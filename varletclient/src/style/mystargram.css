@@ -1,0 +1,80 @@
+.App{
+    width:99vw;
+    border:1px solid red;
+    margin:2px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.loginform{
+    width:800px;
+    margin-top:50px;
+    min-width: 500px; 
+    border:5px solid silver;
+    border-radius : 20px;
+    padding:15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+.loginform .logo{ 
+    font-family: 'Dancing Script', cursive; font-size:300%; 
+    margin-bottom:50px; 
+    border:1px dotted blue; 
+    width:100%; 
+    text-align: center;
+}
+.loginform .field{
+    /* border:1px dotted blue;  */
+    width:100%; 
+    display: flex;
+    margin:5px 0;
+}
+.loginform .field label{
+    flex:1;
+    font-weight: bold;
+    margin:5px 0;
+}
+.loginform .field input{
+    flex:4; border-radius: 10px;
+}
+.loginform .field div{
+    flex:4; border-radius: 10px;
+}
+.loginform .btns, .loginform .snslogin{
+    border:1px dotted blue; 
+    width:100%; 
+    margin-top:10px;
+    display: flex;
+    padding:3px;
+    box-sizing: border-box;
+}
+
+.loginform .btns button, .loginform .snslogin button{
+    flex:1;   height:30px;   margin-right:5px;   font-weight: bold; border:none; padding:5px; font-size: 1.1rem; border-radius: 10px;
+}
+.loginform .btns button:last-child, .loginform .snslogin button:last-child{
+    margin-right: 0;
+}
+.loginform .btns button{
+    color:white; background-color: black;
+}
+.loginform .snslogin button:nth-child(1){background-color: yellow;}
+.loginform .snslogin button:nth-child(2){background-color: rgb(28, 204, 28); color:white}
+.loginform .snslogin button:nth-child(3){background-color: red; color:white}
+.loginform .snslogin button:nth-child(4){background-color: blue; color:white}
+
+@media (max-width:700px) {
+    .loginform .field , .loginform .btns , .loginform .snslogin{
+        flex-direction: column;
+    }
+    .loginform .field input, 
+    .loginform .btns button, 
+    .loginform .snslogin button{
+        margin: 5px 0;
+        padding:10px;
+    }
+}
