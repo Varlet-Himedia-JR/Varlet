@@ -1,8 +1,8 @@
-import logo from './logo.svg';
-import './App.css';
+
 
 function App() {
   return (
+    <h2>Hello Varlet</h2>
     <div className="App">
       {/* hi */}
     </div>
