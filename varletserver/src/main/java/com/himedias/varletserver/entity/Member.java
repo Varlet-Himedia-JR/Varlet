@@ -26,5 +26,5 @@ public class Member {
     private String d_address;
     private String provider;
     private String snsid;
-    private String isLogin; //yn
+    private String isLogin;
 }
