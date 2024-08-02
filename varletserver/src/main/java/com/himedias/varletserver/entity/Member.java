@@ -1,10 +1,10 @@
 package com.himedias.varletserver.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -27,4 +27,12 @@ public class Member {
     private String provider;
     private String snsid;
     private String isLogin; //yn
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Builder.Default // Default: new ArrayList<>() 비어있는 리스트로 객체 저장
+    private List<MemberRole> memberRoleList = new ArrayList<MemberRole>();
+
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Timetable> timetables;
 }
