@@ -12,6 +12,8 @@ public class Point {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int point;  //포인트 수량
+
+    private String userid  ;   //유저아이디 왜래키
 
 }
