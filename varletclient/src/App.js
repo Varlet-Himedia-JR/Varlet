@@ -3,6 +3,8 @@ import { Routes, Route } from "react-router-dom";
 // import Login from './component/Login';
 import Main from './component/Main';
 import Login from "./component/Login";
+import QNA from "./component/qna/QNA";
+import ReviewList from "./component/review/ReviewList";
 // import Join from './component/member/Join';
 // import WritePost from './component/post/WritePost';
 // import MyPage from './component/member/MyPage';
@@ -17,6 +19,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/qna" element={<QNA />} />
+        <Route path="/reviewList" element={<ReviewList />} />
         {/* <Route path="/join" element={<Join />} />
         <Route path="/main" element={<Main />} />
         <Route path="/writePost" element={<WritePost />} />
