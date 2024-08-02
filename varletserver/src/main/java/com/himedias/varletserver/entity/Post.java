@@ -16,7 +16,7 @@ public class Post {
         @jakarta.persistence.Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "pseq", nullable = false)
-        private int pseq;
+        private int pseq;       //게시글 번호
 
         @Column(nullable = false)
         private String title; // 게시글 제목
@@ -25,7 +25,10 @@ public class Post {
         private String content; // 게시글 내용
 
         @Column(nullable = false)
-        private int kind; // 게시글 유형 (예: 특정 카테고리나 지역을 나타내는 정수형 값)
+        private int location; // 지역 대분류
+
+        @Column(nullable = false)
+        private int location2;  // 지역 소분류
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "userid", referencedColumnName = "userid")
@@ -38,8 +41,12 @@ public class Post {
         @Column(nullable = false)
         private int viewCount = 0; // 조회수
 
-        // 생성자, getter, setter
+        private int suggest = 0;        //추천 수
+
+        private int reword;     // 설정된 포인트
+
+        private char select;    //채택여부
+
     }
 
 
-}
