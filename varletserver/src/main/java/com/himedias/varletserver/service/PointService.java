@@ -1,13 +1,34 @@
 package com.himedias.varletserver.service;
 
 import com.himedias.varletserver.dao.PointRepository;
+import com.himedias.varletserver.dto.PointDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
 
+/**
+ * 포인트 관련 비즈니스 로직을 처리하는 서비스 클래스
+ */
 @Service
 public class PointService {
 
     @Autowired
-    PointRepository pr;
+    private PointRepository pointRepository;
 
+    public Optional<PointDto> getPointByUserid(String userid) {
+        return pointRepository.findByUserid(userid);
+    }
+
+    public List<PointDto> getAllPoints() {
+        return pointRepository.findAll();
+    }
+
+    public PointDto savePoint(PointDto pointDto) {
+        return pointRepository.save(pointDto);
+    }
+
+    public void deletePoint(int pnum) {
+        pointRepository.deleteById(pnum);
+    }
 }
