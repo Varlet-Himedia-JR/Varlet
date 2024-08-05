@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // React Router의 useNavigate 훅을 사용
 
 function PostList() {
   const [posts, setPosts] = useState([]);
-  const [selectedOption, setSelectedOption] = useState('option1');
+  const [selectedOption, setSelectedOption] = useState('1');
+  const navigate = useNavigate(); // useNavigate 훅 사용
 
   const handleChange = (event) => {
     setSelectedOption(event.target.value);
   };
 
   useEffect(() => {
-    axios.get('/api/rcommunity/getPostList')
+    axios.get(`/api/rcommunity/getPostList?location=${selectedOption}`)
       .then(response => {
         setPosts(response.data.postlist);
         console.log("데이터옴?");
@@ -18,10 +20,15 @@ function PostList() {
       .catch(error => {
         console.error('Error fetching posts:', error);
       });
-  }, []);
+  }, [selectedOption]);
 
   const obfuscateUserId = (userid) => {
-    return userid.slice(0, 2) + '****';
+    return userid.length > 2 ? userid.slice(0, 2) + '****' : userid;
+  };
+
+  // 글 작성 페이지로 이동하는 함수
+  const requestwrite = () => {
+    navigate('/rpostwrite'); // 글 작성 페이지로 이동
   };
 
   return (
@@ -53,8 +60,8 @@ function PostList() {
           <option value="17">경상남도</option>
           <option value="18">제주도</option>
         </select>
+        <button onClick={requestwrite}>의뢰하기</button>
       </div>
-
       <ul>
         {posts.map(post => (
           <li key={post.rnum}>
