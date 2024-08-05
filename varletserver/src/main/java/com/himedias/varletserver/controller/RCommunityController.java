@@ -20,16 +20,17 @@ public class RCommunityController {
     @GetMapping("/getPostList")
     public HashMap<String, Object> getPostList() {
         HashMap<String, Object> result = new HashMap<>();
+        System.out.println(result);
         System.out.println("postlist");
         result.put("postlist", rcs.getPostList());
         return result;
     }
 
-//    @GetMapping("/writePost")
-//    public HashMap<String, Object> writePost(){
-//         HashMap<String, Object> result = new HashMap<>();
-//        System.out.println("result in?");
-//    }
+    @GetMapping("/writePost")
+    public HashMap<String, Object> writePost(){
+         HashMap<String, Object> result = new HashMap<>();
+        System.out.println("result in?");
+    }
 
 
 }

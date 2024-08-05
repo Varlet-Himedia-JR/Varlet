@@ -12,10 +12,11 @@ function PostList() {
   };
 
   useEffect(() => {
-    axios.get(`/api/rcommunity/getPostList?location=${selectedOption}`)
+    axios.get(`/api/rcommunity/getPostList`)
       .then(response => {
         setPosts(response.data.postlist);
         console.log("데이터옴?");
+        console.log("posts."+posts.length);
       })
       .catch(error => {
         console.error('Error fetching posts:', error);
@@ -62,7 +63,7 @@ function PostList() {
         </select>
         <button onClick={requestwrite}>의뢰하기</button>
       </div>
-      <ul>
+      {/* <ul>
         {posts.map(post => (
           <li key={post.rnum}>
             <h2>{post.title}</h2>
@@ -71,7 +72,7 @@ function PostList() {
             <p>작성일: {post.writedate}</p>
           </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 }
