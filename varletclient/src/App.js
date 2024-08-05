@@ -5,6 +5,9 @@ import Main from './component/Main';
 import Login from "./component/Login";
 import ReviewList from "./component/review/ReviewList";
 import Qna from "./component/qna/Qna";
+import RCommunityList from "./component/request/RCommunityList";
+import RPostWrite from "./component/request/RPostWrite";
+
 // import Join from './component/member/Join';
 // import WritePost from './component/post/WritePost';
 // import MyPage from './component/member/MyPage';
@@ -21,6 +24,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/qna" element={<Qna />} />
         <Route path="/reviewList" element={<ReviewList />} />
+        <Route path="/rcommunity" element={<RCommunityList />} /> 
+        <Route path="/rpostwrite" element={<RPostWrite />} /> 
         {/* <Route path="/join" element={<Join />} />
         <Route path="/main" element={<Main />} />
         <Route path="/writePost" element={<WritePost />} />

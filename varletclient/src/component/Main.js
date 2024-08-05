@@ -82,17 +82,15 @@ function Main() {
     <>
     <Heading/>
     <div>
-
       <h1>Varlet lego</h1>
       {getCookie('user')?'':<button onClick={() => { navigate('/login') }}>Login</button>}
       <button onClick={() => { navigate('/qna') }}>Q&A</button>
-      <button onClick={() => { navigate('/quest') }}>QUEST</button>
       <button onClick={() => { navigate('/review') }}>REVIEW</button>
       {getCookie('user')? (
         <h2>{getCookie('user').snsid}님 환영합니다</h2>
       ) : null}
       {getCookie('user')?<button onClick={() => { logout() }}>Logout</button>:''}
-
+    <button onClick={ ()=>{ navigate('/rcommunity') } }>Request</button>
     </div>
     <Footer/>
     </>
