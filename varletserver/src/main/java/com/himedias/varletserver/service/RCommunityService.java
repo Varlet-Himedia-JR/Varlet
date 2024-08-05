@@ -3,21 +3,19 @@ package com.himedias.varletserver.service;
 import com.himedias.varletserver.dao.RCommunityRepository;
 import com.himedias.varletserver.dto.RCommunityDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
-/**
- * 커뮤니티 게시글 관련 비즈니스 로직을 처리하는 서비스 클래스
- */
+
 @Service
 public class RCommunityService {
 
     @Autowired
     private RCommunityRepository rcr;
 
-
-    public List<RCommunityDto> getAllPosts() {
-        return rcr.findAll();
+    public List<RCommunityDto> getPostList() {
+        return rcr.findAll(Sort.by(Sort.Direction.DESC, "rnum"));
     }
-
 }

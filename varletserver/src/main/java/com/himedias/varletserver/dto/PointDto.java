@@ -15,11 +15,7 @@ import jakarta.persistence.Table;
  * 포인트 엔티티
  */
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "point")
 public class PointDto {
 
         @Id

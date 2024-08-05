@@ -10,7 +10,7 @@ import java.util.List;
  * 포인트 로그 관련 요청을 처리하는 컨트롤러 클래스
  */
 @RestController
-@RequestMapping("/api/pointlogs")
+@RequestMapping("/pointlogs")
 public class PointLogController {
 
     @Autowired

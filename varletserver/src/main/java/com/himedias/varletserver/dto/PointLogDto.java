@@ -11,12 +11,11 @@ import java.sql.Timestamp;
  * 포인트 로그 데이터를 저장하는 DTO
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class PointLogDto {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int lnum;           // 로그 고유 번호
     private String userid;      // 사용자 ID
     private int rnum;           // 관련 게시글 번호 (외래키)

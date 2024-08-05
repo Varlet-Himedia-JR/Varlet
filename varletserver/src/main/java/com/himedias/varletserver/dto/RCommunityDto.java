@@ -10,22 +10,19 @@ import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
+
 import java.sql.Timestamp;
 
 /**
  * 커뮤니티 게시글 엔티티
  */
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "RCommunity")
+@Table(name = "rcommunity")
 public class RCommunityDto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "rnum") // 게시글 번호 컬럼
     private Integer rnum; // 게시글 번호
 
     private String userid; // 사용자 ID
@@ -46,5 +43,5 @@ public class RCommunityDto {
 
     private Integer reward; // 보상 포인트
 
-    private String select; // 채택 여부
+    private String picked; // 채택 여부
 }

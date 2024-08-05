@@ -20,7 +20,7 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/reviewList" element={<ReviewList />} />
-        <Route path="/rcommunity" element={<RCommunityList />} /> {/* 추가된 라우터 */}
+        <Route path="/rcommunity" element={<RCommunityList />} /> 
         {/* <Route path="/join" element={<Join />} />
         <Route path="/main" element={<Main />} />
         <Route path="/writePost" element={<WritePost />} />

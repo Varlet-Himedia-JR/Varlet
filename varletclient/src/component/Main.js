@@ -14,7 +14,7 @@ function Main() {
     <h1>Varlet lego</h1>
     <button onClick={ ()=>{ navigate('/login') } }>Login</button>
     <button onClick={ ()=>{ navigate('/qna') } }>Q&A</button>
-    <button onClick={ ()=>{ navigate('/quest') } }>QUEST</button>
+    <button onClick={ ()=>{ navigate('/rcommunity') } }>Request</button>
     <button onClick={ ()=>{ navigate('/review') } }>REVIEW</button>
     </div>
   )

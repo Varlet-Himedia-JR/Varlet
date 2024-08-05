@@ -6,9 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * 추천 댓글 데이터를 관리하는 리포지토리 인터페이스
- */
+
 @Repository
 public interface RCRecommendRepository extends JpaRepository<RCRecommendDto, Integer> {
 }
