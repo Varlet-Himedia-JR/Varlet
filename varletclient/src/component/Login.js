@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector, useDispatch } from 'react-redux';
-import { loginAction, setFollowers, setFollowings } from '../store/userSlice';
+import { loginAction } from '../store/userSlice';
 
 import { setCookie, getCookie} from "../util/cookieUtil";
 
@@ -25,23 +25,7 @@ function Login() {
                 console.log(result.data);
                 dispatch(loginAction(result.data));
                 setCookie("user",JSON.stringify(result.data),1);
-                // 로그인 유저의 follower 와 following을 조회해서 리덕스에 저장해주세요.
-                let res = await axios.get('/api/member/getFollowings',
-                    {
-                        params:{ nickname:result.data.nickname},
-                        headers : {'Authorization' : `Bearer ${lUser.accessToken}`}
-                            
-                    }
-                );
-                dispatch(setFollowings({followings:res.data}));
-                res = await axios.get('/api/member/getFollowers',
-                    {
-                        params:{ nickname:result.data.nickname},
-                        headers:{'Authorization' : `Bearer ${lUser.accessToken}`}   
-                    }
-                );
-                dispatch(setFollowers({followers:res.data}));
-                navigate('/main')
+                navigate('/')
             }
             
         }catch(err){ console.error(err)}
