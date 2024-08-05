@@ -2,7 +2,6 @@ package com.himedias.varletserver.dao;
 
 import com.himedias.varletserver.dto.Paging;
 import com.himedias.varletserver.entity.Qna;
-import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

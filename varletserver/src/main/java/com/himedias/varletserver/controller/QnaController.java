@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/qna")
 public class QnaController {
 
     @Autowired

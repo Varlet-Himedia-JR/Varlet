@@ -23,7 +23,7 @@ function Qna() {
   function onPageMove(page){
   
           // 스크롤 방식
-          axios.get(`/api/customer/qnaList/${page}`)
+          axios.get(`/api/qna/qnaList/${page}`)
           .then((result)=>{
               setPaging( result.data.paging);
               let qnas=[]; 
@@ -64,12 +64,12 @@ function Qna() {
   }
 
   async function onQnaView(qseq){
-      let result = await axios.get(`/api/customer/getQnaView/${qseq}`);
+      let result = await axios.get(`/api/qna/getQnaView/${qseq}`);
       if(result.data.qna.security == 'N'){
           navigate(`/qnaView/${qseq}`);
       }else{
           let inputPass = window.prompt('패스워드를 입력하세요','');
-          let res = await axios.post(`/api/customer/passCheck`,null,{params:{qseq,inputPass}});
+          let res = await axios.post(`/api/qna/passCheck`,null,{params:{qseq,inputPass}});
           if(res.data.msg == 'OK'){
               navigate(`/qnaView/${qseq}`);
           }else{
@@ -84,7 +84,7 @@ function Qna() {
 
             <div className="qnalist" style={{flex:"4"}}>
             <div style={{display:"flex",justifyContent:"space-between"}}>
-                <h2>Qna List</h2>
+                <h2>고객센터</h2>
                 <button onClick={()=>{navigate('/writeQna')}}>1:1 문의 작성</button>
             </div>
                 <div className="qnatable">
