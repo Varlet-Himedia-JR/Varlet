@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "memberRoleList")
 @Table(name = "member")
 public class Member {
     @Id
