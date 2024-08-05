@@ -10,14 +10,14 @@ function WritePost() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // API를 통해 게시글 작성 요청
     axios.post('/api/rcommunity/writePost', { title, content, location, location2, reward })
       .then(response => {
         console.log('글 작성 성공:', response);
-        // 성공 후 적절한 처리 (예: 목록 페이지로 리다이렉트)
+        alert('의뢰 성공');
       })
       .catch(error => {
         console.error('글 작성 실패:', error);
+        alert('의뢰 실패');
       });
   };
 
@@ -54,30 +54,38 @@ function WritePost() {
           >
             <option value="1">전체</option>
             <option value="2">서울특별시</option>
+            <option value="3">부산광역시</option>
+            <option value="4">대구광역시</option>
+            <option value="5">인천광역시</option>
+            <option value="6">광주광역시</option>
+            <option value="7">대전광역시</option>
+            <option value="8">울산광역시</option>
+            <option value="9">세종특별자치시</option>
+            <option value="10">경기도</option>
+            <option value="11">강원도</option>
+            <option value="12">충청북도</option>
+            <option value="13">충청남도</option>
+            <option value="14">전라북도</option>
+            <option value="15">전라남도</option>
+            <option value="16">경상북도</option>
+            <option value="17">경상남도</option>
+            <option value="18">제주도</option>
           </select>
-          <label htmlFor="location">상세지역</label>
+          <label htmlFor="location2">상세지역</label>
           <select
-            id="location"
+            id="location2"
             value={location2}
             onChange={(e) => setLocation(e.target.value)}
             required
           >
             <option value="1">전체</option>
             <option value="2">서울특별시</option>
+            
           </select>
         </div>
         <div>
-          <label htmlFor="reward">지역</label>
-          <select
-            id="location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            required
-          >
-            <option value="1">전체</option>
-            <option value="2">서울특별시</option>
-          </select>
-          <label htmlFor="location">지역</label>
+          
+          <label htmlFor="location">설정 포인트</label>
           
         </div>
         <button type="submit">제출</button>
