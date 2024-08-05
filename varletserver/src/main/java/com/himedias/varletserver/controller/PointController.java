@@ -17,24 +17,6 @@ public class PointController {
     @Autowired
     private PointService pointService;
 
-    @GetMapping("/{userid}")
-    public Optional<PointDto> getPointByUserid(@PathVariable String userid) {
-        return pointService.getPointByUserid(userid);
-    }
 
-    @GetMapping
-    public List<PointDto> getAllPoints() {
-        return pointService.getAllPoints();
-    }
-
-    @PostMapping
-    public PointDto createPoint(@RequestBody PointDto pointDto) {
-        return pointService.savePoint(pointDto);
-    }
-
-    @DeleteMapping("/{pnum}")
-    public void deletePoint(@PathVariable int pnum) {
-        pointService.deletePoint(pnum);
-    }
 }
 

@@ -16,27 +16,10 @@ public class RCommunityController {
     @Autowired
     private RCommunityService rcs;
 
-    // 특정 사용자 ID로 게시글 목록 조회
-    @GetMapping("/{userid}")
-    public List<RCommunityDto> getPostsByUserid(@PathVariable String userid) {
-        return rcs.getPostsByUserid(userid);
-    }
 
-    // 모든 게시글 목록 조회
     @GetMapping
     public List<RCommunityDto> getAllPosts() {
         return rcs.getAllPosts();
     }
 
-    // 게시글 생성
-    @PostMapping
-    public RCommunityDto createPost(@RequestBody RCommunityDto rCommunityDto) {
-        return rcs.savePost(rCommunityDto);
-    }
-
-    // 게시글 삭제
-    @DeleteMapping("/{rnum}")
-    public void deletePost(@PathVariable int rnum) {
-        rcs.deletePost(rnum);
-    }
 }

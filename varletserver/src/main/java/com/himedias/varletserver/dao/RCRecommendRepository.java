@@ -11,6 +11,4 @@ import java.util.List;
  */
 @Repository
 public interface RCRecommendRepository extends JpaRepository<RCRecommendDto, Integer> {
-    // 특정 게시글 번호의 댓글 목록 찾기
-    List<RCRecommendDto> findByRnum(int rnum);
 }

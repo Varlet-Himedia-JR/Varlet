@@ -11,6 +11,4 @@ import java.util.List;
  */
 @Repository
 public interface PointLogRepository extends JpaRepository<PointLogDto, Integer> {
-    // 특정 사용자 ID의 포인트 로그 목록 찾기
-    List<PointLogDto> findByUserid(String userid);
 }

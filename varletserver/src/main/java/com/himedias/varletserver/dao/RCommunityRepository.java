@@ -11,6 +11,5 @@ import java.util.List;
  */
 @Repository
 public interface RCommunityRepository extends JpaRepository<RCommunityDto, Integer> {
-    // 특정 사용자 ID의 게시글 목록 찾기
     List<RCommunityDto> findByUserid(String userid);
 }

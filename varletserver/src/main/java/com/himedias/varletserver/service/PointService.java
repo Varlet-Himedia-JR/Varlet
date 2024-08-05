@@ -16,19 +16,5 @@ public class PointService {
     @Autowired
     private PointRepository pointRepository;
 
-    public Optional<PointDto> getPointByUserid(String userid) {
-        return pointRepository.findByUserid(userid);
-    }
 
-    public List<PointDto> getAllPoints() {
-        return pointRepository.findAll();
-    }
-
-    public PointDto savePoint(PointDto pointDto) {
-        return pointRepository.save(pointDto);
-    }
-
-    public void deletePoint(int pnum) {
-        pointRepository.deleteById(pnum);
-    }
 }

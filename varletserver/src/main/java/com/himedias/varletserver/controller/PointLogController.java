@@ -16,23 +16,6 @@ public class PointLogController {
     @Autowired
     private PointLogService pointLogService;
 
-    @GetMapping("/{userid}")
-    public List<PointLogDto> getLogsByUserid(@PathVariable String userid) {
-        return pointLogService.getLogsByUserid(userid);
-    }
 
-    @GetMapping
-    public List<PointLogDto> getAllLogs() {
-        return pointLogService.getAllLogs();
-    }
 
-    @PostMapping
-    public PointLogDto createLog(@RequestBody PointLogDto pointLogDto) {
-        return pointLogService.saveLog(pointLogDto);
-    }
-
-    @DeleteMapping("/{lnum}")
-    public void deleteLog(@PathVariable int lnum) {
-        pointLogService.deleteLog(lnum);
-    }
 }

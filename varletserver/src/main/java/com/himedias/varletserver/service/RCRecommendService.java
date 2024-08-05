@@ -15,19 +15,4 @@ public class RCRecommendService {
     @Autowired
     private RCRecommendRepository rcRecommendRepository;
 
-    public List<RCRecommendDto> getCommentsByRnum(int rnum) {
-        return rcRecommendRepository.findByRnum(rnum);
-    }
-
-    public List<RCRecommendDto> getAllComments() {
-        return rcRecommendRepository.findAll();
-    }
-
-    public RCRecommendDto saveComment(RCRecommendDto rcRecommendDto) {
-        return rcRecommendRepository.save(rcRecommendDto);
-    }
-
-    public void deleteComment(int rcnum) {
-        rcRecommendRepository.deleteById(rcnum);
-    }
 }

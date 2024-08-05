@@ -15,19 +15,5 @@ public class PointLogService {
     @Autowired
     private PointLogRepository pointLogRepository;
 
-    public List<PointLogDto> getLogsByUserid(String userid) {
-        return pointLogRepository.findByUserid(userid);
-    }
 
-    public List<PointLogDto> getAllLogs() {
-        return pointLogRepository.findAll();
-    }
-
-    public PointLogDto saveLog(PointLogDto pointLogDto) {
-        return pointLogRepository.save(pointLogDto);
-    }
-
-    public void deleteLog(int lnum) {
-        pointLogRepository.deleteById(lnum);
-    }
 }

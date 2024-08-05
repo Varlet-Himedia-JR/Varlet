@@ -15,19 +15,9 @@ public class RCommunityService {
     @Autowired
     private RCommunityRepository rcr;
 
-    public List<RCommunityDto> getPostsByUserid(String userid) {
-        return rcr.findByUserid(userid);
-    }
 
     public List<RCommunityDto> getAllPosts() {
         return rcr.findAll();
     }
 
-    public RCommunityDto savePost(RCommunityDto rCommunityDto) {
-        return rcr.save(rCommunityDto);
-    }
-
-    public void deletePost(int rnum) {
-        rcr.deleteById(rnum);
-    }
 }

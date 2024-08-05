@@ -11,8 +11,6 @@ import java.util.Optional;
  */
 @Repository
 public interface PointRepository extends JpaRepository<PointDto, Integer> {
-  // 사용자 ID로 포인트 찾기
-  Optional<PointDto> findByUserid(String userid);
 }
 
 
