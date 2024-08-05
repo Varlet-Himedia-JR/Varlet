@@ -19,7 +19,6 @@ public class QnaController {
     @GetMapping("/qnaList/{page}")
     public HashMap<String,Object> qnalist(@PathVariable("page") int page){
         HashMap<String,Object> result = new HashMap<String,Object>();
-
         Paging paging = new Paging();
         paging.setPage(page);
         paging.calPaging();

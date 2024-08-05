@@ -25,11 +25,11 @@ public class RCommunityController {
         return result;
     }
 
-    @GetMapping("/writePost")
-    public HashMap<String, Object> writePost(){
-         HashMap<String, Object> result = new HashMap<>();
-        System.out.println("result in?");
-    }
+//    @GetMapping("/writePost")
+//    public HashMap<String, Object> writePost(){
+//         HashMap<String, Object> result = new HashMap<>();
+//        System.out.println("result in?");
+//    }
 
 
 }
