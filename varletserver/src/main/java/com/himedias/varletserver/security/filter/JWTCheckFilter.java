@@ -117,7 +117,12 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/favicon.ico"))
             return true;
+        //course
+        if (path.startsWith("/course/getTnames/"))
+            return true;
 
+        if (path.startsWith("/course/getDuration/"))
+            return true;
 
         return false;
     }
