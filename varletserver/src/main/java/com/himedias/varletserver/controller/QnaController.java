@@ -3,8 +3,10 @@ package com.himedias.varletserver.controller;
 import com.himedias.varletserver.dto.Paging;
 import com.himedias.varletserver.entity.Qna;
 import com.himedias.varletserver.service.QnaService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -25,7 +27,7 @@ public class QnaController {
         paging.setPage(page);
         paging.setDisplayRow(10);
 
-
+        paging.setSort(Sort.by(Sort.Order.desc("indate")));
         Page<Qna> qnaPage = qs.getQnaList(paging);
 
 
@@ -44,4 +46,30 @@ public class QnaController {
         qs.writeQna(qna);
         return null;
     }
+
+    @GetMapping("/getQnaView/{qseq}")
+    public HashMap<String,Object> getQnaView(@PathVariable("qseq") int qseq){
+        HashMap<String, Object> result = new HashMap<>();
+        Qna qna = qs.getQnaView(qseq);
+        result.put("qna", qna);
+        return result;
+    }
+
+    @PostMapping("/passCheck")
+    public HashMap<String, Object> passCheck(@RequestParam("qseq") int qseq,
+                                             @RequestParam("inputPass") String inputPass) {
+        HashMap<String, Object> result = new HashMap<>();
+        Qna qna = qs.getQnaView(qseq);
+        if(qna.getPass().equals(inputPass)) result.put("msg","OK");
+        else result.put("msg","FAIL");
+
+        return result;
+    }
+    @DeleteMapping("/qnaDelete/{qseq}")
+    public HashMap<String,Object> qnaDelete(@PathVariable("qseq") int qseq){
+        qs.deleteQna(qseq);
+        return null;
+    }
+
+
 }

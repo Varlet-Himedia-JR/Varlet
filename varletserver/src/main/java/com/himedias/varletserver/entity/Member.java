@@ -24,8 +24,8 @@ public class Member {
     @Column(name = "userid", nullable = false, length = 50)
     private String userid;
 
-    @Size(max = 50)
-    @Column(name = "pwd", length = 50)
+    @Size(max = 300)
+    @Column(name = "pwd", length = 300)
     private String pwd;
 
     @Size(max = 10)

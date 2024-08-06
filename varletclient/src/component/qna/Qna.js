@@ -51,13 +51,15 @@ function Qna() {
 
   async function onQnaView(qseq){
       let result = await axios.get(`/api/qna/getQnaView/${qseq}`);
-      if(result.data.qna.security == 'Y'){
+      if(result.data.qna.security == 'N'){
           navigate(`/qnaView/${qseq}`);
       }else{
           let inputPass = window.prompt('패스워드를 입력하세요','');
           let res = await axios.post(`/api/qna/passCheck`,null,{params:{qseq,inputPass}});
+          console.log(res.data.msg);
+          
           if(res.data.msg == 'OK'){
-              navigate(`/qnaView/${qseq}`);
+              navigate(`/QnaView/${qseq}`);
           }else{
               return alert('패스워드가 일치하지 않습니다.')
           }

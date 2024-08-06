@@ -2,6 +2,7 @@ package com.himedias.varletserver.dto;
 
 
 import lombok.Data;
+import org.springframework.data.domain.Sort;
 
 @Data
 public class Paging {
@@ -15,6 +16,7 @@ public class Paging {
     private boolean next;
     private int startNum;
     private int endNum;
+    private Sort sort;
 
     public void calPaging() {
         endPage = ( (int)Math.ceil( page/(double)displayPage ) ) * displayPage;
