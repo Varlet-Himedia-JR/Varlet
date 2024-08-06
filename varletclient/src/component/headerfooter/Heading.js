@@ -15,19 +15,27 @@ function Heading() {
     const userCookie = getCookie('user');
 
     const LoginWindow = () =>{
-        window.open('/login','Login','width=500,height=600');
+        // window.open('/login','Login','width=500,height=600');
+        navigate('/login');
     };
     const JoinWindow = () =>{
         window.open('/join','Join','width=500,height=600');
     };
 
-    function onLogout(){
-        axios.get('/api/member/logout')
-        .then(()=>{
-            dispatch( logoutAction() );
-            window.location.href='/';
-        })
-    }
+    // function onLogout(){
+    //     axios.get('/api/member/logout')
+    //     .then(()=>{
+    //         dispatch( logoutAction() );
+    //         window.location.href='/';
+    //     })
+    // }
+
+    function logout() {
+        dispatch(logoutAction());
+        removeCookie("user");
+        alert('로그아웃되었습니다');
+        navigate('/');
+      }
 
 
     return (
@@ -46,7 +54,7 @@ function Heading() {
                 {!userCookie && <div className='login' onClick={LoginWindow}>로그인</div>}
                 {!userCookie && <div className='join' onClick={JoinWindow}>회원가입</div>}
                     {getCookie('user')? (<h2>{getCookie('user').snsid}님 환영합니다</h2>) : null}
-                    {getCookie('user')?<div className='logout' onClick={() => { onLogout() }}>Logout</div>:''}
+                    {getCookie('user')?<div className='logout' onClick={() => { logout() }}>Logout</div>:''}
                 </div>
             </div>
                 

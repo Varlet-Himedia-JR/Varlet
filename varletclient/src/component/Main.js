@@ -16,12 +16,7 @@ function Main() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  function logout() {
-    dispatch(logoutAction());
-    removeCookie("user");
-    alert('로그아웃되었습니다');
-    navigate('/');
-  }
+  
   return (
     <>
     <Heading/>
