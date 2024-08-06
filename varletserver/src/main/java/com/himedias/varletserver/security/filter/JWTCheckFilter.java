@@ -15,6 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             Map<String, Object> claims = JWTUtil.validateToken(accessToken);
             log.info("JWT claims: " + claims);
 
+            String userid = (String) claims.get("userid");
             String nickname = (String) claims.get("nickname");
             String pwd = (String) claims.get("pwd");
             String email = (String) claims.get("email");
@@ -42,11 +44,11 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             String zipcode = (String) claims.get("zipcode");
             String address = (String) claims.get("address");
             String dAddress = (String) claims.get("dAddress");
-            Instant indate = (Instant) claims.get("indate");
+            Timestamp indate = (Timestamp) claims.get("indate");
             Character isLogin = (Character) claims.get("isLogin");
             List<String> roleNames = (List<String>) claims.get("roleNames");
 
-            MemberDTO memberDTO = new MemberDTO(nickname,pwd,email,phone,provider,snsid,profileimg,zipcode,address,dAddress,indate,isLogin,roleNames);
+            MemberDTO memberDTO = new MemberDTO(userid, nickname, pwd, email, phone, provider, snsid, profileimg, zipcode, address, dAddress, indate, isLogin, roleNames);
             log.info("-----------------------------------");
             log.info(memberDTO);
             log.info(memberDTO.getAuthorities()); // 권한 추출
@@ -78,6 +80,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         if (path.startsWith("/member/loginlocal"))
             return true;
+        if (path.startsWith("/main/"))
+            return true;
+
 
         if (path.startsWith("/images/"))
             return true;
@@ -86,6 +91,14 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
 
         if (path.startsWith("/member/join"))
+            return true;
+        if (path.startsWith("/qna/qna"))
+            return true;
+        if (path.startsWith("/qna/writeQna"))
+            return true;
+        if (path.startsWith("/qna/getQnaView"))
+            return true;
+        if (path.startsWith("/qna/passCheck"))
             return true;
 
         if (path.startsWith("/member/emailcheck"))
@@ -100,9 +113,16 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/member/kakaoLigin"))
             return true;
+        if (path.startsWith("/rcommunity/getPostList"))
+            return true;
         if (path.startsWith("/favicon.ico"))
             return true;
+        //course
+        if (path.startsWith("/course/getTnames/"))
+            return true;
 
+        if (path.startsWith("/course/getDuration/"))
+            return true;
 
         return false;
     }

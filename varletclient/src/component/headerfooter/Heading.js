@@ -1,26 +1,47 @@
 import React from 'react'
-import { useNavigate, Link } from 'react-router-dom';
-import '../../style/index.css'
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutAction } from '../../store/userSlice';
 import axios from 'axios';
+import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
+
+import '../../style/index.css'
+
 
 function Heading() {
     const navigate = useNavigate();
     const loginUser = useSelector( state=>state.user );
     const dispatch = useDispatch();
+    const userCookie = getCookie('user');
 
-    function onLogout(){
-        axios.get('/api/member/logout')
-        .then(()=>{
-            dispatch( logoutAction() );
-            window.location.href='/';
-        })
-    }
+    const LoginWindow = () =>{
+        // window.open('/login','Login','width=500,height=600');
+        navigate('/login');
+    };
+    const JoinWindow = () =>{
+        window.open('/join','Join','width=500,height=600');
+    };
+
+    // function onLogout(){
+    //     axios.get('/api/member/logout')
+    //     .then(()=>{
+    //         dispatch( logoutAction() );
+    //         window.location.href='/';
+    //     })
+    // }
+
+    function logout() {
+        dispatch(logoutAction());
+        removeCookie("user");
+        alert('로그아웃되었습니다');
+        navigate('/');
+      }
+
+
     return (
         <div className='header'>
             <div className='category_menu'>
-                <div onClick={ ()=>{ window.location.href='/kindlist/1' } } >여행 코스 의뢰</div>
+                <div onClick={ ()=>{ navigate('/rcommunity') } }>여행 코스 의뢰</div>
                 <div onClick={ ()=>{ window.location.href='/kindlist/2' } } >즐길거리</div>
                 <div className='logo'>
                     <img src="http://localhost:8070/images/logo.png" onClick={
@@ -28,25 +49,13 @@ function Heading() {
                     }/>
                 </div>
                 <div onClick={ ()=>{ window.location.href='/kindlist/3' } } >리뷰게시판</div>
-                <div onClick={ ()=>{ window.location.href='/kindlist/4' } } >숙소</div>
+                <div onClick={ ()=>{ navigate('/mycourse') } } >나의 여행</div>
+                <div onClick={ ()=>{ window.location.href='/qna' } } >고객센터</div>
                 <div className='gnb'>  
-
-                        {
-                            (loginUser.userid)?(
-                                <div className='logininfo'>
-                                    {loginUser.userid}({loginUser.name})&nbsp;&nbsp;&nbsp;
-                                    <Link to='/cartlist' >CART</Link>
-                                    <Link to='/mypage' >MYPAGE</Link>
-                                    <button onClick={()=>{onLogout()}}>LOGOUT</button>
-                                </div>
-                            ):(
-                                <>
-                                    <Link className='login' to='/login'>로그인</Link>
-                                    <Link className='join' to='/join'>회원가입</Link>
-                                </>
-                            )
-                        }
-                        
+                {!userCookie && <div className='login' onClick={LoginWindow}>로그인</div>}
+                {!userCookie && <div className='join' onClick={JoinWindow}>회원가입</div>}
+                    {getCookie('user')? (<h2>{getCookie('user').snsid}님 환영합니다</h2>) : null}
+                    {getCookie('user')?<div className='logout' onClick={() => { logout() }}>Logout</div>:''}
                 </div>
             </div>
                 

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "memberRoleList")
 @Table(name = "member")
 public class Member {
     @Id
@@ -22,8 +24,8 @@ public class Member {
     @Column(name = "userid", nullable = false, length = 50)
     private String userid;
 
-    @Size(max = 50)
-    @Column(name = "pwd", length = 50)
+    @Size(max = 300)
+    @Column(name = "pwd", length = 300)
     private String pwd;
 
     @Size(max = 10)
@@ -56,7 +58,7 @@ public class Member {
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "indate")
-    private Instant indate;
+    private Timestamp indate;
 
     @Column(name = "is_login")
     private Character isLogin;

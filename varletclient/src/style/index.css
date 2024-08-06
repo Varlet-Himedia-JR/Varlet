@@ -1,5 +1,5 @@
 .header{
-    width: 100%;
+    width: 1500px;
     display: flex;
 }
 /* Rectangle 1 */
@@ -9,14 +9,13 @@
 /* varlet_logo_with_plane 1 */
 .logo{
 position: relative;
-width: 400px;
+width: 300px;
 height: 103px;
 border: 1px dotted black;
 }
-.logo img{
-    width: 300px;
-    height: 100px;
-}
+
+
+
 .category_menu{
     width: 100%;
     display: flex;
@@ -28,7 +27,7 @@ border: 1px dotted black;
 .category_menu :first-child{
 position: relative;
 width: 200px;
-height: 16px;
+height: 29px;
 
 font-family: 'Inter';
 font-style: normal;
@@ -77,7 +76,7 @@ color: #000000;
 .category_menu :nth-child(5){
 position: relative;
 width: 48px;
-height: 32px;
+height: 29px;
 
 font-family: 'Inter';
 font-style: normal;
@@ -89,7 +88,7 @@ color: #000000;
 }
 .gnb{
     display: flex;
-    width: 250px;
+    width: 180px;
     height: 100px;
     align-items: center;
     justify-content: space-around;

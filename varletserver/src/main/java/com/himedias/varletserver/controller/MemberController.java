@@ -1,11 +1,15 @@
 package com.himedias.varletserver.controller;
 
+import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.security.util.CustomJWTException;
 import com.himedias.varletserver.security.util.JWTUtil;
 import com.himedias.varletserver.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -14,6 +18,9 @@ public class MemberController {
 
     @Autowired
     MemberService ms;
+
+
+
 
     @GetMapping("/refresh/{refreshToken}")
     public Map<String, Object> refresh(@RequestHeader("Authorization") String authHeader,

@@ -1,14 +1,16 @@
 import { Routes, Route } from "react-router-dom";
 
-// import Login from './component/Login';
 import Main from './component/Main';
-import Login from "./component/Login";
+import Login from "./component/member/Login";
 import ReviewList from "./component/review/ReviewList";
 import Qna from "./component/qna/Qna";
 import RCommunityList from "./component/request/RCommunityList";
 import RPostWrite from "./component/request/RPostWrite";
+import Join from './component/member/Join';
+import WriteQna from './component/qna/WriteQna';
+import QnaView from './component/qna/QnaView';
+import Mycourse from "./component/course/Mycourse";
 
-// import Join from './component/member/Join';
 // import WritePost from './component/post/WritePost';
 // import MyPage from './component/member/MyPage';
 // import Kakaosaveinfo from './component/member/Kakaosaveinfo';
@@ -26,8 +28,12 @@ function App() {
         <Route path="/reviewList" element={<ReviewList />} />
         <Route path="/rcommunity" element={<RCommunityList />} /> 
         <Route path="/rpostwrite" element={<RPostWrite />} /> 
-        {/* <Route path="/join" element={<Join />} />
-        <Route path="/main" element={<Main />} />
+        <Route path="/join" element={<Join />} />
+        <Route path="/writeQna" element={<WriteQna />} />
+        <Route path="/qnaView/:qseq" element={<QnaView/>} />
+        <Route path="/mycourse" element={<Mycourse />} />
+        
+        {/* <Route path="/main" element={<Main />} />
         <Route path="/writePost" element={<WritePost />} />
         <Route path="/myPage" element={<MyPage />} />
         <Route path="/postone/:postid" element={<Postone />} />
