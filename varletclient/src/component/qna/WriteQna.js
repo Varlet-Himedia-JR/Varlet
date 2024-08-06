@@ -16,10 +16,9 @@ function WriteQna() {
     const loginUser = useSelector(state => state.user);
     const navigate = useNavigate();
     const userCookie = getCookie('user');
-
+    const userid = userCookie.userid;
     function onSubmit(){
-        setSecurity('Y')
-        jaxios.post('/api/qna/writeQna',{subject,content, userid:getCookie('user').userid, pass})
+        axios.post('/api/qna/writeQna',{ subject,content, userid, security,pass})
         .then(()=>{ navigate('/qna')})
         .catch((err)=>{
             console.error(err);

@@ -9,14 +9,13 @@
 /* varlet_logo_with_plane 1 */
 .logo{
 position: relative;
-width: 400px;
+width: 300px;
 height: 103px;
 border: 1px dotted black;
 }
-.logo img{
-    width: 300px;
-    height: 100px;
-}
+
+
+
 .category_menu{
     width: 100%;
     display: flex;
