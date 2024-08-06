@@ -1,41 +1,71 @@
 package com.himedias.varletserver.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "rcommunity")
-@Data
 public class RCommunity {
 
+    @Getter
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int rnum;
 
+    @Getter
+    @Setter
+    @Column(name = "userid", nullable = false, length = 50)
+    private String userid;  // 여기서 필드명을 userId로 수정
+
+    @Getter
+    @Setter
     @Column(nullable = false)
     private int location;
 
+    @Getter
+    @Setter
     @Column(nullable = false)
     private int location2;
 
-    @Column(nullable = false, updatable = false)
-    private Timestamp writedate;
+    @Getter
+    @Setter
+    @Column(nullable = false, columnDefinition = "int default 0")
+    private int suggest;
 
-    private Integer suggest;  // Integer를 사용하여 null 가능성을 표현
+    @Getter
+    @Setter
+    @Column(nullable = false, columnDefinition = "int default 0")
+    private int views;
 
-    private Integer views;    // Integer를 사용하여 null 가능성을 표현
-
-    @Column(length = 255)
+    @Getter
+    @Setter
+    @Column(nullable = false, length = 50)
     private String title;
 
-    @Column(length = 255)
+    @Getter
+    @Setter
+    @Column(nullable = false, length = 2500)
     private String content;
 
-    @Column(nullable = false)
+    @Getter
+    @Setter
+    @Column(nullable = false, columnDefinition = "int default 0")
     private int reward;
 
-    @Column(length = 255)
-    private String picked;
+    @Getter
+    @Setter
+    @Column(nullable = false, columnDefinition = "char(1) default 'N'")
+    private char picked;
+
+    @Getter
+    @Setter
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
+    private Timestamp writedate;
+
 
 }
+

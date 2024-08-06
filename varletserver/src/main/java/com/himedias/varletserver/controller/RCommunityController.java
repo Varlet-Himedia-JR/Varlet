@@ -1,5 +1,7 @@
 package com.himedias.varletserver.controller;
 
+import com.himedias.varletserver.dto.RCommunitySummary;
+import com.himedias.varletserver.dto.RCommunityWrite;
 import com.himedias.varletserver.service.RCommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,16 +23,16 @@ public class RCommunityController {
     @GetMapping("/getPostList")
     public HashMap<String, Object> getPostList() {
         HashMap<String, Object> result = new HashMap<>();
-        System.out.println(result);
-        System.out.println("postlist");
-        result.put("postlist", rcs.getPostList());
+        List<RCommunitySummary> postList = rcs.getPostList();  // 메서드 호출
+        result.put("postlist", postList);
+        System.out.println("postlist: " + postList);
         return result;
     }
 
-    @GetMapping("/writePost")
-    public HashMap<String, Object> writePost(){
-         HashMap<String, Object> result = new HashMap<>();
-        System.out.println("result in?");
+    @PostMapping("/writePost")
+    public ResponseEntity<HashMap<String, Object>> writePost(@RequestBody RCommunityWrite rCommunityWrite) {
+        HashMap<String, Object> result = rcs.writePost(rCommunityWrite);
+        return ResponseEntity.ok(result);
     }
 
 

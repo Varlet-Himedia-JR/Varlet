@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // React Router의 useNavigate 훅을 사용
+import { useNavigate } from "react-router-dom";
+import '../../style/customer.css';
 
 function PostList() {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([]);  // 초기값을 빈 배열로 설정
   const [selectedOption, setSelectedOption] = useState('1');
   const navigate = useNavigate(); // useNavigate 훅 사용
 
@@ -14,16 +15,16 @@ function PostList() {
   useEffect(() => {
     axios.get(`/api/rcommunity/getPostList`)
       .then(response => {
-        setPosts(response.data.postlist);
+        setPosts(response.data.postlist || []);  // postlist가 없을 경우 빈 배열로 설정
         console.log("데이터옴?");
-        console.log("posts."+posts.length);
+        console.log("posts:", response.data.postlist);
       })
       .catch(error => {
         console.error('Error fetching posts:', error);
       });
   }, [selectedOption]);
 
-  const obfuscateUserId = (userid) => {
+  const maskedid = (userid) => {
     return userid.length > 2 ? userid.slice(0, 2) + '****' : userid;
   };
 
@@ -63,16 +64,20 @@ function PostList() {
         </select>
         <button onClick={requestwrite}>의뢰하기</button>
       </div>
-      {/* <ul>
-        {posts.map(post => (
-          <li key={post.rnum}>
-            <h2>{post.title}</h2>
-            <p>{post.content}</p>
-            <p>작성자: {obfuscateUserId(post.userid)}</p>
-            <p>작성일: {post.writedate}</p>
-          </li>
-        ))}
-      </ul> */}
+      <ul>
+        {posts.length > 0 ? (
+          posts.map(post => (
+            <li key={post.rnum}>
+              <h2>{post.title}</h2>
+              <p>{post.content}</p>
+              <p>작성자: {maskedid(post.userid)}</p>
+              <p>작성일: {post.writedate}</p>
+            </li>
+          ))
+        ) : (
+          <p>게시글이 없습니다.</p>
+        )}
+      </ul>
     </div>
   );
 }

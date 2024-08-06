@@ -1,64 +1,41 @@
-
-import React, { useState, useEffect } from 'react';
-import React, {useEffect, useState} from 'react'
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { logoutAction } from '../../store/userSlice';
-
-
-
-const locations = {
-  "1": { name: "전체", cities: ["전체"] },
-  "2": { name: "서울특별시", cities: ["강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구"] },
-  "3": { name: "부산광역시", cities: ["해운대구", "사하구", "동래구", ...] },
-  "4": { name: "대구광역시", cities: ["달서구", "수성구", "북구", ...] },
-  "5": { name: "인천광역시", cities: ["남동구", "부평구", "연수구", ...] },
-  "6": { name: "광주광역시", cities: ["동구", "서구", "남구", ...] },
-  "7": { name: "대전광역시", cities: ["유성구", "서구", "동구", ...] },
-  "8": { name: "울산광역시", cities: ["남구", "동구", "북구", ...] },
-  "9": { name: "세종특별자치시", cities: ["고운동", "아름동", "어진동", ...] },
-  "10": { name: "경기도", cities: ["수원시", "성남시", "안양시", ...] },
-  "11": { name: "강원도", cities: ["춘천시", "원주시", "강릉시", ...] },
-  "12": { name: "충청북도", cities: ["청주시", "충주시", "제천시", ...] },
-  "13": { name: "충청남도", cities: ["천안시", "아산시", "서산시", ...] },
-  "14": { name: "전라북도", cities: ["전주시", "군산시", "익산시", ...] },
-  "15": { name: "전라남도", cities: ["목포시", "여수시", "순천시", ...] },
-  "16": { name: "경상북도", cities: ["포항시", "경주시", "김천시", ...] },
-  "17": { name: "경상남도", cities: ["창원시", "진주시", "김해시", ...] },
-  "18": { name: "제주도", cities: ["제주시", "서귀포시", "우도", ...] },
-};
-
-
-function WritePost() {}
-
+import React ,{useState, useEffect} from 'react'
+import axios from 'axios'
+import { useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import Heading from './../headerfooter/Heading';
+import Footer from './../headerfooter/Footer';
+import '../../style/customer.css';
+import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
+import jaxios from '../../util/jwtUtil';
 
 const locationData = {
-  2: ["강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"], 
-  3: ["중구", "서구", "동구", "영도구", "부산진구", "동래구", "남구", "북구", "강서구", "해운대구", "사하구", "금정구", "연제구", "수영구", "사상구", "기장군"], 
-  4: ["중구", "동구", "서구", "남구", "북구", "수성구", "달서구", "달성군", "군위군"], 
-  5: ["중구", "동구", "미추홀구", "연수구", "남동구", "부평구", "계양구", "서구", "강화군", "옹진군"], 
-  6: ["동구", "서구", "남구", "북구", "광산구"], 
-  7: ["동구", "중구", "서구", "유성구", "대덕구"], 
-  8: ["중구", "남구", "동구", "북구", "울주군"], 
-  9: ["조치원읍", "연기면", "연동면", "부강면", "금남면", "장군면", "연서면", "전의면", "전동면", "소정면", "한솔동", "새롬동", "나성동", "도담동", "어진동", "해밀동", "아름동", "종촌동", "고운동", "소담동", "반곡동", "보람동", "대평동", "다정동"], 
-  10: ["수원시", "성남시", "의정부시", "안양시", "부천시", "광명시", "평택시", "동두천시", "안산시", "고양시", "과천시", "구리시", "남양주시", "오산시", "시흥시", "군포시", "의왕시", "하남시", "용인시", "파주시", "이천시", "안성시", "김포시", "화성시", "광주시", "양주시", "포천시", "여주시", "연천군", "가평군", "양평군"], 
-  11: ["춘천", "원주", "강릉", "동해", "태백", "속초", "삼척", "홍천", "영월", "평창", "정선", "철원", "화천", "양구", "인제", "고성", "양양"], 
-  12: ["청주", "충주", "제천", "보은", "옥천", "영동", "증평", "진천", "괴산", "음성", "단양"], 
-  13: ["천안", "공주", "보령", "앗나", "서산", "논산", "계룡", "당진", "금산", "부여", "서천", "청양", "홍성", "예산", "태안"], 
-  14: ["전주", "익산", "군산", "정읍", "남원", "김제", "무주", "완주", "부안", "고창", "임실", "순창", "진안", "장수"], 
-  15: ["목포", "여수", "순천", "나주", "광양", "담양", "곡성", "구례", "고흥", "보성", "화순", "장흥", "강진", "해남", "영암", "무안", "함평", "영광", "장성", "완도", "진도", "신안"], 
-  16: ["포항", "경주", "김천", "안동", "구미", "영주", "영천", "상주", "문경", "경산", "의성", "청송", "영양", "영덕", "청도", "고령", "성주", "칠곡", "예천", "봉화", "울진", "울릉"], 
-  17: ["창원", "김해", "양산", "진주", "거제", "통영", "사천", "밀양", "함안", "거창", "창녕", "고성", "하동", "합천", "남해", "함양", "신창", "의령"], 
-  18: ["제주도", "서귀포시"]
+  1: ["전체"] ,
+  2: ["전체","강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"], 
+  3: ["전체","중구", "서구", "동구", "영도구", "부산진구", "동래구", "남구", "북구", "강서구", "해운대구", "사하구", "금정구", "연제구", "수영구", "사상구", "기장군"], 
+  4: ["전체","중구", "동구", "서구", "남구", "북구", "수성구", "달서구", "달성군", "군위군"], 
+  5: ["전체","중구", "동구", "미추홀구", "연수구", "남동구", "부평구", "계양구", "서구", "강화군", "옹진군"], 
+  6: ["전체","동구", "서구", "남구", "북구", "광산구"], 
+  7: ["전체","동구", "중구", "서구", "유성구", "대덕구"], 
+  8: ["전체","중구", "남구", "동구", "북구", "울주군"], 
+  9: ["전체","조치원읍", "연기면", "연동면", "부강면", "금남면", "장군면", "연서면", "전의면", "전동면", "소정면", "한솔동", "새롬동", "나성동", "도담동", "어진동", "해밀동", "아름동", "종촌동", "고운동", "소담동", "반곡동", "보람동", "대평동", "다정동"], 
+  10: ["전체","수원시", "성남시", "의정부시", "안양시", "부천시", "광명시", "평택시", "동두천시", "안산시", "고양시", "과천시", "구리시", "남양주시", "오산시", "시흥시", "군포시", "의왕시", "하남시", "용인시", "파주시", "이천시", "안성시", "김포시", "화성시", "광주시", "양주시", "포천시", "여주시", "연천군", "가평군", "양평군"], 
+  11: ["전체","춘천", "원주", "강릉", "동해", "태백", "속초", "삼척", "홍천", "영월", "평창", "정선", "철원", "화천", "양구", "인제", "고성", "양양"], 
+  12: ["전체","청주", "충주", "제천", "보은", "옥천", "영동", "증평", "진천", "괴산", "음성", "단양"], 
+  13: ["전체","천안", "공주", "보령", "앗나", "서산", "논산", "계룡", "당진", "금산", "부여", "서천", "청양", "홍성", "예산", "태안"], 
+  14: ["전체","전주", "익산", "군산", "정읍", "남원", "김제", "무주", "완주", "부안", "고창", "임실", "순창", "진안", "장수"], 
+  15: ["전체","목포", "여수", "순천", "나주", "광양", "담양", "곡성", "구례", "고흥", "보성", "화순", "장흥", "강진", "해남", "영암", "무안", "함평", "영광", "장성", "완도", "진도", "신안"], 
+  16: ["전체","포항", "경주", "김천", "안동", "구미", "영주", "영천", "상주", "문경", "경산", "의성", "청송", "영양", "영덕", "청도", "고령", "성주", "칠곡", "예천", "봉화", "울진", "울릉"], 
+  17: ["전체","창원", "김해", "양산", "진주", "거제", "통영", "사천", "밀양", "함안", "거창", "창녕", "고성", "하동", "합천", "남해", "함양", "신창", "의령"], 
+  18: ["전체","제주도", "서귀포시"]
 };
 
 const WritePost = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [location, setLocation] = useState('1');
-  const [location2, setLocation2] = useState(locations["1"].cities[0]);
+  const [location2, setLocation2] = useState('');
   const [reward, setReward] = useState('');
-  const [userPoint, setUserPoint] = useState(0);  
+  const [userPoint, setUserPoint] = useState(0);
   const navigate = useNavigate();
   const loginUser = useSelector(state => state.user);
   const userCookie = getCookie('user');
@@ -70,11 +47,10 @@ const WritePost = () => {
           setUserPoint(response.data.point);
         })
         .catch(error => {
-          console.error('Failed to fetch user point:', error);
+          console.error('사용자 포인트를 가져오는데 실패했습니다:', error);
         });
     }
   }, [userCookie]);
-    
 
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
@@ -82,28 +58,48 @@ const WritePost = () => {
   };
 
   useEffect(() => {
-    setLocation2(locations[location].cities[0]);
+    if (location in locationData) {
+      setLocation2(locationData[location][0]);
+    }
   }, [location]);
+
+  const RewardChange = (event) => {
+    const { value } = event.target;
+    if (/^\d*$/.test(value)) {
+      setReward(value);
+    } else {
+      alert('숫자만 입력 가능합니다.');
+    }
+  };
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post('/api/rcommunity/writePost', { title, content, location, location2, reward })
-      .then(response => {
+    axios.post('/api/rcommunity/writePost', {
+        title: title,
+        content: content,
+        location: parseInt(location, 10), // int형으로 변환
+        location2: parseInt(location2, 10), // int형으로 변환
+        reward: parseInt(reward, 10), // int형으로 변환
+        userid: userCookie.userid // userid를 추가
+    })
+    .then(response => {
         console.log('글 작성 성공:', response);
-        alert('의뢰 성공');
-      })
-      .catch(error => {
+        alert('의뢰가 성공적으로 등록되었습니다.');
+        navigate('/'); // 홈 또는 다른 페이지로 이동
+    })
+    .catch(error => {
         console.error('글 작성 실패:', error);
-        alert('의뢰 실패');
-      });
-  };
-}
+        alert('의뢰 등록에 실패했습니다.');
+    });
+};
+
   return (
     <div>
       <h1>글 작성</h1>
       <form onSubmit={handleSubmit}>
-        <div className='gnb'>  
-          {getCookie('user')? (<h2>{getCookie('user').snsid}</h2>) : null}
+        <div className='gnb'>
+          {userCookie ? (<h2>{userCookie.userid}</h2>) : null}
         </div>
         <div>
           <label htmlFor="title">제목</label>
@@ -116,6 +112,16 @@ const WritePost = () => {
           />
         </div>
         <div>
+          <label htmlFor="title">상세내용</label>
+          <input
+            id="title"
+            type="text"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            required
+          />
+        </div>
+        <div>
           <label htmlFor="location">지역</label>
           <select
             id="location"
@@ -123,11 +129,6 @@ const WritePost = () => {
             onChange={handleLocationChange}
             required
           >
-
-            {Object.entries(locations).map(([key, value]) => (
-              <option key={key} value={key}>{value.name}</option>
-            ))}
-
             <option value="1">지역을 선택하세요</option>
             <option value="2">서울특별시</option>
             <option value="3">부산광역시</option>
@@ -149,17 +150,14 @@ const WritePost = () => {
           </select>
         </div>
         <div>
-          <label htmlFor="location2">상세지역</label>
-          <select>
+          <label htmlFor="location2">상세 지역</label>
+          <select
             id="location2"
             value={location2}
             onChange={(e) => setLocation2(e.target.value)}
             required
-          
-            {locations[location].cities.map((city, index) => (
-              <option key={index} value={city}>{city}</option>}
-            <option value="">상세지역을 선택하세요</option>)
-            {(locationData[location] || []).map((loc, index) => (
+          >
+            {locationData[location]?.map((loc, index) => (
               <option key={index} value={loc}>{loc}</option>
             ))}
           </select>
@@ -168,9 +166,9 @@ const WritePost = () => {
           <label htmlFor="reward">설정 포인트</label>
           <input
             id="reward"
-            type="number"
+            type="text"
             value={reward}
-            onChange={(e) => setReward(e.target.value)}
+            onChange={RewardChange}
             required
           />
         </div>
@@ -178,6 +176,6 @@ const WritePost = () => {
       </form>
     </div>
   );
-  
+}
 
 export default WritePost;
