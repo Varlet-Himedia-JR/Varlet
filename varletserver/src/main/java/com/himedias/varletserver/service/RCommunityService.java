@@ -18,4 +18,9 @@ public class RCommunityService {
     public List<RCommunityDto> getPostList() {
         return rcr.findAll(Sort.by(Sort.Direction.DESC, "rnum"));
     }
+
+    public void savePost(RCommunityDto postDto) {
+        rcr.save(postDto);
+    }
+
 }

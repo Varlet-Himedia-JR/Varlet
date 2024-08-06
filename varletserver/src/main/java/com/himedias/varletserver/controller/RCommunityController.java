@@ -3,6 +3,8 @@ package com.himedias.varletserver.controller;
 import com.himedias.varletserver.dto.RCommunityDto;
 import com.himedias.varletserver.service.RCommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -25,11 +27,15 @@ public class RCommunityController {
         return result;
     }
 
-//    @GetMapping("/writePost")
-//    public HashMap<String, Object> writePost(){
-//         HashMap<String, Object> result = new HashMap<>();
-//        System.out.println("result in?");
-//    }
+    @PostMapping("/writePost")
+    public ResponseEntity<String> writePost(@RequestBody RCommunityDto postDto) {
+        try {
+            rcs.savePost(postDto);
+            return ResponseEntity.ok("글 작성 성공");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("글 작성 실패");
+        }
+    }
 
 
 }
