@@ -31,9 +31,12 @@ public class CustomUserDetailService implements UserDetailsService {
         if(member == null) {
             throw new UsernameNotFoundException(username + " - User Not found");
         }
+        System.out.println("----login info----");
+        System.out.println(member.toString());
 
         // 존재하면 로그인 처리를 위해 Entity 데이터를 DTO 데이터로 옮김
         MemberDTO memberdto = new MemberDTO(
+                member.getUserid(),
                 member.getNickname(),
                 member.getPwd(),
                 member.getEmail(),
