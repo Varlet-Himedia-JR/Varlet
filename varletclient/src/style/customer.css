@@ -39,7 +39,12 @@
 .qnatable .col:nth-child(4){
     flex:1;
 }
-
+.row{
+    width:100%;
+    display: flex;
+    flex:1;
+    flex-direction:row;
+}
 
 .qnawriteform{
     width:100%;

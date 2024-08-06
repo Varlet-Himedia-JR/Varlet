@@ -2,11 +2,11 @@ import React, {useEffect, useState} from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector, useDispatch } from 'react-redux';
-import { loginAction } from '../store/userSlice';
+import { loginAction } from '../../store/userSlice';
 
-import { setCookie, getCookie} from "../util/cookieUtil";
+import { setCookie, getCookie} from "../../util/cookieUtil";
 
-import '../style/mystargram.css'
+import '../../style/mystargram.css'
 
 function Login() {
     const [email, setEmail] = useState('');
