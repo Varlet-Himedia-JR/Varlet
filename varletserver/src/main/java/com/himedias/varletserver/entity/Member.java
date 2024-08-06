@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,7 @@ public class Member {
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "indate")
-    private Instant indate;
+    private Timestamp indate;
 
     @Column(name = "is_login")
     private Character isLogin;

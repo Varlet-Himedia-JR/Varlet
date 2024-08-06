@@ -14,6 +14,7 @@ public class Qna {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int qseq;
+    private String userid;
     private String subject;
     private String content;
     private Timestamp indate;
