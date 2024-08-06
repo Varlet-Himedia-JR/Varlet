@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
 import '../../style/customer.css';
+import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
+import jaxios from '../../util/jwtUtil';
 
 function WriteQna() {
     const [subject, setSubject] = useState('');
@@ -13,10 +15,11 @@ function WriteQna() {
     const [security, setSecurity] = useState('');
     const loginUser = useSelector(state => state.user);
     const navigate = useNavigate();
+    const userCookie = getCookie('user');
 
     function onSubmit(){
         setSecurity('Y')
-        axios.post('/api/qna/writeQna',{subject,content, userid:loginUser.userid, security,pass})
+        jaxios.post('/api/qna/writeQna',{subject,content, userid:getCookie('user').userid, pass})
         .then(()=>{ navigate('/qna')})
         .catch((err)=>{
             console.error(err);
