@@ -1,4 +1,5 @@
 //jwtUtil.js
+
 import axios from "axios";
 import { setCookie , getCookie } from "./cookieUtil";
 const jaxios = axios.create();
@@ -39,6 +40,7 @@ const beforeRes=async (res)=>{
     //     setCookie('user', JSON.stringify(loginUser), 1);
     //     loginUser = getCookie('user');
     // }
+
     
     return res;
 }

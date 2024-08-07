@@ -7,13 +7,12 @@
     display: flex;
 }
 /* varlet_logo_with_plane 1 */
-.logo{
-position: relative;
-width: 300px;
-height: 103px;
-border: 1px dotted black;
-}
 
+
+.img{
+    width: 800px;
+    height: 103px;
+}
 
 
 .category_menu{

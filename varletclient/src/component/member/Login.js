@@ -26,6 +26,7 @@ function Login() {
             }else{
                 console.log('login info',result.data);
                 dispatch(loginAction(result.data));
+
                 setCookie("user",JSON.stringify(result.data),1);
                 navigate('/')
                 console.log('login cookie info : ',getCookie('user'));
