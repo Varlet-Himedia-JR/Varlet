@@ -1,14 +1,21 @@
 package com.himedias.varletserver.controller;
 
 import com.himedias.varletserver.entity.Member;
+import com.himedias.varletserver.security.CustomSecurityConfig;
 import com.himedias.varletserver.security.util.CustomJWTException;
 import com.himedias.varletserver.security.util.JWTUtil;
 import com.himedias.varletserver.service.MemberService;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +25,65 @@ public class MemberController {
 
     @Autowired
     MemberService ms;
+
+    @PostMapping("/useridCheck")
+    public HashMap<String, Object> useridCheck( @RequestParam("userid") String userid ){
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        Member mem = ms.getMember( userid );
+        if( mem != null ) result.put("msg", "no");
+        else result.put("msg", "yes");
+        return result;
+    }
+
+    @PostMapping("/nicknameCheck")
+    public HashMap<String, Object> nicknameCheck( @RequestParam("nickname") String nickname){
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        Member mem = ms.getMemberByNickname( nickname );
+        if( mem != null ) result.put("msg", "no");
+        else result.put("msg", "yes");
+        return result;
+    }
+
+    @Autowired
+    CustomSecurityConfig cc;
+
+    @PostMapping("/join")
+    public HashMap<String, Object> join( @RequestBody Member member){
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        PasswordEncoder pe = cc.passwordEncoder();
+        member.setPwd(pe.encode(member.getPwd()));
+        ms.insertMember(member);
+        result.put("msg", "ok");
+        return result;
+    }
+
+
+
+
+    @Autowired
+    ServletContext context;
+
+    @PostMapping("/fileupload")
+    public HashMap<String, Object> fileupload(@RequestParam("image") MultipartFile file){
+
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        String path = context.getRealPath("/uploads");
+
+        Calendar today = Calendar.getInstance();
+        long dt = today.getTimeInMillis();
+        String filename = file.getOriginalFilename();
+        String fn1 = filename.substring(0, filename.indexOf(".") );
+        String fn2 = filename.substring(filename.indexOf(".") );
+        String uploadPath = path + "/" + fn1 + dt + fn2;
+
+        try {
+            file.transferTo( new File(uploadPath) );
+            result.put("filename", fn1 + dt + fn2);
+        } catch (IllegalStateException | IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
 
 
