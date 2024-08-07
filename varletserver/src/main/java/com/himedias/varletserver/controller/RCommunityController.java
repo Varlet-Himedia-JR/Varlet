@@ -31,6 +31,7 @@ public class RCommunityController {
     @PostMapping("/writePost")
     public ResponseEntity<HashMap<String, Object>> writePost(@RequestBody RCommunityWrite rCommunityWrite) {
         HashMap<String, Object> result = rcs.writePost(rCommunityWrite);
+        System.out.println("result: " + result);
         return ResponseEntity.ok(result);
     }
 

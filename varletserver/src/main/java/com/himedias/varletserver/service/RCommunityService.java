@@ -7,6 +7,8 @@ import com.himedias.varletserver.entity.RCommunity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,22 +25,24 @@ public class RCommunityService {
         }
 
 
-    public HashMap<String, Object> writePost(RCommunityWrite rCommunityWrite) {
+    @Transactional
+    public HashMap<String, Object> writePost(@RequestBody RCommunityWrite rCommunityWrite) {
         HashMap<String, Object> result = new HashMap<>();
         try {
-            RCommunity rCommunity = new RCommunity();
-            rCommunity.setUserid(rCommunityWrite.getUserid());
-            rCommunity.setLocation(rCommunityWrite.getLocation());
-            rCommunity.setLocation2(rCommunityWrite.getLocation2());
-            rCommunity.setReward(rCommunityWrite.getReward());
-            rCommunity.setTitle(rCommunityWrite.getTitle());
-            rCommunity.setContent(rCommunityWrite.getContent());
-            rCommunity.setPicked('N'); // 기본값
-            rCommunity.setSuggest(0); // 기본값
-            rCommunity.setViews(0); // 기본값
+            RCommunity rc = new RCommunity();
+            rc.setUserid(rCommunityWrite.getUserid());
+            rc.setLocation(rCommunityWrite.getLocation());
+            rc.setLocation2(rCommunityWrite.getLocation2());
+            rc.setReward(rCommunityWrite.getReward());
+            rc.setTitle(rCommunityWrite.getTitle());
+            rc.setContent(rCommunityWrite.getContent());
+            rc.setPicked('N'); // 기본값
+            rc.setSuggest(0); // 기본값
+            rc.setViews(0); // 기본값
 
+            System.out.println("rc?" + rc);
             // 게시글 저장
-            rcr.save(rCommunity);
+            rcr.save(rc);
 
             // 성공 응답
             result.put("success", true);
@@ -49,6 +53,7 @@ public class RCommunityService {
             result.put("message", "게시글 작성에 실패했습니다: " + e.getMessage());
             e.printStackTrace();
         }
+        System.out.println("rc?" + result);
         return result;
     }
 
