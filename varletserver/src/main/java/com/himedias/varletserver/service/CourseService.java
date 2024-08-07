@@ -1,12 +1,12 @@
 package com.himedias.varletserver.service;
 
 import com.himedias.varletserver.dao.CourseRepository;
+import com.himedias.varletserver.entity.Dayschedule;
 import com.himedias.varletserver.entity.Timetable;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,11 +43,21 @@ public class CourseService {
             }
         }
 
-        for(int i = 0; i<duration.size();i++) {
+        for (int i = 0; i < duration.size(); i++) {
             System.out.println(duration.get(i));
         }
 
         return duration;
 
     }
+
+    public List<Dayschedule> getDaySchedules(String tnames, String userid) {
+        Timetable tt = cr.findTseqByTnamesAndUserid(tnames,userid);
+        int tseq = tt.getTseq();
+        return cr.findDayschedule(tseq);
+
+    }
+
 }
+
+
