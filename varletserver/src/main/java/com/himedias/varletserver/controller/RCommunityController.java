@@ -1,10 +1,9 @@
 package com.himedias.varletserver.controller;
 
-import com.himedias.varletserver.dto.RCommunitySummary;
-import com.himedias.varletserver.dto.RCommunityWrite;
+import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
+import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
 import com.himedias.varletserver.service.RCommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,8 +1,8 @@
 package com.himedias.varletserver.service;
 
 import com.himedias.varletserver.dao.RCommunityRepository;
-import com.himedias.varletserver.dto.RCommunitySummary;
-import com.himedias.varletserver.dto.RCommunityWrite;
+import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
+import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
 import com.himedias.varletserver.entity.RCommunity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;

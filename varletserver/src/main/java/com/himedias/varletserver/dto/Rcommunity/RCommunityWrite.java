@@ -1,10 +1,7 @@
-package com.himedias.varletserver.dto;
+package com.himedias.varletserver.dto.Rcommunity;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.Value;
-
-import java.io.Serializable;
 
 /**
  * DTO for {@link com.himedias.varletserver.entity.RCommunity}
