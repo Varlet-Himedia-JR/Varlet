@@ -7,6 +7,8 @@ import { loginAction } from '../../store/userSlice';
 import { setCookie, getCookie} from "../../util/cookieUtil";
 
 import '../../style/mystargram.css'
+import Heading from '../headerfooter/Heading';
+import Footer from '../headerfooter/Footer';
 
 function Login() {
     const [userid, setUserid] = useState('');
@@ -22,16 +24,21 @@ function Login() {
             if( result.data.error == 'ERROR_LOGIN'){
                 return alert("이메일 또는 패스워드 오류입니다",result.data.error);
             }else{
-                console.log(result.data);
+                console.log('login info',result.data);
                 dispatch(loginAction(result.data));
-                setCookie("user",JSON.stringify(result.data));                
-                navigate('/');
+
+                setCookie("user",JSON.stringify(result.data),1);
+                navigate('/')
+                console.log('login cookie info : ',getCookie('user'));
+
             }
             
         }catch(err){ console.error(err)}
     }
 
     return (
+        <div>
+        <Heading/>
         <div className="loginform">
             <div className='field'>
                 <label>ID</label>
@@ -53,6 +60,8 @@ function Login() {
                 <button>GOOGLE</button>
                 <button>FACEBOOK</button>
             </div>
+        </div>
+        <Footer/>
         </div>
     )
 }
