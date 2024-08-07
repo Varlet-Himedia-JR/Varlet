@@ -17,6 +17,7 @@ function Heading() {
     const LoginWindow = () =>{
         // window.open('/login','Login','width=500,height=600');
         navigate('/login');
+        
     };
     const JoinWindow = () =>{
         window.open('/join','Join','width=500,height=600');
@@ -44,7 +45,7 @@ function Heading() {
                 <div onClick={ ()=>{ navigate('/rcommunity') } }>여행 코스 의뢰</div>
                 <div onClick={ ()=>{ window.location.href='/kindlist/2' } } >즐길거리</div>
                 <div className='logo'>
-                    <img src="http://localhost:8070/images/logo.png" onClick={
+                    <img className='img' src="http://localhost:8070/images/logo.png" onClick={
                         ()=>{ navigate('/') }
                     }/>
                 </div>
@@ -54,8 +55,8 @@ function Heading() {
                 <div className='gnb'>  
                 {!userCookie && <div className='login' onClick={LoginWindow}>로그인</div>}
                 {!userCookie && <div className='join' onClick={JoinWindow}>회원가입</div>}
-                    {getCookie('user')? (<h2>{getCookie('user').snsid}님 환영합니다</h2>) : null}
-                    {getCookie('user')?<div className='logout' onClick={() => { logout() }}>Logout</div>:''}
+                    {getCookie('user')? (<h2>{getCookie('user').nickname}님</h2>) : null}
+                    {getCookie('user')?<div className='logout' onClick={() => { logout() }}>로그아웃</div>:''}
                 </div>
             </div>
                 

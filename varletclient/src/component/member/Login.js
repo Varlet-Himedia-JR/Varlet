@@ -24,8 +24,8 @@ function Login() {
             }else{
                 console.log(result.data);
                 dispatch(loginAction(result.data));
-                setCookie("user",JSON.stringify(result.data),1);
-                navigate('/')
+                setCookie("user",JSON.stringify(result.data));                
+                navigate('/');
             }
             
         }catch(err){ console.error(err)}
