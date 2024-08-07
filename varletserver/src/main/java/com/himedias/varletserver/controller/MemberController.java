@@ -26,6 +26,7 @@ public class MemberController {
     public Map<String, Object> refresh(@RequestHeader("Authorization") String authHeader,
                                        @PathVariable("refreshToken") String refreshToken
     ) throws CustomJWTException {
+        System.out.println("refreshtoken on refresh"+refreshToken);
         if(refreshToken == null ) throw new CustomJWTException("NULL_REFRASH");
         if(authHeader == null || authHeader.length() < 7 )
             throw new CustomJWTException("INVALID_HEADER");
@@ -33,14 +34,14 @@ public class MemberController {
         // 추출하는 내용의 7번째 글자부터 끝까지 추출합니다
         String accessToken = authHeader.substring(7);
 
-        if(checkExpiredToken(accessToken)){ // 기간이 지나면 true, 안지났으면 false 리턴
+        if(!checkExpiredToken(accessToken)){ // 기간이 지나면 true, 안지났으면 false 리턴
             return Map.of("access_token",accessToken,"refresh_token",refreshToken);
         }
         // accessToken 기간 만료시 refresh 토큰으로 재 검증하여 사용자 정보 추출
         Map<String,Object> claims = JWTUtil.validateToken(refreshToken);
 
         // 토큰 교체
-        String newAccessToken = JWTUtil.generateToken(claims,5);
+        String newAccessToken = JWTUtil.generateToken(claims,1);
         String newRefreshToken = "";
         if( checkTime((Integer)claims.get("exp"))){
             newRefreshToken = JWTUtil.generateToken(claims,60*24);
@@ -48,7 +49,7 @@ public class MemberController {
             newRefreshToken = refreshToken;
         }
 
-        return Map.of("access_token",accessToken,"refresh_token",refreshToken);
+        return Map.of("access_token",newAccessToken,"refresh_token",newRefreshToken);
     }
 
     private boolean checkTime(Integer exp) {
