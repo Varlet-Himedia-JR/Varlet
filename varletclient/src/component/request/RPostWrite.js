@@ -86,7 +86,7 @@ const WritePost = () => {
     .then(response => {
         console.log('글 작성 성공:', response);
         alert('의뢰가 성공적으로 등록되었습니다.');
-        navigate('/'); // 홈 또는 다른 페이지로 이동
+        navigate('/rcommunity'); // 홈 또는 다른 페이지로 이동
     })
     .catch(error => {
         console.error('글 작성 실패:', error);
@@ -167,7 +167,7 @@ const WritePost = () => {
           <input
             id="reward"
             type="text"
-            value={reward}
+            defaultValue={0}
             onChange={RewardChange}
             required
           />
