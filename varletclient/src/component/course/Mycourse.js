@@ -20,7 +20,7 @@ function Mycourse() {
     };
 
     useEffect(() => {
-        axios.get(`/api/course/getTnames/${userCookie.userid}`)
+        jaxios.get(`/api/course/getTnames/${userCookie.userid}`)
             .then((result) => {
                 setMycourse(result.data.mycourse);
                 if (result.data.mycourse.length > 0) {
@@ -32,7 +32,7 @@ function Mycourse() {
 
     useEffect(() => {
         if (selectedCourse) {
-            axios.get(`/api/course/getDuration/${selectedCourse}`)
+            jaxios.get(`/api/course/getDuration/${selectedCourse}`)
                 .then((result) => {
                     setCourseDuration(result.data.duration);
                 })
