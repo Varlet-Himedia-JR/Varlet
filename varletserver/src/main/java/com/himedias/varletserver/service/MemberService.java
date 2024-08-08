@@ -3,18 +3,10 @@ package com.himedias.varletserver.service;
 
 import com.himedias.varletserver.dao.MemberRepository;
 import com.himedias.varletserver.entity.Member;
-import jakarta.servlet.ServletContext;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Optional;
 
 @Service
@@ -36,6 +28,19 @@ public class MemberService {
             return mem.get();
         }
     }
+
+//    @Autowired
+//    FollowRepository fr;
+//
+//    public List<Follow> getFollowings(String nickname) {
+//        List<Follow> list = fr.findByFfrom( nickname );
+//        return list;
+//    }
+//
+//    public List<Follow> getFollowers(String nickname) {
+//        List<Follow> list = fr.findByFto( nickname );
+//        return list;
+//    }
 
     public Member getMemberBySnsid(String id) {
         Optional<Member> mem = mr.findBySnsid( id );

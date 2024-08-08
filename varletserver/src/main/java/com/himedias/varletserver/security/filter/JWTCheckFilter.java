@@ -34,7 +34,6 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             log.info("JWT claims: " + claims);
 
             String userid = (String) claims.get("userid");
-            String name = (String) claims.get("name");
             String nickname = (String) claims.get("nickname");
             String pwd = (String) claims.get("pwd");
             String email = (String) claims.get("email");
@@ -42,15 +41,14 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             String provider = (String) claims.get("provider");
             String snsid = (String) claims.get("snsid");
             String profileimg = (String) claims.get("profileimg");
-            String zipcode = (String) claims.get("zip_code");
+            String zipcode = (String) claims.get("zipcode");
             String address = (String) claims.get("address");
-            String dAddress = (String) claims.get("d_address");
+            String dAddress = (String) claims.get("dAddress");
             Timestamp indate = (Timestamp) claims.get("indate");
             Character isLogin = (Character) claims.get("isLogin");
             List<String> roleNames = (List<String>) claims.get("roleNames");
 
-
-            MemberDTO memberDTO = new MemberDTO(userid, name,nickname, pwd, email, phone, provider, snsid, profileimg, zipcode, address, dAddress, indate, isLogin, roleNames);
+            MemberDTO memberDTO = new MemberDTO(userid, nickname, pwd, email, phone, provider, snsid, profileimg, zipcode, address, dAddress, indate, isLogin, roleNames);
             log.info("-----------------------------------");
             log.info(memberDTO);
             log.info(memberDTO.getAuthorities()); // 권한 추출
@@ -94,7 +92,6 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         if (path.startsWith("/member/join"))
             return true;
-
         if (path.startsWith("/qna/qna"))
             return true;
         if (path.startsWith("/qna/writeQna"))
@@ -104,19 +101,18 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/qna/passCheck"))
             return true;
 
-        if (path.startsWith("/member/useridCheck"))
+        if (path.startsWith("/member/emailcheck"))
             return true;
 
-        if (path.startsWith("/member/nicknameCheck"))
+        if (path.startsWith("/member/nicknamecheck"))
             return true;
 
         if (path.startsWith("/member/fileupload"))
             return true;
-        if (path.startsWith("/member/kakaoStart"))
+        if (path.startsWith("/member/kakaostart"))
             return true;
         if (path.startsWith("/member/kakaoLogin"))
             return true;
-
         if (path.startsWith("/rcommunity/getPostList"))
             return true;
         if (path.startsWith("/favicon.ico"))

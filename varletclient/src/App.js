@@ -13,7 +13,6 @@ import Join from './component/member/Join';
 import WriteQna from './component/qna/WriteQna';
 import QnaView from './component/qna/QnaView';
 import Mycourse from "./component/course/Mycourse";
-import Kakaosaveinfo from "./component/member/Kakaosaveinfo";
 import Contents from "./component/contents/Contents";
 import Testcontents from "./component/contents/Testcontents";
 import ContentsView from "./component/contents/ContentsView";
@@ -42,7 +41,6 @@ function App() {
         <Route path="/writeQna" element={<WriteQna />} />
         <Route path="/qnaView/:qseq" element={<QnaView/>} />
         <Route path="/mycourse" element={<Mycourse />} />
-        <Route path="/kakaosaveinfo/:nickname" element={<Kakaosaveinfo />} />
         <Route path="/contents" element={<Contents />} />
         <Route path="/ctest" element={<Testcontents />} />
         <Route path="/getContentsView/:cseq" element={<ContentsView />} />

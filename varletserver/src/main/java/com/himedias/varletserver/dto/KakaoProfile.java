@@ -17,7 +17,6 @@ public class KakaoProfile {
     public class KakaoAccount {
 
         private Profile profile;
-        private String userid;
         private String email;
         private boolean has_email;
 
@@ -45,13 +44,6 @@ public class KakaoProfile {
             this.has_email = has_email;
         }
 
-        public String getUserid() {
-            return userid;
-        }
-        public void setUserid(String userid) {
-            this.userid = userid;
-        }
-
         public class Profile {
             private String nickname;
             private String profile_image_url;
@@ -71,7 +63,6 @@ public class KakaoProfile {
             public void setProfile_image_url(String profile_image_url) {
                 this.profile_image_url = profile_image_url;
             }
-
         }
     }
 }
