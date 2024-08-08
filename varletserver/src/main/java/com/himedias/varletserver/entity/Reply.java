@@ -11,18 +11,18 @@ import java.sql.Timestamp;
 
 @Data
 @Entity
-public class Qna {
+public class Reply {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int qseq;
-    private String userid;
-    private String pass;
-    private String security;
-    private String subject;
-    private String content;
-    @CreationTimestamp
-    private Timestamp indate;
-    private String reply;
-    private Timestamp replydate;
+    private int renum; // 댓글 시퀀스 (Primary Key)
 
+    private int rseq; // 리뷰 시퀀스 (댓글이 달린 리뷰의 ID)
+
+    private String userid; // 사용자 ID (댓글 작성자)
+
+    private String content; // 댓글 내용
+
+    @CreationTimestamp
+    private Timestamp writedate; // 댓글 작성 날짜
 }

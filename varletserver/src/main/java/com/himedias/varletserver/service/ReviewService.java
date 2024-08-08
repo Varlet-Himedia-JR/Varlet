@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.Optional;
 
 @Service
@@ -45,7 +46,24 @@ public class ReviewService {
         rr.deleteById(rseq);
     }
 
-   /* public Optional<Review> updateReview(int rseq) {
-        rr.
-    }*/
+    public void updateReview(int rseq, Review updatedReview) throws Exception {
+        // Check if the review exists
+        if (!rr.existsById(rseq)) {
+            throw new Exception("Review not found");
+        }
+
+        // Fetch the existing review
+        Review existingReview = rr.findById(rseq).orElseThrow(() -> new Exception("Review not found"));
+
+        // Update the existing review with new values
+        existingReview.setTitle(updatedReview.getTitle());
+        existingReview.setContent(updatedReview.getContent());
+        existingReview.setReviewimg(updatedReview.getReviewimg());
+        existingReview.setIndate(new Timestamp(System.currentTimeMillis())); // Update date to current time
+
+        // Save updated review
+        rr.save(existingReview);
+    }
+
+
 }

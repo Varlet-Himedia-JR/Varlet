@@ -12,7 +12,7 @@ function ReviewView() {
 
     useEffect(() => {
         axios.get(`/api/review/getReviewView/${rseq}`)
-            .then((result) => { 
+            .then((result) => {
                 setReview(result.data.review);
                 setEditForm({
                     title: result.data.review.title,
@@ -20,32 +20,41 @@ function ReviewView() {
                     reviewimg: result.data.review.reviewimg
                 });
             })
-            .catch((err) => { 
+            .catch((err) => {
                 console.error(err);
-                setReview({}); 
+                setReview({});
             });
     }, [rseq]);
 
     function reviewDelete() {
-        axios.delete(`/api/review/reviewDelete/${rseq}`)
-            .then(() => { 
-                navigate('/reviewList'); 
-            })
-            .catch((err) => { 
-                console.error(err);
-            });
+        // 사용자에게 삭제 확인 대화상자를 표시
+        const isConfirmed = window.confirm("정말로 삭제하시겠습니까?");
+
+        if (isConfirmed) {
+            axios.delete(`/api/review/reviewDelete/${rseq}`)
+                .then(() => {
+                    // 삭제가 성공하면 리뷰 목록 페이지로 이동
+                    navigate('/reviewList');
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        } else {
+            // 사용자가 취소를 클릭한 경우 아무 동작도 하지 않음
+            console.log("삭제가 취소되었습니다.");
+        }
     }
 
     function reviewEdit() {
-        axios.post(`/api/review/updateReview/${rseq}`, { 
-            ...editForm, 
+        axios.post(`/api/review/updateReview/${rseq}`, {
+            ...editForm,
             indate: new Date() // Update the date to the current date
         })
-            .then(() => { 
+            .then(() => {
                 setIsEditing(false);
                 // Fetch the updated review after edit
                 axios.get(`/api/review/getReviewView/${rseq}`)
-                    .then((result) => { 
+                    .then((result) => {
                         setReview(result.data.review);
                         setEditForm({
                             title: result.data.review.title,
@@ -53,11 +62,11 @@ function ReviewView() {
                             reviewimg: result.data.review.reviewimg
                         });
                     })
-                    .catch((err) => { 
+                    .catch((err) => {
                         console.error(err);
                     });
             })
-            .catch((err) => { 
+            .catch((err) => {
                 console.error(err);
             });
     }
@@ -90,8 +99,8 @@ function ReviewView() {
                                 <div className='field'>
                                     <label>Title</label>
                                     {isEditing ? (
-                                        <input 
-                                            type="text" 
+                                        <input
+                                            type="text"
                                             name="title"
                                             value={editForm.title}
                                             onChange={handleInputChange}
@@ -107,7 +116,7 @@ function ReviewView() {
                                 <div className='field'>
                                     <label>Content</label>
                                     {isEditing ? (
-                                        <textarea 
+                                        <textarea
                                             name="content"
                                             value={editForm.content}
                                             onChange={handleInputChange}
@@ -124,22 +133,23 @@ function ReviewView() {
                                     <label>Readcount</label>
                                     <div>{review.readcount}</div>
                                 </div>
+
                                 {review.reviewimg && (
                                     <div className='field'>
                                         <label>Image</label>
                                         {isEditing ? (
-                                            <input 
-                                                type="text" 
+                                            <input
+                                                type="text"
                                                 name="reviewimg"
                                                 value={editForm.reviewimg}
                                                 onChange={handleInputChange}
                                             />
                                         ) : (
                                             <div>
-                                                <img 
+                                                <img
                                                     src={`/images/${review.reviewimg}`}  // Adjust path as needed
-                                                    alt="Review" 
-                                                    style={{ maxWidth: '300px', maxHeight: '300px' }} 
+                                                    alt="Review"
+                                                    style={{ maxWidth: '300px', maxHeight: '300px' }}
                                                 />
                                             </div>
                                         )}

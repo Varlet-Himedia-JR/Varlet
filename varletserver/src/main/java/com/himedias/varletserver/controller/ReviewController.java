@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -100,11 +99,20 @@ public class ReviewController {
         return result;
     }
 
-   /* @PostMapping("/updateReview/{rseq}")
+    @PostMapping("/updateReview/{rseq}")
     public HashMap<String, Object> updateReview(@PathVariable int rseq,
                                                 @RequestBody Review review,
                                                 HttpServletRequest request) {
         HashMap<String, Object> result = new HashMap<>();
-
-    }*/
+        try {
+            rs.updateReview(rseq, review);
+            HttpSession session = request.getSession();
+            session.setAttribute("userid", review.getUserid()); // Update with the correct user ID if needed
+            result.put("msg", "ok");
+        } catch (Exception e) {
+            result.put("msg", "error");
+            result.put("message", e.getMessage());
+        }
+        return result;
+    }
 }
