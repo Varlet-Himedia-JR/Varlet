@@ -58,7 +58,7 @@ function Heading() {
                         ()=>{ navigate('/') }
                     }/>
                 </div>
-                <div onClick={ ()=>{ window.location.href='/kindlist/3' } } >리뷰게시판</div>
+                <div onClick={ ()=>{ window.location.href='/reviewList' } } >리뷰게시판</div>
                 <div onClick={ ()=>{ logCheck('/mycourse') } } >나의 여행</div>
                 <div onClick={ ()=>{ window.location.href='/qna' } } >고객센터</div>
                 <div className='gnb'>  
@@ -68,8 +68,6 @@ function Heading() {
                     {getCookie('user')?<div className='logout' onClick={() => { logout() }}>로그아웃</div>:''}
                 </div>
             </div>
-                
-
         </div>
     )
 }

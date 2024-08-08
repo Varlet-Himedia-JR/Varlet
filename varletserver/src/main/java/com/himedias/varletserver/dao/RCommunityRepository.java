@@ -1,6 +1,6 @@
 package com.himedias.varletserver.dao;
 
-import com.himedias.varletserver.dto.RCommunitySummary;
+import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.entity.RCommunity;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;

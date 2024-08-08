@@ -34,6 +34,7 @@ const WritePost = () => {
   const [content, setContent] = useState('');
   const [location, setLocation] = useState('1');
   const [location2, setLocation2] = useState('');
+  const [selectedOption, setSelectedOption] = useState('1');
   const [reward, setReward] = useState('');
   const [userPoint, setUserPoint] = useState(0);
   const navigate = useNavigate();
@@ -52,14 +53,17 @@ const WritePost = () => {
     }
   }, [userCookie]);
 
-  const handleLocationChange = (event) => {
-    setLocation(event.target.value);
-    setLocation2('');
+  const LocationChange = (event) => {
+    const newLocation = event.target.value;
+    setLocation(newLocation);
+    setLocation2(locationData[newLocation] ? locationData[newLocation][0] : ''); // 선택된 지역의 첫 번째 값 또는 빈 문자열로 설정
   };
-
+  
   useEffect(() => {
-    if (location in locationData) {
-      setLocation2(locationData[location][0]);
+    if (locationData[location]) {
+      setLocation2(locationData[location][0] || '');
+    } else {
+      setLocation2('');
     }
   }, [location]);
 
@@ -72,64 +76,55 @@ const WritePost = () => {
     }
   };
 
+  const Location2Change = (event) => {
+    setSelectedOption(event.target.value);
+    setLocation2(event.target.value !== '전체' ? event.target.value : '');
+  };
+
+
+  const returnList = (event) => {
+    window.alert('작성을 취소하시겠습니까?')
+    navigate('/rcommunity');  
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+  
+    // location2가 빈 문자열일 경우 null로 처리
+    const location2Value = location2 === '' ? null : parseInt(location2, 10);
+  
     axios.post('/api/rcommunity/writePost', {
-        title: title,
-        content: content,
-        location: parseInt(location, 10), // int형으로 변환
-        location2: parseInt(location2, 10), // int형으로 변환
-        reward: parseInt(reward, 10), // int형으로 변환
-        userid: userCookie.userid // userid를 추가
+      title: title,
+      content: content,
+      location: parseInt(location, 10),
+      location2: parseInt(location2Value, 10), // int형으로 변환, 빈 문자열인 경우 null로 처리
+      reward: parseInt(reward, 10),
+      userid: userCookie.userid
     })
     .then(response => {
-        console.log('글 작성 성공:', response);
-        alert('의뢰가 성공적으로 등록되었습니다.');
-        navigate('/rcommunity'); // 홈 또는 다른 페이지로 이동
+      console.log('글 작성 성공:', response);
+      alert('의뢰가 성공적으로 등록되었습니다.');
+      navigate('/rcommunity'); // 홈 또는 다른 페이지로 이동
     })
     .catch(error => {
-        console.error('글 작성 실패:', error);
-        alert('의뢰 등록에 실패했습니다.');
+      console.error('글 작성 실패:', error);
+      alert('의뢰 등록에 실패했습니다.');
     });
-};
+  };
 
-  return (
-    <div>
-      <h1>글 작성</h1>
-      <form onSubmit={handleSubmit}>
-        <div className='gnb'>
-          {userCookie ? (<h2>{userCookie.userid}</h2>) : null}
-        </div>
-        <div>
-          <label htmlFor="title">제목</label>
-          <input
-            id="title"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="title">상세내용</label>
-          <input
-            id="title"
-            type="text"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="location">지역</label>
-          <select
-            id="location"
-            value={location}
-            onChange={handleLocationChange}
-            required
-          >
-            <option value="1">지역을 선택하세요</option>
+return (
+  <div className="max-w-4xl mx-auto p-8">
+    <h1 className="text-2xl font-bold mb-4">의뢰 글 작성</h1>
+    <form onSubmit={handleSubmit}>
+    <ul className='mb-4'>
+          <li className='flex items-center mb-4'>
+            <span className='mr-4 text-lg font-medium'>지역 선택</span>
+            <select
+              className='border rounded px-2 py-1'
+              value={location}
+              onChange={LocationChange}
+            >
+              <option value="1">전체</option>
             <option value="2">서울특별시</option>
             <option value="3">부산광역시</option>
             <option value="4">대구광역시</option>
@@ -147,35 +142,86 @@ const WritePost = () => {
             <option value="16">경상북도</option>
             <option value="17">경상남도</option>
             <option value="18">제주도</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="location2">상세 지역</label>
-          <select
-            id="location2"
-            value={location2}
-            onChange={(e) => setLocation2(e.target.value)}
-            required
+            </select>
+            <div>
+              <span className='mr-4 text-lg font-medium'>지역 상세</span>
+              <select
+                className='border rounded px-2 py-1'
+                value={location2}
+                onChange={Location2Change}
+              >
+                {locationData[location]?.map((loc, index) => (
+                  <option key={index} value={loc}>{loc}</option>
+                ))}
+              </select>
+            </div>
+          </li>
+        </ul>
+      <div className='w-full'>
+        <div className="mb-4">
+          <label
+            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium"
+            htmlFor="title"
           >
-            {locationData[location]?.map((loc, index) => (
-              <option key={index} value={loc}>{loc}</option>
-            ))}
-          </select>
+            제목
+          </label>
+          <input
+            className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full mt-2"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium"
+            htmlFor="content"
+          >
+            내용
+          </label>
+          <textarea
+            className="flex min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full mt-2 h-64"
+            id="content"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
         </div>
         <div>
-          <label htmlFor="reward">설정 포인트</label>
+          <label
+            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium"
+            htmlFor="reward"
+          >
+            포인트 설정
+          </label>
           <input
+            className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full mt-2"
             id="reward"
             type="text"
-            defaultValue={0}
+            value={reward}
             onChange={RewardChange}
             required
           />
         </div>
-        <button type="submit">제출</button>
-      </form>
-    </div>
-  );
-}
+
+        <div className="flex justify-center space-x-4">
+          <button
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 px-4 py-2 bg-black text-white"
+            type="submit"
+          >
+            작성완료
+          </button>
+          <button
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+            type="button"
+            onClick={returnList}
+          >
+            작성취소
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+);
+};
 
 export default WritePost;
