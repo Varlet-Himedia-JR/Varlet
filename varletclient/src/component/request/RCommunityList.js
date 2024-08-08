@@ -91,8 +91,18 @@ function PostList() {
     return locationData[loc1]?.[loc2] ?? '전체';
   };
 
-  const RCommunityDetail = (postId) => {
+  const RCommunityDetail = async (postId) => {
+    await increaseViewCount(postId); // 조회수 증가 호출
     navigate(`/RCommunityDetail/${postId}`);
+  };
+
+  const increaseViewCount = async (rnum) => {
+    try {
+      await axios.post(`/api/rcommunity/increaseViewCount`, { rnum });
+      console.log("조회수 증가 성공", rnum);
+    } catch (error) {
+      console.error("조회수 증가 실패", rnum);
+    }
   };
 
   return (
