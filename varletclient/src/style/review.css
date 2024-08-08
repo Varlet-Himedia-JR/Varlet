@@ -1,0 +1,181 @@
+.reviewtable {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px dotted black;
+    margin: 2px auto;
+}
+
+.reviewtable .row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.reviewtable .row:first-child .col {
+    background-color: palevioletred;
+    color: white;
+    font-weight: bold;
+}
+
+.reviewtable .col {
+    border: 1px dotted palevioletred;
+    padding: 15px;
+    text-align: center;
+    margin: 2px;
+}
+
+.reviewtable .col:nth-child(1) {
+    flex: 1;
+}
+
+.reviewtable .col:nth-child(2) {
+    flex: 3;
+    cursor: pointer;
+}
+
+.reviewtable .col:nth-child(3) {
+    flex: 1;
+}
+
+.reviewtable .col:nth-child(4) {
+    flex: 1;
+}
+
+.row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.reviewwriteform {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.reviewwriteform .field {
+    width: 100%;
+    border: 1px solid blue;
+    display: flex;
+    margin: 5px 0;
+}
+
+.reviewwriteform .field label {
+    flex: 1;
+    padding: 3px;
+    margin: 5px 5px;
+    font-weight: bold;
+}
+
+.reviewwriteform .field input, 
+.reviewwriteform .field div {
+    flex: 5;
+}
+
+.reviewwriteform .field textarea {
+    flex: 5;
+}
+
+.reviewwriteform .btns {
+    display: flex;
+}
+
+.reviewwriteform .btns button {
+    flex: 1;
+    padding: 5px;
+    margin: 2px;
+    font-weight: bold;
+}
+
+.review {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.reviewview {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.reviewview .field {
+    flex: 1;
+    display: flex;
+}
+
+.reviewview label {
+    background-color: palevioletred;
+    color: white;
+    flex: 1;
+    padding: 5px;
+}
+
+.reviewview div {
+    flex: 4;
+    margin: 5px;
+}
+
+.reviewWriteForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.reviewWriteForm .field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.reviewWriteForm .field label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.reviewWriteForm .field input,
+.reviewWriteForm .field textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.reviewWriteForm .field textarea {
+    resize: vertical;
+}
+
+.reviewWriteForm .field input[type="file"] {
+    border: none;
+    padding: 0;
+}
+
+.reviewWriteForm .field p {
+    margin-top: 10px;
+    color: #333;
+}
+
+.reviewWriteForm .btns {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.reviewWriteForm .btns button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: palevioletred;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.reviewWriteForm .btns button:hover {
+    background-color: palevioletred;
+;
+}
+

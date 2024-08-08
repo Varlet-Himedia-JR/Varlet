@@ -9,5 +9,4 @@ class VarletserverApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

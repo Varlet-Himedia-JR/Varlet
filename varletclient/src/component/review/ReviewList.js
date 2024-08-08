@@ -1,61 +1,69 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import Heading from './../headerfooter/Heading';
+import Footer from './../headerfooter/Footer';
+import '../../style/review.css';
 
 function ReviewList() {
     const [reviewList, setReviewList] = useState([]);
-    const [paging, setPaging] = useState({});
+    const [paging, setPaging] = useState(null);  // 초기값을 null로 설정
+    const [beginend, setBeginend] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('/api/review/reviewList/1') // 데이터 가져오기
+        axios.get('/api/review/reviewList/1')
             .then((result) => {
-                setReviewList(result.data.reviewList); // 실제 데이터 구조에 맞게 수정
-                setPaging(result.data.paging);
+                const { reviewList, paging } = result.data;
+                setReviewList(Array.isArray(reviewList) ? reviewList : []);
+                setPaging(paging || null);  // paging이 없으면 null로 설정
+                
+                // 페이지 배열 계산
+                if (paging && paging.beginPage && paging.endPage) {
+                    const pageArr = [];
+                    for (let i = paging.beginPage; i <= paging.endPage; i++) {
+                        pageArr.push(i);
+                    }
+                    setBeginend(pageArr);
+                }
             })
             .catch((err) => { console.error(err); });
     }, []);
 
-    function onPageMove(p) {
-        axios.get(`/api/review/reviewList/${p}`)
+    function onPageMove(page) {
+        axios.get(`/api/review/reviewList/${page}`)
             .then((result) => {
-                let reviews = [...reviewList, ...result.data.reviewList];
-                setReviewList(reviews);
-                setPaging(result.data.paging);
+                const { reviewList, paging } = result.data;
+                console.log(result.data);
+                setReviewList(Array.isArray(reviewList) ? reviewList : []);
+                setPaging(paging || null);  // paging이 없으면 null로 설정
+                
+                // 페이지 배열 계산
+                if (paging && paging.beginPage && paging.endPage) {
+                    const pageArr = [];
+                    for (let i = paging.beginPage; i <= paging.endPage; i++) {
+                        pageArr.push(i);
+                    }
+                    setBeginend(pageArr);
+                }
             })
             .catch((err) => { console.error(err); });
     }
 
-    // 스크롤을 통한 페이징 처리
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollHeight = document.documentElement.scrollHeight - 10;
-            const scrollTop = document.documentElement.scrollTop;
-            const clientHeight = document.documentElement.clientHeight;
-            if (paging.page && (scrollTop + clientHeight >= scrollHeight)) {
-                onPageMove(Number(paging.page) + 1);
-            }
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, [paging.page, reviewList]);
-
-    // 리뷰 상세 페이지로 이동
     function onReviewView(rseq) {
         navigate(`/reviewView/${rseq}`);
     }
 
     return (
         <article>
+            <Heading />
             <div className='subPage'>
                 <div className='reviewList' style={{ flex: "4" }}>
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                         <h2>Review List</h2>
                         <button onClick={() => { navigate('/writeReview') }}>리뷰 작성</button>
                     </div>
-                    <div className="ReviewTable">
+                    <div className="reviewtable">
                         <div className='row'>
                             <div className="col">번호</div>
                             <div className="col">작성자이름</div>
@@ -64,7 +72,7 @@ function ReviewList() {
                             <div className="col">조회수</div>
                         </div>
                         {
-                            reviewList.length > 0 ? (
+                            Array.isArray(reviewList) && reviewList.length > 0 ? (
                                 reviewList.map((review, idx) => (
                                     <div className="row" key={idx}>
                                         <div className="col">{review.rseq}</div>
@@ -81,8 +89,45 @@ function ReviewList() {
                             )
                         }
                     </div>
+                    {/* 페이지 네비게이션 추가 */}
+                    <div id="paging" style={{ textAlign: "center", padding: "10px" }}>
+                        {
+                            paging && paging.prev ? (
+                                <span style={{ cursor: "pointer" }} onClick={() => { onPageMove(paging.beginPage - 1) }}>
+                                    ◀
+                                </span>
+                            ) : (
+                                <span></span>
+                            )
+                        }
+                        {
+                            beginend.length > 0 ? (
+                                beginend.map((page, idx) => (
+                                    <span
+                                        key={idx}
+                                        style={{ cursor: "pointer", margin: "0 5px" }}
+                                        onClick={() => { onPageMove(page) }}
+                                    >
+                                        {page}
+                                    </span>
+                                ))
+                            ) : (
+                                <span>1</span>
+                            )
+                        }
+                        {
+                            paging && paging.next ? (
+                                <span style={{ cursor: "pointer" }} onClick={() => { onPageMove(paging.endPage + 1) }}>
+                                    ▶
+                                </span>
+                            ) : (
+                                <span></span>
+                            )
+                        }
+                    </div>
                 </div>
             </div>
+            <Footer />
         </article>
     );
 }

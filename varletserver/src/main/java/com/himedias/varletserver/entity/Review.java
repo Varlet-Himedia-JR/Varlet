@@ -16,19 +16,20 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer rseq;           // 리뷰의 고유 식별자 (기본 키)
 
-    private String userid;          // 리뷰 작성자의 사용자 ID
+    private int rseq; // 리뷰 시퀀스 (Primary Key)
 
-    private int readcount;          // 리뷰의 조회 수
+    private String userid; // 사용자 ID
 
-    private String title;           // 리뷰의 제목
+    private String title; // 리뷰 제목
 
-    private String reviewimg;       // 리뷰 이미지 URL 또는 경로
-
-    private String content;         // 리뷰 내용
+    private String content; // 리뷰 내용
 
     @CreationTimestamp
-    private Timestamp indate;       // 리뷰 작성 일시
+    private Timestamp indate; // 리뷰 작성 날짜
+
+    private int readcount; // 조회수
+
+    private String reviewimg; // 리뷰 이미지 경로
 
 }
