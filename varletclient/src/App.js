@@ -10,6 +10,9 @@ import Join from './component/member/Join';
 import WriteQna from './component/qna/WriteQna';
 import QnaView from './component/qna/QnaView';
 import Mycourse from "./component/course/Mycourse";
+import Contents from "./component/contents/Contents";
+import Testcontents from "./component/contents/Testcontents";
+import ContentsView from "./component/contents/ContentsView";
 
 // import WritePost from './component/post/WritePost';
 // import MyPage from './component/member/MyPage';
@@ -32,6 +35,11 @@ function App() {
         <Route path="/writeQna" element={<WriteQna />} />
         <Route path="/qnaView/:qseq" element={<QnaView/>} />
         <Route path="/mycourse" element={<Mycourse />} />
+        <Route path="/contents" element={<Contents />} />
+        <Route path="/ctest" element={<Testcontents />} />
+        <Route path="/getContentsView/:cseq" element={<ContentsView />} />
+
+        
         
         {/* <Route path="/main" element={<Main />} />
         <Route path="/writePost" element={<WritePost />} />

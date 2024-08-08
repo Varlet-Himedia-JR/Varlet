@@ -52,46 +52,7 @@ const Timetable = ({ courseDuration }) => {
             </div>
             <hr />
 
-            <div>
-                <tbody>
-                    <tr>
-                        <th></th>
-                        {days.map(day => (
-                            <td >
-                                <div key={day} className="theader">{day}</div>
-                            </td>
-                        ))}
-                    </tr>
-                </tbody>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div className='grids'>
-                                {times.map(time => (
-                                    <div key={time} className="cell">{time}</div>
-                                ))}
-                            </div>
-                        </td>
-                        {days.map(day => (
-                            <td>
-                                <div className='cols' style={{width:'20px', height:'20px'}}>
-                                    <div className='subject color3'>
-                                        {/* <ul className='status'>
-                                        <img className='img' src="http://localhost:8070/images/deletebutton.png" style={{width:'20px', height:'20px'}} />
-                                        </ul> */}
-                                    </div>
-                                </div>
-                                <div className='grids'>
-                                    {times.map(time => (
-                                        <div className="cell" style={{ border: '1px solid black' }}></div>
-                                    ))}
-                                </div>
-                            </td>
-                        ))}
-                    </tr>
-                </tbody>
-
-            </div>
+            
         </div>
     );
 };
