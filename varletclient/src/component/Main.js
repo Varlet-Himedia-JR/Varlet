@@ -8,7 +8,6 @@ import { loginAction, logoutAction } from '../store/userSlice';
 import jaxios from '../util/jwtUtil';
 
 import { setCookie, getCookie, removeCookie } from "../util/cookieUtil";
-
 // import '../style/mystargram.css'
 function Main() {
   const [loginUser, setLoginUser] = useState({});
@@ -16,12 +15,16 @@ function Main() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  function pay(){
+      jaxios('/api/pay/pay')
+  } 
+
   
   return (
     <>
     <Heading/>
     <div>
-      <h3>메인 내용 들어올 예정</h3>
+        <div onClick={ ()=>{ pay() } } >구매</div>
     </div>
     <Footer/>
     </>

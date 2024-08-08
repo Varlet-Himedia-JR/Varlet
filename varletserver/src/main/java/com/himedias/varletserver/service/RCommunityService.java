@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @Service
-public class RCommunityService {
+public class  RCommunityService {
 
     @Autowired
     private RCommunityRepository rcr;

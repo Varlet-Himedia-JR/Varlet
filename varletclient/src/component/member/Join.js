@@ -44,7 +44,7 @@ function Join() {
                 return alert('닉네임이 중복됩니다');
             }
 
-            result = await axios.post('/api/member/join', {userid, pwd, name,nickname, phone,zip_code,address, d_address, profileimg });
+            result = await axios.post('/api/member/join', {userid, pwd, name,nickname,email,phone,zip_code,address,d_address,profileimg });
             if(result.data.msg=='ok'){
                 alert('회원 가입이 완료되었습니다. 로그인하세요');
                 navigate('/');
