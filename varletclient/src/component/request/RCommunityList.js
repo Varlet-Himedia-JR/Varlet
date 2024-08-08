@@ -52,10 +52,10 @@ function PostList() {
   const [location, setLocation] = useState('1');
   const [location2, setLocation2] = useState('');
 
-  const handleChange = (event) => {
-    setSelectedOption(event.target.value);
-    setLocation2('');
-  };
+  // const handleChange = (event) => {
+  //   setSelectedOption(event.target.value);
+  //   setLocation2('');
+  // }; 점검중
 
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
@@ -75,14 +75,6 @@ function PostList() {
       .catch(error => console.error('Error fetching posts:', error));
   }, []);
 
-  const maskedid = (userid) => {
-    return userid.length > 2 ? userid.slice(0, 2) + '****' : userid;
-  };
-
-  const requestwrite = () => {
-    navigate('/rpostwrite');
-  };
-
   const getLocation1Name = (loc) => {
     return location1Data[loc] ?? '이러지마 제발~';
   };
@@ -91,19 +83,25 @@ function PostList() {
     return locationData[loc1]?.[loc2] ?? '전체';
   };
 
-  const RCommunityDetail = async (postId) => {
-    await increaseViewCount(postId); // 조회수 증가 호출
-    navigate(`/RCommunityDetail/${postId}`);
+  const maskedid = (userid) => {
+    return userid.length > 2 ? userid.slice(0, 2) + '****' : userid;
   };
 
-  const increaseViewCount = async (rnum) => {
+  const requestwrite = () => {
+    navigate('/rpostwrite');
+  };
+
+  const RCommunityDetail = async (postId) => {
     try {
-      await axios.post(`/api/rcommunity/increaseViewCount`, { rnum });
-      console.log("조회수 증가 성공", rnum);
+      const response = await axios.get(`/api/rcommunity/rCommunityDetail?rnum=${postId}`);
+      console.log("조회수 증가 및 게시글 조회 성공", response.data.post);
+      navigate(`/RCommunityDetail/${postId}`);
     } catch (error) {
-      console.error("조회수 증가 실패", rnum);
+      console.error("조회수 증가 및 게시글 조회 실패", error);
     }
   };
+
+
 
   return (
     <div className='w-full max-w-7xl mx-auto px-4 mb-16'>
@@ -167,8 +165,8 @@ function PostList() {
             <span className='w-2/12 text-center'>상세 지역</span>
             <span className='w-2/12 text-center'>닉네임[작성자]</span>
             <span className='w-2/12 text-left'>작성일</span>
-            <span className='w-1/12 text-center'>추천수</span>
             <span className='w-1/12 text-center'>조회수</span>
+            <span className='w-1/12 text-center'>추천수</span>
           </li>
           <div>
             {posts.length > 0 ? (
@@ -178,12 +176,18 @@ function PostList() {
                     {post.rnum}
                   </span>
                   <span className='w-4/12 text-left cursor-pointer text-blue-500' onClick={() => RCommunityDetail(post.rnum)}>
-                    {post.title}
-                  </span>                  <span className='w-2/12 text-center'>{getLocation1Name(post.location)}</span>
-                  <span className='w-2/12 text-center'>{getLocation2Name(post.location, post.location2)}</span>
-                  
+		{post.title}
+                  </span>                  
+                  <span className='w-2/12 text-center'>{getLocation1Name(post.location)}</span>
+                  <span className='w-2/12 text-center'>{getLocation2Name(post.location, post.location2)}</span>           
                   <span className='w-2/12 text-center'>{maskedid(post.userid)}</span>
-                  <span className='w-2/12 text-left'>{post.writedate}</span>
+                  <span className='w-2/12 text-left'>
+                    {new Date(post.writedate).toLocaleDateString('ko-KR', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit'
+                    }).replace(/\./g, '.').replace(/\.$/, '')}
+                  </span>               
                   <span className='w-1/12 text-center'>{post.views}</span>
                   <span className='w-1/12 text-center'>{post.suggest}</span>
                 </li>

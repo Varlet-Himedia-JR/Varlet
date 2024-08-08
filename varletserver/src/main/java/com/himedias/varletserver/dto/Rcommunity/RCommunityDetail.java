@@ -10,7 +10,7 @@ public interface RCommunityDetail {
 
     String getUserid();
 
-    int getLocation();
+    int getLocaQtion();
 
     int getLocation2();
 

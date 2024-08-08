@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom'; // react-router-dom을 사용하여 URL 파라미터를 처리합니다.
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const CommunityDetail = () => {
     const { gseq } = useParams(); // gseq는 URL에서 추출한 파라미터입니다.
@@ -9,9 +10,8 @@ const CommunityDetail = () => {
     const [replyAllcount, setReplyAllcount] = useState(0);
     const [loginUser, setLoginUser] = useState({ userid: null });
 
-    // 데이터 로딩 함수
     useEffect(() => {
-        // API 호출 등으로 데이터 로드
+        axios.get('/api/community/RCommunityDetail/' + gseq)
         const fetchData = async () => {
             // 여기서 API 호출을 통해 communityVO, communityReplies, replyAllcount, loginUser를 가져옵니다.
             // 예: const data = await fetch(`/api/community/${gseq}`);

@@ -57,8 +57,13 @@ public class RCommunityService {
         return result;
     }
 
-    public RCommunity getRCommunityDetail(int rnum) {
-            return rcr.findById(rnum).get();
+    @Transactional
+    public RCommunity getPostAndIncreaseViewCount(int rnum) {
+        RCommunity post = rcr.findById(rnum)
+                .orElseThrow(() -> new RuntimeException("Post not found with id " + rnum));
+        post.setViews(post.getViews() + 1);
+        rcr.save(post);
+        return post;
     }
 
 }

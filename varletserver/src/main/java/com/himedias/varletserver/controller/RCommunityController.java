@@ -31,6 +31,7 @@ public class RCommunityController {
         return result;
     }
 
+
     @PostMapping("/writePost")
     public ResponseEntity<HashMap<String, Object>> writePost(@RequestBody RCommunityWrite rCommunityWrite) {
         HashMap<String, Object> result = rcs.writePost(rCommunityWrite);
@@ -38,13 +39,15 @@ public class RCommunityController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/RCommunityDetail")
-    public HashMap<String, Object> getRCommunityDetail(@RequestParam int rnum) {
+    @GetMapping("/rCommunityDetail")
+    public HashMap<String, Object> getPostDetail(@RequestParam int rnum) {
         HashMap<String, Object> result = new HashMap<>();
-        RCommunity postdetail = rcs.getRCommunityDetail(rnum);
-        result.put("postdetail", postdetail);
+        System.out.println(result + "result??????/====================");
+        RCommunity post = rcs.getPostAndIncreaseViewCount(rnum);
+        result.put("post", post);
         return result;
     }
+
 
 
 }
