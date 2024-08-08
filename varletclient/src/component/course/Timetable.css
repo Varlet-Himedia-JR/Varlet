@@ -30,11 +30,11 @@
     background-color: #fff;
     text-align: center;
     padding: 10px;
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
     height: 50px;
     cursor: pointer;
 }
 
-.cell:hover {
+/* .cell:hover {
     background-color: #e0e0e0;
-}
+} */
