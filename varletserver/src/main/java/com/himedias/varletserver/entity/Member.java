@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -46,7 +47,7 @@ public class Member {
 
     @Size(max = 20)
     @Column(name = "zip_code", length = 20)
-    private String zipCode;
+    private String zip_code;
 
     @Size(max = 100)
     @Column(name = "address", length = 100)
@@ -54,18 +55,19 @@ public class Member {
 
     @Size(max = 100)
     @Column(name = "d_address", length = 100)
-    private String dAddress;
+    private String d_address;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
+
     @Column(name = "indate")
+    @CreationTimestamp
     private Timestamp indate;
 
     @Column(name = "is_login")
-    private Character isLogin;
+    private Character is_login = 'Y';
 
     @Size(max = 50)
     @Column(name = "provider", length = 50)
-    private String provider;
+    private String provider = "local";
 
     @Size(max = 50)
     @Column(name = "snsid", length = 50)
@@ -80,4 +82,13 @@ public class Member {
     @Builder.Default // Default: new ArrayList<>() 비어있는 리스트로 객체 저장
     private List<MemberRole> memberRoleList = new ArrayList<MemberRole>();
 
+    @PrePersist
+    public void prePersist() {
+        if (is_login == null) {
+            is_login = 'Y';
+        }
+        if (provider == null) {
+            provider = "local";
+        }
+    }
 }

@@ -13,17 +13,18 @@ import java.util.stream.Collectors;
 public class MemberDTO extends User {
 
     public MemberDTO(
-            String userid,
+        String userid,
         String username,
+        String nickname,
         String password,
         String email,
         String phone,
         String provider,
         String snsid,
         String profileimg,
-        String zipCode,
+        String zip_code,
         String address,
-        String dAddress,
+        String d_address,
         Timestamp indate,
         Character isLogin,
         List<String> roleNames
@@ -36,16 +37,17 @@ public class MemberDTO extends User {
         );
         // 생성자에 전달된 전달인수들을 멤버변수에 저장
         this.userid = userid;
-        this.nickname = username;
+        this.name = username;
+        this.nickname = nickname;
         this.pwd = password;
         this.email = email;
         this.phone = phone;
         this.provider = provider;
         this.snsid = snsid;
         this.profileimg = profileimg;
-        this.zipCode = zipCode;
+        this.zip_code = zip_code;
         this.address = address;
-        this.dAddress = dAddress;
+        this.d_address = d_address;
         this.indate = indate;
         this.isLogin = isLogin;
         this.roleNames = roleNames;
@@ -53,16 +55,17 @@ public class MemberDTO extends User {
 
     private String userid;
     private String email;
+    private String name;
     private String nickname;
     private String pwd;
     private String phone;
     private String profileimg;
-    private String zipCode;
+    private String zip_code;
     private String address;
     private Timestamp indate;
     private String provider;
     private String snsid;
-    private String dAddress;
+    private String d_address;
     private Character isLogin;
     private List<String> roleNames = new ArrayList<String>();
 
@@ -72,6 +75,7 @@ public class MemberDTO extends User {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("userid", userid);
         dataMap.put("email", email);
+        dataMap.put("name", name);
         dataMap.put("pwd", pwd);
         dataMap.put("nickname", nickname);
         dataMap.put("phone", phone);
@@ -79,10 +83,10 @@ public class MemberDTO extends User {
         dataMap.put("snsid", snsid);
         dataMap.put("profileimg", profileimg);
         dataMap.put("roleNames", roleNames);
-        dataMap.put("zipCode", zipCode);
+        dataMap.put("zip_code", zip_code);
         dataMap.put("address", address);
         dataMap.put("indate", indate);
-        dataMap.put("dAddress", dAddress);
+        dataMap.put("d_address", d_address);
         dataMap.put("isLogin", isLogin);
         return dataMap;
     }
