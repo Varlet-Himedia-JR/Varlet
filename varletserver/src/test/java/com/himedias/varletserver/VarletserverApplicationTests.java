@@ -21,5 +21,4 @@ class VarletserverApplicationTests {
         System.out.println(pe.encode("1"));
         System.out.println(pe.encode("1111"));
     }
-
 }

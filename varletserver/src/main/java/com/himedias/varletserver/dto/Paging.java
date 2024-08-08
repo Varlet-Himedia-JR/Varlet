@@ -1,5 +1,8 @@
 package com.himedias.varletserver.dto;
 
+import lombok.Data;
+
+
 
 import lombok.Data;
 import org.springframework.data.domain.Sort;

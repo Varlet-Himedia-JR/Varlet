@@ -3,6 +3,8 @@ import { Routes, Route } from "react-router-dom";
 import Main from './component/Main';
 import Login from "./component/member/Login";
 import ReviewList from "./component/review/ReviewList";
+import WriteReview from "./component/review/WriteReview";
+import ReviewView from "./component/review/ReviewView";
 import Qna from "./component/qna/Qna";
 import RCommunityList from "./component/request/RCommunityList";
 import RPostWrite from "./component/request/RPostWrite";
@@ -27,6 +29,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/qna" element={<Qna />} />
         <Route path="/reviewList" element={<ReviewList />} />
+        <Route path="/writeReview" element={<WriteReview />} />
+        <Route path="/reviewView/:rseq" element={<ReviewView />} /> {/* 수정된 부분 */}
         <Route path="/rcommunity" element={<RCommunityList />} /> 
         <Route path="/rpostwrite" element={<RPostWrite />} /> 
         <Route path="/rcommunityDetail" element={<RCommunityDetail />} /> 
