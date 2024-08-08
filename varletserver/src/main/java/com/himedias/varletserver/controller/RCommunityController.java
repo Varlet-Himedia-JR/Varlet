@@ -1,7 +1,10 @@
 package com.himedias.varletserver.controller;
 
+import com.himedias.varletserver.dao.RCommunityRepository;
+import com.himedias.varletserver.dto.RCommunityDetail;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
+import com.himedias.varletserver.entity.RCommunity;
 import com.himedias.varletserver.service.RCommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +36,14 @@ public class RCommunityController {
         HashMap<String, Object> result = rcs.writePost(rCommunityWrite);
         System.out.println("result: " + result);
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/RCommunityDetail")
+    public HashMap<String, Object> getRCommunityDetail(@RequestParam int rnum) {
+        HashMap<String, Object> result = new HashMap<>();
+        RCommunity postdetail = rcs.getRCommunityDetail(rnum);
+        result.put("postdetail", postdetail);
+        return result;
     }
 
 

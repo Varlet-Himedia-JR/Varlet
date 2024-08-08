@@ -58,6 +58,7 @@ const WritePost = () => {
     setLocation(newLocation);
     setLocation2(locationData[newLocation] ? locationData[newLocation][0] : ''); // 선택된 지역의 첫 번째 값 또는 빈 문자열로 설정
   };
+  
   useEffect(() => {
     if (locationData[location]) {
       setLocation2(locationData[location][0] || '');

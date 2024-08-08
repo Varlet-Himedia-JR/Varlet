@@ -57,4 +57,8 @@ public class RCommunityService {
         return result;
     }
 
+    public RCommunity getRCommunityDetail(int rnum) {
+            return rcr.findById(rnum).get();
+    }
+
 }

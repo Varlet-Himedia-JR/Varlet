@@ -65,12 +65,15 @@ function PostList() {
   useEffect(() => {
     axios.get('/api/rcommunity/getPostList')
       .then(response => {
-        setPosts(response.data.postlist || []);
+        const data = response.data.postlist.map(post => ({
+          ...post,
+          location1Name: getLocation1Name(post.location1),
+          location2Name: getLocation2Name(post.location1, post.location2)
+        }));
+        setPosts(data);
       })
-      .catch(error => {
-        console.error('Error fetching posts:', error);
-      });
-  }, [selectedOption]);
+      .catch(error => console.error('Error fetching posts:', error));
+  }, []);
 
   const maskedid = (userid) => {
     return userid.length > 2 ? userid.slice(0, 2) + '****' : userid;
@@ -80,12 +83,16 @@ function PostList() {
     navigate('/rpostwrite');
   };
 
-  const locationName = (loc) => {
-    return locationData[loc]?.[0] || '전체';
+  const getLocation1Name = (loc) => {
+    return location1Data[loc] ?? '이러지마 제발~';
   };
 
-  const getLocation2Name = (loc2) => {
-    return locationData[location]?.find(item => item === loc2) || '전체';
+  const getLocation2Name = (loc1, loc2) => {
+    return locationData[loc1]?.[loc2] ?? '전체';
+  };
+
+  const RCommunityDetail = (postId) => {
+    navigate(`/RCommunityDetail/${postId}`);
   };
 
   return (
@@ -160,9 +167,11 @@ function PostList() {
                   <span className='w-1/12 text-center bg-blue-500 text-white rounded-full px-2 py-1 text-xs'>
                     {post.rnum}
                   </span>
-                  <span className='w-4/12 text-left'>{post.title}</span>
-                  <span className='w-2/12 text-center'>{locationName(post.location)}</span>
-                  <span className='w-2/12 text-center'>{getLocation2Name(post.location2)}</span>
+                  <span className='w-4/12 text-left cursor-pointer text-blue-500' onClick={() => RCommunityDetail(post.rnum)}>
+                    {post.title}
+                  </span>                  <span className='w-2/12 text-center'>{getLocation1Name(post.location)}</span>
+                  <span className='w-2/12 text-center'>{getLocation2Name(post.location, post.location2)}</span>
+                  
                   <span className='w-2/12 text-center'>{maskedid(post.userid)}</span>
                   <span className='w-2/12 text-left'>{post.writedate}</span>
                   <span className='w-1/12 text-center'>{post.views}</span>

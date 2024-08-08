@@ -124,6 +124,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/course/getDuration/"))
             return true;
+        if (path.startsWith("/rcommunity/RCView"))
+            return true;
 
         return false;
     }
