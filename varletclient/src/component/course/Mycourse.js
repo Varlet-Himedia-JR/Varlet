@@ -8,11 +8,14 @@ import '../../style/customer.css';
 import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
 import jaxios from '../../util/jwtUtil';
 import Timetable from './Timetable';
+import Timetable2 from './Timetable2';
+
 
 function Mycourse() {
     const [selectedCourse, setSelectedCourse] = useState('');
     const [mycourse, setMycourse] = useState([]);
     const [courseDuration, setCourseDuration] = useState([]);
+    const [daySchedule, setDaySchedule] = useState([]);
     const userCookie = getCookie('user');
 
     const handleCourseChange = (event) => {
@@ -32,9 +35,11 @@ function Mycourse() {
 
     useEffect(() => {
         if (selectedCourse) {
-            jaxios.get(`/api/course/getDuration/${selectedCourse}`)
+            jaxios.get(`/api/course/getMycourse/${selectedCourse}/${userCookie.userid}`)
+            // jaxios.get(`/api/course/getDuration/${selectedCourse}   `)
                 .then((result) => {
                     setCourseDuration(result.data.duration);
+                    setDaySchedule(result.data.dayschedule);
                 })
                 .catch((err) => { console.error(err); });
         }
@@ -59,9 +64,16 @@ function Mycourse() {
                 </select>
                 <p>Selected Course: {selectedCourse}</p>
             </div>
-            <div className='timetable'>
-                <Timetable courseDuration={courseDuration} />
+            <div>
+                {daySchedule.map((ds) => (
+                    <div>{ds.dseq}/{ds.dtitle}/{ds.userid}/{ds.day_date}/{ds.startTime}/{ds.endTime}/{ds.price}/{ds.pcount}</div>
+                ))}
             </div>
+            <div className='timetable'>
+                {/* <Timetable courseDuration={courseDuration} /> */}
+                <Timetable2 courseDuration={courseDuration} daySchedule={daySchedule} />
+            </div>
+            <img src='https://www.mcst.go.kr/attachFiles/cultureInfoCourt/localFestival/notifyFestival/1719535357705.jpg'/>
             <Footer />
         </article>
     );

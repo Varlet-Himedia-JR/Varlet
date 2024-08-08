@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
-import java.util.List;
 
 @RestController
 @RequestMapping("/course")
@@ -22,6 +21,7 @@ public class CourseController {
     public HashMap<String,Object> getTnamesByUserid(@PathVariable String userid) {
         HashMap<String,Object> result = new HashMap<String,Object>();
         result.put("mycourse",cs.getTnamesByUserid(userid));
+//        result.put("mycourse",cs.getAllMycourseByUserid(userid));
         return result;
     }
 
@@ -31,5 +31,15 @@ public class CourseController {
         result.put("duration",cs.getDurationByTnames(mycourse));
         return result;
     }
+
+    @GetMapping("/getMycourse/{mycourse}/{userid}")
+    public HashMap<String,Object> getMycourse(@PathVariable String mycourse,@PathVariable String userid) {
+        HashMap<String,Object> result = new HashMap<String,Object>();
+        result.put("duration",cs.getDurationByTnames(mycourse));
+        result.put("dayschedule",cs.getDaySchedules(mycourse, userid));
+        return result;
+    }
+
+
 
 }

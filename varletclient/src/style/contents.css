@@ -1,0 +1,51 @@
+/* contents.css */
+
+.contents-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+}
+
+.contents-item {
+    flex: 0 0 calc(33.333% - 20px);
+    box-sizing: border-box;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contents-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.contents-row {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.contents-col {
+    margin-bottom: 10px;
+}
+
+.contents-img {
+    max-width: 100%;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.contents-row{
+    border:1px solid black;
+}
+
+/* .contents-col{
+    border:1px solid black;
+} */
+
+/* tbody table tr,tbody table td{
+    border:1px solid black;
+} */

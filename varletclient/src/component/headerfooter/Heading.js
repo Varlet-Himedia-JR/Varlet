@@ -51,13 +51,14 @@ function Heading() {
         <div className='header'>
             <div className='category_menu'>
                 <div onClick={ ()=>{ navigate('/rcommunity') } }>여행 코스 의뢰</div>
-                <div onClick={ ()=>{ window.location.href='/kindlist/2' } } >즐길거리</div>
+                <div onClick={ ()=>{ window.location.href='/contents' } } >즐길거리</div>
+                {/* <div onClick={ ()=>{ navigate('/ctest') } }>테스트</div> */}
                 <div className='logo'>
                     <img className='img' src="http://localhost:8070/images/logo.png" onClick={
                         ()=>{ navigate('/') }
                     }/>
                 </div>
-                <div onClick={ ()=>{ window.location.href='/kindlist/3' } } >리뷰게시판</div>
+                <div onClick={ ()=>{ window.location.href='/reviewList' } } >리뷰게시판</div>
                 <div onClick={ ()=>{ logCheck('/mycourse') } } >나의 여행</div>
                 <div onClick={ ()=>{ window.location.href='/qna' } } >고객센터</div>
                 <div className='gnb'>  
@@ -67,8 +68,6 @@ function Heading() {
                     {getCookie('user')?<div className='logout' onClick={() => { logout() }}>로그아웃</div>:''}
                 </div>
             </div>
-                
-
         </div>
     )
 }
