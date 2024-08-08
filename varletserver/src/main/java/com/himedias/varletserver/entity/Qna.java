@@ -11,8 +11,7 @@ import java.sql.Timestamp;
 
 @Data
 @Entity
-public class Reply {
-
+public class Qna {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int renum; // 답글 번호 (Primary Key)
@@ -26,3 +25,5 @@ public class Reply {
     @CreationTimestamp
     private Timestamp writedate; // 답글 작성 날짜
 }
+
+

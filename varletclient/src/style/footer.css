@@ -1,0 +1,198 @@
+/* Rectangle 6 */
+.footer{
+position: relative;
+display: flex;
+width: 100%;
+height: 300px;
+background: #0066C4;
+justify-content: space-between;
+}
+
+/* 이용약관 */
+.footer_menu :nth-child(1){
+position: relative;
+width: 105px;
+height: 70px;
+text-align: center;
+font-family: 'Inter';
+font-style: italic;
+font-weight: 200;
+font-size: 26px;
+line-height: 31px;
+
+color: #FFFFFF;
+}
+
+/* 회사정보 */
+.footer_menu2 :nth-child(3){
+position: relative;
+width: 105px;
+height: 37px;
+
+font-family: 'Inter';
+font-style: italic;
+font-weight: 200;
+font-size: 26px;
+line-height: 31px;
+
+color: #FFFFFF;
+}
+
+
+
+/* 개인정보처리방침 */
+.footer_menu2 :nth-child(2){
+position: relative;
+width: 213px;
+height: 37px;
+
+font-family: 'Inter';
+font-style: italic;
+font-weight: 200;
+font-size: 26px;
+line-height: 31px;
+
+color: #FFFFFF;
+}
+
+
+/* 서비스 약관 */
+.footer_menu2 :nth-child(1){
+position: relative;
+width: 140px;
+height: 37px;
+
+font-family: 'Inter';
+font-style: italic;
+font-weight: 200;
+font-size: 26px;
+line-height: 31px;
+
+color: #FFFFFF;
+}
+
+
+/* 쿠키설정 */
+.footer_menu2 :nth-child(4){
+position: relative;
+width: 105px;
+height: 37px;
+
+font-family: 'Inter';
+font-style: italic;
+font-weight: 200;
+font-size: 26px;
+line-height: 31px;
+
+color: #FFFFFF;
+}
+
+
+/* 로그인 */
+.footer_menu :nth-child(3){
+position: relative;
+width: 96px;
+height: 70px;
+
+font-family: 'Inter';
+font-style: italic;
+font-weight: 200;
+font-size: 26px;
+line-height: 31px;
+
+color: #FFFFFF;
+}
+
+
+/* 도움말 */
+.footer_menu :nth-child(2){
+position: relative;
+width: 96px;
+height: 70px;
+
+font-family: 'Inter';
+font-style: italic;
+font-weight: 200;
+font-size: 26px;
+line-height: 31px;
+
+color: #FFFFFF;
+}
+
+
+/* Group 1 */
+.footer_menu{
+display: inline;
+width: 408px;
+height: 158px;
+text-align: center;
+align-items: center;
+margin: 0 auto;
+}
+/* Group 1 */
+.footer_menu2{
+display: inline;
+width: 408px;
+height: 158px;
+right:0;
+text-align: center;
+align-items: center;
+margin: 0 auto;
+}
+    
+
+/* varlet */
+h3{
+display: flex;
+width: 408px;
+text-align: center;
+align-items: center;
+font-family: 'Inter';
+font-style: normal;
+font-weight: 900;
+font-size: 130px;
+line-height: 157px;
+/* identical to box height */
+
+color: #FFFFFF;
+}
+
+/* Polygon 1 */
+.h{
+
+width: 46.22px;
+height: 71.05px;
+
+transform: rotate(88.81deg);
+
+/* Polygon 1 */
+position: absolute;
+left: 153.68%;
+right: -153.68%;
+top: 0%;
+bottom: 0%;
+
+background: #FF0000;
+transform: rotate(88.81deg);
+}
+
+
+/* 고객센터 */
+.customer{
+display: flex;
+position: relative;
+width: 250px;
+height: 58px;
+
+font-family: 'Inter';
+font-style: italic;
+font-weight: 200;
+font-size: 30px;
+line-height: 36px;
+
+color: #FFFFFF;
+}
+
+
+
+

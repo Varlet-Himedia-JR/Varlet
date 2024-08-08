@@ -7,12 +7,14 @@ const initialState = {
     nickname:'',
     phone:'',
     profileimg:'',
-    profilemsg:'',
+    zipCode:'',
+    address:'',
+    dAddress:'',
+    indate:'',
+    isLogin:'',
     provider:'',
     pwd:'',
     snsid:'',
-    Followings:[],
-    Followers:[],
     accessToken:'',
     refreshToken:'',
 }
@@ -24,41 +26,42 @@ const userSlice = createSlice(
         reducers:{
             loginAction:(state, action)=>{
                 // 외부에서 전달되는 객체를 내부의 'user'객체에 저장할껀데
-                // 외부에서 전달되는 객체를 이안에슨ㄴ action 이라고 부르고
+                // 외부에서 전달되는 객체를 이 안에 쓴 action 이라고 부르고
                 // 'user'객체는 state 라고 부릅니다.
                 state.email = action.payload.email;
                 state.nickname = action.payload.nickname;
+                state.phone = action.payload.phone;
+                state.profileimg = action.payload.profileimg;
+                state.zipCode = action.payload.zipCode;
+                state.address = action.payload.address;
+                state.dAddress = action.payload.dAddress;
+                state.indate = action.payload.indate;
+                state.isLogin = action.payload.isLogin;
                 state.provider = action.payload.provider;
                 state.snsid = action.payload.snsid;
-                state.profileimg = action.payload.profileimg;
-                state.profilemsg = action.payload.profilemsg;
                 state.pwd = action.payload.pwd;
-                state.phone = action.payload.phone;
                 state.accessToken= action.payload.access_token;
                 state.refreshToken= action.payload.refresh_token;
             },
             logoutAction:(state)=>{
                 state.email = '';
                 state.nickname = '';
+                state.phone = '';
+                state.profileimg = '';
+                state.zipCode ='';
+                state.address ='';
+                state.dAddress ='';
+                state.indate ='';
+                state.isLogin = '';
                 state.provider = '';
                 state.snsid = '';
-                state.profileimg = '';
-                state.profilemsg = '';
                 state.pwd = '';
-                state.phone = '';
                 state.accessToken='';
                 state.refreshToken='';
             },
-            setFollowings : (state, action)=>{
-                state.Followings = action.payload.followings;
-            },
-            setFollowers : (state, action)=>{
-                state.Followers = action.payload.followers;
-            },
-
         }
     }
 );
 
-export const { loginAction, logoutAction, setFollowings,  setFollowers} = userSlice.actions;
+export const { loginAction, logoutAction} = userSlice.actions;
 export default userSlice;

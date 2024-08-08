@@ -1,0 +1,112 @@
+.qnatable{
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border:1px dotted black;
+    margin:2px auto;
+}
+
+.qnatable .row{
+    width:100%;
+    display: flex;
+    flex:1;
+    flex-direction:row;
+}
+
+.qnatable .row:first-child .col{
+    background-color: blueviolet;
+    color:white;
+    font-weight:bold;
+}
+
+.qnatable .col{
+    border:1px dotted blueviolet;
+    padding:15px;
+    text-align: center;
+    margin: 2px;
+}
+.qnatable .col:nth-child(1){
+    flex:1;
+}
+.qnatable .col:nth-child(2){
+    flex:3;
+    cursor:pointer;
+}
+.qnatable .col:nth-child(3){
+    flex:1;
+}
+.qnatable .col:nth-child(4){
+    flex:1;
+}
+.row{
+    width:100%;
+    display: flex;
+    flex:1;
+    flex-direction:row;
+}
+
+.qnawriteform{
+    width:100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.qnawriteform .field{
+    width:100%;
+    border:1px solid blue;
+    display: flex;
+    margin:5px 0px;
+}
+
+.qnawriteform .field label{
+    flex:1;
+    padding:3px;
+    margin:5px 5px;
+    font-weight:bold;
+}
+.qnawriteform .field input, .qnawriteform .field div{
+    flex:5;
+}
+.qnawriteform .field textarea{
+    flex:5;
+}
+.qnawriteform .btns{
+    display: flex;
+}
+.qnawriteform .btns button{
+    flex: 1;
+    padding:5px;
+    margin:2px;
+    font-weight: bold;
+}
+
+
+
+
+.qna{
+    width:100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.qnaview{
+    width :100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.qnaview .field{
+    flex:1;
+    display: flex;
+}
+.qnaview label{
+    background-color: blueviolet;
+    color:white;
+    flex:1;
+    padding:5px;
+}
+.qnaview div{
+    flex:4;
+    margin: 5px;
+}

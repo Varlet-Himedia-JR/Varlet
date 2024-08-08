@@ -1,22 +1,30 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector, useDispatch } from 'react-redux';
-// import { loginAction, setFollowers, setFollowings } from '../store/userSlice';
+import Heading from './headerfooter/Heading';
+import Footer from './headerfooter/Footer';
+import { loginAction, logoutAction } from '../store/userSlice';
+import jaxios from '../util/jwtUtil';
 
-// import { setCookie, getCookie} from "../util/cookieUtil";
+import { setCookie, getCookie, removeCookie } from "../util/cookieUtil";
 
 // import '../style/mystargram.css'
 function Main() {
-    const navigate=useNavigate();
+  const [loginUser, setLoginUser] = useState({});
+  const lUser = useSelector(state => state.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  
   return (
+    <>
+    <Heading/>
     <div>
-    <h1>Varlet lego</h1>
-    <button onClick={ ()=>{ navigate('/login') } }>Login</button>
-    <button onClick={ ()=>{ navigate('/qna') } }>Q&A</button>
-    <button onClick={ ()=>{ navigate('/quest') } }>QUEST</button>
-    <button onClick={ ()=>{ navigate('/review') } }>REVIEW</button>
+      <h3>메인 내용 들어올 예정</h3>
     </div>
+    <Footer/>
+    </>
   )
 }
 
