@@ -51,7 +51,8 @@ function Heading() {
         <div className='header'>
             <div className='category_menu'>
                 <div onClick={ ()=>{ navigate('/rcommunity') } }>여행 코스 의뢰</div>
-                <div onClick={ ()=>{ window.location.href='/' } } >즐길거리</div>
+                <div onClick={ ()=>{ window.location.href='/contents' } } >즐길거리</div>
+                {/* <div onClick={ ()=>{ navigate('/ctest') } }>테스트</div> */}
                 <div className='logo'>
                     <img className='img' src="http://localhost:8070/images/logo.png" onClick={
                         ()=>{ navigate('/') }

@@ -111,7 +111,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/member/kakaostart"))
             return true;
-        if (path.startsWith("/member/kakaoLigin"))
+        if (path.startsWith("/member/kakaoLogin"))
             return true;
         if (path.startsWith("/rcommunity/getPostList"))
             return true;
@@ -119,6 +119,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         //course
         if (path.startsWith("/course/getTnames/"))
+            return true;
+        if (path.startsWith("/course/getMycourse/"))
             return true;
         if (path.startsWith("/rcommunity/writePost"))
             return true;
@@ -139,6 +141,13 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/review/updateReview/"))
             return true;
 
+
+        //contents
+        if (path.startsWith("/contents/contentsList/"))
+            return true;
+
+        if (path.startsWith("/contents/getContentsView/"))
+            return true;
 
         return false;
     }

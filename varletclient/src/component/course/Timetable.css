@@ -16,6 +16,16 @@
     z-index: 2;
 }
 
+th{
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
 .time {
     background-color: #f0f0f0;
     text-align: center;
@@ -33,6 +43,25 @@
     /* border: 1px solid #ddd; */
     height: 50px;
     cursor: pointer;
+}
+
+.contentscell{
+    background-color: #fff;
+    text-align: center;
+    padding: 10px;
+    /* border: 1px solid #ddd; */
+    height: 50px;
+    cursor: pointer;
+}
+
+.dayschedule{
+    background-color: red;
+    color:white;
+    text-align: center;
+    padding: 0;
+    height: 50px;
+    cursor: pointer;
+    border: 1px solid #ddd;
 }
 
 /* .cell:hover {

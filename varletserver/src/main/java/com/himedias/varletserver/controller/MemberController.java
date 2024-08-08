@@ -19,9 +19,6 @@ public class MemberController {
     @Autowired
     MemberService ms;
 
-
-
-
     @GetMapping("/refresh/{refreshToken}")
     public Map<String, Object> refresh(@RequestHeader("Authorization") String authHeader,
                                        @PathVariable("refreshToken") String refreshToken
