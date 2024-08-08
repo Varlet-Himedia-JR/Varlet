@@ -8,7 +8,7 @@ import ReviewView from "./component/review/ReviewView";
 import Qna from "./component/qna/Qna";
 import RCommunityList from "./component/request/RCommunityList";
 import RPostWrite from "./component/request/RPostWrite";
-import RCommunityDetail from "./component/request/RCommunityDetail";
+import RCommunityDetail from "./component/request/RcommunityDetail";
 import Join from './component/member/Join';
 import WriteQna from './component/qna/WriteQna';
 import QnaView from './component/qna/QnaView';
