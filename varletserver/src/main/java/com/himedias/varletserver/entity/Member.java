@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +78,7 @@ public class Member {
     @Column(name = "profileimg", length = 300)
     private String profileimg;
 
+
     // 사용자의 등급별 권한들이 저장
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default // Default: new ArrayList<>() 비어있는 리스트로 객체 저장
@@ -90,5 +92,7 @@ public class Member {
         if (provider == null) {
             provider = "local";
         }
+
+
     }
 }

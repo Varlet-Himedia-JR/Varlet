@@ -9,12 +9,12 @@ import { setCookie } from '../../util/cookieUtil';
 function Naversaveinfo() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const {userid} = useParams();
+    const {nickname} = useParams();
 
     useEffect(
         ()=>{
-            console.log(userid);
-            axios.post('/api/member/loginlocal', null, {params:{username:userid, password:'naver'}} )
+            console.log(nickname);
+            axios.post('/api/member/loginlocal', null, {params:{username:nickname, password:'naver'}} )
             .then((result=>{
                 if( result.data.error == 'ERROR_LOGIN' ){
                     return alert("이메일 또는 패스워드 오류입니다");

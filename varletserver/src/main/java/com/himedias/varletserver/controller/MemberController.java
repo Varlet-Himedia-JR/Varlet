@@ -23,9 +23,12 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/member")
@@ -84,13 +87,17 @@ public class MemberController {
         HttpsURLConnection conn2 = (HttpsURLConnection) url2.openConnection();
         conn2.setRequestProperty("Authorization", "Bearer " + oAuthToken.getAccess_token());
         conn2.setDoOutput(true);
-        BufferedReader br2 = new BufferedReader(new InputStreamReader(conn2.getInputStream(), "UTF-8"));
-        String input2 = "";
         StringBuilder sb2 = new StringBuilder();
-        while ((input2 = br2.readLine()) != null) {
-            sb2.append(input2);
-            System.out.println(input2);
+        try (BufferedReader br2 = new BufferedReader(new InputStreamReader(conn2.getInputStream(), "UTF-8"))) {
+            String input2;
+            while ((input2 = br2.readLine()) != null) {
+                sb2.append(input2);
+                System.out.println(input2); // API 응답을 로그로 출력하여 구조 확인
+            }
         }
+
+// JSON 응답 로그로 확인
+        System.out.println("NaverProfile JSON: " + sb2.toString());
         Gson gson2 = new Gson();
         KakaoProfile kakaoProfile = gson2.fromJson(sb2.toString(), KakaoProfile.class);
         KakaoProfile.KakaoAccount ac = kakaoProfile.getAccount();
@@ -116,47 +123,72 @@ public class MemberController {
     }
 
     // 네이버 로그인
-    @Value("${spring.security.oauth2.client.registration.naver.client-id}")
+    @Value("${naver.client_id}")
     private String naver_id;
-    @Value("${spring.security.oauth2.client.registration.naver.redirect-uri}")
+    @Value("${naver.redirect_uri}")
     private String naver_uri;
-
+    @Value("${naver.client_secret}")
+    private String naver_secret;
     @RequestMapping("/naverStart")
-    public @ResponseBody String naverStart() {
+    public @ResponseBody String naverStart(HttpServletRequest request) {
+        String state = generateState();
         String a = "<script type='text/javascript'>"
                 + "location.href='https://nid.naver.com/oauth2.0/authorize?"
                 + "client_id=" + naver_id + "&"
                 + "redirect_uri=" + naver_uri + "&"
+                + "state=" + state + "&"
                 + "response_type=code';" + "</script>";
-        System.out.println( "Naver Client ID: " + naver_id + ", Redirect URI: " + naver_uri);
+        request.getSession().setAttribute("state", state);
         return a;
+
     }
+
+    private String generateState() {
+        return UUID.randomUUID().toString();
+    }
+
     @RequestMapping("/naverLogin")
-    public void naverLogin( HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void naverLogin( HttpServletRequest request, HttpServletResponse response,
+                            @RequestParam("state") String state) throws IOException {
         String code = request.getParameter("code");
+        String sessionState = (String) request.getSession().getAttribute("state");
+
+        // CSRF 보호를 위해 state 값 비교
+        if (state == null || !state.equals(sessionState)) {
+            System.out.println("세션 불일치");
+            response.sendRedirect("/error");
+            return;
+        }
+
         String endpoint = "https://nid.naver.com/oauth2.0/token";
         URL url = new URL(endpoint);
         String bodyData = "grant_type=authorization_code&";
-        bodyData += "client_id=XA1m05Bk3ARhCxqbLUd7&";
-        bodyData += "redirect_uri=http://localhost:8070/login/oauth2/code/naver&";
-        bodyData += "code=" + code;
+        bodyData += "client_id=" + naver_id ;
+        bodyData += "&client_secret=" + naver_secret;
+        bodyData += "&code=" + code;
+        bodyData += "&state=" + URLEncoder.encode(state, "UTF-8") + "&";
+        bodyData += "redirect_uri=" + URLEncoder.encode(naver_uri, "UTF-8");
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
         conn.setDoOutput(true);
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(), "UTF-8"));
-        bw.write(bodyData);
-        bw.flush();
-        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-        String input = "";
-        StringBuilder sb = new StringBuilder();
-        while ((input = br.readLine()) != null) {
-            sb.append(input);
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(), "UTF-8"))) {
+            bw.write(bodyData);
+            bw.flush();
         }
+
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
+            String input;
+            while ((input = br.readLine()) != null) {
+                sb.append(input);
+            }
+        }
+
         Gson gson = new Gson();
         OAuthToken oAuthToken = gson.fromJson(sb.toString(), OAuthToken.class);
-        String endpoint2 = "https://nid.naver.com/v2/user/me";
+        String endpoint2 = "https://openapi.naver.com/v1/nid/me";
         URL url2 = new URL(endpoint2);
 
         HttpsURLConnection conn2 = (HttpsURLConnection) url2.openConnection();
@@ -169,27 +201,29 @@ public class MemberController {
             sb2.append(input2);
             System.out.println(input2);
         }
-        Gson gson2 = new Gson();
-        NaverProfile naverProfile = gson2.fromJson(sb2.toString(), NaverProfile.class);
-        NaverProfile.NaverAccount nac = naverProfile.getAccount();
-        NaverProfile.NaverAccount.Profile npf = nac.getProfile();
-        System.out.println("id : " + naverProfile.getId());
-        System.out.println("NaverAccount-Email : " + nac.getEmail());
-        System.out.println("NaverProfile-Nickname : " + npf.getNickname());
 
-        Member member = ms.getMemberBySnsid( naverProfile.getId() );
+
+            NaverProfile naverProfile = gson.fromJson(sb2.toString(), NaverProfile.class);
+            // 정보 출력
+            System.out.println("id : " + naverProfile.getResponse().getId());
+            System.out.println("NaverAccount-Email : " + naverProfile.getResponse().getEmail());
+            System.out.println("NaverProfile-Nickname : " + naverProfile.getResponse().getNickname());
+
+
+        Member member = ms.getMemberBySnsid(naverProfile.getResponse().getId());
         PasswordEncoder pe = cc.passwordEncoder(); // 비밀번호 암호화도구
-        if( member == null) {
+        if (member == null) {
             member = new Member();
-            member.setUserid(nac.getEmail());
+            member.setUserid(naverProfile.getResponse().getEmail());
             member.setPwd(pe.encode("naver"));
-            member.setNickname(npf.getNickname());
-            member.setEmail( nac.getEmail());
-            member.setProvider( "naver" );
-            member.setSnsid( naverProfile.getId() );
+            member.setNickname(naverProfile.getResponse().getNickname());
+            member.setEmail(naverProfile.getResponse().getEmail());
+            member.setProvider("naver");
+            member.setSnsid(naverProfile.getResponse().getId());
+            member.setIndate(Timestamp.valueOf(LocalDateTime.now()));
             ms.insertMember(member);
         }
-        String username = URLEncoder.encode(nac.getEmail(),"UTF-8");
+        String username = URLEncoder.encode(naverProfile.getResponse().getEmail(),"UTF-8");
         response.sendRedirect("http://localhost:3000/naversaveinfo/"+username);
     }
 
