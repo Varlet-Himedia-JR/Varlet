@@ -5,22 +5,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import { loginAction, setFollowers, setFollowings } from '../../store/userSlice';
 
 import { setCookie } from '../../util/cookieUtil';
-import jaxios from '../../util/jwtUtil';
 
-function Kakaosaveinfo() {
+function Naversaveinfo() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const {nickname} = useParams();
+    const {userid} = useParams();
 
     useEffect(
         ()=>{
-            console.log(nickname);
-            axios.post('/api/member/loginlocal', null, {params:{username:nickname, password:'kakao'}} )
+            console.log(userid);
+            axios.post('/api/member/loginlocal', null, {params:{username:userid, password:'naver'}} )
             .then((result=>{
                 if( result.data.error == 'ERROR_LOGIN' ){
                     return alert("이메일 또는 패스워드 오류입니다");
                 }else{
-                    console.log('kakaoUser', result.data );
+                    console.log('naveruser', result.data );
                     dispatch( loginAction( result.data ) );
                     setCookie("user", JSON.stringify(result.data), 1);
                     navigate('/')
@@ -32,11 +31,9 @@ function Kakaosaveinfo() {
             
         },[]
     )
-    return (
-        <div>
-        
-        </div>
-    )
+  return (
+    <div></div>
+  )
 }
 
-export default Kakaosaveinfo
+export default Naversaveinfo
