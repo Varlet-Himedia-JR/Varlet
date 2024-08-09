@@ -1,9 +1,7 @@
 package com.himedias.varletserver.service;
 
-import com.himedias.varletserver.dao.ReplyRepository;
 import com.himedias.varletserver.dao.ReviewRepository;
 import com.himedias.varletserver.dto.Paging;
-import com.himedias.varletserver.entity.Reply;
 import com.himedias.varletserver.entity.Review;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +9,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,13 +23,11 @@ public class ReviewService {
     @Autowired
     ReviewRepository rr;
 
-    @Autowired
-    ReplyRepository re;
-
     public Page<Review> getReviewList(Paging paging) {
         int pageNumber = paging.getPage() - 1; // PageRequest uses 0-based index
         int pageSize = paging.getDisplayRow();
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Order.desc("indate")));
+        PageRequest pageRequest = PageRequest.of(paging.getPage() - 1, paging.getDisplayRow(), Sort.by(Sort.Order.desc("indate")));
+        // Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return rr.findAll(pageRequest);
     }
 
@@ -47,36 +45,55 @@ public class ReviewService {
         rr.save(review);
     }
 
-    public void deleteReview(Integer rseq) {
-        rr.deleteById(rseq);
-    }
+    public void deleteReview(Integer rseq) throws IOException {
+        Optional<Review> reviewOpt = rr.findById(rseq);
+        if (reviewOpt.isPresent()) {
+            Review review = reviewOpt.get();
 
-    public void updateReview(int rseq, Review updatedReview) throws Exception {
-        if (!rr.existsById(rseq)) {
-            throw new Exception("Review not found");
+            // Delete the review image file if it exists
+            String reviewimg = review.getReviewimg();
+            if (reviewimg != null && !reviewimg.isEmpty()) {
+                File file = new File(reviewimg + File.separator + reviewimg);
+                if (file.exists()) {
+                    if (!file.delete()) {
+                        throw new IOException("Failed to delete image file: " + reviewimg);
+                    }
+                }
+            }
+
+            // Delete the review record from the database
+            rr.deleteById(rseq);
+        } else {
+            throw new RuntimeException("Review not found");
         }
-
-        Review existingReview = rr.findById(rseq).orElseThrow(() -> new Exception("Review not found"));
-
-        existingReview.setTitle(updatedReview.getTitle());
-        existingReview.setContent(updatedReview.getContent());
-        existingReview.setReviewimg(updatedReview.getReviewimg());
-        existingReview.setIndate(new Timestamp(System.currentTimeMillis())); // Update date to current time
-
-        rr.save(existingReview);
     }
 
-    // 댓글 관련 기능 추가
-
-    public List<Reply> getReplies(int rseq) {
-        return re.findByRseq(rseq);
+    public void updateReview(int rseq, Review review) {
+        Optional<Review> existingReview = rr.findById(rseq);
+        if (existingReview.isPresent()) {
+            Review updatedReview = existingReview.get();
+            updatedReview.setTitle(review.getTitle());
+            updatedReview.setContent(review.getContent());
+            updatedReview.setReviewimg(review.getReviewimg()); // Update image if provided
+            rr.save(updatedReview);
+        } else {
+            throw new RuntimeException("Review not found");
+        }
     }
 
-    public void addReply(Reply reply) {
-        re.save(reply);
+    public String saveFile(MultipartFile file) throws IOException {
+        // Define the file storage location
+        String uploadDir = "path/to/save/directory/";
+
+        // Generate the file path
+        String fileName = file.getOriginalFilename();
+        File targetFile = new File(uploadDir + fileName);
+
+        // Save the file to the local file system
+        file.transferTo(targetFile);
+
+        return fileName;
     }
 
-    public void deleteReply(int renum) {
-        re.deleteById(renum);
-    }
+
 }
