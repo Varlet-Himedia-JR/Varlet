@@ -138,8 +138,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/review/reviewList/"))
             return true;
-        if (path.startsWith("/review/writeReview/"))
+        if (path.startsWith("/review/writeReview"))
             return true;
+
         if (path.startsWith("/review/getReviewView/"))
             return true;
         if (path.startsWith("/review/reviewDelete/"))
