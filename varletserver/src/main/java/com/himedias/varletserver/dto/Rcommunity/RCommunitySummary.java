@@ -1,4 +1,4 @@
-package com.himedias.varletserver.dto;
+package com.himedias.varletserver.dto.Rcommunity;
 
 import java.sql.Timestamp;
 

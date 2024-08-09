@@ -1,0 +1,26 @@
+#paging {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+#paging span {
+    cursor: pointer;
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    transition: background-color 0.3s ease;
+}
+
+#paging span:hover {
+    background-color: #e0e0e0;
+}
+
+#paging span.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
