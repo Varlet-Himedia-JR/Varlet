@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Heading from './../headerfooter/Heading';
@@ -7,48 +7,56 @@ import '../../style/review.css';
 
 function ReviewList() {
     const [reviewList, setReviewList] = useState([]);
-    const [paging, setPaging] = useState(null);  // 초기값을 null로 설정
-    const [beginend, setBeginend] = useState([]);
+    const [page, setPage] = useState(1); // 현재 페이지
+    const [hasMore, setHasMore] = useState(true); // 더 로드할 데이터가 있는지 여부
     const navigate = useNavigate();
 
-    useEffect(() => {
-        axios.get('/api/review/reviewList/1')
-            .then((result) => {
-                const { reviewList, paging } = result.data;
-                setReviewList(Array.isArray(reviewList) ? reviewList : []);
-                setPaging(paging || null);  // paging이 없으면 null로 설정
-                
-                // 페이지 배열 계산
-                if (paging && paging.beginPage && paging.endPage) {
-                    const pageArr = [];
-                    for (let i = paging.beginPage; i <= paging.endPage; i++) {
-                        pageArr.push(i);
-                    }
-                    setBeginend(pageArr);
+    // 데이터 로드 함수
+    const loadReviews = useCallback(async (pageNumber) => {
+        try {
+            const result = await axios.get(`/api/review/reviewList/${pageNumber}`);
+            const { reviewList: newReviews, paging } = result.data;
+
+            if (Array.isArray(newReviews) && newReviews.length > 0) {
+                setReviewList(prevReviews => [...prevReviews, ...newReviews]);
+                setPage(pageNumber);
+
+                // 다음 페이지가 없으면 hasMore를 false로 설정
+                if (!paging || (paging && paging.next === null)) {
+                    setHasMore(false);
                 }
-            })
-            .catch((err) => { console.error(err); });
+            } else {
+                setHasMore(false);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     }, []);
 
-    function onPageMove(page) {
-        axios.get(`/api/review/reviewList/${page}`)
-            .then((result) => {
-                const { reviewList, paging } = result.data;
-                console.log(result.data);
-                setReviewList(Array.isArray(reviewList) ? reviewList : []);
-                setPaging(paging || null);  // paging이 없으면 null로 설정
-                
-                // 페이지 배열 계산
-                if (paging && paging.beginPage && paging.endPage) {
-                    const pageArr = [];
-                    for (let i = paging.beginPage; i <= paging.endPage; i++) {
-                        pageArr.push(i);
-                    }
-                    setBeginend(pageArr);
-                }
-            })
-            .catch((err) => { console.error(err); });
-    }
+    // 스크롤 이벤트 핸들러
+    const handleScroll = useCallback(() => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = document.documentElement.clientHeight;
+
+        // 스크롤이 페이지 하단에 도달했을 때
+        if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore) {
+            loadReviews(page + 1);
+        }
+    }, [page, hasMore, loadReviews]);
+
+    // 컴포넌트 마운트 시 스크롤 이벤트 리스너 추가
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [handleScroll]);
+
+    // 초기 데이터 로드
+    useEffect(() => {
+        loadReviews(page);
+    }, [loadReviews, page]);
 
     function onReviewView(rseq) {
         navigate(`/reviewView/${rseq}`);
@@ -89,42 +97,8 @@ function ReviewList() {
                             )
                         }
                     </div>
-                    {/* 페이지 네비게이션 추가 */}
-                    <div id="paging" style={{ textAlign: "center", padding: "10px" }}>
-                        {
-                            paging && paging.prev ? (
-                                <span style={{ cursor: "pointer" }} onClick={() => { onPageMove(paging.beginPage - 1) }}>
-                                    ◀
-                                </span>
-                            ) : (
-                                <span></span>
-                            )
-                        }
-                        {
-                            beginend.length > 0 ? (
-                                beginend.map((page, idx) => (
-                                    <span
-                                        key={idx}
-                                        style={{ cursor: "pointer", margin: "0 5px" }}
-                                        onClick={() => { onPageMove(page) }}
-                                    >
-                                        {page}
-                                    </span>
-                                ))
-                            ) : (
-                                <span>1</span>
-                            )
-                        }
-                        {
-                            paging && paging.next ? (
-                                <span style={{ cursor: "pointer" }} onClick={() => { onPageMove(paging.endPage + 1) }}>
-                                    ▶
-                                </span>
-                            ) : (
-                                <span></span>
-                            )
-                        }
-                    </div>
+                    {/* 로딩 중 표시 */}
+                    {hasMore && <div className="loading">Loading more reviews...</div>}
                 </div>
             </div>
             <Footer />
