@@ -12,9 +12,9 @@ function Join() {
     const [email,setEmail] = useState('');
     const [nickname, setNickname] = useState('');
     const [phone, setPhone] = useState('');
-    const [zip_code, setZip_code] = useState('');
+    const [zipCode, setZipCode] = useState('');
     const [address, setAddress] = useState('');
-    const [d_address, setD_address] = useState('');
+    const [dAddress, setDAddress] = useState('');
     const [profileimg, setProfileimg] = useState('');
     const [imgStyle, setImgStyle] = useState({display:"none"});
     const [showPostcode, setShowPostcode] = useState(false);
@@ -31,7 +31,7 @@ function Join() {
         if(nickname==''){ return alert('닉네임을 입력하세요');}
         if(email==''){ return alert('이메일을 입력하세요');}
         if(phone==''){ return alert('전화번호를 입력하세요');}
-        if(d_address==''){ return alert('상세주소를 입력하세요');}
+        if(dAddress==''){ return alert('상세주소를 입력하세요');}
         
         try{
             let result = await axios.post('/api/member/useridCheck', null, {params:{userid}} );
@@ -44,7 +44,7 @@ function Join() {
                 return alert('닉네임이 중복됩니다');
             }
 
-            result = await axios.post('/api/member/join', {userid, pwd, name,nickname,email,phone,zip_code,address,d_address,profileimg });
+            result = await axios.post('/api/member/join', {userid, pwd, name,nickname,email,phone,zipCode,address,dAddress,profileimg });
             if(result.data.msg=='ok'){
                 alert('회원 가입이 완료되었습니다. 로그인하세요');
                 navigate('/');
@@ -67,7 +67,7 @@ function Join() {
 
 
     const handlePostcodeComplete = (data) => {
-      setZip_code(data.zonecode);
+      setZipCode(data.zonecode);
       setAddress(data.address);
       setShowPostcode(false);
     };
@@ -119,8 +119,8 @@ function Join() {
             </div>
             <div className="field">
                 <label>우편번호</label>
-                <input type="text"  style={{flex:"2"}} value={zip_code} onChange={(e)=>{
-                     setZip_code( e.currentTarget.value );
+                <input type="text"  style={{flex:"2"}} value={zipCode} onChange={(e)=>{
+                     setZipCode( e.currentTarget.value );
                 }} readOnly/>
                 <button style={{ flex: "1" }} onClick={() => { setShowPostcode(true) }}>우편번호 찾기</button>
             </div>
@@ -137,8 +137,8 @@ function Join() {
             </div>
             <div className="field">
                 <label>상세주소</label>
-                <input type="text" value={d_address} onChange={
-                      (e)=>{  setD_address( e.currentTarget.value ); }
+                <input type="text" value={dAddress} onChange={
+                      (e)=>{  setDAddress( e.currentTarget.value ); }
                 } placeholder='상세주소 입력'/>
             </div>
             <div className='field'>

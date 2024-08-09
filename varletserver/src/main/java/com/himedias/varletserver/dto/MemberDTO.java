@@ -14,22 +14,24 @@ public class MemberDTO extends User {
 
     public MemberDTO(
         String userid,
-        String username,
-        String nickname,
         String password,
+        String name,
+        String nickname,
         String email,
         String phone,
+        String profileimg,
+        String zipCode,
+        String address,
+        String dAddress,
         String provider,
         String snsid,
-        String profileimg,
-        String zip_code,
-        String address,
-        String d_address,
         Timestamp indate,
         Character isLogin,
         List<String> roleNames
         ) {
-        super(username, password,
+        // 부모 클래스인 User의 생성자를 호출합니다.
+        // 이때 사용자의 권한을 SimpleGrantedAuthority 객체로 변환하여 전달합니다.
+        super(userid, password,
                 roleNames.stream().map(
                         str -> new SimpleGrantedAuthority("ROLE_" + str)
                 ).collect(Collectors.toList())
@@ -37,35 +39,34 @@ public class MemberDTO extends User {
         );
         // 생성자에 전달된 전달인수들을 멤버변수에 저장
         this.userid = userid;
-        this.name = username;
-        this.nickname = nickname;
         this.pwd = password;
+        this.name = name;
+        this.nickname = nickname;
         this.email = email;
         this.phone = phone;
+        this.profileimg = profileimg;
+        this.zipCode = zipCode;
+        this.address = address;
+        this.dAddress = dAddress;
         this.provider = provider;
         this.snsid = snsid;
-        this.profileimg = profileimg;
-        this.zip_code = zip_code;
-        this.address = address;
-        this.d_address = d_address;
         this.indate = indate;
         this.isLogin = isLogin;
         this.roleNames = roleNames;
     }
-
     private String userid;
-    private String email;
+    private String pwd;
     private String name;
     private String nickname;
-    private String pwd;
+    private String email;
     private String phone;
     private String profileimg;
-    private String zip_code;
+    private String zipCode;
     private String address;
-    private Timestamp indate;
+    private String dAddress;
     private String provider;
     private String snsid;
-    private String d_address;
+    private Timestamp indate;
     private Character isLogin;
     private List<String> roleNames = new ArrayList<String>();
 
@@ -74,20 +75,20 @@ public class MemberDTO extends User {
     public Map<String, Object> getClaims() {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("userid", userid);
-        dataMap.put("email", email);
-        dataMap.put("name", name);
         dataMap.put("pwd", pwd);
+        dataMap.put("name", name);
         dataMap.put("nickname", nickname);
+        dataMap.put("email", email);
         dataMap.put("phone", phone);
+        dataMap.put("profileimg", profileimg);
+        dataMap.put("zipCode", zipCode);
+        dataMap.put("address", address);
+        dataMap.put("dAddress", dAddress);
         dataMap.put("provider", provider);
         dataMap.put("snsid", snsid);
-        dataMap.put("profileimg", profileimg);
-        dataMap.put("roleNames", roleNames);
-        dataMap.put("zip_code", zip_code);
-        dataMap.put("address", address);
         dataMap.put("indate", indate);
-        dataMap.put("d_address", d_address);
         dataMap.put("isLogin", isLogin);
+        dataMap.put("roleNames", roleNames);
         return dataMap;
     }
 

@@ -37,17 +37,17 @@ public class CustomUserDetailService implements UserDetailsService {
         // 존재하면 로그인 처리를 위해 Entity 데이터를 DTO 데이터로 옮김
         MemberDTO memberdto = new MemberDTO(
                 member.getUserid(),
-                member.getName(),
                 member.getPwd(),
+                member.getName(),
                 member.getNickname(),
                 member.getEmail(),
                 member.getPhone(),
-                member.getProvider(),
-                member.getSnsid(),
                 member.getProfileimg(),
                 member.getZip_code(),
                 member.getAddress(),
                 member.getD_address(),
+                member.getProvider(),
+                member.getSnsid(),
                 member.getIndate(),
                 member.getIs_login(),
                 member.getMemberRoleList().stream().map(memberRole -> memberRole.name()).collect(Collectors.toList())
