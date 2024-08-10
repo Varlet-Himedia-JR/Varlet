@@ -11,9 +11,11 @@ public interface RCommunitySummary {
     int getLocation();
     int getLocation2();
     Timestamp getWritedate();
-    Integer getSuggest();
     Integer getViews();
     String getTitle();
     int getReward();
-    String getPicked();
+
+    Timestamp getStartdate();
+
+    Timestamp getEnddate();
 }

@@ -34,11 +34,6 @@ public class RCommunity {
     @Getter
     @Setter
     @Column(nullable = false, columnDefinition = "int default 0")
-    private int suggest;
-
-    @Getter
-    @Setter
-    @Column(nullable = false, columnDefinition = "int default 0")
     private int views;
 
     @Getter
@@ -65,6 +60,16 @@ public class RCommunity {
     @Setter
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
     private Timestamp writedate;
+
+    @Getter
+    @Setter
+    @Column(name = "startdate", nullable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
+    private Timestamp startdate;
+
+    @Getter
+    @Setter
+    @Column(name = "enddate", nullable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
+    private Timestamp enddate;
 
 
 }

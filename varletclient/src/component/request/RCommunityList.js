@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const locationData = {
+// 예시 데이터 (실제 데이터로 교체 필요)
+const location2Data = {
   1: ["전체"],
   2: ["전체", "강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"],
   3: ["전체", "중구", "서구", "동구", "영도구", "부산진구", "동래구", "남구", "북구", "강서구", "해운대구", "사하구", "금정구", "연제구", "수영구", "사상구", "기장군"],
@@ -24,7 +25,7 @@ const locationData = {
 };
 
 const location1Data={
-  1: ["전체"],
+  1: ["지역 선택"],
   2: ["서울특별시"],
   3: ["부산광역시"],
   4: ["대구광역시"],
@@ -47,40 +48,16 @@ const location1Data={
 
 function PostList() {
   const [posts, setPosts] = useState([]);
-  const [selectedOption, setSelectedOption] = useState('1');
-  const navigate = useNavigate();
   const [location, setLocation] = useState('1');
   const [location2, setLocation2] = useState('');
-
-  // const handleChange = (event) => {
-  //   setSelectedOption(event.target.value);
-  //   setLocation2('');
-  // }; 점검중
-
-  const handleLocationChange = (event) => {
-    setLocation(event.target.value);
-    setLocation2('');
-  };
-
-  useEffect(() => {
-    axios.get('/api/rcommunity/getPostList')
-      .then(response => {
-        const data = response.data.postlist.map(post => ({
-          ...post,
-          location1Name: getLocation1Name(post.location1),
-          location2Name: getLocation2Name(post.location1, post.location2)
-        }));
-        setPosts(data);
-      })
-      .catch(error => console.error('Error fetching posts:', error));
-  }, []);
+  const navigate = useNavigate();
 
   const getLocation1Name = (loc) => {
     return location1Data[loc] ?? '이러지마 제발~';
   };
 
   const getLocation2Name = (loc1, loc2) => {
-    return locationData[loc1]?.[loc2] ?? '전체';
+    return location2Data[loc1]?.[loc2] ?? '전체';
   };
 
   const maskedid = (userid) => {
@@ -91,17 +68,34 @@ function PostList() {
     navigate('/rpostwrite');
   };
 
-  const RCommunityDetail = async (postId) => {
-    try {
-      const response = await axios.get(`/api/rcommunity/rCommunityDetail?rnum=${postId}`);
-      console.log("조회수 증가 및 게시글 조회 성공", response.data.post);
-      navigate(`/RCommunityDetail/${postId}`);
-    } catch (error) {
-      console.error("조회수 증가 및 게시글 조회 실패", error);
-    }
+  const RCommunityDetail = (postId) => {
+    navigate(`/RcommunityDetail/${postId}`);
   };
 
+  const handleLocationChange = (e) => {
+    setLocation(e.target.value);
+    setLocation2(''); // 지역 2를 초기화
+  };
 
+  const findList = () => {
+    axios.get('/api/rcommunity/getPostList', {
+      params: { location, location2 }
+    })
+    .then(response => {
+      const data = response.data.postlist.map(post => ({
+        ...post,
+        location1Name: getLocation1Name(post.location),
+        location2Name: getLocation2Name(post.location, post.location2)
+      }));
+      setPosts(data);
+    })
+    .catch(error => console.error('Error fetching posts:', error));
+  };
+
+  useEffect(() => {
+    // 초기 로드 시 전체 게시글 불러오기
+    findList();
+  }, []);
 
   return (
     <div className='w-full max-w-7xl mx-auto px-4 mb-16'>
@@ -109,15 +103,15 @@ function PostList() {
         <h1 className='text-3xl font-semibold'>의뢰 게시판</h1>
       </div>
       <div className='w-full'>
-      <ul className='mb-4'>
+        <ul className='mb-4'>
           <li className='flex items-center mb-4'>
-            <span className='mr-4 text-lg font-medium'>전체</span>
             <span className='mr-4 text-lg font-medium'>지역 선택</span>
-              <select
+            <select
                 className='border rounded px-2 py-1'
                 value={location}
                 onChange={handleLocationChange}
               >
+              <option hidden value="0"></option>
               <option value="1">전체</option>
               <option value="2">서울특별시</option>
               <option value="3">부산광역시</option>
@@ -137,18 +131,31 @@ function PostList() {
               <option value="17">경상남도</option>
               <option value="18">제주도</option>
             </select>
-            <div>
-            <span className='mr-4 text-lg font-medium'>지역 상세</span>
-            <select
-              className='border rounded px-2 py-1'
-              value={location2}
-              onChange={(e) => setLocation2(e.target.value)}
+            <button
+              className='bg-blue-500 text-white px-4 py-2 rounded'
+              onClick={findList}
             >
-            {locationData[location]?.map((loc, index) => (
-              <option key={index} value={loc}>{loc}</option>
-            ))}
-          </select>
-        </div>
+              검색하기
+            </button>
+            <div className='ml-4'>
+              <span className='mr-4 text-lg font-medium'>지역 상세</span>
+              <select
+                className='border rounded px-2 py-1'
+                value={location2}
+                onChange={(e) => setLocation2(e.target.value)}
+              >
+                {location2Data[location]?.map((loc, index) => (
+                  <option key={index} value={loc}>{loc}</option>
+                ))}
+              </select>
+            </div>
+            <button
+              className='bg-blue-500 text-white px-4 py-2 rounded'
+              onClick={findList}
+            >
+            상세 검색
+            </button>
+            
             <button
               className='ml-auto bg-blue-500 text-white px-4 py-2 rounded'
               onClick={requestwrite}
@@ -159,14 +166,13 @@ function PostList() {
         </ul>
         <ul>
           <li className='flex font-bold text-black border-b border-gray-300 pb-2 mb-2'>
-            <span className='w-1/12 text-center'>no.</span>
+            <span className='w-1/12 text-center'>번호</span>
             <span className='w-4/12 text-left'>제목</span>
-            <span className='w-2/12 text-center'>지역</span>
-            <span className='w-2/12 text-center'>상세 지역</span>
-            <span className='w-2/12 text-center'>닉네임[작성자]</span>
+            <span className='w-2/12 text-center'>지역1</span>
+            <span className='w-2/12 text-center'>지역2</span>
+            <span className='w-2/12 text-center'>작성자</span>
             <span className='w-2/12 text-left'>작성일</span>
             <span className='w-1/12 text-center'>조회수</span>
-            <span className='w-1/12 text-center'>추천수</span>
           </li>
           <div>
             {posts.length > 0 ? (
@@ -176,10 +182,10 @@ function PostList() {
                     {post.rnum}
                   </span>
                   <span className='w-4/12 text-left cursor-pointer text-blue-500' onClick={() => RCommunityDetail(post.rnum)}>
-		{post.title}
-                  </span>                  
+                    {post.title}
+                  </span>
                   <span className='w-2/12 text-center'>{getLocation1Name(post.location)}</span>
-                  <span className='w-2/12 text-center'>{getLocation2Name(post.location, post.location2)}</span>           
+                  <span className='w-2/12 text-center'>{getLocation2Name(post.location, post.location2)}</span>
                   <span className='w-2/12 text-center'>{maskedid(post.userid)}</span>
                   <span className='w-2/12 text-left'>
                     {new Date(post.writedate).toLocaleDateString('ko-KR', {
@@ -187,9 +193,8 @@ function PostList() {
                       month: '2-digit',
                       day: '2-digit'
                     }).replace(/\./g, '.').replace(/\.$/, '')}
-                  </span>               
+                  </span>
                   <span className='w-1/12 text-center'>{post.views}</span>
-                  <span className='w-1/12 text-center'>{post.suggest}</span>
                 </li>
               ))
             ) : (

@@ -20,9 +20,22 @@ public class RCommunityService {
     @Autowired
     private RCommunityRepository rcr;
 
-        public List<RCommunitySummary> getPostList() {
-            return rcr.findAllBy(Sort.by(Sort.Direction.DESC, "rnum"));
+    public List<RCommunitySummary> getPostList(int location, String location2) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "rnum");
+
+        if (location == 1) {
+            // 전체 지역 선택 시
+            return rcr.findAllBy(sort);
+        } else if (location2 == null || location2.equals("") || location2.equals("전체")) {
+            // 지역 2가 선택되지 않았거나 "전체"일 때
+            return rcr.findByLocation(location, sort);
+        } else {
+            // 지역 1과 지역 2 모두 선택된 경우
+            return rcr.findByLocationAndLocation2(location, location2, sort);
         }
+    }
+
+
 
 
     @Transactional
@@ -37,7 +50,6 @@ public class RCommunityService {
             rc.setTitle(rCommunityWrite.getTitle());
             rc.setContent(rCommunityWrite.getContent());
             rc.setPicked('N'); // 기본값
-            rc.setSuggest(0); // 기본값
             rc.setViews(0); // 기본값
 
             System.out.println("rc?" + rc);
@@ -65,5 +77,6 @@ public class RCommunityService {
         rcr.save(post);
         return post;
     }
+
 
 }

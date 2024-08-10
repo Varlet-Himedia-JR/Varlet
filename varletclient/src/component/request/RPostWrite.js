@@ -1,5 +1,5 @@
 import React ,{useState, useEffect} from 'react'
-import axios from 'axios'
+import axios from '../../util/jwtUtil'
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import Heading from './../headerfooter/Heading';
@@ -34,7 +34,6 @@ const WritePost = () => {
   const [content, setContent] = useState('');
   const [location, setLocation] = useState('1');
   const [location2, setLocation2] = useState('');
-  const [selectedOption, setSelectedOption] = useState('1');
   const [reward, setReward] = useState('');
   const [userPoint, setUserPoint] = useState(0);
   const navigate = useNavigate();
@@ -51,14 +50,44 @@ const WritePost = () => {
           console.error('사용자 포인트를 가져오는데 실패했습니다:', error);
         });
     }
-  }, [userCookie]);
-
-  const LocationChange = (event) => {
-    const newLocation = event.target.value;
-    setLocation(newLocation);
-    setLocation2(locationData[newLocation] ? locationData[newLocation][0] : ''); // 선택된 지역의 첫 번째 값 또는 빈 문자열로 설정
-  };
+  }, []);
   
+//location 함수
+const LocationChange = (event) => {
+  const newLocation = event.target.value;
+  setLocation(newLocation);
+  setLocation2(locationData[newLocation] ? locationData[newLocation][0] : ''); // 선택된 지역의 첫 번째 값 또는 빈 문자열로 설정
+};
+
+const Location2Change = (event) => {
+  setLocation2(event.target.value !== '전체' ? event.target.value : '');
+};
+
+const handleSubmit = (event) => {
+  event.preventDefault();
+
+  
+  const location2Value = location2 === '' ? null : parseInt(location2, 10);
+
+  axios.post('/api/rcommunity/writePost', {
+    title: title,
+    content: content,
+    location: parseInt(location, 10),
+    location2: location2Value, // int형으로 변환, 빈 문자열인 경우 null로 처리
+    reward: parseInt(reward, 10),
+    userid: userCookie.userid
+  })
+  .then(response => {
+    console.log('글 작성 성공:', response);
+    alert('의뢰가 성공적으로 등록되었습니다.');
+    navigate('/rcommunity'); 
+  })
+  .catch(error => {
+    console.error('글 작성 실패:', error);
+    alert('의뢰 등록에 실패했습니다.');
+  });
+};
+
   useEffect(() => {
     if (locationData[location]) {
       setLocation2(locationData[location][0] || '');
@@ -76,10 +105,6 @@ const WritePost = () => {
     }
   };
 
-  const Location2Change = (event) => {
-    setSelectedOption(event.target.value);
-    setLocation2(event.target.value !== '전체' ? event.target.value : '');
-  };
 
 
   const returnList = (event) => {
@@ -87,30 +112,6 @@ const WritePost = () => {
     navigate('/rcommunity');  
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-  
-    // location2가 빈 문자열일 경우 null로 처리
-    const location2Value = location2 === '' ? null : parseInt(location2, 10);
-  
-    axios.post('/api/rcommunity/writePost', {
-      title: title,
-      content: content,
-      location: parseInt(location, 10),
-      location2: parseInt(location2Value, 10), // int형으로 변환, 빈 문자열인 경우 null로 처리
-      reward: parseInt(reward, 10),
-      userid: userCookie.userid
-    })
-    .then(response => {
-      console.log('글 작성 성공:', response);
-      alert('의뢰가 성공적으로 등록되었습니다.');
-      navigate('/rcommunity'); // 홈 또는 다른 페이지로 이동
-    })
-    .catch(error => {
-      console.error('글 작성 실패:', error);
-      alert('의뢰 등록에 실패했습니다.');
-    });
-  };
 
 return (
   <div className="max-w-4xl mx-auto p-8">
@@ -151,7 +152,7 @@ return (
                 onChange={Location2Change}
               >
                 {locationData[location]?.map((loc, index) => (
-                  <option key={index} value={loc}>{loc}</option>
+                  <option key={index} value={index}>{loc}</option>
                 ))}
               </select>
             </div>
