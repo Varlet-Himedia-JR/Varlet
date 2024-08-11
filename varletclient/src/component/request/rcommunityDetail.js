@@ -331,216 +331,312 @@ const location2Data = {
     18: ["제주도"]
   };
 
-const RCommunityDetail = () => {
+  const RCommunityDetail = () => {
     const { rnum } = useParams();
     const [post, setPost] = useState({});
     const [replyAllcount, setReplyAllcount] = useState(0);
     const navigate = useNavigate();
     const [loginUser, setLoginUser] = useState(null);
-
+  
     useEffect(() => {
-        jaxios.get(`/api/rcommunity/rCommunityDetail/${rnum}`)
-            .then((response) => {
-                setPost(response.data.post);
-                console.log(response.data.post);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+      jaxios.get(`/api/rcommunity/rCommunityDetail/${rnum}`)
+        .then((response) => {
+          setPost(response.data.post);
+          console.log(response.data.post);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }, [rnum]);
-
+  
     const deleteCommunity = (rnum) => {
-        if (window.confirm('정말로 삭제하시겠습니까?')) {
-            jaxios.delete(`/api/rcommunity/deleteCommunity/${rnum}`)
-                .then(() => {
-                    navigate('/rcommunity');
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-        }
+      if (window.confirm('정말로 삭제하시겠습니까?')) {
+        jaxios.delete(`/api/rcommunity/deleteCommunity/${rnum}`)
+          .then(() => {
+            navigate('/rcommunity');
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
     };
-
-    const deleteCommunityReply = (grseq, rnum) => {
-        if (window.confirm('정말로 삭제하시겠습니까?')) {
-            jaxios.delete(`/api/rcommunity/deleteReply/${grseq}`)
-                .then(() => {
-                    // 댓글 삭제 후 처리 로직
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-        }
+  
+    const deleteCommunityReply = (grseq) => {
+      if (window.confirm('정말로 삭제하시겠습니까?')) {
+        jaxios.delete(`/api/rcommunity/deleteReply/${grseq}`)
+          .then(() => {
+            // 댓글 삭제 후 처리 로직
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
     };
-
+  
     const returnList = () => {
-        if (window.confirm('목록으로 돌아가시겠습니까?')) {
-            navigate('/rcommunity');  
-        }
+      if (window.confirm('목록으로 돌아가시겠습니까?')) {
+        navigate('/rcommunity');
+      }
     };
-
+  
     const rcommunityupdate = () => {
-        // 수정 로직 구현
+      // 수정 로직 구현
     };
-
+  
     const maskedid = (userid) => {
-        if (typeof userid === 'string') {
-            if (userid.length > 2) {
-                return userid.slice(0, 2) + '*'.repeat(userid.length - 2);
-            }
-            return '*'.repeat(userid.length);
+      if (typeof userid === 'string') {
+        if (userid.length > 2) {
+          return userid.slice(0, 2) + '*'.repeat(userid.length - 2);
         }
-        return '정보 없음';
+        return '*'.repeat(userid.length);
+      }
+      return '정보 없음';
     };
-
+  
     const getLocationName = (location1, location2) => {
-        const location1Name = location1Data[location1] ? location1Data[location1][0] : '정보 없음';
-        const location2Options = location2Data[location1] || [];
-        const location2Name = location2Options.find(option => option.value === location2)?.label || '정보 없음';
-
-        return `${location1Name} - ${location2Name}`;
+      const location1Name = location1Data[location1] ? location1Data[location1][0] : '정보 없음';
+      const location2Options = location2Data[location1] || [];
+      const location2Name = location2Options.find(option => option.value === location2)?.label || '정보 없음';
+  
+      return `${location1Name} - ${location2Name}`;
     };
+  
+    const getTravelDuration = (startDate, endDate) => {
+      if (!startDate || !endDate) return '정보 없음';
+  
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+  
+      const diffTime = end - start;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      const diffNights = diffDays - 1; // 시작일과 종료일 포함
+  
+      return `${diffNights}박 ${diffDays}일`;
+    };
+  
+return (
+      
 
-    return (
-        <section className="p-8 max-w-screen-lg ">
-            <div className=" flex-col border-b border-gray-300 pb-6 mb-8">
-                <div className="text-gray-500 font-bold mb-4 text-lg">No.{post.rnum}</div>
-                <div className="flex flex-col mb-8">
-                    <div className="text-3xl font-bold pb-12">
-                        {post.title}
-                    </div>
-                    <div className="flex items-center justify-between mb-8">
-                        <div className="text-3xl font-bold">
-                            <span className='w-2/12 text-center'>{maskedid(post.userid)}</span>
-                        </div>
-                        <div className="flex space-x-4">
-                            {
-                            (post.userid === getCookie('user').userid) && (
-                                <>
-                                    <button 
-                                        className="bg-blue-700 text-white border border-black px-5 py-3 rounded cursor-pointer hover:bg-[#000080]"
-                                        onClick={rcommunityupdate}
-                                    >
-                                        수정
-                                    </button>
-                                    <button 
-                                        className="bg-blue-700 text-white border border-black px-5 py-3 rounded cursor-pointer hover:bg-[#000080]"
-                                        onClick={() => deleteCommunity(post.rnum)} 
-                                    >
-                                        삭제
-                                    </button>
-                                </>
-                            )
-                            }
-                        </div>
-                    </div>
-                    <div className="flex space-x-6 mb-6">
-                        <span className='text-left'>
-                            작성일:
-                            {new Date(post.writedate).toLocaleDateString('ko-KR', {
-                                year: 'numeric',
-                                month: '2-digit',
-                                day: '2-digit'
-                            }).replace(/\./g, '.').replace(/\.$/, '')}
-                        </span>
-                        <span className='text-left'>
-                            여행 시작일:
-                            {new Date(post.startdate).toLocaleDateString('ko-KR', {
-                                year: 'numeric',
-                                month: '2-digit',
-                                day: '2-digit'
-                            }).replace(/\./g, '.').replace(/\.$/, '')}
-                        </span>
-                        <span className='text-left'>
-                            여행 종료일:
-                            {new Date(post.enddate).toLocaleDateString('ko-KR', {
-                                year: 'numeric',
-                                month: '2-digit',
-                                day: '2-digit'
-                            }).replace(/\./g, '.').replace(/\.$/, '')}
-                        </span>
-                        <div className="flex items-center text-gray-500 text-lg mb-4">
-                            <div className="mr-6">조회수: {post.views}</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="text-3xl font-bold pb-12">
-                    여행 예상지: {getLocationName(post.location, post.location2)}
-                </div>
+<div class="w-full max-w-5xl mx-auto px-4 py-8">
+  <div class="border-b pb-4 mb-6">
+    <h1 class="text-3xl font-bold mb-2">{post.title}</h1>
+    <div class="flex items-center text-muted-foreground text-sm">
+      <div class="mr-4">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-4 h-4 mr-1 inline-block"
+        >
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        {maskedid(post.userid)}
+      </div>
+      <div class="mr-4">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-4 h-4 mr-1 inline-block"
+        >
+          <path d="M8 2v4"></path>
+          <path d="M16 2v4"></path>
+          <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+          <path d="M3 10h18"></path>
+        </svg>
+        <span className='text-left'>
+          작성일:
+          {new Date(post.writedate).toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+          }).replace(/\./g, '.').replace(/\.$/, '')}
+        </span>
+      </div>
+      <div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-4 h-4 mr-1 inline-block"
+        >
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        {post.views}
+      </div>
+    </div>
+    <div>
+    <div class="flex items-center text-muted-foreground text-lg mb-4">
+      <div class="mr-4">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-5 h-5 mr-1 inline-block"
+        >
+          <path d="M8 2v4"></path>
+          <path d="M16 2v4"></path>
+          <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+          <path d="M3 10h18"></path>
+        </svg>
+        <span className='text-left'>
+                여행 시작일:
+                {new Date(post.startdate).toLocaleDateString('ko-KR', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit'
+                }).replace(/\./g, '.').replace(/\.$/, '')}
+              </span>
+      </div>
+      <div class="mr-4">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-5 h-5 mr-1 inline-block"
+        >
+          <path d="M8 2v4"></path>
+          <path d="M16 2v4"></path>
+          <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+          <path d="M3 10h18"></path>
+        </svg>
+        <span className='text-left'>
+                여행 종료일:
+                {new Date(post.enddate).toLocaleDateString('ko-KR', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit'
+                }).replace(/\./g, '.').replace(/\.$/, '')}
+              </span>     
+     </div>
+    </div>
+      <div class="mr-4">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-5 h-5 mr-1 inline-block"
+        >
+          <path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"></path>
+          <path d="M15 5.764v15"></path>
+          <path d="M9 3.236v15"></path>
+        </svg>
+        여행 예상지: {getLocationName(post.location, post.location2)}
+        </div>
+    </div>
+  </div>
+  <div class="prose prose-lg">
+  <div className="bg-gray-100 p-8 rounded-lg mb-8">
+    <div className="text-lg leading-relaxed min-h-[40rem] w-full">
+      <pre className="whitespace-pre-wrap">{post.content}</pre>
+    </div>
+  </div>
+  </div>
+  <div class="border-t pt-6 mt-6">
+    <div class="flex justify-end gap-2 mb-4">
+    <div className="flex items-center gap-2">
+                {(post.userid === getCookie('user').userid) && (
+                  <>
+                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"                    onClick={rcommunityupdate}
+                    >
+                      수정
+                    </button>
+                                <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" onClick={() => deleteCommunity(post.rnum)}
+                    >
+                      삭제
+                    </button>
+                  </>
+                )}
+              </div>
+              <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                  onClick={returnList}
 
-                <div className="bg-gray-100 p-8  rounded-lg mb-8">
-                    <div className="text-lg leading-relaxed min-h-[40rem] w-full">
-                        <pre className="whitespace-pre-wrap">{post.content}</pre>
-                    </div>
-                </div>
+              >
+        목록으로
+      </button>
+    </div>
+    <div class="border-b pb-4 mb-4">
+      <textarea
+        class="flex min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full mb-2"
+        placeholder="Write a reply..."
+      ></textarea>
+      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+        작성하기
+      </button>
+    </div>
+    
+    <div class="space-y-4">
+      <div class="flex items-start gap-4">
+        <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
+          <img class="aspect-square h-full w-full" alt="@shadcn" src="/placeholder-user.jpg" />
+        </span>
+        <div class="grid gap-1.5">
+          <div class="flex items-center gap-2 text-sm">
+            <div class="font-medium">Jane Doe</div>
+            <div class="text-muted-foreground">2 days ago</div>
+          </div>
+          <p>
+            Wow, your trip to Jeju Island sounds amazing! I've always wanted to visit and your photos and
+            descriptions have made me even more excited to plan a trip there. The natural beauty and cultural
+            richness of the island seem truly captivating.
+          </p>
+        </div>
+      </div>
+      <div class="flex items-start gap-4">
+        <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
+          <img class="aspect-square h-full w-full" alt="@shadcn" src="/placeholder-user.jpg" />
+        </span>
+        <div class="grid gap-1.5">
+          <div class="flex items-center gap-2 text-sm">
+            <div class="font-medium">Michael Johnson</div>
+            <div class="text-muted-foreground">1 week ago</div>
+          </div>
+          <p>I've been to Jeju Island a few times</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-                <button 
-                    className="bg-blue-700 text-white border border-black px-5 py-3 rounded cursor-pointer hover:bg-[#000080] mb-8"
-                    onClick={returnList}
-                >
-                    목록으로
-                </button>
-
-                <div className="mt-16">
-                    <h2 className="text-2xl font-semibold border-t border-gray-300 pt-8 mb-8">댓글 {replyAllcount}개</h2>
-                    {loginUser && (
-                        <form className="flex flex-col mb-8" action="zootopia.do?command=writeCommunityReply" method="post">
-                            <textarea 
-                                className="w-full h-32 p-4 border border-gray-300 rounded mb-4" 
-                                name="content" 
-                                required
-                            />
-                            <input type="hidden" name="rnum" value={post.rnum} />
-                            <button 
-                                className="bg-black text-white px-6 py-3 rounded-lg hover:bg-white hover:text-black" 
-                                type="submit"
-                            >
-                                작성하기
-                            </button>
-                        </form>
-                    )}
-
-                    {/* 댓글 리스트를 표시할 때, UI가 복잡해지지 않도록 아래 코드는 비활성화 상태로 두었습니다.
-                        주석을 제거하고 필요에 따라 스타일을 조정하여 사용할 수 있습니다.
-
-                        <div className="reply_list">
-                            <ul className="list-none p-0">
-                                {communityReplyList.map((reply) => (
-                                    <li key={reply.grseq} className="border-b border-gray-300 py-4">
-                                        <div className="flex justify-between items-center mb-2">
-                                            <span className="text-gray-700 font-semibold">
-                                                {reply.userid}
-                                            </span>
-                                            <span className="text-gray-500 text-sm">
-                                                {new Date(reply.writedate).toLocaleDateString('ko-KR', {
-                                                    year: 'numeric',
-                                                    month: '2-digit',
-                                                    day: '2-digit'
-                                                }).replace(/\./g, '.').replace(/\.$/, '')}
-                                            </span>
-                                        </div>
-                                        <div className="text-gray-800 mb-2">
-                                            {reply.content}
-                                        </div>
-                                        {loginUser && loginUser.userid === reply.userid && (
-                                            <div className="flex space-x-4">
-                                                <button 
-                                                    className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-[#000080]"
-                                                    onClick={() => deleteCommunityReply(reply.grseq, post.rnum)}
-                                                >
-                                                    삭제
-                                                </button>
-                                            </div>
-                                        )}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    */}
-                </div>
-            </div>
-        </section>
     );
-};
-
-export default RCommunityDetail;
+  };
+  
+  export default RCommunityDetail;

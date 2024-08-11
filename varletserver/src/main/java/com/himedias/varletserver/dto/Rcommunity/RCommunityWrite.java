@@ -21,4 +21,6 @@ public class RCommunityWrite {
     private String content;
     private Timestamp startdate;  // 추가된 필드
     private Timestamp enddate;
+    private char picked;
+
 }

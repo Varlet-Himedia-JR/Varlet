@@ -51,10 +51,11 @@ public class RCommunityService {
         post.setStartdate(rCommunityWrite.getStartdate());
         post.setEnddate(rCommunityWrite.getEnddate());
         post.setViews(0);
+        post.setPicked(rCommunityWrite.getPicked()); // picked 값 설정
 
         // 게시글 저장
         RCommunity savedPost = rcr.save(post);
-
+        System.out.println("post??" + post);
         result.put("success", true);
         result.put("post", savedPost);
         return result;

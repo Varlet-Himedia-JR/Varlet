@@ -402,7 +402,7 @@ function PostList() {
   };
 
   return (
-    <div className='w-full max-w-7xl mx-auto px-4 mb-16'>
+    <div className='w-full max-w-[1700px] mx-auto px-1 mb-16'>
       <div className='flex justify-between items-baseline mb-16'>
         <h1 className='text-3xl font-semibold'>의뢰 게시판</h1>
       </div>
@@ -483,10 +483,11 @@ function PostList() {
           <li className='flex font-bold text-black border-b border-gray-300 pb-2 mb-2'>
             <span className='w-1/12 text-center'>번호</span>
             <span className='w-4/12 text-left'>제목</span>
-            <span className='w-2/12 text-center'>지역1</span>
-            <span className='w-2/12 text-center'>지역2</span>
+            <span className='w-2/12 text-center'>지역</span>
+            <span className='w-2/12 text-center'>상세 지역</span>
             <span className='w-2/12 text-center'>작성자</span>
-            <span className='w-2/12 text-left'>작성일</span>
+            <span className='w-2/12 text-center'>작성일</span>
+            <span className='w-2/12 text-center'>채택 여부</span>
             <span className='w-1/12 text-center'>조회수</span>
           </li>
           <div>
@@ -504,12 +505,15 @@ function PostList() {
                     {location2Data[post.location]?.find(item => item.value === post.location2)?.label || "전체"}
                   </span>
                   <span className='w-2/12 text-center'>{maskedid(post.userid)}</span>
-                  <span className='w-2/12 text-left'>
+                  <span className='w-2/12 text-center'>
                     {new Date(post.writedate).toLocaleDateString('ko-KR', {
                       year: 'numeric',
                       month: '2-digit',
                       day: '2-digit'
                     }).replace(/\./g, '.').replace(/\.$/, '')}
+                  </span>
+                  <span className='w-2/12 text-center'>
+                    {post.picked === "Y" ? "채택 완료" : (post.picked === "N" ? "채택 진행중" : "미정")}
                   </span>
                   <span className='w-1/12 text-center'>{post.views}</span>
                 </li>

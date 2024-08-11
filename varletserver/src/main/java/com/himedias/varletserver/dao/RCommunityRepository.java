@@ -13,17 +13,18 @@ import java.util.List;
 @Repository
 public interface RCommunityRepository extends JpaRepository<RCommunity, Integer> {
 
-    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward " +
+    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
             "FROM RCommunity r ORDER BY r.rnum DESC")
     List<RCommunitySummary> findAllBy(Sort sort);
 
-    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward " +
+    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
             "FROM RCommunity r WHERE r.location = :location ORDER BY r.rnum DESC")
     List<RCommunitySummary> findByLocation(int location, Sort sort);
 
-    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward " +
+    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
             "FROM RCommunity r WHERE r.location = :location AND r.location2 = :location2 ORDER BY r.rnum DESC")
     List<RCommunitySummary> findByLocationAndLocation2(int location, int location2, Sort sort);
+
 
     @Query("SELECT r FROM RCommunity r WHERE r.rnum = :rnum")
     RCommunity findPostById(@Param("rnum") int rnum);

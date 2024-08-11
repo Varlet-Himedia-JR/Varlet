@@ -72,5 +72,12 @@ public class RCommunity {
     private Timestamp enddate;
 
 
+    @PrePersist
+    public void prePersist() {
+        if (this.picked == '\u0000') {  // picked 필드의 기본값이 설정되지 않은 경우
+            this.picked = 'N';
+        }
+    }
+
 }
 
