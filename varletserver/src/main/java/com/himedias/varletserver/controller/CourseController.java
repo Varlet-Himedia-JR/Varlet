@@ -1,12 +1,11 @@
 package com.himedias.varletserver.controller;
 
 
+import com.himedias.varletserver.entity.Timetable;
 import com.himedias.varletserver.service.CourseService;
+import com.himedias.varletserver.service.TimetableService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
@@ -16,6 +15,8 @@ public class CourseController {
 
     @Autowired
     CourseService cs;
+
+
 
     @GetMapping("/getTnames/{userid}")
     public HashMap<String,Object> getTnamesByUserid(@PathVariable String userid) {
@@ -39,6 +40,8 @@ public class CourseController {
         result.put("dayschedule",cs.getDaySchedules(mycourse, userid));
         return result;
     }
+
+
 
 
 

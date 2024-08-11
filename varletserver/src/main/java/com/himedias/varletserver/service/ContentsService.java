@@ -1,8 +1,10 @@
 package com.himedias.varletserver.service;
 
 import com.himedias.varletserver.dao.ContentsRepository;
+import com.himedias.varletserver.dao.TimetableRepository;
 import com.himedias.varletserver.dto.Paging;
 import com.himedias.varletserver.entity.Contents;
+import com.himedias.varletserver.entity.Timetable;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,8 @@ public class ContentsService {
     @Autowired
     ContentsRepository cr;
 
+
+
     public Page<Contents> getContentsList(Paging paging) {
         int pageNumber = paging.getPage() - 1; // PageRequest uses 0-based index
         int pageSize = paging.getDisplayRow();
@@ -28,4 +32,6 @@ public class ContentsService {
     public Contents getQnaView(int cseq) {
         return cr.findById(cseq).get();
     }
+
+
 }

@@ -33,9 +33,9 @@ public class CourseService {
         if (tt.isPresent()) {
             Timetable timetable = tt.get();
             Calendar start = Calendar.getInstance();
-            start.setTime(timetable.getStartDate());
+            start.setTime(timetable.getStart_date());
             Calendar end = Calendar.getInstance();
-            end.setTime(timetable.getEndDate());
+            end.setTime(timetable.getEnd_date());
 
             while (!start.after(end)) {
                 duration.add(sdf.format(start.getTime()));
@@ -57,6 +57,7 @@ public class CourseService {
         return cr.findDayschedule(tseq);
 
     }
+
 
 }
 

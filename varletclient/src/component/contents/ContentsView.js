@@ -81,9 +81,9 @@ function ContentsView() {
                             <button onClick={qnaDelete}>삭제</button>
                         ):(<></>)
                         } */}
-                        (getCookie('user').userid)?(
+                        {getCookie('user')?(
                             <button onClick={addSchedule(contents.cseq)}>추가</button>
-                        ):(<></>)
+                        ):(<></>)}
                         <button onClick={() => { navigate('/contents') }}>목록으로</button>
                     </div>
                 </div>

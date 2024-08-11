@@ -9,6 +9,7 @@ import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
 import jaxios from '../../util/jwtUtil';
 import Timetable from './Timetable';
 import Timetable2 from './Timetable2';
+import Timetablemaker from '../contents/Timetablemaker';
 
 
 function Mycourse() {
@@ -17,6 +18,7 @@ function Mycourse() {
     const [courseDuration, setCourseDuration] = useState([]);
     const [daySchedule, setDaySchedule] = useState([]);
     const userCookie = getCookie('user');
+    const [ttmaker, setTtmaker] = useState();
 
     const handleCourseChange = (event) => {
         setSelectedCourse(event.target.value);
@@ -36,7 +38,7 @@ function Mycourse() {
     useEffect(() => {
         if (selectedCourse) {
             jaxios.get(`/api/course/getMycourse/${selectedCourse}/${userCookie.userid}`)
-            // jaxios.get(`/api/course/getDuration/${selectedCourse}   `)
+                // jaxios.get(`/api/course/getDuration/${selectedCourse}   `)
                 .then((result) => {
                     setCourseDuration(result.data.duration);
                     setDaySchedule(result.data.dayschedule);
@@ -45,9 +47,23 @@ function Mycourse() {
         }
     }, [selectedCourse]);
 
+    const selectComponent = {
+        ttmaker: <Timetablemaker />,
+    };
+
+    const handleClickButton = e => {
+        const { name } = e.target;
+        if (ttmaker == '') {
+            setTtmaker(name);
+        } else {
+            setTtmaker('');
+        }
+    };
+
     return (
         <article>
             <Heading />
+
             <div className='subPage'>
                 <label htmlFor="mycourse">여행 코스를 고르세요</label>
                 <select
@@ -64,6 +80,16 @@ function Mycourse() {
                 </select>
                 <p>Selected Course: {selectedCourse}</p>
             </div>
+
+            <div className='subPage'>
+                {getCookie('user') ? (
+                    <button onClick={handleClickButton} name='ttmaker' >
+                        여행코스 만들기
+                    </button>
+                ) : (<></>)}
+                {ttmaker == '' ? <></> : ttmaker && <Timetablemaker>{selectComponent[ttmaker]}</Timetablemaker>}
+            </div>
+
             <div>
                 {daySchedule.map((ds) => (
                     <div>{ds.dseq}/{ds.dtitle}/{ds.userid}/{ds.day_date}/{ds.startTime}/{ds.endTime}/{ds.price}/{ds.pcount}</div>
@@ -73,7 +99,7 @@ function Mycourse() {
                 {/* <Timetable courseDuration={courseDuration} /> */}
                 <Timetable2 courseDuration={courseDuration} daySchedule={daySchedule} />
             </div>
-            <img src='https://www.mcst.go.kr/attachFiles/cultureInfoCourt/localFestival/notifyFestival/1719535357705.jpg'/>
+            {/* <img src='https://www.mcst.go.kr/attachFiles/cultureInfoCourt/localFestival/notifyFestival/1719535357705.jpg'/> */}
             <Footer />
         </article>
     );
