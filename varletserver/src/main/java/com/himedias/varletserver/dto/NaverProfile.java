@@ -1,30 +1,29 @@
 package com.himedias.varletserver.dto;
 
-public class KakaoProfile {
-
+public class NaverProfile {
     private String id;
 
     public String getId() {
         return id;
     }
 
-    private KakaoAccount kakao_account;
+    private NaverProfile.NaverAccount naver_account;
 
-    public KakaoAccount getAccount() {
-        return kakao_account;
+    public NaverAccount getAccount() {
+        return naver_account;
     }
 
-    public class KakaoAccount {
+    public class NaverAccount {
 
-        private Profile profile;
+        private NaverProfile.NaverAccount.Profile profile;
         private String email;
         private boolean has_email;
 
-        public Profile getProfile() {
+        public  NaverProfile.NaverAccount.Profile getProfile() {
             return profile;
         }
 
-        public void setProfile(Profile profile) {
+        public void setProfile(NaverProfile.NaverAccount.Profile profile) {
             this.profile = profile;
         }
 
@@ -56,8 +55,6 @@ public class KakaoProfile {
                 this.nickname = nickname;
             }
 
-
-
             public String getProfile_image_url() {
                 return profile_image_url;
             }
@@ -65,6 +62,8 @@ public class KakaoProfile {
             public void setProfile_image_url(String profile_image_url) {
                 this.profile_image_url = profile_image_url;
             }
+
         }
     }
 }
+

@@ -56,7 +56,9 @@ function Login() {
                 <button onClick={()=>{
                     window.location.href='http://localhost:8070/member/kakaostart';
                 }}>KAKAO</button>
-                <button>NAVER</button>
+                <button onClick={()=>{
+                    window.location.href='http://localhost:8070/member/naverStart';
+                }}>NAVER</button>
                 <button>GOOGLE</button>
                 <button>FACEBOOK</button>
             </div>

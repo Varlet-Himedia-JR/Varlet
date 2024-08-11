@@ -21,14 +21,15 @@ function WriteReview() {
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
-        setSelectedImage(file);
         if (file) {
+            setSelectedImage(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImagePreview(reader.result);
             };
             reader.readAsDataURL(file);
         } else {
+            setSelectedImage(null);
             setImagePreview('');
         }
     };
@@ -57,9 +58,12 @@ function WriteReview() {
                 'Content-Type': 'multipart/form-data'
             }
         })
-        .then(() => { navigate('/reviewList'); })
+        .then(() => { 
+            navigate('/reviewList'); 
+        })
         .catch((err) => {
-            console.error(err);
+            console.error('Error while submitting review:', err);
+            alert('리뷰 제출 중 오류가 발생했습니다. 콘솔을 확인하세요.');
         });
     };
 
@@ -69,12 +73,12 @@ function WriteReview() {
 
     return (
         <article>
-            <Heading/>
+            <Heading />
             <h2>Write Review</h2>
             <div className='subPage'>
                 <div className="reviewWriteForm" style={{ flex: "4" }}>
                     <div className="field">
-                        <label>title</label>
+                        <label>Title</label>
                         <input 
                             type="text" 
                             value={title} 
@@ -82,7 +86,7 @@ function WriteReview() {
                         />
                     </div>
                     <div className="field">
-                        <label>content</label>
+                        <label>Content</label>
                         <textarea 
                             rows="7" 
                             value={content} 
@@ -90,7 +94,7 @@ function WriteReview() {
                         ></textarea>
                     </div>
                     <div className="field">
-                        <label>image</label>
+                        <label>Image</label>
                         <input 
                             type="file" 
                             accept="image/*" 
@@ -98,17 +102,17 @@ function WriteReview() {
                         />
                         {imagePreview && (
                             <div className="image-preview">
-                                <img src={imagePreview} alt="미리보기" style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                                <img src={imagePreview} alt="Preview" style={{ maxWidth: '100px', maxHeight: '100px' }} />
                             </div>
                         )}
                     </div>
                     <div className="btns">
-                        <button onClick={onSubmit}>작성완료</button>
-                        <button onClick={onCancel} style={{ marginLeft: '10px' }}>작성 취소</button>
+                        <button onClick={onSubmit}>Submit</button>
+                        <button onClick={onCancel} style={{ marginLeft: '10px' }}>Cancel</button>
                     </div>
                 </div>
             </div>
-            <Footer/>
+            <Footer />
         </article>
     );
 }

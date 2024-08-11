@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { getCookie } from '../../util/cookieUtil';
 
 function ReviewView() {
     const [review, setReview] = useState(null);
-    const [isEditing, setIsEditing] = useState(false);  // Editing state
+    const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState({ title: '', content: '', reviewimg: '' });
+    const [replyContent, setReplyContent] = useState('');
+    const [replyList, setReplyList] = useState([]);
     const { rseq } = useParams();
     const navigate = useNavigate();
+    const loginUser = useSelector(state => state.user);
 
     useEffect(() => {
         axios.get(`/api/review/getReviewView/${rseq}`)
@@ -26,33 +30,61 @@ function ReviewView() {
             });
     }, [rseq]);
 
-    function reviewDelete() {
-        // 사용자에게 삭제 확인 대화상자를 표시
-        const isConfirmed = window.confirm("정말로 삭제하시겠습니까?");
+    useEffect(() => {
+        if (review) {
+            axios.get(`/api/review/getReplies/${rseq}`)
+                .then((result) => {
+                    setReplyList(result.data.replies);  // 서버 응답에 맞게 수정
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        }
+    }, [review, rseq]);
 
+    async function addReply() {
+        try {
+            const userid = loginUser?.userid;
+            const content = replyContent;
+
+            await axios.post('/api/review/addReply', { userid, content, rseq });
+            const result = await axios.get(`/api/review/getReplies/${rseq}`);
+            setReplyList(result.data.replies);  // 서버 응답에 맞게 수정
+        } catch (err) {
+            console.error(err);
+        }
+        setReplyContent('');
+    }
+
+    async function deleteReply(renum) {
+        try {
+            await axios.delete(`/api/review/deleteReply/${renum}`);
+            const result = await axios.get(`/api/review/getReplies/${rseq}`);
+            setReplyList(result.data.replies);  // 서버 응답에 맞게 수정
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    function reviewDelete() {
+        const isConfirmed = window.confirm("정말로 삭제하시겠습니까?");
         if (isConfirmed) {
-            axios.delete(`/api/review/reviewDelete/${rseq}`)
+            axios.delete(`/api/review/deleteReview/${rseq}`)
                 .then(() => {
-                    // 삭제가 성공하면 리뷰 목록 페이지로 이동
                     navigate('/reviewList');
                 })
                 .catch((err) => {
                     console.error(err);
                 });
         } else {
-            // 사용자가 취소를 클릭한 경우 아무 동작도 하지 않음
             console.log("삭제가 취소되었습니다.");
         }
     }
 
     function reviewEdit() {
-        axios.post(`/api/review/updateReview/${rseq}`, {
-            ...editForm,
-            indate: new Date() // Update the date to the current date
-        })
+        axios.post(`/api/review/updateReview/${rseq}`, editForm)
             .then(() => {
                 setIsEditing(false);
-                // Fetch the updated review after edit
                 axios.get(`/api/review/getReviewView/${rseq}`)
                     .then((result) => {
                         setReview(result.data.review);
@@ -80,8 +112,6 @@ function ReviewView() {
     }
 
     const isUserAuthorized = review && review.userid === getCookie('user')?.userid;
-
-    // Format the date if `indate` exists
     const formattedDate = review?.indate ? new Date(review.indate).toLocaleDateString() : '';
 
     return (
@@ -147,7 +177,7 @@ function ReviewView() {
                                         ) : (
                                             <div>
                                                 <img
-                                                    src={`/images/${review.reviewimg}`}  // Adjust path as needed
+                                                    src={`http://localhost:8070/images/${review.reviewimg}`}  // Ensure this path is correct
                                                     alt="Review"
                                                     style={{ maxWidth: '300px', maxHeight: '300px' }}
                                                 />
@@ -155,6 +185,35 @@ function ReviewView() {
                                         )}
                                     </div>
                                 )}
+
+                                <div className="field">
+                                    <label>Replies</label>
+                                    <div>
+                                        {replyList.length > 0 ? (
+                                            <ul>
+                                                {replyList.map(reply => (
+                                                    <li key={reply.renum}>
+                                                        <div>{reply.writer}: {reply.content}</div>
+                                                        {loginUser?.userid === reply.writer && (
+                                                            <button onClick={() => deleteReply(reply.renum)}>Delete</button>
+                                                        )}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        ) : (
+                                            <div>No replies yet.</div>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="field">
+                                    <label>Add Reply</label>
+                                    <textarea
+                                        rows="4"
+                                        value={replyContent}
+                                        onChange={(e) => setReplyContent(e.target.value)}
+                                    />
+                                    <button onClick={addReply}>Add Reply</button>
+                                </div>
                             </div>
                         ) : (
                             <div>Loading...</div>

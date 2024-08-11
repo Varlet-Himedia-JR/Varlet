@@ -10,6 +10,6 @@ import org.springframework.stereotype.Service;
 public class ReplyService {
 
     @Autowired
-    ReplyRepository rr;
+    ReplyRepository re;
 }
 
