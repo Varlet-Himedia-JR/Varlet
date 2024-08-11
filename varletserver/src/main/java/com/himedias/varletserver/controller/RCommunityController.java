@@ -19,14 +19,21 @@ public class RCommunityController {
     @Autowired
     private RCommunityService rcs;
 
-
     @GetMapping("/getPostList")
     public HashMap<String, Object> getPostList(
-            @RequestParam("location") int location,
-            @RequestParam("location2") String location2) {
-
+            @RequestParam(required = false) Integer location,
+            @RequestParam(required = false) Integer location2) {
         HashMap<String, Object> result = new HashMap<>();
-        List<RCommunitySummary> postList = rcs.getPostList(location, location2);
+        List<RCommunitySummary> postList;
+
+        if (location != null && location2 != null) {
+            postList = rcs.getPostListByLocationAndLocation2(location, location2);
+        } else if (location != null) {
+            postList = rcs.getPostListByLocation(location);
+        } else {
+            postList = rcs.getAllPosts();  // 필터링하지 않고 전체 게시글 반환
+        }
+
         result.put("postlist", postList);
         return result;
     }
@@ -44,6 +51,4 @@ public class RCommunityController {
         result.put("post", post);
         return result;
     }
-
-
 }

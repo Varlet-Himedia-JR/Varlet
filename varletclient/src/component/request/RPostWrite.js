@@ -28,6 +28,7 @@ const locationData = {
   17: ["전체","창원", "김해", "양산", "진주", "거제", "통영", "사천", "밀양", "함안", "거창", "창녕", "고성", "하동", "합천", "남해", "함양", "신창", "의령"], 
   18: ["전체","제주도", "서귀포시"]
 };
+<script src="../path/to/flowbite/dist/flowbite.min.js"></script>
 
 const WritePost = () => {
   const [title, setTitle] = useState('');
@@ -36,6 +37,8 @@ const WritePost = () => {
   const [location2, setLocation2] = useState('');
   const [reward, setReward] = useState('');
   const [userPoint, setUserPoint] = useState(0);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const navigate = useNavigate();
   const loginUser = useSelector(state => state.user);
   const userCookie = getCookie('user');
@@ -75,7 +78,9 @@ const handleSubmit = (event) => {
     location: parseInt(location, 10),
     location2: location2Value, // int형으로 변환, 빈 문자열인 경우 null로 처리
     reward: parseInt(reward, 10),
-    userid: userCookie.userid
+    userid: userCookie.userid,
+    startdate: startDate,
+    enddate: endDate    // 추가
   })
   .then(response => {
     console.log('글 작성 성공:', response);
@@ -95,6 +100,15 @@ const handleSubmit = (event) => {
       setLocation2('');
     }
   }, [location]);
+
+  const onInputChange = (event) => {
+    const { name, value } = event.target;
+    if (name === 'startDate') {
+      setStartDate(value);
+    } else if (name === 'endDate') {
+      setEndDate(value);
+    }
+  };
 
   const RewardChange = (event) => {
     const { value } = event.target;
@@ -158,6 +172,29 @@ return (
             </div>
           </li>
         </ul>
+        <div className="createEvent_field">
+          <label htmlFor="startDate">시작 날짜</label>
+          <input
+            type="date"
+            id="startDate"
+            name="startDate"
+            onChange={onInputChange}
+            value={startDate}
+            required
+          />
+        </div>
+        <div className="createEvent_field">
+          <label htmlFor="endDate">종료 날짜</label>
+          <input
+            type="date"
+            id="endDate"
+            name="endDate"
+            onChange={onInputChange}
+            value={endDate}
+            required
+          />
+        </div>
+
       <div className='w-full'>
         <div className="mb-4">
           <label

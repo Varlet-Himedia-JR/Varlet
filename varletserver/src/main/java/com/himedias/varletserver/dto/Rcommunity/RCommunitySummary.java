@@ -15,7 +15,4 @@ public interface RCommunitySummary {
     String getTitle();
     int getReward();
 
-    Timestamp getStartdate();
-
-    Timestamp getEnddate();
 }
