@@ -101,7 +101,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/qna/passCheck"))
             return true;
 
-        if (path.startsWith("/member/emailcheck"))
+        if (path.startsWith("/member/emailCheck"))
             return true;
 
         if (path.startsWith("/member/nicknameCheck"))

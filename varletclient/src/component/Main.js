@@ -8,6 +8,7 @@ import { loginAction, logoutAction } from '../store/userSlice';
 import jaxios from '../util/jwtUtil';
 
 import { setCookie, getCookie, removeCookie } from "../util/cookieUtil";
+import '../style/main.css'
 
 // import '../style/mystargram.css'
 function Main() {
@@ -21,7 +22,7 @@ function Main() {
     <>
     <Heading/>
     <div>
-      <h3>메인 내용 들어올 예정</h3>
+    <div className='background'><img src="http://localhost:8070/images/Beach.jpg"/></div>
     </div>
     <Footer/>
     </>

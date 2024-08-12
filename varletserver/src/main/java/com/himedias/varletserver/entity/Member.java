@@ -90,8 +90,9 @@ public class Member {
         if (provider == null) {
             provider = "local";
         }
-
-
+        if (indate == null) {
+            indate = Timestamp.from(Instant.now());
+        }
     }
 
 }
