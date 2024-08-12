@@ -51,4 +51,28 @@ public class RCommunityController {
         result.put("post", post);
         return result;
     }
+
+    @PostMapping("/rCommunityUpdate/{rnum}")
+    public ResponseEntity<HashMap<String, Object>> updateCommunityPost(
+            @PathVariable("rnum") int rnum,
+            @RequestBody RCommunityWrite rCommunityWrite) {
+        HashMap<String, Object> result = rcs.updatePost(rnum, rCommunityWrite);
+        System.out.println("호출?");
+        return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/rCommunityDelete/{rnum}")
+    public HashMap<String, Object> deleteCommunityPost(@PathVariable("rnum") int rnum) {
+        HashMap<String, Object> result = new HashMap<>();
+        try {
+            rcs.deleteRCommunity(rnum);
+            result.put("status", "success");
+            result.put("message", "게시글이 성공적으로 삭제되었습니다.");
+        } catch (Exception e) {
+            result.put("status", "error");
+            result.put("message", "게시글 삭제에 실패했습니다.");
+        }
+        return result;
+    }
+
 }
