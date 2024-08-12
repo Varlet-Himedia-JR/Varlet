@@ -40,21 +40,21 @@ public class CustomUserDetailService implements UserDetailsService {
                 member.getPwd(),
                 member.getName(),
                 member.getNickname(),
+                member.getPwd(),
                 member.getEmail(),
                 member.getPhone(),
                 member.getProfileimg(),
-                member.getZip_code(),
+                member.getZipCode(),
                 member.getAddress(),
                 member.getD_address(),
                 member.getProvider(),
                 member.getSnsid(),
                 member.getIndate(),
-                member.getIs_login(),
+                member.getIsLogin(),
                 member.getMemberRoleList().stream().map(memberRole -> memberRole.name()).collect(Collectors.toList())
         );
         log.info(memberdto);
         log.info(member);
-
         return memberdto;
     }
 }

@@ -20,7 +20,7 @@ function Heading() {
         
     };
     const JoinWindow = () =>{
-        navigate('/join');
+        window.open('/join','Join','width=500,height=600');
     };
 
     // function onLogout(){

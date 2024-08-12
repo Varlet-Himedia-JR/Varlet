@@ -34,11 +34,6 @@ public class RCommunity {
     @Getter
     @Setter
     @Column(nullable = false, columnDefinition = "int default 0")
-    private int suggest;
-
-    @Getter
-    @Setter
-    @Column(nullable = false, columnDefinition = "int default 0")
     private int views;
 
     @Getter
@@ -66,6 +61,23 @@ public class RCommunity {
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
     private Timestamp writedate;
 
+    @Getter
+    @Setter
+    @Column(name = "startdate", nullable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
+    private Timestamp startdate;
+
+    @Getter
+    @Setter
+    @Column(name = "enddate", nullable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
+    private Timestamp enddate;
+
+
+    @PrePersist
+    public void prePersist() {
+        if (this.picked == '\u0000') {  // picked 필드의 기본값이 설정되지 않은 경우
+            this.picked = 'N';
+        }
+    }
 
 }
 

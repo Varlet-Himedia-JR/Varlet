@@ -12,6 +12,7 @@
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
     "cookie": "^0.6.0",
+    "flowbite": "^2.5.1",
     "http-proxy-middleware": "^3.0.0",
     "mark": "^0.10.0",
     "moment": "^2.30.1",

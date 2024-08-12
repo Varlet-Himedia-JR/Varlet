@@ -65,7 +65,6 @@ public class KakaoProfile {
             public void setProfile_image_url(String profile_image_url) {
                 this.profile_image_url = profile_image_url;
             }
-
         }
     }
 }

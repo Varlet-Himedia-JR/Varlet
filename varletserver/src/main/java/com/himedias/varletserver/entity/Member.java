@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -48,7 +47,7 @@ public class Member {
 
     @Size(max = 20)
     @Column(name = "zip_code", length = 20)
-    private String zip_code;
+    private String zipCode;
 
     @Size(max = 100)
     @Column(name = "address", length = 100)
@@ -56,19 +55,18 @@ public class Member {
 
     @Size(max = 100)
     @Column(name = "d_address", length = 100)
-    private String d_address;
+    private String dAddress;
 
-
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "indate")
-    @CreationTimestamp
     private Timestamp indate;
 
     @Column(name = "is_login")
-    private Character is_login = 'Y';
+    private Character isLogin;
 
     @Size(max = 50)
     @Column(name = "provider", length = 50)
-    private String provider = "local";
+    private String provider;
 
     @Size(max = 50)
     @Column(name = "snsid", length = 50)

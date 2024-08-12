@@ -15,55 +15,58 @@ import java.util.List;
 
 
 @Service
-public class  RCommunityService {
+public class RCommunityService {
 
     @Autowired
     private RCommunityRepository rcr;
 
-        public List<RCommunitySummary> getPostList() {
-            return rcr.findAllBy(Sort.by(Sort.Direction.DESC, "rnum"));
-        }
+    public List<RCommunitySummary> getAllPosts() {
+        return rcr.findAllBy(Sort.by(Sort.Direction.DESC, "rnum"));
+    }
 
+    public List<RCommunitySummary> getPostListByLocation(int location) {
+        return rcr.findByLocation(location, Sort.by(Sort.Direction.DESC, "rnum"));
+    }
+
+    public List<RCommunitySummary> getPostListByLocationAndLocation2(int location, int location2) {
+        return rcr.findByLocationAndLocation2(location, location2, Sort.by(Sort.Direction.DESC, "rnum"));
+    }
+
+    public RCommunity getPostById(int rnum) {
+        return rcr.findPostById(rnum);
+    }
 
     @Transactional
-    public HashMap<String, Object> writePost(@RequestBody RCommunityWrite rCommunityWrite) {
+    public HashMap<String, Object> writePost(RCommunityWrite rCommunityWrite) {
         HashMap<String, Object> result = new HashMap<>();
-        try {
-            RCommunity rc = new RCommunity();
-            rc.setUserid(rCommunityWrite.getUserid());
-            rc.setLocation(rCommunityWrite.getLocation());
-            rc.setLocation2(rCommunityWrite.getLocation2());
-            rc.setReward(rCommunityWrite.getReward());
-            rc.setTitle(rCommunityWrite.getTitle());
-            rc.setContent(rCommunityWrite.getContent());
-            rc.setPicked('N'); // 기본값
-            rc.setSuggest(0); // 기본값
-            rc.setViews(0); // 기본값
 
-            System.out.println("rc?" + rc);
-            // 게시글 저장
-            rcr.save(rc);
+        // RCommunity 객체 생성 및 필드 설정
+        RCommunity post = new RCommunity();
+        post.setTitle(rCommunityWrite.getTitle());
+        post.setContent(rCommunityWrite.getContent());
+        post.setLocation(rCommunityWrite.getLocation());
+        post.setLocation2(rCommunityWrite.getLocation2());
+        post.setReward(rCommunityWrite.getReward());
+        post.setUserid(rCommunityWrite.getUserid());
+        post.setStartdate(rCommunityWrite.getStartdate());
+        post.setEnddate(rCommunityWrite.getEnddate());
+        post.setViews(0);
+        post.setPicked(rCommunityWrite.getPicked()); // picked 값 설정
 
-            // 성공 응답
-            result.put("success", true);
-            result.put("message", "게시글이 성공적으로 작성되었습니다.");
-        } catch (Exception e) {
-            // 실패 응답
-            result.put("success", false);
-            result.put("message", "게시글 작성에 실패했습니다: " + e.getMessage());
-            e.printStackTrace();
-        }
-        System.out.println("rc?" + result);
+        // 게시글 저장
+        RCommunity savedPost = rcr.save(post);
+        System.out.println("post??" + post);
+        result.put("success", true);
+        result.put("post", savedPost);
         return result;
     }
 
-    @Transactional
     public RCommunity getPostAndIncreaseViewCount(int rnum) {
-        RCommunity post = rcr.findById(rnum)
-                .orElseThrow(() -> new RuntimeException("Post not found with id " + rnum));
-        post.setViews(post.getViews() + 1);
-        rcr.save(post);
+        RCommunity post = rcr.findPostById(rnum);
+        if (post != null) {
+            post.setViews(post.getViews() + 1);
+            rcr.save(post);  // 업데이트된 게시글 저장
+        }
         return post;
     }
-
 }

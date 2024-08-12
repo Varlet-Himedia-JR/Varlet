@@ -1,7 +1,5 @@
 package com.himedias.varletserver.controller;
 
-import com.himedias.varletserver.dao.RCommunityRepository;
-import com.himedias.varletserver.dto.RCommunityDetail;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
 import com.himedias.varletserver.entity.RCommunity;
@@ -21,33 +19,36 @@ public class RCommunityController {
     @Autowired
     private RCommunityService rcs;
 
-
     @GetMapping("/getPostList")
-    public HashMap<String, Object> getPostList() {
+    public HashMap<String, Object> getPostList(
+            @RequestParam(required = false) Integer location,
+            @RequestParam(required = false) Integer location2) {
         HashMap<String, Object> result = new HashMap<>();
-        List<RCommunitySummary> postList = rcs.getPostList();  // 메서드 호출
+        List<RCommunitySummary> postList;
+
+        if (location != null && location2 != null) {
+            postList = rcs.getPostListByLocationAndLocation2(location, location2);
+        } else if (location != null) {
+            postList = rcs.getPostListByLocation(location);
+        } else {
+            postList = rcs.getAllPosts();  // 필터링하지 않고 전체 게시글 반환
+        }
+
         result.put("postlist", postList);
-        System.out.println("postlist: " + postList);
         return result;
     }
-
 
     @PostMapping("/writePost")
     public ResponseEntity<HashMap<String, Object>> writePost(@RequestBody RCommunityWrite rCommunityWrite) {
         HashMap<String, Object> result = rcs.writePost(rCommunityWrite);
-        System.out.println("result: " + result);
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/rCommunityDetail")
-    public HashMap<String, Object> getPostDetail(@RequestParam int rnum) {
+    @GetMapping("/rCommunityDetail/{rnum}")
+    public HashMap<String, Object> getPostDetail(@PathVariable("rnum") int rnum) {
         HashMap<String, Object> result = new HashMap<>();
-        System.out.println(result + "result??????/====================");
         RCommunity post = rcs.getPostAndIncreaseViewCount(rnum);
         result.put("post", post);
         return result;
     }
-
-
-
 }

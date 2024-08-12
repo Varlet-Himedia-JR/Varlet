@@ -30,6 +30,7 @@ function Login() {
                 setCookie("user",JSON.stringify(result.data),1);
                 navigate('/')
                 console.log('login cookie info : ',getCookie('user'));
+
             }
             
         }catch(err){ console.error(err)}
@@ -53,7 +54,7 @@ function Login() {
             </div>
             <div className='snslogin'>
                 <button onClick={()=>{
-                    window.location.href='http://localhost:8070/member/kakaoStart';
+                    window.location.href='http://localhost:8070/member/kakaostart';
                 }}>KAKAO</button>
                 <button onClick={()=>{
                     window.location.href='http://localhost:8070/member/naverStart';

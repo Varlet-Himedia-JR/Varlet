@@ -10,11 +10,9 @@ public interface RCommunityDetail {
 
     String getUserid();
 
-    int getLocaQtion();
+    int getLocation();
 
     int getLocation2();
-
-    int getSuggest();
 
     int getViews();
 
@@ -27,4 +25,8 @@ public interface RCommunityDetail {
     char getPicked();
 
     Timestamp getWritedate();
+
+    Timestamp getStartdate();
+
+    Timestamp getEnddate();
 }
