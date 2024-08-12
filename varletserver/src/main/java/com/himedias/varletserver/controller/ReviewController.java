@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 
 @RestController
@@ -125,14 +127,17 @@ public class ReviewController {
             review.setContent(content);
 
             if (file != null && !file.isEmpty()) {
-                // Save the new file and set the reviewimg to the new file name
+                // 새 파일을 저장하고 reviewimg 필드를 새로운 파일 이름으로 설정합니다.
                 String fileName = saveFile(file);
                 review.setReviewimg(fileName);
             }
 
+            // 리뷰 업데이트 시 현재 날짜로 indate를 설정합니다.
+            review.setIndate(new Timestamp(System.currentTimeMillis()));
+
             rs.updateReview(rseq, review);
             HttpSession session = request.getSession();
-            session.setAttribute("userid", review.getUserid()); // Update with the correct user ID if needed
+            session.setAttribute("userid", review.getUserid()); // 필요한 경우, 올바른 사용자 ID로 업데이트합니다.
             result.put("msg", "ok");
         } catch (Exception e) {
             result.put("msg", "error");
@@ -140,6 +145,8 @@ public class ReviewController {
         }
         return result;
     }
+
+
 
     private String saveFile(MultipartFile file) throws IOException {
         // Save the file to the local file system or cloud storage and return the file name

@@ -88,7 +88,7 @@ function ReviewList() {
                                             {review.userid}
                                         </div>
                                         <div className="col">{review.title}</div>
-                                        <div className="col">{review.indate ? review.indate.toString().substring(0, 10) : ''}</div>
+                                        <div className="col">{review.indate ? review.indate.toString().substring(0, 10) : ''}</div> {/* 수정된 날짜가 여기에 표시됩니다 */}
                                         <div className="col">{review.readcount}</div>
                                     </div>
                                 ))

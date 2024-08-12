@@ -74,12 +74,18 @@ public class ReviewService {
             Review updatedReview = existingReview.get();
             updatedReview.setTitle(review.getTitle());
             updatedReview.setContent(review.getContent());
-            updatedReview.setReviewimg(review.getReviewimg()); // Update image if provided
+            updatedReview.setReviewimg(review.getReviewimg()); // 이미지가 제공된 경우 업데이트
+
+            // indate를 현재 날짜로 수동 업데이트합니다.
+            updatedReview.setIndate(new Timestamp(System.currentTimeMillis()));
+
             rr.save(updatedReview);
         } else {
             throw new RuntimeException("Review not found");
         }
     }
+
+
 
     public String saveFile(MultipartFile file) throws IOException {
         // Define the file storage location
