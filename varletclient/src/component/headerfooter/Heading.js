@@ -53,7 +53,7 @@ function Heading() {
                         ()=>{ navigate('/') }
                     }/>
                 </div>
-                <div className='reviewList' onClick={ ()=>{ window.location.href='/reviewList' } } >리뷰게시판</div>
+                <div className='reviewBoard' onClick={ ()=>{ window.location.href='/reviewList' } } >리뷰게시판</div>
                 <div className='mycourse' onClick={ ()=>{ logCheck('/mycourse') } } >나의 여행</div>
                 <div className='auth-buttons'>
                     {!userCookie && <div className='login' onClick={LoginWindow}>로그인</div>}

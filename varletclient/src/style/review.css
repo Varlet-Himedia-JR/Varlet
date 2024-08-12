@@ -158,7 +158,8 @@ button:hover {
 }
 
 /* 이미지 프리뷰 */
-img {
+/* .asd를 지우고 div로 바꿔서 개별적인 이름 정해주기 */
+.asdimg {
     border: 2px solid #87CEFA; /* 시원한 하늘색 테두리 */
     border-radius: 5px;
     width: 100%; /* 컨테이너에 맞춰 가로 길이 조절 */

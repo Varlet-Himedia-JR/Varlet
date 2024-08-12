@@ -44,7 +44,7 @@
 }
 
 /* 각 카테고리 텍스트 스타일 */
-.rcommunity, .reviewList, .contents, .mycourse {
+.rcommunity, .reviewBoard, .contents, .mycourse {
     font-family: 'Inter', sans-serif;
     font-weight: 900;
     font-size: 18px;
