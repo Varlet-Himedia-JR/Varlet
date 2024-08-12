@@ -16,10 +16,12 @@ function Heading() {
     const LoginWindow = () => {
         navigate('/login');
     };
-
-    const JoinWindow = () => {
-        window.open('/join', 'Join', 'width=500,height=600');
+  
+    const JoinWindow = () =>{
+        navigate('/join');
     };
+
+  
 
     function logout() {
         dispatch(logoutAction());
