@@ -2,15 +2,14 @@ package com.himedias.varletserver.controller;
 
 import com.himedias.varletserver.dto.Paging;
 import com.himedias.varletserver.entity.Contents;
+import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.Qna;
+import com.himedias.varletserver.entity.Timetable;
 import com.himedias.varletserver.service.ContentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
@@ -46,6 +45,8 @@ public class ContentsController {
         result.put("contents", contents);
         return result;
     }
+
+
 
 
 }

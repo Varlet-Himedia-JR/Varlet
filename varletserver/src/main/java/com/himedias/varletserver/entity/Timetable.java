@@ -20,7 +20,7 @@ public class Timetable {
     @Id
     private int tseq;
 
-    @Id
+
     @Size(max = 50)
     @Column(name = "userid", nullable = false, length = 50)
     private String userid;
@@ -30,12 +30,12 @@ public class Timetable {
     private String tname;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "startDate")
-    private Timestamp startDate;
+    @Column(name = "start_date")
+    private Timestamp start_date;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "endDate")
-    private Timestamp endDate;
+    @Column(name = "end_date")
+    private Timestamp end_date;
 
     @Size(max = 1000)
     @Column(name = "description", length = 1000)
