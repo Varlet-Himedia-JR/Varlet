@@ -117,6 +117,11 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/member/naverLogin"))
             return true;
+        if (path.startsWith("/member/updateInfo"))
+            return true;
+        if (path.startsWith("/member/logout"))
+            return true;
+
 
         if (path.startsWith("/rcommunity/getPostList"))
             return true;
@@ -148,11 +153,11 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/review/updateReview/"))
             return true;
-        if (path.startsWith("/review/getReplies/"))
+        if (path.startsWith("/reply/getReplies/"))
             return true;
-        if (path.startsWith("/review/addReply/"))
+        if (path.startsWith("/reply/addReply"))
             return true;
-        if (path.startsWith("/review/deleteReply/"))
+        if (path.startsWith("/reply/deleteReply/"))
             return true;
 
 
