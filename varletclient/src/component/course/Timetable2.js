@@ -53,7 +53,7 @@ const Timetable = ({ courseDuration, daySchedule }) => {
                             </div>
                         </td>
                         {days.map(day => (
-                            <td>
+                            <td key={day.dseq}>
                                 <div className='cols' style={{ width: '20px', height: '20px' }}>
                                     <div className='subject color3'>
                                         {/* <ul className='status'>
