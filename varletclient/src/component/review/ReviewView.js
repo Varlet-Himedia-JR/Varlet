@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { getCookie } from '../../util/cookieUtil';
 
 function ReviewView() {
     const [review, setReview] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState({ title: '', content: '', reviewimg: '' });
-    const [replyContent, setReplyContent] = useState('');
-    const [replyList, setReplyList] = useState([]);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewImage, setPreviewImage] = useState(''); // State for image preview
     const { rseq } = useParams();
     const navigate = useNavigate();
-    const loginUser = useSelector(state => state.user);
 
     useEffect(() => {
         axios.get(`/api/review/getReviewView/${rseq}`)
@@ -23,6 +21,7 @@ function ReviewView() {
                     content: result.data.review.content,
                     reviewimg: result.data.review.reviewimg
                 });
+                setPreviewImage(result.data.review.reviewimg ? `http://localhost:8070/images/${result.data.review.reviewimg}` : '');
             })
             .catch((err) => {
                 console.error(err);
@@ -30,46 +29,10 @@ function ReviewView() {
             });
     }, [rseq]);
 
-    useEffect(() => {
-        if (review) {
-            axios.get(`/api/review/getReplies/${rseq}`)
-                .then((result) => {
-                    setReplyList(result.data.replies);  // 서버 응답에 맞게 수정
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-        }
-    }, [review, rseq]);
-
-    async function addReply() {
-        try {
-            const userid = loginUser?.userid;
-            const content = replyContent;
-
-            await axios.post('/api/review/addReply', { userid, content, rseq });
-            const result = await axios.get(`/api/review/getReplies/${rseq}`);
-            setReplyList(result.data.replies);  // 서버 응답에 맞게 수정
-        } catch (err) {
-            console.error(err);
-        }
-        setReplyContent('');
-    }
-
-    async function deleteReply(renum) {
-        try {
-            await axios.delete(`/api/review/deleteReply/${renum}`);
-            const result = await axios.get(`/api/review/getReplies/${rseq}`);
-            setReplyList(result.data.replies);  // 서버 응답에 맞게 수정
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
     function reviewDelete() {
         const isConfirmed = window.confirm("정말로 삭제하시겠습니까?");
         if (isConfirmed) {
-            axios.delete(`/api/review/deleteReview/${rseq}`)
+            axios.delete(`/api/review/reviewDelete/${rseq}`)
                 .then(() => {
                     navigate('/reviewList');
                 })
@@ -82,7 +45,19 @@ function ReviewView() {
     }
 
     function reviewEdit() {
-        axios.post(`/api/review/updateReview/${rseq}`, editForm)
+        const formData = new FormData();
+        formData.append('title', editForm.title);
+        formData.append('content', editForm.content);
+        if (selectedFile) {
+            formData.append('reviewimg', selectedFile);
+        } else {
+            formData.append('reviewimg', editForm.reviewimg); // Retain existing image if no new file selected
+        }
+        formData.append('indate', new Date().toISOString()); // Update with the current date
+
+        axios.post(`/api/review/updateReview/${rseq}`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
             .then(() => {
                 setIsEditing(false);
                 axios.get(`/api/review/getReviewView/${rseq}`)
@@ -93,6 +68,7 @@ function ReviewView() {
                             content: result.data.review.content,
                             reviewimg: result.data.review.reviewimg
                         });
+                        setPreviewImage(result.data.review.reviewimg ? `http://localhost:8070/images/${result.data.review.reviewimg}` : '');
                     })
                     .catch((err) => {
                         console.error(err);
@@ -109,6 +85,14 @@ function ReviewView() {
             ...prevForm,
             [name]: value
         }));
+    }
+
+    function handleFileChange(event) {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+        if (file) {
+            setPreviewImage(URL.createObjectURL(file)); // Preview the selected file
+        }
     }
 
     const isUserAuthorized = review && review.userid === getCookie('user')?.userid;
@@ -164,55 +148,33 @@ function ReviewView() {
                                     <div>{review.readcount}</div>
                                 </div>
 
-                                {review.reviewimg && (
-                                    <div className='field'>
-                                        <label>Image</label>
-                                        {isEditing ? (
+                                <div className='field'>
+                                    <label>Image</label>
+                                    {isEditing ? (
+                                        <>
                                             <input
-                                                type="text"
-                                                name="reviewimg"
-                                                value={editForm.reviewimg}
-                                                onChange={handleInputChange}
+                                                type="file"
+                                                onChange={handleFileChange}
                                             />
-                                        ) : (
+                                            {previewImage && (
+                                                <img
+                                                    src={previewImage}
+                                                    alt="Preview"
+                                                    style={{ maxWidth: '300px', maxHeight: '300px' }}
+                                                />
+                                            )}
+                                        </>
+                                    ) : (
+                                        review.reviewimg && (
                                             <div>
                                                 <img
-                                                    src={`http://localhost:8070/images/${review.reviewimg}`}  // Ensure this path is correct
+                                                    src={`http://localhost:8070/images/${review.reviewimg}`}
                                                     alt="Review"
                                                     style={{ maxWidth: '300px', maxHeight: '300px' }}
                                                 />
                                             </div>
-                                        )}
-                                    </div>
-                                )}
-
-                                <div className="field">
-                                    <label>Replies</label>
-                                    <div>
-                                        {replyList.length > 0 ? (
-                                            <ul>
-                                                {replyList.map(reply => (
-                                                    <li key={reply.renum}>
-                                                        <div>{reply.writer}: {reply.content}</div>
-                                                        {loginUser?.userid === reply.writer && (
-                                                            <button onClick={() => deleteReply(reply.renum)}>Delete</button>
-                                                        )}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        ) : (
-                                            <div>No replies yet.</div>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="field">
-                                    <label>Add Reply</label>
-                                    <textarea
-                                        rows="4"
-                                        value={replyContent}
-                                        onChange={(e) => setReplyContent(e.target.value)}
-                                    />
-                                    <button onClick={addReply}>Add Reply</button>
+                                        )
+                                    )}
                                 </div>
                             </div>
                         ) : (
