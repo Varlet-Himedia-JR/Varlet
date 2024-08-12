@@ -97,7 +97,7 @@ public class MemberController {
         }
 
 // JSON 응답 로그로 확인
-        System.out.println("NaverProfile JSON: " + sb2.toString());
+        System.out.println("KakaoProfile JSON: " + sb2.toString());
         Gson gson2 = new Gson();
         KakaoProfile kakaoProfile = gson2.fromJson(sb2.toString(), KakaoProfile.class);
         KakaoProfile.KakaoAccount ac = kakaoProfile.getAccount();
@@ -130,6 +130,8 @@ public class MemberController {
     private String naver_uri;
     @Value("${naver.client_secret}")
     private String naver_secret;
+
+
     @RequestMapping("/naverStart")
     public @ResponseBody String naverStart(HttpServletRequest request) {
         String state = generateState();
@@ -202,8 +204,6 @@ public class MemberController {
             sb2.append(input2);
             System.out.println(input2);
         }
-
-
             NaverProfile naverProfile = gson.fromJson(sb2.toString(), NaverProfile.class);
             // 정보 출력
             System.out.println("id : " + naverProfile.getResponse().getId());
@@ -222,7 +222,7 @@ public class MemberController {
             member.setProvider("naver");
             member.setSnsid(naverProfile.getResponse().getId());
             member.setIndate(Timestamp.valueOf(LocalDateTime.now()));
-
+            member.setIs_login('Y');
             ms.insertMember(member);
         }
         String username = URLEncoder.encode(naverProfile.getResponse().getEmail(),"UTF-8");
