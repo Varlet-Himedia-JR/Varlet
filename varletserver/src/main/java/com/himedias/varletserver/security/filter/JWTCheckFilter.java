@@ -161,6 +161,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
 
 
+
+
         //contents
         if (path.startsWith("/contents/contentsList/"))
             return true;
