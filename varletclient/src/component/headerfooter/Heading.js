@@ -5,7 +5,7 @@ import { logoutAction } from '../../store/userSlice';
 import axios from 'axios';
 import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
 
-import '../../style/index.css'
+import '../../style/header.css'
 
 
 function Heading() {
@@ -15,21 +15,12 @@ function Heading() {
     const userCookie = getCookie('user');
 
     const LoginWindow = () =>{
-        // window.open('/login','Login','width=500,height=600');
         navigate('/login');
         
     };
     const JoinWindow = () =>{
-        window.open('/join','Join','width=500,height=600');
+        navigate('/join');
     };
-
-    // function onLogout(){
-    //     axios.get('/api/member/logout')
-    //     .then(()=>{
-    //         dispatch( logoutAction() );
-    //         window.location.href='/';
-    //     })
-    // }
 
     function logout() {
         dispatch(logoutAction());
@@ -50,23 +41,21 @@ function Heading() {
     return (
         <div className='header'>
             <div className='category_menu'>
-                <div onClick={ ()=>{ navigate('/rcommunity') } }>여행 코스 의뢰</div>
-                <div onClick={ ()=>{ window.location.href='/contents' } } >즐길거리</div>
-                {/* <div onClick={ ()=>{ navigate('/ctest') } }>테스트</div> */}
+                <div className='rcommunity'onClick={ ()=>{ navigate('/rcommunity') } }>여행 코스 의뢰</div>
+                <div className='contents' onClick={ ()=>{ window.location.href='/contents' } } >즐길거리</div>
                 <div className='logo'>
-                    <img className='img' src="http://localhost:8070/images/logo.png" onClick={
+                    <img src="http://localhost:8070/images/varlet.png" onClick={
                         ()=>{ navigate('/') }
                     }/>
                 </div>
-                <div onClick={ ()=>{ window.location.href='/reviewList' } } >리뷰게시판</div>
-                <div onClick={ ()=>{ logCheck('/mycourse') } } >나의 여행</div>
-                <div onClick={ ()=>{ window.location.href='/qna' } } >고객센터</div>
-                <div className='gnb'>  
-                {!userCookie && <div className='login' onClick={LoginWindow}>로그인</div>}
-                {!userCookie && <div className='join' onClick={JoinWindow}>회원가입</div>}
+                <div className='reviewList' onClick={ ()=>{ window.location.href='/reviewList' } } >리뷰게시판</div>
+                <div className='mycourse' onClick={ ()=>{ logCheck('/mycourse') } } >나의 여행</div>
+                <div className='auth-buttons'>
+                    {!userCookie && <div className='login' onClick={LoginWindow}>로그인</div>}
+                    {!userCookie && <div className='join' onClick={JoinWindow}>회원가입</div>}
+                </div>
                     {getCookie('user')? (<h2>{getCookie('user').nickname}님</h2>) : null}
                     {getCookie('user')?<div className='logout' onClick={() => { logout() }}>로그아웃</div>:''}
-                </div>
             </div>
         </div>
     )
