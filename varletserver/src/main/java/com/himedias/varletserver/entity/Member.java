@@ -55,14 +55,14 @@ public class Member {
 
     @Size(max = 100)
     @Column(name = "d_address", length = 100)
-    private String dAddress;
+    private String d_address;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "indate")
     private Timestamp indate;
 
     @Column(name = "is_login")
-    private Character isLogin;
+    private Character is_login;
 
     @Size(max = 50)
     @Column(name = "provider", length = 50)
