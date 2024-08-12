@@ -109,7 +109,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         if (path.startsWith("/member/fileupload"))
             return true;
-        if (path.startsWith("/member/kakaostart"))
+        if (path.startsWith("/member/kakaoStart"))
             return true;
         if (path.startsWith("/member/kakaoLogin"))
             return true;

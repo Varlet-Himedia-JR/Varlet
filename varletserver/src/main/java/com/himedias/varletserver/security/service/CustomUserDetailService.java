@@ -40,7 +40,6 @@ public class CustomUserDetailService implements UserDetailsService {
                 member.getPwd(),
                 member.getName(),
                 member.getNickname(),
-                member.getPwd(),
                 member.getEmail(),
                 member.getPhone(),
                 member.getProfileimg(),
@@ -50,7 +49,7 @@ public class CustomUserDetailService implements UserDetailsService {
                 member.getProvider(),
                 member.getSnsid(),
                 member.getIndate(),
-                member.getIsLogin(),
+                member.getIs_login(),
                 member.getMemberRoleList().stream().map(memberRole -> memberRole.name()).collect(Collectors.toList())
         );
         log.info(memberdto);

@@ -5,14 +5,18 @@ import com.himedias.varletserver.dto.KakaoProfile;
 import com.himedias.varletserver.dto.NaverProfile;
 import com.himedias.varletserver.dto.OAuthToken;
 import com.himedias.varletserver.entity.Member;
+import com.himedias.varletserver.security.CustomSecurityConfig;
 import com.himedias.varletserver.security.util.CustomJWTException;
 import com.himedias.varletserver.security.util.JWTUtil;
 import com.himedias.varletserver.service.MemberService;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -43,7 +47,7 @@ public class MemberController {
 
     // 카카오 로그인
     @RequestMapping("/kakaoStart")
-    public @ResponseBody String kakaostart() {
+    public @ResponseBody String kakaoStart() {
         String a = "<script type='text/javascript'>"
                 + "location.href='https://kauth.kakao.com/oauth/authorize?"
                 + "client_id=" + kakao_id + "&"
@@ -218,6 +222,7 @@ public class MemberController {
             member.setProvider("naver");
             member.setSnsid(naverProfile.getResponse().getId());
             member.setIndate(Timestamp.valueOf(LocalDateTime.now()));
+
             ms.insertMember(member);
         }
         String username = URLEncoder.encode(naverProfile.getResponse().getEmail(),"UTF-8");
