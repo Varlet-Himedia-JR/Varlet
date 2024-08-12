@@ -116,6 +116,7 @@ public class MemberController {
             member.setEmail( ac.getEmail());
             member.setProvider( "kakao" );
             member.setSnsid( kakaoProfile.getId() );
+            member.setIndate(Timestamp.valueOf(LocalDateTime.now()));
             ms.insertMember(member);
         }
         String username = URLEncoder.encode(ac.getEmail(),"UTF-8");
