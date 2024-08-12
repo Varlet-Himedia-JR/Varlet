@@ -8,7 +8,7 @@ import { getCookie } from '../../util/cookieUtil';
 import '../../style/paging.css';
 import '../../style/review.css';
 
-function CourseContents({ courseDuration,selectedCourse }) {
+function CourseContents({ courseDuration, selectedCourse }) {
 
     const [contentsList, setContentsList] = useState([]);
     const [page, setPage] = useState(1); // 현재 페이지
@@ -101,18 +101,21 @@ function CourseContents({ courseDuration,selectedCourse }) {
     useEffect(() => {
         axios.get(`/api/timetable/getTseq/${selectedCourse}`)
             .then((result) => {
-              setTseq(result.data.tseq);
+                console.log(selectedCourse);
+                console.log(result.data.tseq);
+                console.log(result.tseq);
+                setTseq(result.data.tseq);
             })
             .catch((err) => { console.error(err); });
     }, []);
 
     const addDayschedule = () => {
-       
+
         setDayschedule({
             dtitle: selectedContents.dname,
-            cseq:selectedContents.cseq,
-            userid:getCookie('user').userid,
-            tseq:tseq
+            cseq: selectedContents.cseq,
+            userid: getCookie('user').userid,
+            tseq: tseq
         }
         )
     }
@@ -191,6 +194,7 @@ function CourseContents({ courseDuration,selectedCourse }) {
                                 <div className="contents-row">
                                     <div className="contents-col" style={{ display: "none" }}>{selectedContents.cseq}</div>
                                     <div className="contents-col" style={{ textAlign: "left" }}>
+                                        <h2>{tseq}</h2>
                                         <strong>{selectedContents.cname}</strong>
                                         <img className="contents-img" src={selectedContents.contentsimg} alt={selectedContents.cname} />
                                     </div>

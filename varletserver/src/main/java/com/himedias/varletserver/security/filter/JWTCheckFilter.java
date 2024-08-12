@@ -171,6 +171,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         //timetable
         if (path.startsWith("/timetable/inserTimetable"))
             return true;
+        if (path.startsWith(" /getTseq/"))
+            return true;
+
 
         return false;
     }
