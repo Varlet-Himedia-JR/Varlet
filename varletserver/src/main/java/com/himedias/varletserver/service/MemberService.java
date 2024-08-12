@@ -3,6 +3,7 @@ package com.himedias.varletserver.service;
 
 import com.himedias.varletserver.dao.MemberRepository;
 import com.himedias.varletserver.entity.Member;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -99,5 +100,18 @@ public class MemberService {
         }
     }
 
+    public void updateMember(Member member) {
+        mr.save(member);
+    }
+
+    @Autowired
+    private HttpSession session;
+
+    public void logout() {
+        // 무효화 세션
+        if (session != null) {
+            session.invalidate();
+        }
+    }
 
 }

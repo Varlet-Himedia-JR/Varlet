@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +17,8 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/review")
@@ -155,4 +158,10 @@ public class ReviewController {
         file.transferTo(targetFile);
         return fileName;
     }
+
+    @GetMapping("/api/review/reviewList")
+    public List<Review> getReviewsByUser(@RequestParam String userid) {
+        return rs.getReviewsByUserId(userid);
+    }
+
 }

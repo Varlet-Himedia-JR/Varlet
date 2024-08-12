@@ -18,6 +18,9 @@ import Naversaveinfo from "./component/member/Naversaveinfo";
 import Contents from "./component/contents/Contents";
 import Testcontents from "./component/contents/Testcontents";
 import ContentsView from "./component/contents/ContentsView";
+import MyPage from "./component/member/MyPage";
+import MyInfo from "./component/member/MyInfo";
+import MyReview from "./component/member/MyReview";
 
 // import WritePost from './component/post/WritePost';
 // import MyPage from './component/member/MyPage';
@@ -39,7 +42,7 @@ function App() {
         <Route path="/rcommunity" element={<RCommunityList />} /> 
         <Route path="/rpostwrite" element={<RPostWrite />} /> 
         <Route path="/rCommunityDetail/:rnum" element={<RCommunityDetail />} />
-                <Route path="/join" element={<Join />} />
+        <Route path="/join" element={<Join />} />
         <Route path="/writeQna" element={<WriteQna />} />
         <Route path="/qnaView/:qseq" element={<QnaView/>} />
         <Route path="/mycourse" element={<Mycourse />} />
@@ -48,6 +51,9 @@ function App() {
         <Route path="/contents" element={<Contents />} />
         <Route path="/ctest" element={<Testcontents />} />
         <Route path="/getContentsView/:cseq" element={<ContentsView />} />
+        <Route path="/myPage" element={<MyPage />} />
+        <Route path="/myInfo" element={<MyInfo />} />
+        <Route path="/myReview" element={<MyReview />} />
 
         
         
