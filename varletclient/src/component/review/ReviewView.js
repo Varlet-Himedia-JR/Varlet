@@ -8,11 +8,16 @@ function ReviewView() {
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState({ title: '', content: '', reviewimg: '' });
     const [selectedFile, setSelectedFile] = useState(null);
-    const [previewImage, setPreviewImage] = useState(''); // State for image preview
+    const [previewImage, setPreviewImage] = useState('');
+    const [replies, setReplies] = useState([]);
+    const [newReply, setNewReply] = useState('');
     const { rseq } = useParams();
     const navigate = useNavigate();
 
+    const userId = getCookie('user')?.userid || 'guest'; // 로그인된 사용자 ID 또는 guest
+
     useEffect(() => {
+        // 리뷰 데이터 로드
         axios.get(`/api/review/getReviewView/${rseq}`)
             .then((result) => {
                 setReview(result.data.review);
@@ -26,6 +31,16 @@ function ReviewView() {
             .catch((err) => {
                 console.error(err);
                 setReview({});
+            });
+
+        // 댓글 데이터 로드
+        axios.get(`/api/reply/getReplies/${rseq}`)
+            .then((result) => {
+                setReplies(result.data.replies || []);
+            })
+            .catch((err) => {
+                console.error(err);
+                setReplies([]);
             });
     }, [rseq]);
 
@@ -52,10 +67,10 @@ function ReviewView() {
         if (selectedFile) {
             formData.append('reviewimg', selectedFile);
         } else {
-            formData.append('reviewimg', editForm.reviewimg); // 새로운 파일이 선택되지 않았다면 기존 이미지를 유지합니다.
+            formData.append('reviewimg', editForm.reviewimg);
         }
     
-        formData.append('indate', new Date().toISOString()); // 현재 날짜로 업데이트
+        formData.append('indate', new Date().toISOString());
     
         axios.post(`/api/review/updateReview/${rseq}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
@@ -80,7 +95,6 @@ function ReviewView() {
             console.error(err);
         });
     }
-    
 
     function handleInputChange(event) {
         const { name, value } = event.target;
@@ -94,11 +108,57 @@ function ReviewView() {
         const file = event.target.files[0];
         setSelectedFile(file);
         if (file) {
-            setPreviewImage(URL.createObjectURL(file)); // Preview the selected file
+            setPreviewImage(URL.createObjectURL(file));
         }
     }
 
-    const isUserAuthorized = review && review.userid === getCookie('user')?.userid;
+    function handleNewReplyChange(event) {
+        setNewReply(event.target.value);
+    }
+
+    function handleNewReplySubmit() {
+        if (newReply.trim()) {
+            const reply = {
+                rseq: review.rseq,
+                userid: userId, // 로그인이 되어 있으면 사용자 ID, 아니면 guest
+                content: newReply
+            };
+            axios.post(`/api/reply/addReply`, reply)
+                .then((result) => {
+                    setReplies(prevReplies => [...prevReplies, result.data.reply]);
+                    setNewReply('');
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        }
+    }
+
+    function handleReplyDelete(replyId, replyUserId) {
+    // 현재 로그인한 사용자와 댓글 작성자가 같은지 확인
+    if (replyUserId !== userId) {
+        alert("댓글 작성자만 삭제할 수 있습니다.");
+        return;
+    }
+
+    const isConfirmed = window.confirm("정말로 이 댓글을 삭제하시겠습니까?");
+    if (isConfirmed) {
+        axios.delete(`/api/reply/deleteReply/${replyId}`, {
+            data: { userId } // 사용자 ID를 요청 본문에 포함
+        })
+            .then(() => {
+                setReplies(prevReplies => prevReplies.filter(reply => reply.renum !== replyId));
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    } else {
+        console.log("댓글 삭제가 취소되었습니다.");
+    }
+}
+
+
+    const isUserAuthorized = review && review.userid === userId;
     const formattedDate = review?.indate ? new Date(review.indate).toLocaleDateString() : '';
 
     return (
@@ -128,7 +188,7 @@ function ReviewView() {
                                 </div>
                                 <div className='field'>
                                     <label>Writer</label>
-                                    <div>{review.userid}</div>
+                                    <div>{review.userid || 'Unknown'}</div>
                                 </div>
                                 <div className='field'>
                                     <label>Content</label>
@@ -178,6 +238,34 @@ function ReviewView() {
                                             </div>
                                         )
                                     )}
+                                </div>
+
+                                <div className='replies'>
+                                    <h3>댓글</h3>
+                                    <div>
+                                        {replies.length > 0 ? (
+                                            replies.map(reply => (
+                                                <div key={reply.renum} className='reply'>
+                                                    <div><strong>{reply.userid || 'Unknown'}</strong></div>
+                                                    <div>{reply.content}</div>
+                                                    <div>{reply.writedate ? new Date(reply.writedate).toLocaleString() : 'Unknown date'}</div>
+                                                    {reply.userid === userId && (
+                                                        <button onClick={() => handleReplyDelete(reply.renum, reply.userid)}>삭제</button>
+                                                    )}
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div>댓글이 없습니다.</div>
+                                        )}
+                                    </div>
+                                    <div className='new-reply'>
+                                        <textarea
+                                            value={newReply}
+                                            onChange={handleNewReplyChange}
+                                            placeholder="댓글을 입력하세요"
+                                        />
+                                        <button onClick={handleNewReplySubmit}>댓글 작성</button>
+                                    </div>
                                 </div>
                             </div>
                         ) : (
