@@ -48,36 +48,39 @@ function ReviewView() {
         const formData = new FormData();
         formData.append('title', editForm.title);
         formData.append('content', editForm.content);
+    
         if (selectedFile) {
             formData.append('reviewimg', selectedFile);
         } else {
-            formData.append('reviewimg', editForm.reviewimg); // Retain existing image if no new file selected
+            formData.append('reviewimg', editForm.reviewimg); // 새로운 파일이 선택되지 않았다면 기존 이미지를 유지합니다.
         }
-        formData.append('indate', new Date().toISOString()); // Update with the current date
-
+    
+        formData.append('indate', new Date().toISOString()); // 현재 날짜로 업데이트
+    
         axios.post(`/api/review/updateReview/${rseq}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
-            .then(() => {
-                setIsEditing(false);
-                axios.get(`/api/review/getReviewView/${rseq}`)
-                    .then((result) => {
-                        setReview(result.data.review);
-                        setEditForm({
-                            title: result.data.review.title,
-                            content: result.data.review.content,
-                            reviewimg: result.data.review.reviewimg
-                        });
-                        setPreviewImage(result.data.review.reviewimg ? `http://localhost:8070/images/${result.data.review.reviewimg}` : '');
-                    })
-                    .catch((err) => {
-                        console.error(err);
+        .then(() => {
+            setIsEditing(false);
+            axios.get(`/api/review/getReviewView/${rseq}`)
+                .then((result) => {
+                    setReview(result.data.review);
+                    setEditForm({
+                        title: result.data.review.title,
+                        content: result.data.review.content,
+                        reviewimg: result.data.review.reviewimg
                     });
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+                    setPreviewImage(result.data.review.reviewimg ? `http://localhost:8070/images/${result.data.review.reviewimg}` : '');
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        })
+        .catch((err) => {
+            console.error(err);
+        });
     }
+    
 
     function handleInputChange(event) {
         const { name, value } = event.target;
