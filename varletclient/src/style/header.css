@@ -10,6 +10,7 @@
     width: 100%;
     align-items: center;
     background: linear-gradient(180deg, #00BDF9 0%, #61D8FE 49.5%, #FFED8C 100%);
+    z-index: 100;
 }
 
 /* 카테고리 메뉴 스타일 */
