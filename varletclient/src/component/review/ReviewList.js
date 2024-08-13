@@ -96,7 +96,7 @@ function ReviewList() {
     return (
         <>
             <Heading />
-            <div className='subPage'>
+            <div className='subPage' style={{ paddingTop: '100px' }}>
                 <div className='reviewList' style={{ flex: "4" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
                         <h2>Review List</h2>

@@ -10,7 +10,6 @@ import jaxios from '../util/jwtUtil';
 import { setCookie, getCookie, removeCookie } from "../util/cookieUtil";
 import '../style/main.css'
 
-// import '../style/mystargram.css'
 function Main() {
   const [loginUser, setLoginUser] = useState({});
   const lUser = useSelector(state => state.user);
@@ -21,7 +20,7 @@ function Main() {
   return (
     <>
     <Heading/>
-    <div>
+    <div style={{ paddingTop: '100px' }}>
     <div className='background'><img src="http://localhost:8070/images/Beach.jpg"/></div>
     </div>
     <Footer/>

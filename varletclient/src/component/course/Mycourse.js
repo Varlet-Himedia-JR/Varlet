@@ -85,6 +85,7 @@ function Mycourse() {
     };
 
     return (
+
         <div style={{ width: '100%' }}>
             <Heading/>
             <div className='mycourse_container' style={{position:'relative', top:'100px'}}>
@@ -107,6 +108,7 @@ function Mycourse() {
                         </select>
                         <p>Selected Course: {selectedCourse}</p>
                     </div>
+
 
                     <div className='course' style={{ width: '100%' }}>
                         {getCookie('user') ? (
@@ -138,6 +140,7 @@ function Mycourse() {
                     {/* <Timetable courseDuration={courseDuration} daySchedule={daySchedule} /> */}
                     <Timetable2 courseDuration={courseDuration} daySchedule={daySchedule} />
                 </div>
+
             </div>
             <ul className='floating'>
                 <li className="button search" onClick={onChangeCourseContents}>콘텐츠 목록에서 검색</li>
@@ -165,6 +168,7 @@ function Mycourse() {
                             X
                         </button>
                     </div>
+
                 </div>
             )}
             <Footer />

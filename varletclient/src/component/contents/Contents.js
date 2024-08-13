@@ -51,7 +51,7 @@ function Contents() {
     return (
         <>
             <Heading />
-            <div className="contents-container">
+            <div className="contents-container" style={{ paddingTop: '100px' }}>
                 {
                     (contentsList && contentsList.length > 0) ? (
                         contentsList.map((contents, idx) => {

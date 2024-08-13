@@ -8,7 +8,7 @@ import { setCookie, getCookie} from "../../util/cookieUtil";
 
 import Heading from '../headerfooter/Heading';
 import Footer from '../headerfooter/Footer';
-
+import '../../style/login.css'
 function Login() {
     const [userid, setUserid] = useState('');
     const [pwd, setPwd] = useState('');
@@ -33,34 +33,36 @@ function Login() {
         }catch(err){ console.error(err)}
     }
     return (
-        <div>
-        {/* <Heading/> */}
-        <div className="loginform">
+        <>
+        <Heading/>
+        <div style={{ paddingTop: '100px' }}>
+            <div className='background'><img src="http://localhost:8070/images/Beach.jpg"/></div>
+        </div>
+        <div className="loginform" style={{paddingTop: '100px'}}>
+            <div className='loginlabel'>로그인</div>
             <div className='field'>
-                <label>ID</label>
-                <input type="text" value={userid} onChange={(e)=>{ setUserid(e.currentTarget.value) }}/>
+                <label>아이디</label>
+                <input type="text" className='text'value={userid} onChange={(e)=>{ setUserid(e.currentTarget.value) }}/>
             </div>
             <div className='field'>
-                <label>PASSWORD</label>
+                <label>비밀번호</label>
                 <input type="password" value={pwd} onChange={(e)=>{ setPwd(e.currentTarget.value) }}/>
             </div>
             <div className='btns'>
-                <button onClick={ ()=>{ onLoginLocal() } }>LOGIN</button>
-                <button onClick={ ()=>{ navigate('/join') } }>JOIN</button>
+                <button onClick={ ()=>{ onLoginLocal() } }>로그인</button>
+                <button onClick={ ()=>{ navigate('/join') } }>회원가입</button>
             </div>
             <div className='snslogin'>
                 <button onClick={()=>{
                     window.location.href='http://localhost:8070/member/kakaoStart';
-                }}>KAKAO</button>
+                }}>KAKAO 로그인</button>
                 <button onClick={()=>{
                     window.location.href='http://localhost:8070/member/naverStart';
-                }}>NAVER</button>
-                <button>GOOGLE</button>
-                <button>FACEBOOK</button>
+                }}>NAVER 로그인</button>
             </div>
         </div>
         <Footer/>
-        </div>
+        </>
     )
 }
 

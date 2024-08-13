@@ -406,7 +406,7 @@ function PostList() {
   return (
     <>
       <Heading />
-      <div className='w-full max-w-[1700px] mx-auto px-1 mb-28 '>
+      <div className='w-full max-w-[1700px] mx-auto px-1 mb-28 'style={{ paddingTop: '100px' }}>
         <div className='mb-28 '> {/* 여기에 margin-bottom 추가 */}
           <div className='flex justify-between items-baseline mb-28'>
           <h1 className='text-3xl font-semibold'>의뢰 게시판</h1>

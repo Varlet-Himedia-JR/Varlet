@@ -10,7 +10,7 @@ function Footer() {
       <div className='seashell'><img src="http://localhost:8070/images/seashell2.png"/></div>
       <div className='footer_menu'>
         <div>이용약관</div>
-        <div>고객센터</div>
+        <div className='qna' onClick={ ()=>{ window.location.href='/qna' } } >고객센터</div>
         <div>찾아오시는 길</div>
       </div>
 
