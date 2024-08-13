@@ -7,6 +7,8 @@ import Footer from './../headerfooter/Footer';
 import '../../style/customer.css';
 import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
 import jaxios from '../../util/jwtUtil';
+import moment from 'moment';
+
 
 const locationData = {
   1: ["전체"] ,
@@ -45,7 +47,7 @@ function WritePost  ()  {
 
   useEffect(() => {
     if (userCookie) {
-      axios.get(`/api/user/point?userid=${userCookie.userid}`)
+      jaxios.get(`/api/user/point?userid=${userCookie.userid}`)
         .then(response => {
           setUserPoint(response.data.point);
         })
@@ -119,7 +121,9 @@ const handleSubmit = (event) => {
     }
   };
 
+  const today = new Date();
 
+  moment(startDate).format('YYYY-MM-DD')
 
   const returnList = (event) => {
     window.alert('작성을 취소하시겠습니까?')
@@ -127,6 +131,21 @@ const handleSubmit = (event) => {
   };
 
 
+
+  const handleStartDateChange = (e) => {
+    const selectedStartDate = e.target.value;
+    setStartDate(selectedStartDate);
+
+    // 만약 새로운 시작일이 종료일 이후라면 종료일 초기화
+    if (endDate && moment(selectedStartDate).isAfter(moment(endDate))) {
+      setEndDate(''); // 시작일을 변경했으므로 종료일을 초기화
+    }
+  };
+
+  const handleEndDateChange = (e) => {
+    setEndDate(e.target.value);
+  };
+  
 return (
   
   <div class="flex justify-center">
@@ -175,7 +194,7 @@ return (
               class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
               for="sub-location"
             >
-              Sub-Location
+              상세 지역
             </label>
             <select
                 className='border rounded px-2 py-1'
@@ -194,29 +213,35 @@ return (
               class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
               for="start-date"
             >
-              Start Date
+              여행 시작일
             </label>
             <input
-            type="date"
-            id="startDate"
-            name="startDate"
-            onChange={onInputChange}
-            value={startDate}
-            required
-            />
+          min={today
+            ? moment(startDate.dateTo).format('YYYY-MM-DD')
+            :"yyyy-MM-dd"
+          }
+          type="date"
+          id="startDate"
+          name="startDate"
+          onChange={handleStartDateChange}
+          value={startDate}
+          required
+        />
           </div>
           <div class="grid gap-4">
             <label
               class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
               for="end-date"
             >
-              End Date
+              여행 종료일
             </label>
             <input
+            min={startDate ? moment(startDate).format('YYYY-MM-DD') : today}
+
             type="date"
             id="endDate"
             name="endDate"
-            onChange={onInputChange}
+            onChange={handleEndDateChange}
             value={endDate}
             required
             />
