@@ -49,7 +49,7 @@ function Contents() {
     }
 
     return (
-        <article>
+        <>
             <Heading />
             <div className="contents-container">
                 {
@@ -134,7 +134,7 @@ function Contents() {
                 }
             </div>
             <Footer />
-        </article>
+        </>
     )
 }
 

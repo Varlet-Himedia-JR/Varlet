@@ -6,7 +6,6 @@ import { loginAction } from '../../store/userSlice';
 
 import { setCookie, getCookie} from "../../util/cookieUtil";
 
-import '../../style/mystargram.css'
 import Heading from '../headerfooter/Heading';
 import Footer from '../headerfooter/Footer';
 
@@ -30,12 +29,9 @@ function Login() {
                 setCookie("user",JSON.stringify(result.data),1);
                 navigate('/')
                 console.log('login cookie info : ',getCookie('user'));
-
             }
-            
         }catch(err){ console.error(err)}
     }
-
     return (
         <div>
         <Heading/>

@@ -86,8 +86,7 @@ function Mycourse() {
     };
 
     return (
-        <article>
-            
+        <>
             <div className="mycourse_container" style={{
 
                 height: getHeight(),
@@ -160,8 +159,7 @@ function Mycourse() {
                     </div>
                 )}
             </div>
-
-        </article>
+        </>
     );
 }
 
