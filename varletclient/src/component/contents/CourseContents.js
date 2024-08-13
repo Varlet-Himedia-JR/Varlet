@@ -7,6 +7,7 @@ import Footer from './../headerfooter/Footer';
 import { getCookie } from '../../util/cookieUtil';
 import '../../style/paging.css';
 import '../../style/review.css';
+import jaxios from '../../util/jwtUtil';
 
 function CourseContents({ courseDuration, selectedCourse }) {
 
@@ -15,23 +16,36 @@ function CourseContents({ courseDuration, selectedCourse }) {
     const [hasMore, setHasMore] = useState(true);
     const [selectedContents, setSelectedContents] = useState({});
     const [days, setDays] = useState([]);
-    const [start_time, setStart_time] = useState('');
-    const [end_time, setEnd_time] = useState('');
+    const [sdate, setSdate] = useState('');
+    // const [edate, setEdate] = useState('');
+    const [stime, setStime] = useState('');
+    const [etime, setEtime] = useState('');
     const [dayschedule, setDayschedule] = useState({});
     const [tseq, setTseq] = useState('');
-
+    const [price, setPrice] = useState('');
+    const [pcount, setPcount] = useState('1');
     const navigate = useNavigate();
 
-    const handleStart_timeChange = (event) => {
-        setStart_time(event.target.value);
+    const onInputChange = (event) => {
+        const { name, value } = event.target;
+        if (name === 'sdate') {
+            setSdate(value);
+        } else if (name === 'edate') {
+            // setEdate(value);
+        }
     };
-    const handleEnd_timeChange = (event) => {
-        setEnd_time(event.target.value);
-    };
+
+    // const handleStart_timeChange = (event) => {
+    //     setStart_time(event.target.value);
+    // };
+    // const handleEnd_timeChange = (event) => {
+    //     setEnd_time(event.target.value);
+    // };
 
     useEffect(() => {
         if (courseDuration && courseDuration.length > 0) {
             setDays(courseDuration);
+            setSdate(courseDuration[0]);
             // setStart_time(days[0]);
             // setEnd_time(days[days.length-1]);
         }
@@ -99,25 +113,61 @@ function CourseContents({ courseDuration, selectedCourse }) {
 
 
     useEffect(() => {
+
         axios.get(`/api/timetable/getTseq/${selectedCourse}`)
             .then((result) => {
+                console.log(selectedContents)
                 console.log(selectedCourse);
                 console.log(result.data.tseq);
                 console.log(result.tseq);
                 setTseq(result.data.tseq);
+
             })
             .catch((err) => { console.error(err); });
     }, []);
 
-    const addDayschedule = () => {
+    const addDayschedule = async () => {
 
-        setDayschedule({
-            dtitle: selectedContents.dname,
-            cseq: selectedContents.cseq,
-            userid: getCookie('user').userid,
-            tseq: tseq
+        const sDateTimeString = `${sdate}T${stime}:00`;
+        const sDateObject = new Date(sDateTimeString);
+        const eDateTimeString = `${sdate}T${etime}:00`;
+        const eDateObject = new Date(eDateTimeString);
+        // setTemp(new Date(`${sdate}T${etime}:00`));
+        // setDayschedule({
+        //     dtitle: selectedContents.dname,
+        //     cseq: selectedContents.cseq,
+        //     userid: getCookie('user').userid,
+        //     tseq: tseq,
+        //     day_date: sDateObject,
+        //     start_time: sDateObject,
+        //     end_time: eDateObject,
+        //     price: price,
+        //     pcount: pcount
+        // }
+        // )
+        try {
+            console.log("stringggg : ", sDateTimeString)
+            console.log("berfore insert : ", { dtitle: selectedContents.cname, cseq: selectedContents.cseq, userid: getCookie('user').userid, tseq: tseq, day_date: sDateObject, start_time: sDateObject, end_time: eDateObject, price: price, pcount: pcount });
+            let result = await jaxios.post('/api/dayschedule/insertDayschedule', {
+                dtitle: selectedContents.cname,
+                cseq: selectedContents.cseq,
+                userid: getCookie('user').userid,
+                tseq: tseq,
+                day_date: sDateObject,
+                start_time: sDateObject,
+                end_time: eDateObject,
+                price: price,
+                pcount: pcount
+            });
+            if (result.data.msg == 'ok') {
+                alert('등록완료');
+                setIsAddContentsVisible(false);
+            }
+        } catch (err) {
+            console.error(err);
         }
-        )
+
+
     }
 
     const [isAddContentsVisible, setIsAddContentsVisible] = useState(false);
@@ -159,17 +209,17 @@ function CourseContents({ courseDuration, selectedCourse }) {
                     {isAddContentsVisible && (
                         <div className="add_contents" >
                             <div className="cchead" style={{ border: '1px solid black', display: 'flex', justifyContent: 'space-between' }}>
-                                <h2>AddContents</h2>
+                                <h2>AddContents On {selectedCourse}</h2>
                                 <button style={{ border: '1px solid black' }} onClick={onChangeAddContents}>
                                     X
                                 </button>
                             </div>
                             <div>{getCookie('user').userid}</div>
                             <select
-                                id="start_time"
-                                name="start_time"
-                                value={start_time}
-                                onChange={handleStart_timeChange}
+                                id="sdate"
+                                name="sdate"
+                                value={sdate}
+                                onChange={(e) => { setSdate(e.currentTarget.value) }}
                             >
                                 {days.map((day, index) => (
                                     <option key={index} value={day}>
@@ -177,20 +227,42 @@ function CourseContents({ courseDuration, selectedCourse }) {
                                     </option>
                                 ))}
                             </select>
+                            <input type="time" id="stime" name="stime" min="00:00" max="23:59" required onChange={(e) => { setStime(e.currentTarget.value) }} />
+                            {/* <select
+                                id="edate"
+                                name="edate"
+                                value={edate}
+                                onChange={onInputChange}
+                            >
+                                {days.map((day, index) => (
+                                    <option key={index} value={day}>
+                                        {day}
+                                    </option>
+                                ))}
+                            </select> */}
+                            <input type="time" id="etime" name="etime" min="00:00" max="23:59" required onChange={(e) => { setEtime(e.currentTarget.value) }} />
+                            <div>
+                                <label>제목</label>
+                                <input type="text" value={selectedContents.cname} />
+                            </div>
+                            <div>
+                                <label>가격</label>
+                                <input type="text" value={selectedContents.price} onChange={(e) => { setPrice(e.currentTarget.value) }}/>
+                            </div>
+                            <div>
+                                <label>인원 수</label>
+                                <input type="text" value={1} onChange={(e) => { setPcount(e.currentTarget.value) }} />
+                            </div>
+                            {/* <div>
+                                <label>참고용 시간값</label>
+                                {selectedContents.cstartTime}
+                            </div>
+                            <div>
+                                <label>내 시간값</label>
+                                {temp}
+                            </div> */}
 
-                            <select
-                                id="end_time"
-                                name="end_time"
-                                value={end_time}
-                                onChange={handleEnd_timeChange}
-                            >
-                                {days.map((day, index) => (
-                                    <option key={index} value={day}>
-                                        {day}
-                                    </option>
-                                ))}
-                            </select>
-                            <div className="contents-item" style={{ hover: 'none' }}>
+                            {/* <div className="contents-item" style={{ hover: 'none' }}>
                                 <div className="contents-row">
                                     <div className="contents-col" style={{ display: "none" }}>{selectedContents.cseq}</div>
                                     <div className="contents-col" style={{ textAlign: "left" }}>
@@ -227,8 +299,8 @@ function CourseContents({ courseDuration, selectedCourse }) {
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
-                            <button onClick={() => addDayschedule}>일정등록</button>
+                            </div> */}
+                            <button onClick={addDayschedule}>일정등록</button>
                         </div>
                     )}
                 </div>

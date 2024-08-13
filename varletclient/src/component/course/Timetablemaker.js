@@ -12,28 +12,43 @@ function Timetablemaker() {
     const [tname, setTname] = useState('');
     const [description, setDescription] = useState('');
 
-    const onChange1 = newDate => {
-        // 새로운 날짜를 포맷하고 상태에 저장
-        setStart_date(formatDate(newDate));
+    // const onChange1 = newDate => {
+    //     // 새로운 날짜를 포맷하고 상태에 저장
+    //     // setStart_date(formatDate(newDate));
+    //     const { name, value } = event.target;
+    //     if (name === 'startDate') {
+    //         setStartDate(value);
+    //     } else if (name === 'endDate') {
+    //         setEndDate(value);
+    //     }
+    // };
+
+    const onInputChange = (event) => {
+        const { name, value } = event.target;
+        if (name === 'start_date') {
+            setStart_date(value);
+        } else if (name === 'end_date') {
+            setEnd_date(value);
+        }
     };
 
-    const onChange2 = newDate => {
-        // 새로운 날짜를 포맷하고 상태에 저장
-        setEnd_date(formatDate(newDate));
-    };
+    // const onChange2 = newDate => {
+    //     // 새로운 날짜를 포맷하고 상태에 저장
+    //     setEnd_date(formatDate(newDate));
+    // };
     const navigate = useNavigate();
 
-    function onTimetable(){
-        if(!getCookie('user')){
+    function onTimetable() {
+        if (!getCookie('user')) {
             navigate('/login');
-        }else{
+        } else {
             const userid = getCookie('user').userid;
-            jaxios.post('/api/timetable/inserTimetable' , {userid, tname,start_date, end_date, description}  )
-            .then(()=>{ 
-                alert('일정 생성 완료');
-                navigate('/')
-            } )
-            .catch((err)=>{console.error(err)})
+            jaxios.post('/api/timetable/inserTimetable', { userid, tname, start_date, end_date, description })
+                .then(() => {
+                    alert('일정 생성 완료');
+                    navigate('/')
+                })
+                .catch((err) => { console.error(err) })
         }
     }
 
@@ -47,8 +62,7 @@ function Timetablemaker() {
         return `${year}-${month}-${day}`;
     }
     return (
-        <div>
-            <div style={{ display: 'flex', justifyContent: 'column' }}>
+            <div >
                 <div >
                     <div>
                         <label>제목</label>
@@ -59,31 +73,44 @@ function Timetablemaker() {
                     <div>
                         <label>내용</label>
                         <textarea
-                        style={{border:'1px solid black'}}
-                            value={description} 
-                            onChange={e => setDescription(e.target.value)} 
+                            style={{ border: '1px solid black' }}
+                            value={description}
+                            onChange={e => setDescription(e.target.value)}
                         />
                     </div>
                 </div>
                 <div>
-                    <Calendar
+                    {/* <Calendar
                         onChange={onChange1}
                         value={new Date(start_date)}  // 문자열을 다시 Date 객체로 변환하여 전달
+                    /> */}
+                    <input
+                        type="date"
+                        id="start_date"
+                        name="start_date"
+                        onChange={onInputChange}
+                        value={start_date}
+                        required
                     />
-                    <p>선택된 날짜: {start_date}</p>
                 </div>
                 <div>
-                    <Calendar
+                    {/* <Calendar
                         onChange={onChange2}
                         value={new Date(end_date)}  // 문자열을 다시 Date 객체로 변환하여 전달
+                    /> */}
+                    <input
+                        type="date"
+                        id="end_date"
+                        name="end_date"
+                        onChange={onInputChange}
+                        value={end_date}
+                        required
                     />
-                    <p>선택된 날짜: {end_date}</p>
                 </div>
                 <button onClick={
-                            ()=>{ onTimetable(); }
-                        }>일정 생성</button>
+                    () => { onTimetable(); }
+                }>일정 생성</button>
             </div>
-        </div>
     )
 }
 
