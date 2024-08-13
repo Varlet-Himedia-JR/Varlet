@@ -4,6 +4,7 @@ import com.himedias.varletserver.dao.RCommunityRepository;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
 import com.himedias.varletserver.entity.RCommunity;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -100,4 +101,6 @@ public class RCommunityService {
         RCommunity rc = rcr.findById(rnum).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
         rcr.delete(rc);
     }
+
+
 }

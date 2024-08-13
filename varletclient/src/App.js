@@ -22,6 +22,8 @@ import ContentsView from "./component/contents/ContentsView";
 import MyPage from "./component/member/MyPage";
 import MyInfo from "./component/member/MyInfo";
 import MyReview from "./component/member/MyReview";
+import MyQna from "./component/member/MyQna";
+import MyRequest from "./component/member/MyRequest";
 
 // import WritePost from './component/post/WritePost';
 // import MyPage from './component/member/MyPage';
@@ -56,6 +58,8 @@ function App() {
         <Route path="/myPage" element={<MyPage />} />
         <Route path="/myInfo" element={<MyInfo />} />
         <Route path="/myReview" element={<MyReview />} />
+        <Route path="/myQna" element={<MyQna />} />
+        <Route path="/myRequest" element={<MyRequest />} />
 
         
         
