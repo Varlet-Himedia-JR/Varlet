@@ -1,0 +1,109 @@
+/* 전체 헤더 스타일 */
+.header {
+    position: fixed; /* 헤더를 화면 상단에 고정 */
+    top: 0; /* 화면 상단에 위치 */
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #000000;
+    height: 100px;
+    width: 100%;
+    align-items: center;
+    background: linear-gradient(180deg, #00BDF9 0%, #61D8FE 49.5%, #FFED8C 100%);
+}
+
+/* 카테고리 메뉴 스타일 */
+.category_menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 1400px;
+    height: 100px;
+    padding: 0 20px;
+    margin-left: 270px;
+}
+
+/* 로고 스타일 */
+.logo img{
+    width: 450px;
+    height: 300px;
+    margin-top: -95px;
+    
+}
+.logo {
+    position: relative;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 36px;
+    padding: 0 auto;
+    cursor: pointer;
+    width: 350px;
+    height: 99px;
+    text-align: center;
+    overflow: hidden;
+    mix-blend-mode: multiply;
+
+
+}
+
+/* 각 카테고리 텍스트 스타일 */
+.rcommunity, .reviewBoard, .contents, .mycourse {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 18px;
+    color: #000000;
+    cursor: pointer;
+    margin: 0 15px;
+}
+
+/* 인증 버튼 스타일 */
+.auth-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.login, .join, .logout {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 18px;
+    color: #000000;
+    background-color: #0085FF;
+    border-radius: 20px;
+    padding: 5px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    text-align: center;
+    border: 2px #000000 solid;
+
+}
+
+.join {
+    background-color: #C6FF99;
+    border: 2px #000000 solid;
+}
+
+.logout {
+    background-color: #ffc369;
+}
+h2{
+    font-family: 'Inter', sans-serif;
+    color: #007BFF;
+    font-weight: 900;
+    cursor: pointer;
+    font-size: 18px;
+    text-align: center;
+}
+/* menu */
+.menu{
+position: relative;
+width: 24px;
+height: 24px;
+}
+/* icon */
+.menu {
+position: absolute;
+left: 12.5%;
+right: 12.5%;
+top: 25%;
+bottom: 25%;
+background: #1D1B20;
+}

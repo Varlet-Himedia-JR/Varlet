@@ -2,7 +2,8 @@ import React, {useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
-
+import Heading from '../headerfooter/Heading';
+import Footer from '../headerfooter/Footer';
 function Join() {
 
     const [userid, setUserid] = useState('');
@@ -73,7 +74,10 @@ function Join() {
     };
 
     return (
+        <>
+        <Heading/>
         <div className='loginform'>
+
             <div className="logo" style={{fontSize:"2.0rem"}}>회원가입</div>
             <div className='field'>
                 <label>아이디</label>
@@ -154,8 +158,10 @@ function Join() {
                 <button onClick={ ()=>{   onSubmit()    }  }>회원가입</button>
                 <button onClick={ ()=>{ navigate('/')   }  }>돌아가기</button>
             </div>
-
+        
         </div>
+        <Footer/>
+    </>
     )
 }
 

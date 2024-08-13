@@ -1,0 +1,9 @@
+.background img{
+    background-size: cover; /* 배경 이미지를 요소 크기에 맞게 조정 */
+    background-position: center; /* 이미지를 가운데로 배치 */
+    background-repeat: no-repeat; /* 이미지를 반복하지 않도록 설정 */
+    width: 100%;
+    height: 100vh; /* 페이지 전체 높이를 차지하도록 설정 */
+    position: relative; /* 자식 요소들이 배경 위에 배치되도록 설정 */
+    z-index: -1; /* 배경을 뒤로 보내기 위해 z-index 설정 */
+  }

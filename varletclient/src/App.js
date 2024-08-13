@@ -19,6 +19,9 @@ import Naversaveinfo from "./component/member/Naversaveinfo";
 import Contents from "./component/contents/Contents";
 import Testcontents from "./component/contents/Testcontents";
 import ContentsView from "./component/contents/ContentsView";
+import MyPage from "./component/member/MyPage";
+import MyInfo from "./component/member/MyInfo";
+import MyReview from "./component/member/MyReview";
 
 // import WritePost from './component/post/WritePost';
 // import MyPage from './component/member/MyPage';
@@ -50,6 +53,9 @@ function App() {
         <Route path="/ctest" element={<Testcontents />} />
         <Route path="/getContentsView/:cseq" element={<ContentsView />} />
         <Route path="/rCommunityUpdate/:rnum" element={<RCommunityUpdate />} />
+        <Route path="/myPage" element={<MyPage />} />
+        <Route path="/myInfo" element={<MyInfo />} />
+        <Route path="/myReview" element={<MyReview />} />
 
         
         

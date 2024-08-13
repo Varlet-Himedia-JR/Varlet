@@ -101,10 +101,10 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/qna/passCheck"))
             return true;
 
-        if (path.startsWith("/member/emailcheck"))
+        if (path.startsWith("/member/emailCheck"))
             return true;
 
-        if (path.startsWith("/member/nicknamecheck"))
+        if (path.startsWith("/member/nicknameCheck"))
             return true;
 
         if (path.startsWith("/member/fileupload"))
@@ -117,6 +117,11 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/member/naverLogin"))
             return true;
+        if (path.startsWith("/member/updateInfo"))
+            return true;
+        if (path.startsWith("/member/logout"))
+            return true;
+
 
         if (path.startsWith("/favicon.ico"))
             return true;
@@ -155,12 +160,14 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/review/updateReview/"))
             return true;
-        if (path.startsWith("/review/getReplies/"))
+        if (path.startsWith("/reply/getReplies/"))
             return true;
-        if (path.startsWith("/review/addReply/"))
+        if (path.startsWith("/reply/addReply"))
             return true;
-        if (path.startsWith("/review/deleteReply/"))
+        if (path.startsWith("/reply/deleteReply/"))
             return true;
+
+
 
 
         //contents
@@ -173,6 +180,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         //timetable
         if (path.startsWith("/timetable/inserTimetable"))
             return true;
+        if (path.startsWith(" /getTseq/"))
+            return true;
+
 
         return false;
     }

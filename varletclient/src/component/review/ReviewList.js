@@ -9,6 +9,8 @@ function ReviewList() {
     const [reviewList, setReviewList] = useState([]);
     const [page, setPage] = useState(1); // 현재 페이지
     const [hasMore, setHasMore] = useState(true); // 더 로드할 데이터가 있는지 여부
+    const [searchTerm, setSearchTerm] = useState(''); // 검색어
+    const [filteredReviews, setFilteredReviews] = useState([]); // 필터된 리뷰 목록
     const navigate = useNavigate();
 
     // 데이터 로드 함수
@@ -32,6 +34,20 @@ function ReviewList() {
             console.error(err);
         }
     }, []);
+
+    // 필터링 함수
+    const filterReviews = useCallback(() => {
+        if (searchTerm.trim() === '') {
+            setFilteredReviews(reviewList);
+        } else {
+            const lowercasedTerm = searchTerm.toLowerCase();
+            const filtered = reviewList.filter(review =>
+                review.title.toLowerCase().includes(lowercasedTerm) ||
+                review.userid.toLowerCase().includes(lowercasedTerm)
+            );
+            setFilteredReviews(filtered);
+        }
+    }, [searchTerm, reviewList]);
 
     // 스크롤 이벤트 핸들러
     const handleScroll = useCallback(() => {
@@ -58,6 +74,21 @@ function ReviewList() {
         loadReviews(page);
     }, [loadReviews, page]);
 
+    // 검색어 변경 핸들러
+    function handleSearchChange(event) {
+        setSearchTerm(event.target.value);
+    }
+
+    // 검색어가 변경될 때마다 필터링
+    useEffect(() => {
+        filterReviews();
+    }, [searchTerm, filterReviews]);
+
+    // 검색어 클리어 핸들러
+    function handleClearSearch() {
+        setSearchTerm('');
+    }
+
     function onReviewView(rseq) {
         navigate(`/reviewView/${rseq}`);
     }
@@ -67,9 +98,22 @@ function ReviewList() {
             <Heading />
             <div className='subPage'>
                 <div className='reviewList' style={{ flex: "4" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
                         <h2>Review List</h2>
                         <button onClick={() => { navigate('/writeReview') }}>리뷰 작성</button>
+                    </div>
+                    <div className="search-container" style={{ marginBottom: "20px" }}>
+                        <input
+                            type="text"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            placeholder="제목 또는 작성자 아이디로 검색"
+                        />
+                        {searchTerm && (
+                            <button className="clear-button" onClick={handleClearSearch}>
+                                &times; {/* 'X' 문자 */}
+                            </button>
+                        )}
                     </div>
                     <div className="reviewtable">
                         <div className='row'>
@@ -80,15 +124,15 @@ function ReviewList() {
                             <div className="col">조회수</div>
                         </div>
                         {
-                            Array.isArray(reviewList) && reviewList.length > 0 ? (
-                                reviewList.map((review, idx) => (
+                            Array.isArray(filteredReviews) && filteredReviews.length > 0 ? (
+                                filteredReviews.map((review, idx) => (
                                     <div className="row" key={idx}>
                                         <div className="col">{review.rseq}</div>
                                         <div className="col" style={{ textAlign: "left" }} onClick={() => onReviewView(review.rseq)}>
                                             {review.userid}
                                         </div>
                                         <div className="col">{review.title}</div>
-                                        <div className="col">{review.indate ? review.indate.toString().substring(0, 10) : ''}</div> {/* 수정된 날짜가 여기에 표시됩니다 */}
+                                        <div className="col">{review.indate ? review.indate.toString().substring(0, 10) : ''}</div>
                                         <div className="col">{review.readcount}</div>
                                     </div>
                                 ))

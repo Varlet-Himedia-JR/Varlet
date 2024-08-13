@@ -12,8 +12,11 @@ import com.himedias.varletserver.service.MemberService;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +43,12 @@ public class MemberController {
     private String kakao_uri;
     @Autowired
     MemberService ms;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ServletContext context;
 
     @Autowired
     CustomSecurityConfig cc;
@@ -117,6 +126,7 @@ public class MemberController {
             member.setProvider( "kakao" );
             member.setSnsid( kakaoProfile.getId() );
             member.setIndate(Timestamp.valueOf(LocalDateTime.now()));
+            member.setIs_login('Y');
             ms.insertMember(member);
         }
         String username = URLEncoder.encode(ac.getEmail(),"UTF-8");
@@ -262,12 +272,6 @@ public class MemberController {
         return result;
     }
 
-
-
-
-    @Autowired
-    ServletContext context;
-
     @PostMapping("/fileupload")
     public HashMap<String, Object> fileupload(@RequestParam("image") MultipartFile file){
 
@@ -342,5 +346,52 @@ public class MemberController {
         }
         return false;
     }
+
+    @PostMapping("/updateInfo")
+    public Map<String, Object> updateInfo(@RequestBody Member member) {
+        HashMap<String, Object> result = new HashMap<>();
+
+        // Ensure indate is set
+        if (member.getIndate() == null) {
+            member.setIndate(new Timestamp(System.currentTimeMillis())); // Set current date/time
+        }
+
+        // Check if password is provided before encoding
+        if (member.getPwd() != null && !member.getPwd().isEmpty()) {
+            member.setPwd(passwordEncoder.encode(member.getPwd()));
+        }
+
+        // Ensure dAddress is not null
+        if (member.getD_address() == null) {
+            member.setD_address("");
+        }
+
+        // Update member information in the database
+        try {
+            ms.updateMember(member);
+            result.put("msg", "ok");
+        } catch (Exception e) {
+            e.printStackTrace(); // Print stack trace to log
+            result.put("msg", "error");
+        }
+        return result;
+    }
+
+    @PostMapping("/logout")
+    public Map<String, Object> logout(HttpServletRequest request) {
+        HashMap<String, Object> result = new HashMap<>();
+        try {
+            ms.logout();
+            result.put("msg", "logged out");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("msg", "error");
+        }
+        return result;
+    }
+
+
+
+
 
 }

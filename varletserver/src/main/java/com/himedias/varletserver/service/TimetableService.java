@@ -14,7 +14,11 @@ public class TimetableService {
 
 
     public void insertTimetable(Timetable timetable) {
-        System.out.println("ttinfo : "+timetable.toString());
+//        System.out.println("ttinfo : "+timetable.toString());
         tr.save(timetable);
+    }
+
+    public Timetable getTseq(String selectedCourse) {
+        return tr.findTimetableByTname(selectedCourse);
     }
 }
