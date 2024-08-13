@@ -28,4 +28,6 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
 
     @Query("SELECT r FROM RCommunity r WHERE r.rnum = :rnum")
     RCommunity findPostById(@Param("rnum") int rnum);
+
+
 }

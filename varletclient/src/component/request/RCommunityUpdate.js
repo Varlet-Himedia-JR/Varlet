@@ -1,12 +1,8 @@
-import React ,{useState, useEffect} from 'react'
-import axios from '../../util/jwtUtil'
-import { useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
-import Heading from './../headerfooter/Heading';
-import Footer from './../headerfooter/Footer';
-import '../../style/customer.css';
-import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import jaxios from '../../util/jwtUtil';
+import { getCookie } from '../../util/cookieUtil';
+
 
 const locationData = {
   1: ["전체"] ,
@@ -28,78 +24,47 @@ const locationData = {
   17: ["전체","창원", "김해", "양산", "진주", "거제", "통영", "사천", "밀양", "함안", "거창", "창녕", "고성", "하동", "합천", "남해", "함양", "신창", "의령"], 
   18: ["전체","제주도", "서귀포시"]
 };
-<script src="../path/to/flowbite/dist/flowbite.min.js"></script>
 
-function WritePost  ()  {
+
+
+function RCommunityUpdate() {
+  const { rnum } = useParams();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [location, setLocation] = useState('1');
   const [location2, setLocation2] = useState('');
   const [reward, setReward] = useState('');
-  const [userPoint, setUserPoint] = useState(0);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const navigate = useNavigate();
-  const loginUser = useSelector(state => state.user);
-  const userCookie = getCookie('user');
 
   useEffect(() => {
-    if (userCookie) {
-      axios.get(`/api/user/point?userid=${userCookie.userid}`)
-        .then(response => {
-          setUserPoint(response.data.point);
-        })
-        .catch(error => {
-          console.error('사용자 포인트를 가져오는데 실패했습니다:', error);
-        });
-    }
-  }, []);
-  
-//location 함수
-const LocationChange = (event) => {
-  const newLocation = event.target.value;
-  setLocation(newLocation);
-  setLocation2(locationData[newLocation] ? locationData[newLocation][0] : ''); // 선택된 지역의 첫 번째 값 또는 빈 문자열로 설정
-};
+    jaxios.get(`/api/rcommunity/rCommunityDetail/${rnum}`)
+      .then((response) => {
+        const post = response.data.post;
+        setTitle(post.title);
+        setContent(post.content);
+        setLocation(post.location);
+        setLocation2(post.location2);
+        setReward(post.reward);
+        setStartDate(post.startdate);
+        setEndDate(post.enddate);
+        console.log(response.data.post);
+      })
+      .catch((err) => {
+        console.error('게시물 데이터를 불러오는 데 실패했습니다:', err);
+      });
+  }, [rnum]);
 
-const Location2Change = (event) => {
-  setLocation2(event.target.value !== '전체' ? event.target.value : '');
-};
+  const LocationChange = (event) => {
+    const newLocation = event.target.value;
+    setLocation(newLocation);
+    setLocation2(locationData[newLocation] ? locationData[newLocation][0] : '');
+  };
 
-const handleSubmit = (event) => {
-  event.preventDefault();
-
-  
-  const location2Value = location2 === '' ? null : parseInt(location2, 10);
-
-  axios.post('/api/rcommunity/writePost', {
-    title: title,
-    content: content,
-    location: parseInt(location, 10),
-    location2: location2Value, // int형으로 변환, 빈 문자열인 경우 null로 처리
-    reward: parseInt(reward, 10),
-    userid: userCookie.userid,
-    startdate: startDate,
-    enddate: endDate    // 추가
-  })
-  .then(response => {
-    console.log('글 작성 성공:', response);
-    alert('의뢰가 성공적으로 등록되었습니다.');
-    navigate('/rcommunity'); 
-  })
-  .catch(error => {
-    console.error('글 작성 실패:', error);
-    alert('의뢰 등록에 실패했습니다.');
-  });
-};
-
-  useEffect(() => {
-    if (locationData[location]) {
-      setLocation2(locationData[location][0] || '');
-    } else {
-      setLocation2('');
-    }
-  }, [location]);
+  const Location2Change = (event) => {
+    setLocation2(event.target.value !== '전체' ? event.target.value : '');
+  };
 
   const onInputChange = (event) => {
     const { name, value } = event.target;
@@ -119,21 +84,51 @@ const handleSubmit = (event) => {
     }
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const location2Value = location2 === '' ? null : parseInt(location2, 10);
 
+    jaxios.post(`/api/rcommunity/rCommunityUpdate/${rnum}`, {
+      title: title,
+      content: content,
+      location: parseInt(location, 10),
+      location2: location2Value,
+      reward: parseInt(reward, 10),
+      startdate: startDate,
+      enddate: endDate
+      
+    })
+      .then(() => {
+        alert('게시물이 성공적으로 수정되었습니다.');
+        navigate(`/rCommunityDetail/${rnum}`);
+      })
+      .catch((err) => {
+        console.error('게시물 수정에 실패했습니다:', err);
+        alert('게시물 수정에 실패했습니다.');
+      });
+  };
 
-  const returnList = (event) => {
-    window.alert('작성을 취소하시겠습니까?')
-    navigate('/rcommunity');  
+  const returnList = () => {
+    if (window.confirm('수정을 취소하시겠습니까?')) {
+      navigate('/rcommunity');
+    }
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    // Date 객체 생성
+    const date = new Date(dateString);
+    // yyyy-mm-dd 형식으로 변환
+    return date.toISOString().split('T')[0];
   };
 
 
-return (
-  
-  <div class="flex justify-center">
+  return (
+    <div class="flex justify-center">
     <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-4xl" data-v0-t="card">
     <form onSubmit={handleSubmit}>
       <div class="flex flex-col space-y-1.5 p-6">
-        <h1 class="whitespace-nowrap font-semibold tracking-tight text-4xl">여행 의뢰 작성</h1>
+        <h1 class="whitespace-nowrap font-semibold tracking-tight text-4xl">게시글 수정</h1>
       </div>
       <div class="p-6 grid gap-8">
         <div class="grid grid-cols-2 gap-6">
@@ -143,7 +138,7 @@ return (
               for="location"
             >
               여행 예정지
-              </label>
+            </label>
             
             <select
               className='border rounded px-2 py-1'
@@ -194,32 +189,32 @@ return (
               class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
               for="start-date"
             >
-              Start Date
+              여행 시작일
             </label>
             <input
-            type="date"
-            id="startDate"
-            name="startDate"
-            onChange={onInputChange}
-            value={startDate}
-            required
-            />
+          type="date"
+          id="startDate"
+          name="startDate"
+          onChange={onInputChange}
+          defaultValue={startDate ?startDate.slice(0, 10) : ""}
+          required
+        />
           </div>
           <div class="grid gap-4">
             <label
               class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
               for="end-date"
             >
-              End Date
+              여행 종료일
             </label>
             <input
-            type="date"
-            id="endDate"
-            name="endDate"
-            onChange={onInputChange}
-            value={endDate}
-            required
-            />
+          type="date"
+          id="enddate"
+          name="enddate"
+          onChange={onInputChange}
+          defaultValue={endDate ? endDate.slice(0, 10) : ""}
+          required
+        />
           </div>
         </div>
         <div class="grid gap-4">
@@ -264,12 +259,12 @@ return (
           <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
           onClick={returnList}
           >
-            작성 취소
+            수정 취소
           </button>
           <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
           type="submit"
           >
-            작성 완료
+            수정 완료
           </button>
         </div>
       </div>
@@ -277,7 +272,7 @@ return (
 
     </div>
   </div>
-);
-};
+  );
+}
 
-export default WritePost;
+export default RCommunityUpdate;

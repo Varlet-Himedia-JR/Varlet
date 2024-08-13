@@ -331,7 +331,7 @@ const location2Data = {
     18: ["제주도"]
   };
 
-  const RCommunityDetail = () => {
+  function RCommunityDetail ()  {
     const { rnum } = useParams();
     const [post, setPost] = useState({});
     const [replyAllcount, setReplyAllcount] = useState(0);
@@ -351,7 +351,7 @@ const location2Data = {
   
     const deleteCommunity = (rnum) => {
       if (window.confirm('정말로 삭제하시겠습니까?')) {
-        jaxios.delete(`/api/rcommunity/deleteCommunity/${rnum}`)
+        jaxios.delete(`/api/rcommunity/rCommunityDelete/${rnum}`)
           .then(() => {
             navigate('/rcommunity');
           })
@@ -380,7 +380,7 @@ const location2Data = {
     };
   
     const rcommunityupdate = () => {
-      // 수정 로직 구현
+      navigate(`/rCommunityUpdate/${rnum}`);
     };
   
     const maskedid = (userid) => {
@@ -413,6 +413,14 @@ const location2Data = {
   
       return `${diffNights}박 ${diffDays}일`;
     };
+
+    const extractDate = (dateString) => {
+      if (!dateString) return '';
+    
+      // 문자열의 앞 10글자만 반환
+      return dateString.slice(0, 10);
+    };
+
   
 return (
       
@@ -507,12 +515,8 @@ return (
         </svg>
         <span className='text-left'>
                 여행 시작일:
-                {new Date(post.startdate).toLocaleDateString('ko-KR', {
-                  year: 'numeric',
-                  month: '2-digit',
-                  day: '2-digit'
-                }).replace(/\./g, '.').replace(/\.$/, '')}
-              </span>
+                {extractDate(post.startdate)}
+                </span>
       </div>
       <div class="mr-4">
         <svg
@@ -534,14 +538,12 @@ return (
         </svg>
         <span className='text-left'>
                 여행 종료일:
-                {new Date(post.enddate).toLocaleDateString('ko-KR', {
-                  year: 'numeric',
-                  month: '2-digit',
-                  day: '2-digit'
-                }).replace(/\./g, '.').replace(/\.$/, '')}
+                {extractDate(post.enddate)}
+
               </span>     
      </div>
     </div>
+    <h2>총 여행일수:{getTravelDuration(post.startdate,post.enddate)}</h2>
       <div class="mr-4">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -575,11 +577,14 @@ return (
     <div className="flex items-center gap-2">
                 {(post.userid === getCookie('user').userid) && (
                   <>
-                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"                    onClick={rcommunityupdate}
+                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"                   
+                     onClick={rcommunityupdate}
                     >
                       수정
                     </button>
-                                <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" onClick={() => deleteCommunity(post.rnum)}
+                    <button
+                      className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                      onClick={() => deleteCommunity(post.rnum)}
                     >
                       삭제
                     </button>
