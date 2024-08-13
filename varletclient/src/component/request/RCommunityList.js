@@ -6,7 +6,7 @@ import Footer from '../headerfooter/Footer';
 
 // 예시 데이터 (실제 데이터로 교체 필요)
 const location2Data = {
-  1: [{ value: 0, label: "지역 선택" }],
+  1: [{ value: 0, label: "전체" }],
   2: [
     { value: 0, label: "전체" },
     { value: 1, label: "강남구" },
@@ -313,7 +313,7 @@ const location2Data = {
 
 
 const location1Data = {
-  1: ["지역 선택"],
+  1: ["전체"],
   2: ["서울특별시"],
   3: ["부산광역시"],
   4: ["대구광역시"],
@@ -405,96 +405,119 @@ function PostList() {
 
   return (
     <>
-    <Heading/>
-    <div className='w-full max-w-[1700px] mx-auto px-1 mb-16' style={{ paddingTop: '100px' }}>
-      <div className='flex justify-between items-baseline mb-16'>
-        <h1 className='text-3xl font-semibold'>의뢰 게시판</h1>
-      </div>
-      <div className='w-full'>
-        <ul className='mb-4'>
-          <li className='flex items-center mb-4'>
-            <span className='mr-4 text-lg font-medium'>지역 선택</span>
-            <select
-              className='border rounded px-2 py-1'
-              value={location}
-              onChange={handleLocationChange}
-            >
-              <option value="1">전체</option>
-              <option value="2">서울특별시</option>
-              <option value="3">부산광역시</option>
-              <option value="4">대구광역시</option>
-              <option value="5">인천광역시</option>
-              <option value="6">광주광역시</option>
-              <option value="7">대전광역시</option>
-              <option value="8">울산광역시</option>
-              <option value="9">세종특별자치시</option>
-              <option value="10">경기도</option>
-              <option value="11">강원도</option>
-              <option value="12">충청북도</option>
-              <option value="13">충청남도</option>
-              <option value="14">전라북도</option>
-              <option value="15">전라남도</option>
-              <option value="16">경상북도</option>
-              <option value="17">경상남도</option>
-              <option value="18">제주도</option>
-            </select>
-            <button
-              className='ml-auto bg-blue-500 text-white px-4 py-2 rounded'
-              onClick={searchPosts}
-            >
-              검색하기
-            </button>
-            {searching && (
-              <button
-                className='ml-4 bg-red-500 text-white px-4 py-2 rounded'
-                onClick={cancelSearch}
-              >
-                검색 취소
-              </button>
-            )}
-            <button
-              className='ml-4 bg-red-500 text-white px-4 py-2 rounded'
-              onClick={requestwrite}
-            >
-              의뢰하기
-            </button>
-          </li>
-
-          {isLocation2Visible && (
+      <Heading />
+      <div className='w-full max-w-[1700px] mx-auto px-1 mb-28 'style={{ paddingTop: '100px' }}>
+        <div className='mb-28 '> {/* 여기에 margin-bottom 추가 */}
+          <div className='flex justify-between items-baseline mb-28'>
+          <h1 className='text-3xl font-semibold'>의뢰 게시판</h1>
+        </div>
+        <div className='w-full'>
+          <ul className='mb-4'>
             <li className='flex items-center mb-4'>
-              <span className='mr-4 text-lg font-medium'>지역 상세</span>
+              <span className='mr-4 text-lg font-medium'>지역 선택</span>
               <select
                 className='border rounded px-2 py-1'
-                value={location2}
-                onChange={handleLocation2Change}
+                value={location}
+                onChange={handleLocationChange}
               >
-                <option value="">전체</option>
-                {location2Data[location]?.map((loc) => (
-                  <option key={loc.value} value={loc.value}>{loc.label}</option>
-                ))}
+                <option value="1">전체</option>
+                <option value="2">서울특별시</option>
+                <option value="3">부산광역시</option>
+                <option value="4">대구광역시</option>
+                <option value="5">인천광역시</option>
+                <option value="6">광주광역시</option>
+                <option value="7">대전광역시</option>
+                <option value="8">울산광역시</option>
+                <option value="9">세종특별자치시</option>
+                <option value="10">경기도</option>
+                <option value="11">강원도</option>
+                <option value="12">충청북도</option>
+                <option value="13">충청남도</option>
+                <option value="14">전라북도</option>
+                <option value="15">전라남도</option>
+                <option value="16">경상북도</option>
+                <option value="17">경상남도</option>
+                <option value="18">제주도</option>
               </select>
-              <button
-                className='ml-auto bg-green-500 text-white px-4 py-2 rounded'
-                onClick={searchPostsByLocation2}
-                disabled={!location || !location2}
-              >
-                상세 검색
-              </button>
+              <div className="flex ml-auto space-x-4">
+                <div 
+                  className="bg-blue-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer"
+                  onClick={searchPosts}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                    <path d="M21 21l-6 -6" />
+                  </svg>
+                  <span className="text-xl font-bold">검색</span>
+                </div>
+
+                {searching && (
+                  <button
+                    className='bg-red-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer'
+                    onClick={cancelSearch}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                      <path d="M5.039 5.062a7 7 0 0 0 9.91 9.89m1.584 -2.434a7 7 0 0 0 -9.038 -9.057" />
+                      <path d="M3 3l18 18" />
+                    </svg>
+                    <span className="text-xl font-bold">검색 취소</span>
+                  </button>
+                )}
+
+                <div 
+                  className="bg-red-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer"
+                  onClick={requestwrite}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                    <path d="M13.5 6.5l4 4" />
+                  </svg>
+                  <span className="text-xl font-bold">의뢰하기</span>
+                </div>
+              </div>
             </li>
-          )}
-        </ul>
-        <ul>
-          <li className='flex font-bold text-black border-b border-gray-300 pb-2 mb-2'>
-            <span className='w-1/12 text-center'>번호</span>
-            <span className='w-4/12 text-left'>제목</span>
-            <span className='w-2/12 text-center'>지역</span>
-            <span className='w-2/12 text-center'>상세 지역</span>
-            <span className='w-2/12 text-center'>작성자</span>
-            <span className='w-2/12 text-center'>작성일</span>
-            <span className='w-2/12 text-center'>채택 여부</span>
-            <span className='w-1/12 text-center'>조회수</span>
-          </li>
-          <div>
+
+            {isLocation2Visible && (
+              <li className='flex items-center mb-4'>
+                <span className='mr-4 text-lg font-medium'>지역 상세</span>
+                <select
+                  className='border rounded px-2 py-1'
+                  value={location2}
+                  onChange={handleLocation2Change}
+                >
+                  <option value="">전체</option>
+                  {location2Data[location]?.map((loc) => (
+                    <option key={loc.value} value={loc.value}>{loc.label}</option>
+                  ))}
+                </select>
+                <div 
+                  className="ml-auto bg-blue-300 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer"
+                  onClick={searchPostsByLocation2}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                    <path d="M21 21l-6 -6" />
+                  </svg>
+                  <span className="text-lg font-bold">상세 검색</span>
+                </div>
+              </li>
+            )}
+          </ul>
+          <ul>
+            <li className='flex font-bold text-black border-b border-gray-300 pb-2 mb-2'>
+              <span className='w-1/12 text-center'>번호</span>
+              <span className='w-4/12 text-left'>제목</span>
+              <span className='w-2/12 text-center'>지역</span>
+              <span className='w-2/12 text-center'>상세 지역</span>
+              <span className='w-2/12 text-center'>작성자</span>
+              <span className='w-2/12 text-center'>작성일</span>
+              <span className='w-2/12 text-center'>채택 여부</span>
+              <span className='w-1/12 text-center'>조회수</span>
+            </li>
             {posts.length > 0 ? (
               posts.map(post => (
                 <li key={post.rnum} className='flex items-center border-b border-gray-300 py-2'>
@@ -525,12 +548,12 @@ function PostList() {
             ) : (
               <p className='text-center'>게시물이 없습니다.</p>
             )}
-          </div>
-        </ul>
+          </ul>
+        </div>
       </div>
-    </div>
-    <Footer/>
-  </>
+      </div>
+      <Footer />
+    </>
   );
 }
 

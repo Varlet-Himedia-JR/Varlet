@@ -7,6 +7,8 @@ import Footer from './../headerfooter/Footer';
 import '../../style/customer.css';
 import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
 import jaxios from '../../util/jwtUtil';
+import moment from 'moment';
+
 
 const locationData = {
   1: ["전체"] ,
@@ -30,7 +32,7 @@ const locationData = {
 };
 <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
 
-const WritePost = () => {
+function WritePost  ()  {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [location, setLocation] = useState('1');
@@ -45,7 +47,7 @@ const WritePost = () => {
 
   useEffect(() => {
     if (userCookie) {
-      axios.get(`/api/user/point?userid=${userCookie.userid}`)
+      jaxios.get(`/api/user/point?userid=${userCookie.userid}`)
         .then(response => {
           setUserPoint(response.data.point);
         })
@@ -119,7 +121,9 @@ const handleSubmit = (event) => {
     }
   };
 
+  const today = new Date();
 
+  moment(startDate).format('YYYY-MM-DD')
 
   const returnList = (event) => {
     window.alert('작성을 취소하시겠습니까?')
@@ -127,13 +131,39 @@ const handleSubmit = (event) => {
   };
 
 
+
+  const handleStartDateChange = (e) => {
+    const selectedStartDate = e.target.value;
+    setStartDate(selectedStartDate);
+
+    // 만약 새로운 시작일이 종료일 이후라면 종료일 초기화
+    if (endDate && moment(selectedStartDate).isAfter(moment(endDate))) {
+      setEndDate(''); // 시작일을 변경했으므로 종료일을 초기화
+    }
+  };
+
+  const handleEndDateChange = (e) => {
+    setEndDate(e.target.value);
+  };
+  
 return (
-  <div className="max-w-4xl mx-auto p-8">
-    <h1 className="text-2xl font-bold mb-4">의뢰 글 작성</h1>
+  
+  <div class="flex justify-center">
+    <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-4xl" data-v0-t="card">
     <form onSubmit={handleSubmit}>
-    <ul className='mb-4'>
-          <li className='flex items-center mb-4'>
-            <span className='mr-4 text-lg font-medium'>지역 선택</span>
+      <div class="flex flex-col space-y-1.5 p-6">
+        <h1 class="whitespace-nowrap font-semibold tracking-tight text-4xl">여행 의뢰 작성</h1>
+      </div>
+      <div class="p-6 grid gap-8">
+        <div class="grid grid-cols-2 gap-6">
+          <div class="grid gap-4">
+            <label
+              class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
+              for="location"
+            >
+              여행 예정지
+              </label>
+            
             <select
               className='border rounded px-2 py-1'
               value={location}
@@ -158,9 +188,15 @@ return (
             <option value="17">경상남도</option>
             <option value="18">제주도</option>
             </select>
-            <div>
-              <span className='mr-4 text-lg font-medium'>지역 상세</span>
-              <select
+          </div>
+          <div class="grid gap-4">
+            <label
+              class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
+              for="sub-location"
+            >
+              상세 지역
+            </label>
+            <select
                 className='border rounded px-2 py-1'
                 value={location2}
                 onChange={Location2Change}
@@ -169,95 +205,102 @@ return (
                   <option key={index} value={index}>{loc}</option>
                 ))}
               </select>
-            </div>
-          </li>
-        </ul>
-        <div className="createEvent_field">
-          <label htmlFor="startDate">시작 날짜</label>
-          <input
-            type="date"
-            id="startDate"
-            name="startDate"
-            onChange={onInputChange}
-            value={startDate}
-            required
-          />
+          </div>
         </div>
-        <div className="createEvent_field">
-          <label htmlFor="endDate">종료 날짜</label>
-          <input
+        <div class="grid grid-cols-2 gap-6">
+          <div class="grid gap-4">
+            <label
+              class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
+              for="start-date"
+            >
+              여행 시작일
+            </label>
+            <input
+          min={today
+            ? moment(startDate.dateTo).format('YYYY-MM-DD')
+            :"yyyy-MM-dd"
+          }
+          type="date"
+          id="startDate"
+          name="startDate"
+          onChange={handleStartDateChange}
+          value={startDate}
+          required
+        />
+          </div>
+          <div class="grid gap-4">
+            <label
+              class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
+              for="end-date"
+            >
+              여행 종료일
+            </label>
+            <input
+            min={startDate ? moment(startDate).format('YYYY-MM-DD') : today}
+
             type="date"
             id="endDate"
             name="endDate"
-            onChange={onInputChange}
+            onChange={handleEndDateChange}
             value={endDate}
             required
-          />
+            />
+          </div>
         </div>
-
-      <div className='w-full'>
-        <div className="mb-4">
-          <label
-            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium"
-            htmlFor="title"
-          >
-            제목
+        <div class="grid gap-4">
+          <label class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg" for="title">
+            Title
           </label>
           <input
-            className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full mt-2"
+            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-base"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            placeholder="Enter a title for your post"
           />
         </div>
-        <div className="mb-4">
-          <label
-            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium"
-            htmlFor="content"
-          >
-            내용
+        <div class="grid gap-4">
+          <label class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg" for="content">
+            Content
           </label>
           <textarea
-            className="flex min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full mt-2 h-64"
+            class="flex w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[300px] text-base"
             id="content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-          />
+            placeholder="Write the content of your post here..."
+          ></textarea>
         </div>
-        <div>
-          <label
-            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium"
-            htmlFor="reward"
-          >
-            포인트 설정
+        <div class="grid gap-4">
+          <label class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg" for="points">
+            Points
           </label>
           <input
-            className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full mt-2"
-            id="reward"
-            type="text"
+            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-base"
+            type="number"
+            id="points"
             value={reward}
             onChange={RewardChange}
             required
+            placeholder="Enter points"
           />
         </div>
-
-        <div className="flex justify-center space-x-4">
-          <button
-            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 px-4 py-2 bg-black text-white"
-            type="submit"
+        <div class="flex justify-end gap-4">
+          <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+          onClick={returnList}
           >
-            작성완료
+            작성 취소
           </button>
-          <button
-            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
-            type="button"
-            onClick={returnList}
+          <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+          type="submit"
           >
-            작성취소
+            작성 완료
           </button>
         </div>
       </div>
-    </form>
+      </form>
+
+    </div>
   </div>
 );
 };

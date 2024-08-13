@@ -4,6 +4,7 @@ import com.himedias.varletserver.dao.RCommunityRepository;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
 import com.himedias.varletserver.entity.RCommunity;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -69,4 +70,37 @@ public class RCommunityService {
         }
         return post;
     }
+
+    @Transactional
+    public HashMap<String, Object> updatePost(int rnum, RCommunityWrite rCommunityWrite) {
+        HashMap<String, Object> result = new HashMap<>();
+
+        RCommunity post = rcr.findPostById(rnum);
+        if (post == null) {
+            result.put("success", false);
+            result.put("message", "게시물을 찾을 수 없습니다.");
+            return result;
+        }
+
+        post.setTitle(rCommunityWrite.getTitle());
+        post.setContent(rCommunityWrite.getContent());
+        post.setLocation(rCommunityWrite.getLocation());
+        post.setLocation2(rCommunityWrite.getLocation2());
+        post.setReward(rCommunityWrite.getReward());
+        post.setStartdate(rCommunityWrite.getStartdate());
+        post.setEnddate(rCommunityWrite.getEnddate());
+
+        rcr.save(post);  // 수정된 게시글 저장
+
+        result.put("success", true);
+        result.put("post", post);
+        return result;
+    }
+
+    public void deleteRCommunity(int rnum) {
+        RCommunity rc = rcr.findById(rnum).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+        rcr.delete(rc);
+    }
+
+
 }

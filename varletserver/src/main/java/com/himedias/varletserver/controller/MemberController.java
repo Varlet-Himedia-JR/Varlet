@@ -15,6 +15,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -212,11 +214,11 @@ public class MemberController {
             sb2.append(input2);
             System.out.println(input2);
         }
-            NaverProfile naverProfile = gson.fromJson(sb2.toString(), NaverProfile.class);
-            // 정보 출력
-            System.out.println("id : " + naverProfile.getResponse().getId());
-            System.out.println("NaverAccount-Email : " + naverProfile.getResponse().getEmail());
-            System.out.println("NaverProfile-Nickname : " + naverProfile.getResponse().getNickname());
+        NaverProfile naverProfile = gson.fromJson(sb2.toString(), NaverProfile.class);
+        // 정보 출력
+        System.out.println("id : " + naverProfile.getResponse().getId());
+        System.out.println("NaverAccount-Email : " + naverProfile.getResponse().getEmail());
+        System.out.println("NaverProfile-Nickname : " + naverProfile.getResponse().getNickname());
 
 
         Member member = ms.getMemberBySnsid(naverProfile.getResponse().getId());
@@ -345,35 +347,20 @@ public class MemberController {
         return false;
     }
 
+
     @PostMapping("/updateInfo")
-    public Map<String, Object> updateInfo(@RequestBody Member member) {
-        HashMap<String, Object> result = new HashMap<>();
+    public HashMap<String, Object> updateInfo(@RequestBody Member member, HttpServletRequest request){
 
-        // Ensure indate is set
-        if (member.getIndate() == null) {
-            member.setIndate(new Timestamp(System.currentTimeMillis())); // Set current date/time
-        }
+        HashMap<String, Object> result = new HashMap<String, Object>();
 
-        // Check if password is provided before encoding
-        if (member.getPwd() != null && !member.getPwd().isEmpty()) {
-            member.setPwd(passwordEncoder.encode(member.getPwd()));
-        }
+        ms.updateInfo( member );
+        HttpSession session = request.getSession();
+        session.setAttribute("loginUser", member );
 
-        // Ensure dAddress is not null
-        if (member.getD_address() == null) {
-            member.setD_address("");
-        }
-
-        // Update member information in the database
-        try {
-            ms.updateMember(member);
-            result.put("msg", "ok");
-        } catch (Exception e) {
-            e.printStackTrace(); // Print stack trace to log
-            result.put("msg", "error");
-        }
+        result.put("msg", "ok");
         return result;
     }
+
 
     @PostMapping("/logout")
     public Map<String, Object> logout(HttpServletRequest request) {

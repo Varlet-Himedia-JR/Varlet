@@ -4,8 +4,12 @@ import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
 import com.himedias.varletserver.entity.RCommunity;
 import com.himedias.varletserver.service.RCommunityService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -51,4 +55,30 @@ public class RCommunityController {
         result.put("post", post);
         return result;
     }
+
+    @PostMapping("/rCommunityUpdate/{rnum}")
+    public ResponseEntity<HashMap<String, Object>> updateCommunityPost(
+            @PathVariable("rnum") int rnum,
+            @RequestBody RCommunityWrite rCommunityWrite) {
+        HashMap<String, Object> result = rcs.updatePost(rnum, rCommunityWrite);
+        System.out.println("호출?");
+        return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/rCommunityDelete/{rnum}")
+    public HashMap<String, Object> deleteCommunityPost(@PathVariable("rnum") int rnum) {
+        HashMap<String, Object> result = new HashMap<>();
+        try {
+            rcs.deleteRCommunity(rnum);
+            result.put("status", "success");
+            result.put("message", "게시글이 성공적으로 삭제되었습니다.");
+        } catch (Exception e) {
+            result.put("status", "error");
+            result.put("message", "게시글 삭제에 실패했습니다.");
+        }
+        return result;
+    }
+
+
+
 }
