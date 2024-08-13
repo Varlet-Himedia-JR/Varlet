@@ -6,7 +6,6 @@ import { loginAction } from '../../store/userSlice';
 
 import { setCookie, getCookie} from "../../util/cookieUtil";
 
-import '../../style/mystargram.css'
 import Heading from '../headerfooter/Heading';
 import Footer from '../headerfooter/Footer';
 
