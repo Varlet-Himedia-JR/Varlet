@@ -8,7 +8,7 @@ import ReviewView from "./component/review/ReviewView";
 import Qna from "./component/qna/Qna";
 import RCommunityList from "./component/request/RCommunityList";
 import RPostWrite from "./component/request/RPostWrite";
-import RCommunityDetail from "./component/request/RCommunityDetail";
+import RCommunityView from "./component/request/RCommunityView";
 import RCommunityUpdate from "./component/request/RCommunityUpdate";
 import RcCommunityWrite from "./component/request/RcCommunityWrite";
 import Join from './component/member/Join';
@@ -45,7 +45,7 @@ function App() {
         <Route path="/reviewView/:rseq" element={<ReviewView />} /> {/* 수정된 부분 */}
         <Route path="/rcommunity" element={<RCommunityList />} /> 
         <Route path="/rpostwrite" element={<RPostWrite />} /> 
-        <Route path="/rCommunityDetail/:rnum" element={<RCommunityDetail />} />
+        <Route path="/rCommunityView/:rnum" element={<RCommunityView />} />
         <Route path="/join" element={<Join />} />
         <Route path="/writeQna" element={<WriteQna />} />
         <Route path="/qnaView/:qseq" element={<QnaView/>} />

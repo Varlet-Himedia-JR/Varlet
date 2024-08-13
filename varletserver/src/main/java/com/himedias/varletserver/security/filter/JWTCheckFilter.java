@@ -149,7 +149,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/rcommunity/writePost"))
             return true;
-        if (path.startsWith("/rcommunity/rCommunityDetail"))
+        if (path.startsWith("/rcommunity/rCommunityView"))
             return true;
         if (path.startsWith("/rcommunity/rCommunityDelete"))
             return true;

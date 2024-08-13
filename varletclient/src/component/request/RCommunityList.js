@@ -389,8 +389,8 @@ function PostList() {
     navigate('/rpostwrite');
   };
 
-  const RCommunityDetail = (postId) => {
-    navigate(`/RcommunityDetail/${postId}`);
+  const RcommunityView = (postId) => {
+    navigate(`/RcommunityView/${postId}`);
   };
 
   const handleLocationChange = (e) => {
@@ -453,7 +453,7 @@ function PostList() {
                 </div>
 
                 {searching && (
-                  <button
+                  <div
                     className='bg-red-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer'
                     onClick={cancelSearch}
                   >
@@ -463,7 +463,7 @@ function PostList() {
                       <path d="M3 3l18 18" />
                     </svg>
                     <span className="text-xl font-bold">검색 취소</span>
-                  </button>
+                  </div>
                 )}
 
                 <div 
@@ -524,7 +524,7 @@ function PostList() {
                   <span className='w-1/12 text-center bg-blue-500 text-white rounded-full px-2 py-1 text-xs'>
                     {post.rnum}
                   </span>
-                  <span className='w-4/12 text-left cursor-pointer text-blue-500' onClick={() => RCommunityDetail(post.rnum)}>
+                  <span className='w-4/12 text-left cursor-pointer text-blue-500' onClick={() => RcommunityView(post.rnum)}>
                     {post.title}
                   </span>
                   <span className='w-2/12 text-center'>{location1Data[post.location]}</span>

@@ -331,7 +331,7 @@ const location2Data = {
     18: ["제주도"]
   };
 
-  function RCommunityDetail ()  {
+  function RCommunityView ()  {
     const { rnum } = useParams();
     const [post, setPost] = useState({});
     const [replyAllcount, setReplyAllcount] = useState(0);
@@ -339,7 +339,7 @@ const location2Data = {
     const [loginUser, setLoginUser] = useState(null);
   
     useEffect(() => {
-      jaxios.get(`/api/rcommunity/rCommunityDetail/${rnum}`)
+      jaxios.get(`/api/rcommunity/rCommunityView/${rnum}`)
         .then((response) => {
           setPost(response.data.post);
           console.log(response.data.post);
@@ -635,4 +635,4 @@ return (
     );
   };
   
-  export default RCommunityDetail;
+  export default RCommunityView;
