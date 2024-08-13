@@ -7,6 +7,8 @@ import Footer from './../headerfooter/Footer';
 import '../../style/customer.css';
 import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
 import jaxios from '../../util/jwtUtil';
+import moment from 'moment';
+
 
 const locationData = {
   1: ["전체"] ,
@@ -45,7 +47,7 @@ function WritePost  ()  {
 
   useEffect(() => {
     if (userCookie) {
-      axios.get(`/api/user/point?userid=${userCookie.userid}`)
+      jaxios.get(`/api/user/point?userid=${userCookie.userid}`)
         .then(response => {
           setUserPoint(response.data.point);
         })
@@ -119,12 +121,16 @@ const handleSubmit = (event) => {
     }
   };
 
+  const today = new Date();
 
+  moment(startDate).format('YYYY-MM-DD')
 
   const returnList = (event) => {
     window.alert('작성을 취소하시겠습니까?')
     navigate('/rcommunity');  
   };
+
+  
 
 
 return (
@@ -194,9 +200,13 @@ return (
               class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
               for="start-date"
             >
-              Start Date
+              여행 시작일
             </label>
             <input
+            min={today
+              ? moment(startDate.dateTo).format('YYYY-MM-DD')
+              :"yyyy-MM-dd"
+            }
             type="date"
             id="startDate"
             name="startDate"
@@ -210,9 +220,11 @@ return (
               class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
               for="end-date"
             >
-              End Date
+              여행 종료일
             </label>
             <input
+            min={startDate ? moment(startDate).format('YYYY-MM-DD') : today}
+
             type="date"
             id="endDate"
             name="endDate"

@@ -409,7 +409,7 @@ const location2Data = {
   
       const diffTime = end - start;
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      const diffNights = diffDays - 1; // 시작일과 종료일 포함
+      const diffNights = diffDays + 1; // 시작일과 종료일 포함
   
       return `${diffNights}박 ${diffDays}일`;
     };
@@ -425,7 +425,7 @@ const location2Data = {
 return (
       
 
-<div class="w-full max-w-5xl mx-auto px-4 py-8">
+<div class="w-full max-w-6xl mx-auto px-4 py-9">
   <div class="border-b pb-4 mb-6">
     <h1 class="text-3xl font-bold mb-2">{post.title}</h1>
     <div class="flex items-center text-muted-foreground text-sm">
@@ -543,8 +543,10 @@ return (
               </span>     
      </div>
     </div>
-    <h2>총 여행일수:{getTravelDuration(post.startdate,post.enddate)}</h2>
-      <div class="mr-4">
+    <div class="ml-auto text-2xl font-bold mb-2">
+    총 여행일수:{getTravelDuration(post.startdate,post.enddate)}
+    </div>  
+      <div class="mr-4 text-xl">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -562,6 +564,15 @@ return (
           <path d="M9 3.236v15"></path>
         </svg>
         여행 예상지: {getLocationName(post.location, post.location2)}
+        </div>
+        <div class="flex items-center text-muted-foreground text-sm">
+
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moneybag" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+          <path d="M9.5 3h5a1.5 1.5 0 0 1 1.5 1.5a3.5 3.5 0 0 1 -3.5 3.5h-1a3.5 3.5 0 0 1 -3.5 -3.5a1.5 1.5 0 0 1 1.5 -1.5z" />
+          <path d="M4 17v-1a8 8 0 1 1 16 0v1a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" />
+        </svg>
+        포인트:{post.reward}
         </div>
     </div>
   </div>
