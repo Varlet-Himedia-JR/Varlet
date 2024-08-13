@@ -130,9 +130,22 @@ const handleSubmit = (event) => {
     navigate('/rcommunity');  
   };
 
+
+
+  const handleStartDateChange = (e) => {
+    const selectedStartDate = e.target.value;
+    setStartDate(selectedStartDate);
+
+    // 만약 새로운 시작일이 종료일 이후라면 종료일 초기화
+    if (endDate && moment(selectedStartDate).isAfter(moment(endDate))) {
+      setEndDate(''); // 시작일을 변경했으므로 종료일을 초기화
+    }
+  };
+
+  const handleEndDateChange = (e) => {
+    setEndDate(e.target.value);
+  };
   
-
-
 return (
   
   <div class="flex justify-center">
@@ -181,7 +194,7 @@ return (
               class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
               for="sub-location"
             >
-              Sub-Location
+              상세 지역
             </label>
             <select
                 className='border rounded px-2 py-1'
@@ -203,17 +216,17 @@ return (
               여행 시작일
             </label>
             <input
-            min={today
-              ? moment(startDate.dateTo).format('YYYY-MM-DD')
-              :"yyyy-MM-dd"
-            }
-            type="date"
-            id="startDate"
-            name="startDate"
-            onChange={onInputChange}
-            value={startDate}
-            required
-            />
+          min={today
+            ? moment(startDate.dateTo).format('YYYY-MM-DD')
+            :"yyyy-MM-dd"
+          }
+          type="date"
+          id="startDate"
+          name="startDate"
+          onChange={handleStartDateChange}
+          value={startDate}
+          required
+        />
           </div>
           <div class="grid gap-4">
             <label
@@ -228,7 +241,7 @@ return (
             type="date"
             id="endDate"
             name="endDate"
-            onChange={onInputChange}
+            onChange={handleEndDateChange}
             value={endDate}
             required
             />

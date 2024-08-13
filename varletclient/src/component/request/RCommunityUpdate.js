@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import jaxios from '../../util/jwtUtil';
 import { getCookie } from '../../util/cookieUtil';
+import moment from 'moment';
 
 
 const locationData = {
@@ -122,6 +123,23 @@ function RCommunityUpdate() {
     return date.toISOString().split('T')[0];
   };
 
+  const today = new Date();
+
+  moment(startDate).format('YYYY-MM-DD')
+
+  const handleStartDateChange = (e) => {
+    const selectedStartDate = e.target.value;
+    setStartDate(selectedStartDate);
+
+    // 만약 새로운 시작일이 종료일 이후라면 종료일 초기화
+    if (endDate && moment(selectedStartDate).isAfter(moment(endDate))) {
+      setEndDate(''); // 시작일을 변경했으므로 종료일을 초기화
+    }
+  };
+
+  const handleEndDateChange = (e) => {
+    setEndDate(e.target.value);
+  };
 
   return (
     <div class="flex justify-center">
@@ -192,11 +210,15 @@ function RCommunityUpdate() {
               여행 시작일
             </label>
             <input
+          min={today
+            ? moment(startDate.dateTo).format('YYYY-MM-DD')
+            :"yyyy-MM-dd"
+          }
           type="date"
           id="startDate"
           name="startDate"
-          onChange={onInputChange}
-          defaultValue={startDate ?startDate.slice(0, 10) : ""}
+          onChange={handleStartDateChange}
+          defaultValue={startDate ? startDate.slice(0, 10) : ""}
           required
         />
           </div>
@@ -208,13 +230,14 @@ function RCommunityUpdate() {
               여행 종료일
             </label>
             <input
-          type="date"
-          id="enddate"
-          name="enddate"
-          onChange={onInputChange}
-          defaultValue={endDate ? endDate.slice(0, 10) : ""}
-          required
-        />
+            min={startDate ? moment(startDate).format('YYYY-MM-DD') : today}
+            type="date"
+            id="enddate"
+            name="enddate"
+            onChange={handleEndDateChange}
+            defaultValue={endDate ? endDate.slice(0, 10) : ""}
+            required
+          />
           </div>
         </div>
         <div class="grid gap-4">
