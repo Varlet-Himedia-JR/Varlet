@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Heading from '../headerfooter/Heading';
+import Footer from '../headerfooter/Footer';
 
 // 예시 데이터 (실제 데이터로 교체 필요)
 const location2Data = {
@@ -402,6 +404,8 @@ function PostList() {
   };
 
   return (
+    <>
+    <Heading/>
     <div className='w-full max-w-[1700px] mx-auto px-1 mb-16'>
       <div className='flex justify-between items-baseline mb-16'>
         <h1 className='text-3xl font-semibold'>의뢰 게시판</h1>
@@ -525,6 +529,8 @@ function PostList() {
         </ul>
       </div>
     </div>
+    <Footer/>
+  </>
   );
 }
 

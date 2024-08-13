@@ -29,12 +29,9 @@ function Login() {
                 setCookie("user",JSON.stringify(result.data),1);
                 navigate('/')
                 console.log('login cookie info : ',getCookie('user'));
-
             }
-            
         }catch(err){ console.error(err)}
     }
-
     return (
         <div>
         <Heading/>

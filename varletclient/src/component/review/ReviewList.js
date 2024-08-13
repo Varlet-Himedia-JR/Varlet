@@ -94,7 +94,7 @@ function ReviewList() {
     }
 
     return (
-        <article>
+        <>
             <Heading />
             <div className='subPage'>
                 <div className='reviewList' style={{ flex: "4" }}>
@@ -146,7 +146,7 @@ function ReviewList() {
                 </div>
             </div>
             <Footer />
-        </article>
+        </>
     );
 }
 
