@@ -34,7 +34,7 @@ function Login() {
     }
     return (
         <div>
-        <Heading/>
+        {/* <Heading/> */}
         <div className="loginform">
             <div className='field'>
                 <label>ID</label>
