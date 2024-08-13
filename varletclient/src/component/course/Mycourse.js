@@ -87,13 +87,12 @@ function Mycourse() {
 
     return (
         <>
+            <Heading />
             <div className="mycourse_container" style={{
-
                 height: getHeight(),
                 transition: 'height 0.3s ease', // height 변경 시 애니메이션 효과 추가 (선택사항)
             }}>
-                <Heading />
-                <div className='subPage'>
+                <div className='subPage' style={{ paddingTop: '100px' }}>
                     <label htmlFor="mycourse">여행 코스를 고르세요</label>
                     <select
                         id="mycourse"
@@ -110,7 +109,7 @@ function Mycourse() {
                     <p>Selected Course: {selectedCourse}</p>
                 </div>
 
-                <div className='subPage'>
+                <div className='subPage' style={{ paddingTop: '100px' }}>
                     {getCookie('user') ? (
                         <button onClick={handleClickButton} name='ttmaker' >
                             여행코스 만들기
@@ -132,7 +131,7 @@ function Mycourse() {
                     <li class="button search" onClick={onChangeCourseContents}>콘텐츠 목록에서 검색</li>
                     <li class="button custom" onClick={onChangeCourseCustom}>직접 추가</li>
                 </ul>
-                <Footer />
+                
             </div>
             
             <div>
@@ -159,6 +158,7 @@ function Mycourse() {
                     </div>
                 )}
             </div>
+            <Footer />
         </>
     );
 }

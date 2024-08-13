@@ -4,13 +4,14 @@
     top: 0; /* 화면 상단에 위치 */
     display: flex;
     justify-content: center;
-    border-bottom: 1px solid #000000;
     height: 100px;
-
     width: 100%;
     align-items: center;
     background: linear-gradient(180deg, #00BDF9 0%, #61D8FE 49.5%, #FFED8C 100%);
+    z-index: 100;
 }
+
+
 
 /* 카테고리 메뉴 스타일 */
 .category_menu {
@@ -93,18 +94,9 @@ h2{
     font-size: 18px;
     text-align: center;
 }
-/* menu */
-.menu{
-position: relative;
-width: 24px;
-height: 24px;
-}
 /* icon */
 .menu {
-position: absolute;
-left: 12.5%;
-right: 12.5%;
-top: 25%;
-bottom: 25%;
-background: #1D1B20;
+    width: 60px;
+    margin-right: 50px;
+    justify-content: right;
 }

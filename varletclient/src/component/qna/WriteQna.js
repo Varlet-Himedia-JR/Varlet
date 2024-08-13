@@ -17,6 +17,7 @@ function WriteQna() {
     const navigate = useNavigate();
     const userCookie = getCookie('user');
     const userid = userCookie.userid;
+    
     function onSubmit(){
         axios.post('/api/qna/writeQna',{ subject,content, userid, security,pass})
         .then(()=>{ navigate('/qna')})
@@ -27,9 +28,9 @@ function WriteQna() {
 
 
   return (
-    <article>
+    <>
         <Heading/>
-            <div className='subPage'>
+            <div className='subPage'  style={{paddingTop:'100px'}} >
                 <div className="qnawriteform" style={{flex:"4"}}>
                     <h2>1:1 문의하기</h2>
                     <div className="field">
@@ -60,7 +61,7 @@ function WriteQna() {
                 </div>
             </div>
         <Footer/>
-        </article>
+        </>
   )
 }
 

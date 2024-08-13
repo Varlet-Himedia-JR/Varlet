@@ -61,6 +61,11 @@ function Heading() {
                 </div>
                     {getCookie('user')? (<h2 onClick={handleNicknameClick}>{getCookie('user').nickname}님</h2>) : null}
                     {getCookie('user')?<div className='logout' onClick={() => { logout() }}>로그아웃</div>:''}
+                    <div className='menu'>
+                    <img src="http://localhost:8070/images/menu.png" onClick={
+                        ()=>{ navigate('/') }
+                    }/>
+                </div>
             </div>
         </div>
     );

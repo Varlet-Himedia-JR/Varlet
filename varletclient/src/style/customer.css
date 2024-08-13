@@ -1,51 +1,79 @@
+.QnaPage {
+    margin: 20px auto;
+    width: 1400px;
+    padding: 20px;
+    background-color: #F0F8FF; /* 밝은 아이보리색 배경 */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 .qnatable{
     width:100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border:1px dotted black;
     margin:2px auto;
+    padding: 20 20 20 20px;
 }
 
-.qnatable .row{
+.qnatable .row1{
     width:100%;
     display: flex;
     flex:1;
     flex-direction:row;
+    text-align: center;
+    justify-content: center;
+    padding: 20px;
 }
 
-.qnatable .row:first-child .col{
-    background-color: blueviolet;
+.row2 .coll{
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(184, 220, 250);
+    border-radius: 5px;
+    margin: 2px 1px 2px 1px;
+    margin-left: 20px;
+}
+
+.row2 :last-child(){
+    margin-right: 60px;
+}
+.qnacenter{
+    color: #1E90FF; /* 바다색 */
+    font-size: 2rem;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+.qnatable .row1:first-child .col{
+    background-color: rgb(112, 191, 255);
+    border-radius: 5px;
     color:white;
     font-weight:bold;
 }
 
 .qnatable .col{
-    border:1px dotted blueviolet;
+    border:1px dotted rgb(112, 191, 255);
+    border-radius: 5px;
     padding:15px;
     text-align: center;
+    justify-content: center;
     margin: 2px;
 }
-.qnatable .col:nth-child(1){
-    flex:1;
+.row1{
+
+    margin-left: 20px;
+    margin-right: 20px;
 }
-.qnatable .col:nth-child(2){
-    flex:3;
-    cursor:pointer;
-}
-.qnatable .col:nth-child(3){
-    flex:1;
-}
-.qnatable .col:nth-child(4){
-    flex:1;
-}
-.row{
+.row2{
     width:100%;
     display: flex;
     flex:1;
     flex-direction:row;
+    margin-left: 5px;
+    margin-right: 20px;
 }
-
 .qnawriteform{
     width:100%;
     display: flex;
@@ -67,6 +95,8 @@
 }
 .qnawriteform .field input, .qnawriteform .field div{
     flex:5;
+    text-align: center;
+    cursor:pointer;
 }
 .qnawriteform .field textarea{
     flex:5;
@@ -79,33 +109,21 @@
     padding:5px;
     margin:2px;
     font-weight: bold;
+    margin-right: 20px;
+}
+.button1{
+    background-color: #1E90FF; /* 바다색 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 30px;
 }
 
 
 
 
-.qna{
-    display: flex;
-    flex-direction: column;
-}
 
-.qnaview{
-    width :100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.qnaview .field{
-    flex:1;
-    display: flex;
-}
-.qnaview label{
-    background-color: blueviolet;
-    color:white;
-    flex:1;
-    padding:5px;
-}
-.qnaview div{
-    flex:4;
-    margin: 5px;
-}

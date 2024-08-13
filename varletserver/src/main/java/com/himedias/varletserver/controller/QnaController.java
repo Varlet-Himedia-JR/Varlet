@@ -25,7 +25,7 @@ public class QnaController {
 
         Paging paging = new Paging();
         paging.setPage(page);
-        paging.setDisplayRow(10);
+        paging.setDisplayRow(20);
 
         paging.setSort(Sort.by(Sort.Order.desc("indate")));
         Page<Qna> qnaPage = qs.getQnaList(paging);

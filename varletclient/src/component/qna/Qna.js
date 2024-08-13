@@ -55,6 +55,9 @@ function Qna() {
           navigate(`/qnaView/${qseq}`);
       }else{
           let inputPass = window.prompt('패스워드를 입력하세요','');
+          if (inputPass === null) {
+            return; 
+        }
           let res = await axios.post(`/api/qna/passCheck`,null,{params:{qseq,inputPass}});
           console.log(res.data.msg);
           
@@ -67,16 +70,16 @@ function Qna() {
   }
     
   return (
-    <article>
+    <>
         <Heading/>
-        <div className='subPage'>
+        <div className='QnaPage' style={{paddingTop:'120px'}}>
             <div className="qnalist" style={{flex:"4"}}>
             <div style={{display:"flex",justifyContent:"space-between"}}>
-                <h2>고객센터</h2>
-                <button onClick={()=>{navigate('/writeQna')}}>1:1 문의 작성</button>
+                <div className='qnacenter'>고객센터</div>
+                <button className='button1' onClick={()=>{navigate('/writeQna')}}>1:1 문의 작성</button>
             </div>
                 <div className="qnatable">
-                    <div className="row">
+                    <div className="row1">
                         <div className="col" style={{flex:"2"}}>번호</div>
                         <div className="col" style={{flex:"4"}}>제목</div>
                         <div className="col" style={{flex:"2"}}>등록일</div>
@@ -87,18 +90,18 @@ function Qna() {
                 (qnaList)?(
                     qnaList.map((qna,idx)=>{
                         return(
-                            <div className="row" key={idx}>
-                                <div className="col"  style={{flex:"2"}}>{qna.qseq}</div>
-                                <div className="col"  style={{flex:"4",textAlign:"left"}} onClick={()=>{(onQnaView(qna.qseq))}}>
+                            <div className="row2" key={idx}>
+                                <div className="coll"  style={{flex:"2"}}>{qna.qseq}</div>
+                                <div className="coll"  style={{flex:"3.7"}} onClick={()=>{(onQnaView(qna.qseq))}}>
                                     {qna.subject}
-                                    {
+                                    { 
                                         (qna.security == 'Y')?(
                                             <img style={{verticalAlign:"middle",marginLeft:"10px"}} src="http://localhost:8070/images/key.png"/>
                                         ):(null)
                                     }
                                 </div>
-                                <div className="col"  style={{flex:"2"}} >{qna.indate.substring(0,10)}</div>
-                                <div className="col"  style={{flex:"2"}} >
+                                <div className="coll"  style={{flex:"2"}} >{qna.indate.substring(0,10)}</div>
+                                <div className="coll"  style={{flex:"2"}} >
                                     {
                                         (qna.reply)?(<div>답변완료</div>):(<div>질문 확인 중</div>)
                                     }
@@ -115,7 +118,7 @@ function Qna() {
                         ◀
                     </span>
                 ) : (
-                    <span></span>
+                    <div></div>
                 )
             }
             {
@@ -139,14 +142,14 @@ function Qna() {
                         ▶
                     </span>
                 ) : (
-                    <span></span>
+                    <div></div>
                 )
             }
         </div>
         </div>
     </div>
     <Footer/>
-    </article>
+    </>
   )
 }
 
