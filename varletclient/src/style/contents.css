@@ -49,3 +49,31 @@
 /* tbody table tr,tbody table td{
     border:1px solid black;
 } */
+
+/* 아래 적용되는중 */
+/* 리뷰 테이블 스타일 */
+.contentstable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.contentstable .row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    padding: 10px;
+    border-bottom: 1px solid #B0E0E6; /* 연한 바다색 테두리 */
+}
+
+.contentstable .row:nth-child(even) {
+    background-color: #E0FFFF; /* 연한 하늘색 배경 */
+}
+
+.contentstable .col {
+    padding: 10px;
+    text-align: center;
+}
+
+.contentstable .col:nth-child(2) {
+    text-align: left;
+    cursor: pointer;
+}
