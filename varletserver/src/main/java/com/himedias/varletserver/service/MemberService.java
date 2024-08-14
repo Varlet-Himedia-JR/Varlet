@@ -3,10 +3,14 @@ package com.himedias.varletserver.service;
 
 
 import com.himedias.varletserver.dao.MemberRepository;
+import com.himedias.varletserver.dto.Paging;
 import com.himedias.varletserver.entity.Member;
+import com.himedias.varletserver.entity.Review;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -59,14 +63,8 @@ public class MemberService {
         mr.save(member);
     }
 
-    public Member getMemberByNickname(String nickname) {
-        Optional<Member> mem = mr.findByNickname( nickname );
-        if( !mem.isPresent() ){
-            return null;
-        }else{
-            return mem.get();
-        }
-
+    public boolean checkExistsByNickname(String nickname) {
+        return mr.existsByNickname( nickname );
     }
 
 //    public void onFollow(String ffrom, String fto) {
@@ -99,6 +97,35 @@ public class MemberService {
     }
 
     public void updateInfo(Member member) {
-        mr.save(member);
+        Optional<Member> existingMember = mr.findById(member.getUserid());
+
+        if(existingMember.isPresent()) {
+            // 엔티티가 존재할 경우에만 업데이트 수행
+            mr.updateMember(
+                    member.getUserid(),
+                    member.getPwd(),
+                    member.getName(),
+                    member.getNickname(),
+                    member.getEmail(),
+                    member.getPhone(),
+                    member.getZipCode(),
+                    member.getAddress(),
+                    member.getD_address(),
+                    member.getProfileimg()
+            );
+        } else {
+            // 기존 사용자가 없으면 에러 처리
+            throw new IllegalArgumentException("해당 회원이 존재하지 않습니다.");
+        }
     }
+
+    public Page<Review> getReviewsByUser(String userid, Paging paging) {
+        int pageNumber = paging.getPage() - 1; // PageRequest uses 0-based index
+        int pageSize = paging.getDisplayRow();
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, paging.getSort());
+
+        return mr.findByUserid(userid, pageRequest);
+    }
+
+
 }
