@@ -52,7 +52,7 @@ public class RCommunityController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/rCommunityDetail/{rnum}")
+    @GetMapping("/rCommunityView/{rnum}")
     public HashMap<String, Object> getPostDetail(@PathVariable("rnum") int rnum) {
         HashMap<String, Object> result = new HashMap<>();
         RCommunity post = rcs.getPostAndIncreaseViewCount(rnum);
