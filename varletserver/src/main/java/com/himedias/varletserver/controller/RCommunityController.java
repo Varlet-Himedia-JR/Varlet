@@ -83,6 +83,6 @@ public class RCommunityController {
         return result;
     }
 
-    @GetMapping("/getMyList")
+//    @GetMapping("/getMyList")
 
 }
