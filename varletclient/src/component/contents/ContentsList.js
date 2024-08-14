@@ -122,29 +122,23 @@ function ReviewList() {
                                         </div>
                                         <tbody>
                                             <table>
-                                                <tr>
+                                                {/* <tr>
                                                     <td>번호</td>
                                                     <td>{contents.cseq}</td>
-                                                </tr>
+                                                </tr> */}
                                                 <tr>
-                                                    <td>종류</td>
+                                                    {/* <td>종류</td> */}
                                                     <td>{contents.ctype}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>이름</td>
-                                                    <td>{contents.cname}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>지역</td>
+                                                    {/* <td>지역</td> */}
                                                     <td>{contents.location} {contents.location2}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>기간</td>
                                                     <td>{contents.cstartTime.substring(0, 10)} ~ {contents.cendTime.substring(0, 10)}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>비용</td>
-                                                    <td>{contents.cost}</td>
+                                                    <td>{contents.cost=='0'?'무료': <img style={{width:'15px'}} src="http://localhost:8070/images/contents/won.png"/> }</td>
                                                 </tr>
                                             </table>
                                         </tbody>
