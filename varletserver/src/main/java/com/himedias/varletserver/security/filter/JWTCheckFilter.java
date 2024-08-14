@@ -121,6 +121,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/member/logout"))
             return true;
+        if (path.startsWith("/member/userReviews"))
+            return true;
 
 
         if (path.startsWith("/favicon.ico"))
@@ -152,6 +154,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/rcommunity/rCommunityDetail"))
             return true;
         if (path.startsWith("/rcommunity/rCommunityDelete"))
+            return true;
+        if (path.startsWith("/rcommunity/getMyList"))
             return true;
         //community
         if (path.startsWith("/review/getReviewView/"))

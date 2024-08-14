@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
 import '../../style/review.css';
+import { getCookie } from "../../util/cookieUtil";
 import { useSelector } from 'react-redux';
 
 function MyReview() {
@@ -16,24 +17,30 @@ function MyReview() {
 
     // Redux 상태에서 로그인 사용자 정보 가져오기
     const loginUser = useSelector(state => state.user);
-    
+    const userid = getCookie('user').userid; 
+
     // 데이터 로드 함수
     const loadReviews = useCallback(async (pageNumber) => {
         try {
-            const result = await axios.get(`/review/reviewList/${pageNumber}`, { params: { userid: loginUser.userid } });
+            // const result = await axios.get('/api/member/userReviews', { 
+            //         userid,
+            //         page: pageNumber,
+            //         size: 10
+            // });
+            const result = await axios.get(`/api/member/userReviews/${userid}/${pageNumber}/${10}`);
             const { reviewList: newReviews, hasMore: moreData } = result.data;
-
+        
             if (Array.isArray(newReviews) && newReviews.length > 0) {
                 setReviewList(prevReviews => [...prevReviews, ...newReviews]);
                 setPage(pageNumber);
-                setHasMore(moreData); // 다음 페이지가 있는지 여부를 업데이트
+                setHasMore(moreData);
             } else {
                 setHasMore(false);
             }
         } catch (err) {
             console.error(err);
         }
-    }, [loginUser.id]);
+    }, [userid, page]);
 
     // 필터링 함수
     const filterReviews = useCallback(() => {
@@ -99,7 +106,7 @@ function MyReview() {
             <div className='subPage'>
                 <div className='reviewList' style={{ flex: "4" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-                        <h2>Review List</h2>
+                        <h2>My Reviews</h2>
                         <button onClick={() => { navigate('/writeReview') }}>리뷰 작성</button>
                     </div>
                     <div className="search-container" style={{ marginBottom: "20px" }}>
@@ -118,7 +125,7 @@ function MyReview() {
                     <div className="reviewtable">
                         <div className='row'>
                             <div className="col">번호</div>
-                            <div className="col">작성자이름</div>
+                            <div className="col">작성자</div>
                             <div className="col">제목</div>
                             <div className="col">작성날짜</div>
                             <div className="col">조회수</div>

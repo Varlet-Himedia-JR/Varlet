@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.himedias.varletserver.dto.KakaoProfile;
 import com.himedias.varletserver.dto.NaverProfile;
 import com.himedias.varletserver.dto.OAuthToken;
+import com.himedias.varletserver.dto.Paging;
 import com.himedias.varletserver.entity.Member;
+import com.himedias.varletserver.entity.Review;
 import com.himedias.varletserver.security.CustomSecurityConfig;
 import com.himedias.varletserver.security.util.CustomJWTException;
 import com.himedias.varletserver.security.util.JWTUtil;
@@ -15,6 +17,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,7 +70,7 @@ public class MemberController {
     }
 
     @RequestMapping("/kakaoLogin")
-    public void kakaoLogin( HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void kakaoLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String code = request.getParameter("code");
         String endpoint = "https://kauth.kakao.com/oauth/token";
         URL url = new URL(endpoint);
@@ -115,22 +119,22 @@ public class MemberController {
         System.out.println("KakaoAccount-Email : " + ac.getEmail());
         System.out.println("Profile-Nickname : " + pf.getNickname());
 
-        Member member = ms.getMemberBySnsid( kakaoProfile.getId() );
+        Member member = ms.getMemberBySnsid(kakaoProfile.getId());
         PasswordEncoder pe = cc.passwordEncoder(); // 비밀번호 암호화도구
-        if( member == null) {
+        if (member == null) {
             member = new Member();
             member.setUserid(ac.getEmail());
             member.setPwd(pe.encode("kakao"));
             member.setNickname(pf.getNickname());
-            member.setEmail( ac.getEmail());
-            member.setProvider( "kakao" );
-            member.setSnsid( kakaoProfile.getId() );
+            member.setEmail(ac.getEmail());
+            member.setProvider("kakao");
+            member.setSnsid(kakaoProfile.getId());
             member.setIndate(Timestamp.valueOf(LocalDateTime.now()));
             member.setIs_login('Y');
             ms.insertMember(member);
         }
-        String username = URLEncoder.encode(ac.getEmail(),"UTF-8");
-        response.sendRedirect("http://localhost:3000/kakaosaveinfo/"+username);
+        String username = URLEncoder.encode(ac.getEmail(), "UTF-8");
+        response.sendRedirect("http://localhost:3000/kakaosaveinfo/" + username);
     }
 
     // 네이버 로그인
@@ -161,8 +165,8 @@ public class MemberController {
     }
 
     @RequestMapping("/naverLogin")
-    public void naverLogin( HttpServletRequest request, HttpServletResponse response,
-                            @RequestParam("state") String state) throws IOException {
+    public void naverLogin(HttpServletRequest request, HttpServletResponse response,
+                           @RequestParam("state") String state) throws IOException {
         String code = request.getParameter("code");
         String sessionState = (String) request.getSession().getAttribute("state");
 
@@ -176,7 +180,7 @@ public class MemberController {
         String endpoint = "https://nid.naver.com/oauth2.0/token";
         URL url = new URL(endpoint);
         String bodyData = "grant_type=authorization_code&";
-        bodyData += "client_id=" + naver_id ;
+        bodyData += "client_id=" + naver_id;
         bodyData += "&client_secret=" + naver_secret;
         bodyData += "&code=" + code;
         bodyData += "&state=" + URLEncoder.encode(state, "UTF-8") + "&";
@@ -235,35 +239,31 @@ public class MemberController {
             member.setIs_login('Y');
             ms.insertMember(member);
         }
-        String username = URLEncoder.encode(naverProfile.getResponse().getEmail(),"UTF-8");
-        response.sendRedirect("http://localhost:3000/naversaveinfo/"+username);
+        String username = URLEncoder.encode(naverProfile.getResponse().getEmail(), "UTF-8");
+        response.sendRedirect("http://localhost:3000/naversaveinfo/" + username);
     }
 
 
-
-
-
     @PostMapping("/useridCheck")
-    public HashMap<String, Object> useridCheck( @RequestParam("userid") String userid ){
+    public HashMap<String, Object> useridCheck(@RequestParam("userid") String userid) {
         HashMap<String, Object> result = new HashMap<String, Object>();
-        Member mem = ms.getMember( userid );
-        if( mem != null ) result.put("msg", "no");
+        Member mem = ms.getMember(userid);
+        if (mem != null) result.put("msg", "no");
         else result.put("msg", "yes");
         return result;
     }
 
     @PostMapping("/nicknameCheck")
-    public HashMap<String, Object> nicknameCheck( @RequestParam("nickname") String nickname){
+    public HashMap<String, Object> nicknameCheck(@RequestParam("nickname") String nickname) {
         HashMap<String, Object> result = new HashMap<String, Object>();
-        Member mem = ms.getMemberByNickname( nickname );
-        if( mem != null ) result.put("msg", "no");
+        if (ms.checkExistsByNickname(nickname)) result.put("msg", "no");
         else result.put("msg", "yes");
         return result;
     }
 
 
     @PostMapping("/join")
-    public HashMap<String, Object> join( @RequestBody Member member){
+    public HashMap<String, Object> join(@RequestBody Member member) {
         HashMap<String, Object> result = new HashMap<String, Object>();
         PasswordEncoder pe = cc.passwordEncoder();
         member.setPwd(pe.encode(member.getPwd()));
@@ -273,7 +273,7 @@ public class MemberController {
     }
 
     @PostMapping("/fileupload")
-    public HashMap<String, Object> fileupload(@RequestParam("image") MultipartFile file){
+    public HashMap<String, Object> fileupload(@RequestParam("image") MultipartFile file) {
 
         HashMap<String, Object> result = new HashMap<String, Object>();
         String path = context.getRealPath("/uploads");
@@ -281,12 +281,12 @@ public class MemberController {
         Calendar today = Calendar.getInstance();
         long dt = today.getTimeInMillis();
         String filename = file.getOriginalFilename();
-        String fn1 = filename.substring(0, filename.indexOf(".") );
-        String fn2 = filename.substring(filename.indexOf(".") );
+        String fn1 = filename.substring(0, filename.indexOf("."));
+        String fn2 = filename.substring(filename.indexOf("."));
         String uploadPath = path + "/" + fn1 + dt + fn2;
 
         try {
-            file.transferTo( new File(uploadPath) );
+            file.transferTo(new File(uploadPath));
             result.put("filename", fn1 + dt + fn2);
         } catch (IllegalStateException | IOException e) {
             e.printStackTrace();
@@ -295,43 +295,40 @@ public class MemberController {
     }
 
 
-
-
-
     @GetMapping("/refresh/{refreshToken}")
     public Map<String, Object> refresh(@RequestHeader("Authorization") String authHeader,
                                        @PathVariable("refreshToken") String refreshToken
     ) throws CustomJWTException {
-        System.out.println("refreshtoken on refresh"+refreshToken);
-        if(refreshToken == null ) throw new CustomJWTException("NULL_REFRASH");
-        if(authHeader == null || authHeader.length() < 7 )
+        System.out.println("refreshtoken on refresh" + refreshToken);
+        if (refreshToken == null) throw new CustomJWTException("NULL_REFRASH");
+        if (authHeader == null || authHeader.length() < 7)
             throw new CustomJWTException("INVALID_HEADER");
 
         // 추출하는 내용의 7번째 글자부터 끝까지 추출합니다
         String accessToken = authHeader.substring(7);
 
-        if(!checkExpiredToken(accessToken)){ // 기간이 지나면 true, 안지났으면 false 리턴
-            return Map.of("access_token",accessToken,"refresh_token",refreshToken);
+        if (!checkExpiredToken(accessToken)) { // 기간이 지나면 true, 안지났으면 false 리턴
+            return Map.of("access_token", accessToken, "refresh_token", refreshToken);
         }
         // accessToken 기간 만료시 refresh 토큰으로 재 검증하여 사용자 정보 추출
-        Map<String,Object> claims = JWTUtil.validateToken(refreshToken);
+        Map<String, Object> claims = JWTUtil.validateToken(refreshToken);
 
         // 토큰 교체
-        String newAccessToken = JWTUtil.generateToken(claims,1);
+        String newAccessToken = JWTUtil.generateToken(claims, 1);
         String newRefreshToken = "";
-        if( checkTime((Integer)claims.get("exp"))){
-            newRefreshToken = JWTUtil.generateToken(claims,60*24);
-        }else{
+        if (checkTime((Integer) claims.get("exp"))) {
+            newRefreshToken = JWTUtil.generateToken(claims, 60 * 24);
+        } else {
             newRefreshToken = refreshToken;
         }
 
-        return Map.of("access_token",newAccessToken,"refresh_token",newRefreshToken);
+        return Map.of("access_token", newAccessToken, "refresh_token", newRefreshToken);
     }
 
     private boolean checkTime(Integer exp) {
-        java.util.Date expDate = new java.util.Date((long)exp*(1000)); // 밀리초로 변환
+        java.util.Date expDate = new java.util.Date((long) exp * (1000)); // 밀리초로 변환
         long gap = expDate.getTime() - System.currentTimeMillis(); // 현재 시간과의 차이 계산
-        long leftMin = gap / (1000*60);  // 분단위 변환
+        long leftMin = gap / (1000 * 60);  // 분단위 변환
         // 1시간도 안남았는지
         return leftMin < 60;
     }
@@ -339,8 +336,8 @@ public class MemberController {
     private boolean checkExpiredToken(String accessToken) {
         try {
             JWTUtil.validateToken(accessToken);
-        }catch( CustomJWTException ex ){
-            if(ex.getMessage().equals("Expired")){
+        } catch (CustomJWTException ex) {
+            if (ex.getMessage().equals("Expired")) {
                 return true;
             }
         }
@@ -349,15 +346,42 @@ public class MemberController {
 
 
     @PostMapping("/updateInfo")
-    public HashMap<String, Object> updateInfo(@RequestBody Member member, HttpServletRequest request){
+    public HashMap<String, Object> updateInfo(@RequestBody Member member, HttpServletRequest request) {
 
         HashMap<String, Object> result = new HashMap<String, Object>();
 
-        ms.updateInfo( member );
+        ms.updateInfo(member);
         HttpSession session = request.getSession();
-        session.setAttribute("loginUser", member );
+        session.setAttribute("loginUser", member);
 
         result.put("msg", "ok");
+        return result;
+    }
+
+    @GetMapping("/userReviews/{userid}/{page}/{size}")
+    public HashMap<String, Object> userReviews(
+            @PathVariable("userid") String userid,
+            @PathVariable("page") int page,
+            @PathVariable("size") int size) {
+        HashMap<String, Object> result = new HashMap<>();
+        try {
+            Paging paging = new Paging();
+            paging.setPage(page);
+            paging.setDisplayRow(size);
+            paging.setSort(Sort.by(Sort.Order.desc("indate")));
+
+            Page<Review> reviewPage = ms.getReviewsByUser(userid, paging);
+
+            paging.setTotalCount((int) reviewPage.getTotalElements());
+            paging.calPaging();
+
+            result.put("reviewList", reviewPage.getContent());
+            result.put("paging", paging);
+            result.put("status", "success");
+        } catch (Exception e) {
+            result.put("status", "error");
+            result.put("message", e.getMessage());
+        }
         return result;
     }
 
@@ -374,9 +398,6 @@ public class MemberController {
         }
         return result;
     }
-
-
-
 
 
 }
