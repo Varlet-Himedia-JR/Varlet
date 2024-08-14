@@ -18,6 +18,7 @@ import Mycourse from "./component/course/Mycourse";
 import Kakaosaveinfo from "./component/member/Kakaosaveinfo";
 import Naversaveinfo from "./component/member/Naversaveinfo";
 import Contents from "./component/contents/Contents";
+import ContentsList from "./component/contents/ContentsList";
 import Testcontents from "./component/contents/Testcontents";
 import ContentsView from "./component/contents/ContentsView";
 import MyPage from "./component/member/MyPage";
@@ -25,6 +26,7 @@ import MyInfo from "./component/member/MyInfo";
 import MyReview from "./component/member/MyReview";
 import MyQna from "./component/member/MyQna";
 import MyRequest from "./component/member/MyRequest";
+
 
 // import WritePost from './component/post/WritePost';
 // import MyPage from './component/member/MyPage';
@@ -52,7 +54,7 @@ function App() {
         <Route path="/mycourse" element={<Mycourse />} />
         <Route path="/kakaosaveinfo/:nickname" element={<Kakaosaveinfo />} />
         <Route path="/naversaveinfo/:nickname" element={<Naversaveinfo />} />
-        <Route path="/contents" element={<Contents />} />
+        <Route path="/contents" element={<ContentsList />} />
         <Route path="/ctest" element={<Testcontents />} />
         <Route path="/getContentsView/:cseq" element={<ContentsView />} />
         <Route path="/rCommunityUpdate/:rnum" element={<RCommunityUpdate />} />

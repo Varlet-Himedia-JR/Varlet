@@ -1,30 +1,35 @@
 .course_contents{
     /* display: none; */
-    position: relative;
-    z-index: 99;
-    bottom: 0;
+    position: fixed;
+    z-index: 1;
+    /* bottom: 0; */
+    /* top:400px; */
+    height:50%;
+    bottom:100px;
     width: 100%;
     border-top: 1px solid #d6d6d6;
     box-shadow: 0 0 24px rgba(0, 0, 0, 0.2);
     background-color: #fff;
-    overflow: hidden;
+    /* overflow: hidden; */
+    overflow-y: auto; /* 세로 스크롤을 활성화합니다. */
+    height:
 }
 
-.course_contents {
-    /* display: flex;
-    justify-content: space-between; */
+.mycourse_container {
+    display: flex;
+    justify-content: space-between; 
     position: fixed;
-    top: 50%;
+    top: 100px;
     left: 0;
     width: 100%;
-    /* height: 200px; */
+    height:400px;
     /* 예시로 높이를 설정합니다. 필요에 따라 조정하세요. */
     background-color: white;
-    z-index: 1000;
-    padding: 10px;
+    z-index: 1;
+    padding: 0px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     overflow-y: auto; /* 세로 스크롤을 활성화합니다. */
-    overflow-x: hidden; /* 가로 스크롤을 숨깁니다. 필요시 'auto'로 변경 */
+    overflow-x: auto; 
 }
 .add_contents{
     position: fixed;
@@ -57,13 +62,22 @@
     background-color: white;
     width:100%;
     height:40px;
-    top:50%;
+    top:50%+100px;
 }
+.mycourseContentsList {
+    margin: 0 auto;
+    width: 100%; /* 화면 전체 너비 사용 */
+    padding: 20px;
+    background-color: #F0F8FF; /* 밝은 아이보리색 배경 */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 
 ul.floating {
     position: fixed;
     z-index: 80;
-    bottom: 15px;
+    bottom: 15%;
     left: 45%;
 }
 
@@ -108,6 +122,9 @@ ul.floating li.button.custom {
 }
 
 .coursemenu{
+    /* position: fixed; */
     width:20%;
+    /* top: 100px; */
+    
 }
 

@@ -61,8 +61,11 @@ th{
 }
 
 .dayschedule{
+    position: absolute;
+    top:0;
+    left:310px;
     background-color: red;
-    color:white;
+    color:white;    
     text-align: center;
     padding: 0;
     height: 50px;
