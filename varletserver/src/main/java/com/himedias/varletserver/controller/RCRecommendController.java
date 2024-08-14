@@ -1,7 +1,6 @@
 package com.himedias.varletserver.controller;
 
-import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
-import com.himedias.varletserver.dto.Rcommunity.RcrecommendWrite;
+import com.himedias.varletserver.dto.RCRcommend.RcrecommendWrite;
 import com.himedias.varletserver.service.RCRecommendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

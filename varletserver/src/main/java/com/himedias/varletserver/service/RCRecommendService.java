@@ -3,7 +3,7 @@ package com.himedias.varletserver.service;
 import com.himedias.varletserver.dao.MemberRepository;
 import com.himedias.varletserver.dao.RCommunityRepository;
 import com.himedias.varletserver.dao.RcrecommendRepository;
-import com.himedias.varletserver.dto.Rcommunity.RcrecommendWrite;
+import com.himedias.varletserver.dto.RCRcommend.RcrecommendWrite;
 import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.RCommunity;
 import com.himedias.varletserver.entity.Rcrecommend;

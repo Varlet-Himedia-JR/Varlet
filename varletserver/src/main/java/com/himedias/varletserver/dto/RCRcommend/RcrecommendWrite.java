@@ -1,12 +1,8 @@
-package com.himedias.varletserver.dto.Rcommunity;
+package com.himedias.varletserver.dto.RCRcommend;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.transaction.annotation.Transactional;
