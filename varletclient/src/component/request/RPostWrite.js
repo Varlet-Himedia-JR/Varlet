@@ -55,7 +55,7 @@ const handleSubmit = (event) => {
   
   const location2Value = location2 === '' ? null : parseInt(location2, 10);
 
-  axios.post('/api/rcommunity/writePost', {
+  jaxios.post('/api/rcommunity/writePost', {
     title: title,
     content: content,
     location: parseInt(location, 10),

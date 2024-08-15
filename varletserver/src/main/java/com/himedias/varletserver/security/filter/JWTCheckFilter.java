@@ -159,7 +159,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         //community
 
-
+        if (path.startsWith("/rcrecommend/fileup"))
+            return true;
         if (path.startsWith("/rcrecommend/writeRecommend"))
             return true;
         //recommunity

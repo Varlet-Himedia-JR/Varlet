@@ -3,59 +3,54 @@ package com.himedias.varletserver.service;
 import com.himedias.varletserver.dao.MemberRepository;
 import com.himedias.varletserver.dao.RCommunityRepository;
 import com.himedias.varletserver.dao.RcrecommendRepository;
-import com.himedias.varletserver.dto.RCRcommend.RcrecommendWrite;
+import com.himedias.varletserver.entity.Image;
 import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.RCommunity;
 import com.himedias.varletserver.entity.Rcrecommend;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 
-/**
- * 추천 댓글 관련 비즈니스 로직을 처리하는 서비스 클래스
- */
 @Service
 public class RCRecommendService {
 
-    private  RcrecommendRepository rcrecommendRepository;
-    private  RCommunityRepository rCommunityRepository;
-    private  MemberRepository memberRepository;
+    @Autowired
+    private RcrecommendRepository rcr;
+    @Autowired
+    private RCommunityRepository rc;
+    @Autowired
+    private MemberRepository mr;
+    @Autowired
+    private ImageService ir;
 
-    public void RcrecommendService(RcrecommendRepository rcrecommendRepository,
-                                   RCommunityRepository rCommunityRepository,
-                                   MemberRepository memberRepository) {
-        this.rcrecommendRepository = rcrecommendRepository;
-        this.rCommunityRepository = rCommunityRepository;
-        this.memberRepository = memberRepository;
+    public RCommunity findRCommunityById(int rnum) {
+        return rc.findById(rnum)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid RCommunity ID"));
+    }
+
+    public Member findMemberById(String userid) {
+        return mr.findById(String.valueOf(userid))
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Member ID"));
     }
 
     @Transactional
-    public HashMap<String, Object> writeRecommend(RcrecommendWrite rcrecommendWrite) {
-        HashMap<String, Object> result = new HashMap<>();
+    public Rcrecommend saveRcrecommend(Rcrecommend rcrecommend, List<String> fileNames) {
+        Rcrecommend savedRcrecommend = rcr.save(rcrecommend);
 
-        Rcrecommend rcrecommend = new Rcrecommend();
+        for (String fileName : fileNames) {
+            Image image = new Image();
+            image.setRcRecommend(savedRcrecommend);
+            image.setImageName(fileName);
+            image.setFilePath("/uploads/RcommunityImages/" + fileName);
+            image.setMember(savedRcrecommend.getUserid()); // 파일 업로드 시 사용자 정보 설정
+            ir.saveImage(image);
+        }
 
-        // RCommunity와 Member 엔티티를 찾아서 설정
-        RCommunity rCommunity = rCommunityRepository.findById(rcrecommendWrite.getRnum())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid RCommunity ID"));
-        Member member = memberRepository.findById(rcrecommendWrite.getUserid())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Member ID"));
-
-        rcrecommend.setRnum(rCommunity);
-        rcrecommend.setUserid(member);
-        rcrecommend.setContent(rcrecommendWrite.getContent());
-        rcrecommend.setRpicked('N'); // 기본값 설정
-        rcrecommend.setWritedate(Instant.now());
-        rcrecommend.setImage(rcrecommendWrite.getImage());
-        rcrecommend.setSaveimages(rcrecommendWrite.getSaveimages());
-
-        // 엔티티 저장
-        rcrecommendRepository.save(rcrecommend);
-
-        result.put("success", true);
-        result.put("message", "Recommendation written successfully");
-        return result;
+        return savedRcrecommend;
     }
 }
