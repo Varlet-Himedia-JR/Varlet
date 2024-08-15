@@ -1,8 +1,8 @@
   import React, { useEffect, useState } from 'react';
   import { useParams, useNavigate } from 'react-router-dom';
   import jaxios from '../../util/jwtUtil';
-  import { getCookie } from '../../util/cookieUtil';
   import { location1Data, location2Data } from '../request/LocaionData';
+  import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
 
 
 
@@ -11,9 +11,77 @@
       const [post, setPost] = useState({});
       const [replyAllcount, setReplyAllcount] = useState(0);
       const navigate = useNavigate();
-      const [loginUser, setLoginUser] = useState(null);
-      
+      const [showReplyForm, setShowReplyForm] = useState(false);
+      const [files, setFiles] = useState([]); // 파일 객체와 미리보기 URL을 관리
+      const userCookie = getCookie('user');
+      const [content, setContent] = useState('');
+      const [image, setImage] = useState(null);
+      const [saveimages, setSaveImages] = useState('');
+
+      const [formData, setFormData] = useState({
+          content: '',
+          image: '',
+          saveimages: '',
+          rnum: rnum || 1, // rnum을 URL에서 가져오고, 없으면 1로 설정합니다.
+      });
     
+    
+      useEffect(() => {
+        jaxios.get(`/api/rcommunity/rCommunityView/${rnum}`)
+          .then((response) => {
+            setPost(response.data.post);
+            console.log(response.data.post);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      })
+
+
+      const handleFileChange = (event) => {
+        const newFiles = Array.from(event.target.files);
+        const newPreviews = [];
+
+        newFiles.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                newPreviews.push({ src: e.target.result, file });
+                if (newPreviews.length === newFiles.length) {
+                    setFiles(prevFiles => [...prevFiles, ...newPreviews]);
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+    };
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append('userid', userCookie.userid);
+      formData.append('content', content);
+      formData.append('image', image);
+      formData.append('saveimages', saveimages);
+      formData.append('rnum', rnum);
+
+      jaxios.post('/api/rcrecommend/writeRecommend', formData)
+          .then(response => {
+              alert(response.data);
+              // 필요시 추가 처리
+              console.log(formData);
+          })
+          .catch(error => {
+              alert('답글 작성에 실패했습니다.');
+              console.error(error);
+          });
+  };
+
+
+
+    const handleRemoveFile = (fileToRemove) => {
+        setFiles(prevFiles => prevFiles.filter(file => file.file !== fileToRemove));
+    };
+
       useEffect(() => {
         jaxios.get(`/api/rcommunity/rCommunityView/${rnum}`)
           .then((response) => {
@@ -99,7 +167,8 @@
       };
 
       const writerecommend = () => {
-        
+        setShowReplyForm(!showReplyForm);
+
       };
     
       const [showDates, setShowDates] = useState(false);
@@ -113,6 +182,7 @@
     const toggleShowLocation = () => {
       setShowLocation(!showLocation);
     };    
+
 
 
   return (
@@ -305,7 +375,48 @@
         <span className="text-xl font-bold flex items-center">답글 작성하기</span>
       </div>
 
-
+      {showReplyForm && (
+        <form className="mt-4 p-4 bg-gray-100 rounded-lg" onSubmit={handleSubmit}>
+          <textarea 
+            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+            rows="4"
+            placeholder="답글을 입력하세요..."
+          />
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="multiple_files">파일 업로드</label>
+                        <input
+                            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            id="multiple_files"
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            onChange={handleFileChange}
+                        />
+                        <label>파일 미리보기</label>
+                        <div className="preview-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px'}}>
+                            {files.map(({ src, file }, index) => (
+                                <div key={index} style={{ position: 'relative' }}>
+                                    <img
+                                        src={src}
+                                        alt={`preview ${index}`}
+                                        style={{ width: '300px', height: '300px', objectFit: 'cover', border: '1px solid #ddd' }}
+                                    />
+                                    <button
+                                        onClick={() => handleRemoveFile(file)}
+                                        style={{ position: 'absolute', top: '0', right: '0', backgroundColor: 'red', color: 'white', border: 'none', padding: '5px', borderRadius: '0 0 0 5px' }}
+                                    >
+                                        ✖
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+          <button 
+            type="submit" 
+            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+          >
+            답글 작성
+          </button>
+        </form>
+      )}
 
 
       <div class="space-y-4">
