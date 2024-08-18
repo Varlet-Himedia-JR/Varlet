@@ -4,6 +4,7 @@ import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.entity.RCommunity;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -29,4 +30,7 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
     @Query("SELECT r FROM RCommunity r WHERE r.rnum = :rnum")
     RCommunity findPostById(@Param("rnum") int rnum);
 
+    @Modifying
+    @Query("UPDATE RCommunity r SET r.picked = :picked WHERE r.rnum = :rnum")
+    int updatePicked(@Param("rnum") String rnum, @Param("picked") char picked);
 }

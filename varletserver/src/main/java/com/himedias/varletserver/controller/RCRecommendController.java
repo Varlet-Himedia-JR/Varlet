@@ -115,5 +115,21 @@ public class RCRecommendController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Reply not found or could not be deleted");
         }
     }
+    @PostMapping("/updateReplyPicked/{rcnum}")
+    public ResponseEntity<?> updateReplyPicked(@PathVariable int rcnum, @RequestBody HashMap<String, String> body) {
+        String rpickedStr = body.get("rpicked");
+        if (rpickedStr == null || (!rpickedStr.equals("Y") && !rpickedStr.equals("N"))) {
+            return ResponseEntity.badRequest().body("Invalid rpicked value");
+        }
 
+        // String을 Character로 변환
+        Character rpicked = rpickedStr.charAt(0);
+
+        boolean result = rcs.updateReplyPicked(rcnum, rpicked);
+        if (result) {
+            return ResponseEntity.ok().body("Reply picked updated successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update reply picked");
+        }
+    }
 }

@@ -7,6 +7,7 @@ import com.himedias.varletserver.service.RCRecommendService;
 import com.himedias.varletserver.service.RCommunityService;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -88,15 +89,23 @@ public class RCommunityController {
 
 //    @GetMapping("/getMyList")
 
+    @PostMapping("/updatePicked/{rnum}")
+    public ResponseEntity<?> updatePicked(@PathVariable String rnum, @RequestBody HashMap<String, String> body) {
+        String pickedStr = body.get("picked");
+        if (pickedStr == null || (!pickedStr.equals("Y") && !pickedStr.equals("N"))) {
+            return ResponseEntity.badRequest().body("Invalid picked value");
+        }
 
-    @PostMapping("/pick")
-    public String pickRecommendation(@RequestParam int rnum, @RequestParam Integer rcnum) {
-        try {
-            rcs.pickRecommendation(rnum, rcnum);
-            return "채택 완료되었습니다.";
-        } catch (RuntimeException e) {
-            return "오류 발생: " + e.getMessage();
+        // String을 Character로 변환
+        Character picked = pickedStr.charAt(0);
+
+        boolean result = rcs.updatePicked(rnum, picked);
+        if (result) {
+            return ResponseEntity.ok().body("Picked updated successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update picked");
         }
     }
+
 
 }

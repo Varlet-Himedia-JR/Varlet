@@ -100,35 +100,16 @@ public class RCommunityService {
         return result;
     }
 
+    @Transactional
     public void deleteRCommunity(int rnum) {
         RCommunity rc = rcr.findById(rnum).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
         rcr.delete(rc);
     }
 
     @Transactional
-    public void pickRecommendation(int rnum, Integer rcnum) {
-        // 게시글 가져오기
-        RCommunity community = rcr.findById(rnum)
-                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다"));
-
-        // 채택된 답글 가져오기
-        Rcrecommend recommendation = rcrr.findById(rcnum)
-                .orElseThrow(() -> new RuntimeException("답글을 찾을 수 없습니다"));
-
-        // 게시글의 picked 상태 업데이트
-        community.setPicked('Y');
-        rcr.save(community);
-
-        // 채택된 답글의 rpicked 상태 업데이트
-        recommendation.setRpicked('Y');
-        rcrr.save(recommendation);
-
-        // 채택되지 않은 답글의 rpicked 상태를 'N'으로 설정
-        rcrr.findByRnumAndNotRcnum(rnum, rcnum)
-                .forEach(rec -> {
-                    rec.setRpicked('N');
-                    rcrr.save(rec);
-                });
+    public boolean updatePicked(String rnum, char picked) {
+        int updatedRows = rcr.updatePicked(rnum, picked);
+        return updatedRows > 0;
     }
 
 }

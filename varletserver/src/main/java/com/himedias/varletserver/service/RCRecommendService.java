@@ -69,4 +69,9 @@ public class RCRecommendService {
         rcr.deleteById(rcnum);
     }
 
+    @Transactional
+    public boolean updateReplyPicked(int rcnum, char rpicked) {
+        int updatedRows = rcr.updateReplyPicked(rcnum, rpicked);
+        return updatedRows > 0;
+    }
 }

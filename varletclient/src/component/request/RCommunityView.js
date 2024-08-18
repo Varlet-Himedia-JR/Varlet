@@ -19,7 +19,6 @@ function RCommunityView() {
   const [imgSrc, setImgSrc] = useState([]);
   const [removedFiles, setRemovedFiles] = useState([]);
   const [replies, setReplies] = useState([]); // 답글 목록 상태 추가
-  const { rcnum } = useParams();
 
   useEffect(() => {
       // 게시물 데이터 가져오기
@@ -237,20 +236,38 @@ const replyDelete = (rcnum) => {
       setShowLocation(!showLocation);
   };
 
-  const handlepicked = (replyId) => {
-    jaxios.post(`/api/rcommunity/pick`, { rnum, rcnum: replyId })
-      .then(response => {
-        setPost(prevPost => ({ ...prevPost, picked: "Y" }));
-        setReplies(prevReplies => prevReplies.map(reply =>
-          reply.rcnum === replyId ? { ...reply, rpicked: "Y" } : { ...reply, rpicked: "N" }
-          
-        ));
-        alert("답글이 채택되었습니다.");
-      })
-      .catch(error => {
-        console.error("채택 처리 중 오류 발생:", error);
-      });
+  const handlepicked = (rcnum) => {
+    // 채택 전에 확인 메시지 표시
+    const isConfirmed = window.confirm("채택은 번복이 불가능합니다. 진행하시겠습니까?");
+  
+    if (isConfirmed) {
+      // 사용자가 확인을 누른 경우
+      // 1. 선택된 답글의 rpicked를 'Y'로 변경
+      jaxios.post(`/api/rcrecommend/updateReplyPicked/${rcnum}`, { rpicked: 'Y' })
+        .then(() => {
+          // 2. 게시글의 picked를 'Y'로 변경
+          jaxios.post(`/api/rcommunity/updatePicked/${post.rnum}`, { picked: 'Y' })
+            .then(() => {
+              alert('채택이 완료되었습니다.');
+              fetchReplies(); // 업데이트된 답글 목록을 가져옵니다.
+              setPost(prevPost => ({ ...prevPost, picked: 'Y' })); // 로컬 상태 업데이트
+            })
+            .catch((err) => {
+              console.error('게시글 상태 업데이트 실패:', err);
+              alert('게시글 채택 업데이트에 실패했습니다.');
+            });
+        })
+        .catch((err) => {
+          console.error('답글 상태 업데이트 실패:', err);
+          alert('답글 채택 업데이트에 실패했습니다.');
+        });
+    } else {
+      // 사용자가 취소를 누른 경우
+      // 여기서는 아무 작업도 하지 않고 그냥 게시글 상세화면으로 돌아갑니다.
+      // 필요한 경우 추가적으로 다른 로직을 작성할 수 있습니다.
+    }
   };
+  
 
 
 return (
@@ -518,7 +535,7 @@ return (
               {(post.userid === getCookie('user').userid) && (
                 <>
                   <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"                   
-                  onClick={handlepicked}>
+                    onClick={() => handlepicked (reply.rcnum)}>
                     채택하기
                   </button>
                   
