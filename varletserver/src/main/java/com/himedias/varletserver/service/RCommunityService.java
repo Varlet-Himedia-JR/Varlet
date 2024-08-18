@@ -36,9 +36,6 @@ public class RCommunityService {
         return rcr.findByLocationAndLocation2(location, location2, Sort.by(Sort.Direction.DESC, "rnum"));
     }
 
-    public RCommunity getPostById(int rnum) {
-        return rcr.findPostById(rnum);
-    }
 
     @Transactional
     public HashMap<String, Object> writePost(RCommunityWrite rCommunityWrite) {

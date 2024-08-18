@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import jaxios from '../../util/jwtUtil';
 import { location1Data, location2Data } from '../request/LocaionData';
 import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
-
-
 
 function RCommunityView() {
   const { rnum } = useParams();
@@ -18,7 +16,10 @@ function RCommunityView() {
   const [saveimages, setSaveImages] = useState([]);
   const [imgSrc, setImgSrc] = useState([]);
   const [removedFiles, setRemovedFiles] = useState([]);
-  const [replies, setReplies] = useState([]); // 답글 목록 상태 추가
+  const [replies, setReplies] = useState([]); 
+  const replyFormRef = useRef(null);
+
+
 
   useEffect(() => {
       // 게시물 데이터 가져오기
@@ -131,6 +132,7 @@ function RCommunityView() {
       }
   };
 
+
   const maskeduser = (user) => {
     // user는 객체로 되어 있어야 함
     if (user && typeof user.userid === 'string') {
@@ -223,8 +225,16 @@ const replyDelete = (rcnum) => {
   };
 
   const writerecommend = () => {
-      setShowReplyForm(!showReplyForm);
-  };
+    setShowReplyForm(prev => !prev);
+    if (!showReplyForm) {
+        // 답글 작성 폼이 열릴 때 스크롤 이동
+        setTimeout(() => {
+            if (replyFormRef.current) {
+                replyFormRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 0);
+    } 
+};
 
   const [showDates, setShowDates] = useState(false);
   const toggleShowDates = () => {
@@ -284,21 +294,31 @@ return (
       </div>
     <div class="flex justify-between items-center"> {/* 변경된 부분 */}
       <h1 class="text-3xl font-bold mb-2">{post.title}</h1>
-      <div class="flex items-center"> {/* 설정 포인트와 아이콘을 그룹화 */}
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moneybag" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <div class="flex justify-between items-center"> {/* 변경된 부분 */}
+      {post.picked === "Y" ? (
+        <div class="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#1e90ff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+            <path d="M9 12l2 2l4 -4" />
+          </svg>
+          <div class="text-2xl font-bold ml-2">채택 완료</div>
+        </div>
+      ) : (
+        <div class="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moneybag" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
             <path d="M9.5 3h5a1.5 1.5 0 0 1 1.5 1.5a3.5 3.5 0 0 1 -3.5 3.5h-1a3.5 3.5 0 0 1 -3.5 -3.5a1.5 1.5 0 0 1 1.5 -1.5z" />
             <path d="M4 17v-1a8 8 0 1 1 16 0v1a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" />
-        </svg>
-        <div className='text-2xl font-bold ml-2'> {/* 아이콘과 텍스트 사이에 간격 추가 */}
-          설정 포인트: {post.reward}
+          </svg>
+          <div class="text-2xl font-bold ml-2">설정 포인트: {post.reward}</div>
         </div>
-      </div>
+      )}
+    </div>
     </div>
 
-     <span className='w-2/12 text-center'>
-        {post.picked === "Y" ? "채택 완료" : (post.picked === "N" ? "채택 진행중" : "미정")}
-      </span>    <div class="flex items-center text-muted-foreground text-sm mt-4">
+
+       <div class="flex items-center text-muted-foreground text-sm mt-4">
       <div class="mr-4">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -478,7 +498,7 @@ return (
     </div>
 
      {showReplyForm && (
-                  <form onSubmit={handleSubmitRec} className="mt-6">
+                  <form onSubmit={handleSubmitRec} className="mt-6" ref={replyFormRef}>
                       <textarea
                           rows="4"
                           placeholder="답글 내용을 입력하세요"
@@ -528,25 +548,37 @@ return (
           <img class="aspect-square h-full w-full" alt="@user" src="/placeholder-user.jpg" />
         </span>
         <div class="grid gap-1.5">
-          <div class="flex items-center gap-2 text-sm">
-            <div class="font-medium">{maskeduser(reply.userid)}</div>
-            <div class="text-muted-foreground">{new Date(reply.writedate).toLocaleDateString('ko-KR')}</div>
-            <div className="flex items-center gap-2">
-              {(post.userid === getCookie('user').userid) && (
-                <>
-                  <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"                   
-                    onClick={() => handlepicked (reply.rcnum)}>
-                    채택하기
-                  </button>
-                  
-                </>
-              )}
-            </div>
-          </div>
-          <span className='w-2/12 text-center'>
-        {reply.rpicked === "Y" ? "채택 완료" : (reply.rpicked === "N" ? "채택 진행중" : "미정")}
-        
-      </span>    
+        <div className="flex items-center gap-2 text-sm">
+  <div className="font-medium">{maskeduser(reply.userid)}</div>
+  <div className="text-muted-foreground">{new Date(reply.writedate).toLocaleDateString('ko-KR')}</div>
+  <div className="flex items-center gap-2">
+    {(post.userid === getCookie('user').userid) && (
+      <>
+        <button 
+          className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"                   
+          onClick={() => handlepicked(reply.rcnum)}>
+          채택하기
+        </button>
+      </>
+    )}
+  </div>
+</div>
+
+<span className="w-2/12 text-center flex items-center justify-center gap-2">
+  {reply.rpicked === "Y" ? (
+    <>
+      채택 완료
+      <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-circle-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#1e90ff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+        <path d="M9 12l2 2l4 -4" />
+      </svg>
+    </>
+  ) : (
+    reply.rpicked === "N" ? "채택 진행중" : "미정"
+  )}
+</span>
+
           <p>{reply.content}</p>
           <div className="flex flex-wrap mt-4">
           {reply.images && reply.images.length > 0 && (
