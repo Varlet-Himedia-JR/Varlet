@@ -18,11 +18,25 @@ function RCommunityView() {
   const [saveimages, setSaveImages] = useState([]);
   const [imgSrc, setImgSrc] = useState([]);
   const [removedFiles, setRemovedFiles] = useState([]);
+  const [replies, setReplies] = useState([]); // 답글 목록 상태 추가
+  const { rcnum } = useParams();
 
   useEffect(() => {
+      // 게시물 데이터 가져오기
       jaxios.get(`/api/rcommunity/rCommunityView/${rnum}`)
           .then((response) => {
               setPost(response.data.post);
+              console.log("post?", response.data.post)
+          })
+          .catch((err) => {
+              console.error(err);
+          });
+
+      // 답글 목록 가져오기
+      jaxios.get(`/api/rcrecommend/getReplies/${rnum}`)
+          .then((response) => {
+              setReplies(response.data.recommend); // 답글 리스트 상태 업데이트
+              console.log("댓글정보?", response.data.recommend);
           })
           .catch((err) => {
               console.error(err);
@@ -45,11 +59,21 @@ function RCommunityView() {
               const { image, savefilenames } = result.data;
               setImage(result.data.image);
               setSaveImages(result.data.savefilenames);
-              setImgSrc(savefilenames.map(filename => `http://localhost:8070/RcommunityImages/${filename}`));
+              setImgSrc(savefilenames.map(filename => `http://localhost:8070/uploads/${filename}`));
           })
           .catch((err) => {
               console.error(err);
           });
+  };
+
+  const fetchReplies = () => {
+    jaxios.get(`/api/rcrecommend/getReplies/${rnum}`)
+      .then((response) => {
+        setReplies(response.data.recommend);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const handleSubmitRec = (e) => {
@@ -73,7 +97,17 @@ function RCommunityView() {
           }
       })
           .then(response => {
-              alert(response.data);
+            alert("답글 작성에 성공했습니다.");
+            setShowReplyForm(false); // 답글 작성란을 숨김
+            setShowReplyForm(false);
+            setContent('');
+            setFiles([]);
+            setImage([]);
+            setSaveImages([]);
+            setImgSrc([]);
+            setRemovedFiles([]);
+            fetchReplies();
+            
           })
           .catch(error => {
               alert('답글 작성에 실패했습니다.');
@@ -98,22 +132,54 @@ function RCommunityView() {
       }
   };
 
-  const deleteCommunityReply = (grseq) => {
-      if (window.confirm('정말로 삭제하시겠습니까?')) {
-          jaxios.delete(`/api/rcommunity/deleteReply/${grseq}`)
-              .then(() => {
-                  // 댓글 삭제 후 처리 로직
-              })
-              .catch((err) => {
-                  console.error(err);
-              });
-      }
-  };
+  const maskeduser = (user) => {
+    // user는 객체로 되어 있어야 함
+    if (user && typeof user.userid === 'string') {
+        const userid = user.userid;
+        if (userid.length > 2) {
+            return userid.slice(0, 2) + '*'.repeat(userid.length - 2);
+        }
+        return '*'.repeat(userid.length);
+    }
+    return '정보 없음';
+};
+
+
+const replyDelete = (rcnum) => {
+  if (window.confirm('정말로 삭제하시겠습니까?')) {
+      jaxios.delete(`/api/rcrecommend/deleteReply/${rcnum}`)
+          .then(() => {
+              // 삭제 후, 답글 목록을 새로 가져와서 업데이트합니다.
+              fetchReplies();
+              alert("답글이 삭제되었습니다.");
+          })
+          .catch((err) => {
+              console.error(err);
+              alert('답글 삭제에 실패했습니다.');
+          });
+  }
+};
+
+  const replyUpdate = (grseq) => {
+    // if (window.confirm('정말로 삭제하시겠습니까?')) {
+    //     jaxios.delete(`/api/rcommunity/deleteReply/${grseq}`)
+    //         .then(() => {
+    //             // 댓글 삭제 후 처리 로직
+    //         })
+    //         .catch((err) => {
+    //             console.error(err);
+    //         });
+    // }
+};
 
   const returnList = () => {
       if (window.confirm('목록으로 돌아가시겠습니까?')) {
           navigate('/rcommunity');
       }
+  };
+
+  const test = () =>{
+    navigate('/rCommunityDetail/:rnum/rcCommunityWrite')
   };
 
   const rcommunityupdate = () => {
@@ -170,11 +236,35 @@ function RCommunityView() {
   const toggleShowLocation = () => {
       setShowLocation(!showLocation);
   };
+
+  const handlepicked = (replyId) => {
+    jaxios.post(`/api/rcommunity/pick`, { rnum, rcnum: replyId })
+      .then(response => {
+        setPost(prevPost => ({ ...prevPost, picked: "Y" }));
+        setReplies(prevReplies => prevReplies.map(reply =>
+          reply.rcnum === replyId ? { ...reply, rpicked: "Y" } : { ...reply, rpicked: "N" }
+          
+        ));
+        alert("답글이 채택되었습니다.");
+      })
+      .catch(error => {
+        console.error("채택 처리 중 오류 발생:", error);
+      });
+  };
+
+
 return (
       
 
   <div class="w-full max-w-6xl mx-auto px-4 py-9">
   <div class="border-b pb-4 mb-6">
+    <div class="mr-4">
+        
+        <span className='text-left'>
+          no.
+          {post.rnum}
+        </span>
+      </div>
     <div class="flex justify-between items-center"> {/* 변경된 부분 */}
       <h1 class="text-3xl font-bold mb-2">{post.title}</h1>
       <div class="flex items-center"> {/* 설정 포인트와 아이콘을 그룹화 */}
@@ -189,7 +279,9 @@ return (
       </div>
     </div>
 
-    <div class="flex items-center text-muted-foreground text-sm mt-4">
+     <span className='w-2/12 text-center'>
+        {post.picked === "Y" ? "채택 완료" : (post.picked === "N" ? "채택 진행중" : "미정")}
+      </span>    <div class="flex items-center text-muted-foreground text-sm mt-4">
       <div class="mr-4">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -347,7 +439,13 @@ return (
         onClick={returnList}>
         목록으로
       </button>
+      <button
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+              onClick={test}>
+              test
+            </button>
     </div>
+
     <div 
       className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-lg p-4 bg-blue-50 text-blue-800 dark:bg-gray-800 dark:text-blue-400 rounded-lg shadow-lg cursor-pointer flex items-center justify-center space-x-3 hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors duration-300"
       onClick={writerecommend}
@@ -357,7 +455,9 @@ return (
         <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
         <path d="M13.5 6.5l4 4" />
       </svg>
-      <span className="text-xl font-bold flex items-center">답글 작성하기</span>
+      <span className="text-xl font-bold flex items-center">
+      {showReplyForm ? '답글 작성 닫기' : '답글 작성 열기'}
+      </span>
     </div>
 
      {showReplyForm && (
@@ -403,39 +503,75 @@ return (
         </button>
       </form>
     )}
-
-
     <div class="space-y-4">
-      <div class="flex items-start gap-4">
+  {replies && replies.length > 0 ? (
+    replies.map((reply, index) => (
+      <div key={index} class="flex items-start gap-4">
         <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
-          <img class="aspect-square h-full w-full" alt="@shadcn" src="/placeholder-user.jpg" />
+          <img class="aspect-square h-full w-full" alt="@user" src="/placeholder-user.jpg" />
         </span>
         <div class="grid gap-1.5">
           <div class="flex items-center gap-2 text-sm">
-            <div class="font-medium">Jane Doe</div>
-            <div class="text-muted-foreground">2 days ago</div>
+            <div class="font-medium">{maskeduser(reply.userid)}</div>
+            <div class="text-muted-foreground">{new Date(reply.writedate).toLocaleDateString('ko-KR')}</div>
+            <div className="flex items-center gap-2">
+              {(post.userid === getCookie('user').userid) && (
+                <>
+                  <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"                   
+                  onClick={handlepicked}>
+                    채택하기
+                  </button>
+                  
+                </>
+              )}
+            </div>
           </div>
-          <p>
-            Wow, your trip to Jeju Island sounds amazing! I've always wanted to visit and your photos and
-            descriptions have made me even more excited to plan a trip there. The natural beauty and cultural
-            richness of the island seem truly captivating.
-          </p>
-        </div>
-      </div>
-      <div class="flex items-start gap-4">
-        <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
-          <img class="aspect-square h-full w-full" alt="@shadcn" src="/placeholder-user.jpg" />
-        </span>
-        <div class="grid gap-1.5">
-          <div class="flex items-center gap-2 text-sm">
-            <div class="font-medium">Michael Johnson</div>
-            <div class="text-muted-foreground">1 week ago</div>
-          </div>
-          <p>I've been to Jeju Island a few times</p>
-        </div>
+          <span className='w-2/12 text-center'>
+        {reply.rpicked === "Y" ? "채택 완료" : (reply.rpicked === "N" ? "채택 진행중" : "미정")}
         
+      </span>    
+          <p>{reply.content}</p>
+          <div className="flex flex-wrap mt-4">
+          {reply.images && reply.images.length > 0 && (
+                  <div className="flex flex-wrap gap-4">
+                    {reply.images.map((image) => (
+                      <div key={image.id} className="w-64 h-64 overflow-hidden">
+                        <img
+                          src={`/api/${image.filePath}`} 
+                          alt={image.imag_name}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+          </div>  
+          <div class="flex justify-end gap-2 mb-4">
+            <div className="flex items-center gap-2">
+            {(reply.user === getCookie('user')?.user) && (
+                <>
+                  <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"                   
+                  onClick={replyUpdate}>
+                    수정
+                  </button>
+                  <button
+                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                    onClick={() => replyDelete(reply.rcnum)}>
+                    삭제
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    ))
+  ) : (
+    <p>답글이 없습니다.</p>
+  )}
+</div>
+
+    
   </div>
 </div>
 

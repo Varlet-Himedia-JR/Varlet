@@ -28,6 +28,8 @@ import MyQna from "./component/member/MyQna";
 import MyRequest from "./component/member/MyRequest";
 
 
+import 'ckeditor5/ckeditor5.css';
+
 // import WritePost from './component/post/WritePost';
 // import MyPage from './component/member/MyPage';
 // import Kakaosaveinfo from './component/member/Kakaosaveinfo';
@@ -65,7 +67,6 @@ function App() {
         <Route path="/myQna" element={<MyQna />} />
         <Route path="/myRequest" element={<MyRequest />} />
 
-        
         
         {/* <Route path="/main" element={<Main />} />
         <Route path="/writePost" element={<WritePost />} />

@@ -1,15 +1,15 @@
 package com.himedias.varletserver.service;
 
 import com.himedias.varletserver.dao.RCommunityRepository;
+import com.himedias.varletserver.dao.RcrecommendRepository;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
 import com.himedias.varletserver.entity.RCommunity;
-import org.apache.catalina.User;
+import com.himedias.varletserver.entity.Rcrecommend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +20,9 @@ public class RCommunityService {
 
     @Autowired
     private RCommunityRepository rcr;
+
+    @Autowired
+    private RcrecommendRepository rcrr;
 
     public List<RCommunitySummary> getAllPosts() {
         return rcr.findAllBy(Sort.by(Sort.Direction.DESC, "rnum"));
@@ -102,6 +105,30 @@ public class RCommunityService {
         rcr.delete(rc);
     }
 
+    @Transactional
+    public void pickRecommendation(int rnum, Integer rcnum) {
+        // 게시글 가져오기
+        RCommunity community = rcr.findById(rnum)
+                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다"));
 
+        // 채택된 답글 가져오기
+        Rcrecommend recommendation = rcrr.findById(rcnum)
+                .orElseThrow(() -> new RuntimeException("답글을 찾을 수 없습니다"));
+
+        // 게시글의 picked 상태 업데이트
+        community.setPicked('Y');
+        rcr.save(community);
+
+        // 채택된 답글의 rpicked 상태 업데이트
+        recommendation.setRpicked('Y');
+        rcrr.save(recommendation);
+
+        // 채택되지 않은 답글의 rpicked 상태를 'N'으로 설정
+        rcrr.findByRnumAndNotRcnum(rnum, rcnum)
+                .forEach(rec -> {
+                    rec.setRpicked('N');
+                    rcrr.save(rec);
+                });
+    }
 
 }

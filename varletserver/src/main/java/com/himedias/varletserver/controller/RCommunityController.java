@@ -3,6 +3,7 @@ package com.himedias.varletserver.controller;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
 import com.himedias.varletserver.entity.RCommunity;
+import com.himedias.varletserver.service.RCRecommendService;
 import com.himedias.varletserver.service.RCommunityService;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class RCommunityController {
 
     @Autowired
     private RCommunityService rcs;
+
 
     @GetMapping("/getPostList")
     public HashMap<String, Object> getPostList(
@@ -44,10 +46,10 @@ public class RCommunityController {
 
     @PostMapping("/writePost")
     public ResponseEntity<HashMap<String, Object>> writePost(@RequestBody RCommunityWrite rCommunityWrite) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = authentication.getName();  // 로그인한 사용자의 ID
-        System.out.println(userId);
-        rCommunityWrite.setUserid(userId);  // 로그인한 사용자의 ID를 DTO에 설정
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String userId = authentication.getName();  // 로그인한 사용자의 ID
+//        System.out.println(userId);
+//        rCommunityWrite.setUserid(userId);  // 로그인한 사용자의 ID를 DTO에 설정
 
         HashMap<String, Object> result = rcs.writePost(rCommunityWrite);
         return ResponseEntity.ok(result);
@@ -85,5 +87,16 @@ public class RCommunityController {
     }
 
 //    @GetMapping("/getMyList")
+
+
+    @PostMapping("/pick")
+    public String pickRecommendation(@RequestParam int rnum, @RequestParam Integer rcnum) {
+        try {
+            rcs.pickRecommendation(rnum, rcnum);
+            return "채택 완료되었습니다.";
+        } catch (RuntimeException e) {
+            return "오류 발생: " + e.getMessage();
+        }
+    }
 
 }

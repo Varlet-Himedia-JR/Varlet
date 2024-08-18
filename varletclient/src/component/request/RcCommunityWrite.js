@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from '../../util/jwtUtil';
 import { useNavigate, useParams } from 'react-router-dom';
 import Heading from '../headerfooter/Heading';
 import Footer from '../headerfooter/Footer';
-
+import { createEditor } from "slate";
+import { Slate, Editable, withReact } from "slate-react";
 function RcCommunityWrite() {
     const { rnum } = useParams(); // URL에서 rnum 파라미터를 추출합니다.
     const [files, setFiles] = useState([]); // 파일 객체와 미리보기 URL을 관리
@@ -83,58 +84,26 @@ function RcCommunityWrite() {
             console.error(error);
         }
     };
-
+    const editor = useMemo(() => withReact(createEditor()), []);
+    const [value, setValue] = useState([
+      {
+        type: "paragraph",
+        children: [{ text: "We have some base content." }]
+      }
+    ]);
     return (
 
-
-                <form onSubmit={handleSubmit}>
-                    <div className="grid gap-6 mb-6 md:grid-cols-2 mt-4">
-                        <div>
-                            <label htmlFor="content" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Content</label>
-                            <input
-                                type="text"
-                                id="content"
-                                name="content"
-                                value={formData.content}
-                                onChange={handleInputChange}
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Enter content"
-                                required
-                            />
-                        </div>
-                        {/* 나머지 폼 필드들 */}
-                    </div>
-                    <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="multiple_files">파일 업로드</label>
-                        <input
-                            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                            id="multiple_files"
-                            type="file"
-                            multiple
-                            accept="image/*"
-                            onChange={handleFileChange}
-                        />
-                        <label>파일 미리보기</label>
-                        <div className="preview-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px'}}>
-                            {files.map(({ src, file }, index) => (
-                                <div key={index} style={{ position: 'relative' }}>
-                                    <img
-                                        src={src}
-                                        alt={`preview ${index}`}
-                                        style={{ width: '300px', height: '300px', objectFit: 'cover', border: '1px solid #ddd' }}
-                                    />
-                                    <button
-                                        onClick={() => handleRemoveFile(file)}
-                                        style={{ position: 'absolute', top: '0', right: '0', backgroundColor: 'red', color: 'white', border: 'none', padding: '5px', borderRadius: '0 0 0 5px' }}
-                                    >
-                                        ✖
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                    <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-                </form>
+        <div className="App">
+        <h1>React Editors</h1 >
+        <h2>Start editing to see Slate in action!</h2>
+        <Slate
+          editor={editor}
+          value={value}
+          onChange={(newValue) => setValue(newValue)}
+        >
+          <Editable style={{ border: "1px solid black" }}/>
+        </Slate>
+      </div>
      );
 }
 

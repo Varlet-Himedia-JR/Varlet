@@ -21,7 +21,7 @@ function PostList() {
 
   const fetchAllPosts = () => {
     axios.get('/api/rcommunity/getPostList')
-      .then(response => setPosts(response.data.postlist))
+      .then(response => {setPosts(response.data.postlist); console.log(response.data)})
       .catch(error => console.error('Error fetching posts:', error));
   };
 
