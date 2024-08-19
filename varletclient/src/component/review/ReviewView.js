@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getCookie } from '../../util/cookieUtil';
+import '../../style/review.css';
 
 function ReviewView() {
     const [review, setReview] = useState(null);
@@ -63,37 +64,37 @@ function ReviewView() {
         const formData = new FormData();
         formData.append('title', editForm.title);
         formData.append('content', editForm.content);
-    
+
         if (selectedFile) {
             formData.append('reviewimg', selectedFile);
         } else {
             formData.append('reviewimg', editForm.reviewimg);
         }
-    
+
         formData.append('indate', new Date().toISOString());
-    
+
         axios.post(`/api/review/updateReview/${rseq}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
-        .then(() => {
-            setIsEditing(false);
-            axios.get(`/api/review/getReviewView/${rseq}`)
-                .then((result) => {
-                    setReview(result.data.review);
-                    setEditForm({
-                        title: result.data.review.title,
-                        content: result.data.review.content,
-                        reviewimg: result.data.review.reviewimg
+            .then(() => {
+                setIsEditing(false);
+                axios.get(`/api/review/getReviewView/${rseq}`)
+                    .then((result) => {
+                        setReview(result.data.review);
+                        setEditForm({
+                            title: result.data.review.title,
+                            content: result.data.review.content,
+                            reviewimg: result.data.review.reviewimg
+                        });
+                        setPreviewImage(result.data.review.reviewimg ? `http://localhost:8070/images/${result.data.review.reviewimg}` : '');
+                    })
+                    .catch((err) => {
+                        console.error(err);
                     });
-                    setPreviewImage(result.data.review.reviewimg ? `http://localhost:8070/images/${result.data.review.reviewimg}` : '');
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-        })
-        .catch((err) => {
-            console.error(err);
-        });
+            })
+            .catch((err) => {
+                console.error(err);
+            });
     }
 
     function handleInputChange(event) {
@@ -135,28 +136,31 @@ function ReviewView() {
     }
 
     function handleReplyDelete(replyId, replyUserId) {
-    // 현재 로그인한 사용자와 댓글 작성자가 같은지 확인
-    if (replyUserId !== userId) {
-        alert("댓글 작성자만 삭제할 수 있습니다.");
-        return;
-    }
+        // 현재 로그인한 사용자와 댓글 작성자가 같은지 확인
+        if (replyUserId !== userId) {
+            alert("댓글 작성자만 삭제할 수 있습니다.");
+            return;
+        }
 
-    const isConfirmed = window.confirm("정말로 이 댓글을 삭제하시겠습니까?");
-    if (isConfirmed) {
-        axios.delete(`/api/reply/deleteReply/${replyId}`, {
-            data: { userId } // 사용자 ID를 요청 본문에 포함
-        })
-            .then(() => {
-                setReplies(prevReplies => prevReplies.filter(reply => reply.renum !== replyId));
+        const isConfirmed = window.confirm("정말로 이 댓글을 삭제하시겠습니까?");
+        if (isConfirmed) {
+            axios.delete(`/api/reply/deleteReply/${replyId}`, {
+                data: { userId } // 사용자 ID를 요청 본문에 포함
             })
-            .catch((err) => {
-                console.error(err);
-            });
-    } else {
-        console.log("댓글 삭제가 취소되었습니다.");
+                .then(() => {
+                    setReplies(prevReplies => prevReplies.filter(reply => reply.renum !== replyId));
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        } else {
+            console.log("댓글 삭제가 취소되었습니다.");
+        }
     }
-}
 
+    function handleBackToList() {
+        navigate('/myReview'); // MyReview 페이지로 돌아감
+    }
 
     const isUserAuthorized = review && review.userid === userId;
     const formattedDate = review?.indate ? new Date(review.indate).toLocaleDateString() : '';
@@ -287,6 +291,7 @@ function ReviewView() {
                                             <button onClick={() => setIsEditing(true)}>Edit</button>
                                         </>
                                     )}
+                                    <button onClick={handleBackToList}>To My Review</button>
                                 </>
                             ) : null
                         }

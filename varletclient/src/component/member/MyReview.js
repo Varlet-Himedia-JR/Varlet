@@ -17,16 +17,18 @@ function MyReview() {
 
     // Redux 상태에서 로그인 사용자 정보 가져오기
     const loginUser = useSelector(state => state.user);
-    const userid = getCookie('user').userid; 
+    const userid = getCookie('user').userid;
 
     // 데이터 로드 함수
     const loadReviews = useCallback(async (pageNumber) => {
         try {
             const result = await axios.get(`/api/member/userReviews/${userid}/${pageNumber}/${10}`);
             const { reviewList: newReviews, hasMore: moreData } = result.data;
-        
+
             if (Array.isArray(newReviews) && newReviews.length > 0) {
-                setReviewList(prevReviews => [...prevReviews, ...newReviews]);
+                // 역순으로 정렬
+                const sortedReviews = newReviews.sort((a, b) => b.rseq - a.rseq);
+                setReviewList(prevReviews => [...prevReviews, ...sortedReviews]);
                 setPage(pageNumber);
                 setHasMore(moreData);
             } else {
@@ -35,7 +37,7 @@ function MyReview() {
         } catch (err) {
             console.error(err);
         }
-    }, [userid, page]);
+    }, [userid]);
 
     // 필터링 함수
     const filterReviews = useCallback(() => {
@@ -44,8 +46,7 @@ function MyReview() {
         } else {
             const lowercasedTerm = searchTerm.toLowerCase();
             const filtered = reviewList.filter(review =>
-                review.title.toLowerCase().includes(lowercasedTerm) ||
-                review.userid.toLowerCase().includes(lowercasedTerm)
+                review.title.toLowerCase().includes(lowercasedTerm) // 제목으로만 검색
             );
             setFilteredReviews(filtered);
         }
@@ -92,7 +93,8 @@ function MyReview() {
     }
 
     function onReviewView(rseq) {
-        navigate(`/reviewView/${rseq}`);
+        navigate(`/reviewView/${rseq}`, { state: { fromMyReview: true } }); // 상태를 추가하여 출처를 전달
+        <button onClick={() => { navigate('/myReview') }}>Back to List</button>
     }
 
     return (
@@ -101,15 +103,15 @@ function MyReview() {
             <div className='subPage'>
                 <div className='reviewList' style={{ flex: "4" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-                        <h2>My Reviews</h2>
-                        <button onClick={() => { navigate('/writeReview') }}>리뷰 작성</button>
+                    <div className='reviewcenter'>MY REVIEW</div>
+                        <button className='review-button' onClick={() => { navigate('/writeReview') }}>리뷰 작성</button>
                     </div>
                     <div className="search-container" style={{ marginBottom: "20px" }}>
                         <input
                             type="text"
                             value={searchTerm}
                             onChange={handleSearchChange}
-                            placeholder="제목 또는 작성자 아이디로 검색"
+                            placeholder="제목으로 검색"
                         />
                         {searchTerm && (
                             <button className="clear-button" onClick={handleClearSearch}>
@@ -128,8 +130,8 @@ function MyReview() {
                         {
                             Array.isArray(filteredReviews) && filteredReviews.length > 0 ? (
                                 filteredReviews.map((review, idx) => (
-                                    <div className="row" key={idx}>
-                                        <div className="col">{review.rseq}</div>
+                                    <div className="row" key={review.rseq}>
+                                        <div className="col">{reviewList.length - idx}</div> {/* 역순 번호 표시 */}
                                         <div className="col" style={{ textAlign: "left" }} onClick={() => onReviewView(review.rseq)}>
                                             {review.userid}
                                         </div>
