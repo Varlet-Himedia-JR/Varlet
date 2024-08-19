@@ -24,8 +24,8 @@ public class RCommunityService {
     @Autowired
     private RcrecommendRepository rcrr;
 
-    public List<RCommunitySummary> getAllPosts() {
-        return rcr.findAllBy(Sort.by(Sort.Direction.DESC, "rnum"));
+    public List<RCommunitySummary> getPostListWithReplyCount() {
+        return rcr.findAllWithReplyCount(); // 댓글 수를 포함한 쿼리 호출
     }
 
     public List<RCommunitySummary> getPostListByLocation(int location) {
@@ -108,5 +108,7 @@ public class RCommunityService {
         int updatedRows = rcr.updatePicked(rnum, picked);
         return updatedRows > 0;
     }
+
+
 
 }

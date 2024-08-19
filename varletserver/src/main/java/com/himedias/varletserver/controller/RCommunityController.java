@@ -3,15 +3,11 @@ package com.himedias.varletserver.controller;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
 import com.himedias.varletserver.entity.RCommunity;
-import com.himedias.varletserver.service.RCRecommendService;
 import com.himedias.varletserver.service.RCommunityService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -38,7 +34,7 @@ public class RCommunityController {
         } else if (location != null) {
             postList = rcs.getPostListByLocation(location);
         } else {
-            postList = rcs.getAllPosts();  // 필터링하지 않고 전체 게시글 반환
+            postList = rcs.getPostListWithReplyCount();  // 댓글 수를 포함한 전체 게시글 반환
         }
 
         result.put("postlist", postList);

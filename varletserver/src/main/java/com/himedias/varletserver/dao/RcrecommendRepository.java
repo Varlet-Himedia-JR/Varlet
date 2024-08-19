@@ -20,5 +20,4 @@ public interface RcrecommendRepository extends JpaRepository<Rcrecommend, Intege
     @Query("UPDATE Rcrecommend r SET r.rpicked = :rpicked WHERE r.rcnum = :rcnum")
     int updateReplyPicked(@Param("rcnum") int rcnum, @Param("rpicked") char rpicked);
 
-    
 }
