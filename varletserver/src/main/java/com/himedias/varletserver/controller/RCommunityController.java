@@ -3,13 +3,13 @@ package com.himedias.varletserver.controller;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
 import com.himedias.varletserver.entity.RCommunity;
+import com.himedias.varletserver.entity.Review;
 import com.himedias.varletserver.service.RCommunityService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -23,6 +23,7 @@ public class RCommunityController {
     @Autowired
     private RCommunityService rcs;
 
+
     @GetMapping("/getPostList")
     public HashMap<String, Object> getPostList(
             @RequestParam(required = false) Integer location,
@@ -35,7 +36,7 @@ public class RCommunityController {
         } else if (location != null) {
             postList = rcs.getPostListByLocation(location);
         } else {
-            postList = rcs.getAllPosts();  // 필터링하지 않고 전체 게시글 반환
+            postList = rcs.getPostListWithReplyCount();  // 댓글 수를 포함한 전체 게시글 반환
         }
 
         result.put("postlist", postList);
@@ -44,9 +45,9 @@ public class RCommunityController {
 
     @PostMapping("/writePost")
     public ResponseEntity<HashMap<String, Object>> writePost(@RequestBody RCommunityWrite rCommunityWrite) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = authentication.getName();  // 로그인한 사용자의 ID
-        rCommunityWrite.setUserid(userId);  // 로그인한 사용자의 ID를 DTO에 설정
+//        String userId = authentication.getName();  // 로그인한 사용자의 ID
+//        System.out.println(userId);
+//        rCommunityWrite.setUserid(userId);  // 로그인한 사용자의 ID를 DTO에 설정
 
         HashMap<String, Object> result = rcs.writePost(rCommunityWrite);
         return ResponseEntity.ok(result);
@@ -83,6 +84,47 @@ public class RCommunityController {
         return result;
     }
 
-//    @GetMapping("/getMyList")
+    @GetMapping("/getMyList/{userid}")
+    public HashMap<String, Object> getMyList(@PathVariable String userid,
+                                             @RequestParam(required = false) Integer location,
+                                             @RequestParam(required = false) Integer location2) {
+        HashMap<String, Object> result = new HashMap<>();
+        List<RCommunity> postList;
+
+        if (location != null && location2 != null) {
+            // 특정 지역과 하위 지역으로 게시물 필터링
+            postList = rcs.getPostsByUserIdAndLocation(userid, location, location2);
+        } else if (location != null) {
+            // 특정 지역으로 게시물 필터링
+            postList = rcs.getPostsByUserIdAndLocation(userid, location);
+        } else {
+            // 사용자의 모든 게시물 조회
+            postList = rcs.getPostsByUserId(userid);
+        }
+
+        result.put("postlist", postList); // 'postlist'라는 키로 결과를 저장
+        return result; // 결과 반환
+    }
+
+
+
+    @PostMapping("/updatePicked/{rnum}")
+    public ResponseEntity<?> updatePicked(@PathVariable String rnum, @RequestBody HashMap<String, String> body) {
+        String pickedStr = body.get("picked");
+        if (pickedStr == null || (!pickedStr.equals("Y") && !pickedStr.equals("N"))) {
+            return ResponseEntity.badRequest().body("Invalid picked value");
+        }
+
+        // String을 Character로 변환
+        Character picked = pickedStr.charAt(0);
+
+        boolean result = rcs.updatePicked(rnum, picked);
+        if (result) {
+            return ResponseEntity.ok().body("Picked updated successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update picked");
+        }
+    }
+
 
 }

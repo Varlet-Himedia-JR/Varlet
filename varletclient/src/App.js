@@ -29,6 +29,8 @@ import MyRequest from "./component/member/MyRequest";
 import Notice from "./component/notice/Notice";
 
 
+import 'ckeditor5/ckeditor5.css';
+
 // import WritePost from './component/post/WritePost';
 // import MyPage from './component/member/MyPage';
 // import Kakaosaveinfo from './component/member/Kakaosaveinfo';
@@ -67,7 +69,6 @@ function App() {
         <Route path="/myRequest" element={<MyRequest />} />
         <Route path="/notice" element={<Notice />} />
 
-        
         
         {/* <Route path="/main" element={<Main />} />
         <Route path="/writePost" element={<WritePost />} />

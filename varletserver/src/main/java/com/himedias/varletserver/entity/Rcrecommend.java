@@ -1,59 +1,60 @@
 package com.himedias.varletserver.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.*;
 
+import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "rcrecommend", schema = "varlet")
 public class Rcrecommend {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rcnum", nullable = false)
     private Integer rcnum;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "rnum", nullable = false)
     private RCommunity rnum;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "userid", nullable = false)
     private Member userid;
 
-    @Size(max = 2000)
-    @NotNull
     @Column(name = "content", nullable = false, length = 2000)
     private String content;
 
-    @NotNull
     @ColumnDefault("'N'")
     @Column(name = "rpicked", nullable = false)
     private Character rpicked;
 
-    @NotNull
+    @CreationTimestamp
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "writedate", nullable = false)
-    private Instant writedate;
+    private Timestamp writedate;
 
-    @Size(max = 100)
-    @Column(name = "image", length = 100)
-    private String image;
+    @OneToMany(mappedBy = "rcRecommend", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> images = new ArrayList<>();
 
-    @Size(max = 200)
-    @Column(name = "saveimages", length = 200)
-    private String saveimages;
-
+    // 이미지 추가 메서드
+    public void addImage(Image image) {
+        this.images.add(image);
+        image.setRcRecommend(this);
+    }
 }

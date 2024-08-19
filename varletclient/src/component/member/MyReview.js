@@ -22,11 +22,6 @@ function MyReview() {
     // 데이터 로드 함수
     const loadReviews = useCallback(async (pageNumber) => {
         try {
-            // const result = await axios.get('/api/member/userReviews', { 
-            //         userid,
-            //         page: pageNumber,
-            //         size: 10
-            // });
             const result = await axios.get(`/api/member/userReviews/${userid}/${pageNumber}/${10}`);
             const { reviewList: newReviews, hasMore: moreData } = result.data;
         
