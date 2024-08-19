@@ -349,6 +349,8 @@ public class MemberController {
     public HashMap<String, Object> updateInfo(@RequestBody Member member, HttpServletRequest request) {
 
         HashMap<String, Object> result = new HashMap<String, Object>();
+        PasswordEncoder pe = cc.passwordEncoder();
+        member.setPwd(pe.encode(member.getPwd()));
 
         ms.updateInfo(member);
         HttpSession session = request.getSession();

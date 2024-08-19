@@ -49,7 +49,7 @@ function WriteReview() {
         formData.append('title', title);
         formData.append('content', content);
         if (selectedImage) {
-            formData.append('reviewimg', reviewimg); // 파일 객체
+            formData.append('reviewimg', selectedImage); // 수정: reviewimg에 selectedImage 파일을 추가
         }
         formData.append('userid', userid); // 동적으로 가져온 사용자 ID 설정
     
@@ -63,6 +63,7 @@ function WriteReview() {
             console.error(err);
         });
     };
+    
     
     const onCancel = () => {
         navigate('/reviewList'); // 작성 취소 시 reviewList 페이지로 이동

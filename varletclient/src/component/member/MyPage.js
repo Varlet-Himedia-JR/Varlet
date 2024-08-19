@@ -6,7 +6,7 @@ function MyPage() {
 
     return (
         <div style={{ padding: '20px' }}>
-            <h2>Welcome To My Page</h2>
+            <h2>My Page</h2>
             <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
                 <button onClick={() => navigate('/myQNA')} style={buttonStyle}>
                     My QNA
