@@ -163,7 +163,7 @@ function Join() {
             </div>
         
         </div>
-        <Footer/>
+        {/* <Footer/> */}
     </>
     )
 }

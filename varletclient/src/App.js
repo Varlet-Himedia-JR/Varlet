@@ -8,7 +8,7 @@ import ReviewView from "./component/review/ReviewView";
 import Qna from "./component/qna/Qna";
 import RCommunityList from "./component/request/RCommunityList";
 import RPostWrite from "./component/request/RPostWrite";
-import RCommunityDetail from "./component/request/RCommunityDetail";
+import RCommunityView from "./component/request/RCommunityView";
 import RCommunityUpdate from "./component/request/RCommunityUpdate";
 import RcCommunityWrite from "./component/request/RcCommunityWrite";
 import Join from './component/member/Join';
@@ -18,6 +18,7 @@ import Mycourse from "./component/course/Mycourse";
 import Kakaosaveinfo from "./component/member/Kakaosaveinfo";
 import Naversaveinfo from "./component/member/Naversaveinfo";
 import Contents from "./component/contents/Contents";
+import ContentsList from "./component/contents/ContentsList";
 import Testcontents from "./component/contents/Testcontents";
 import ContentsView from "./component/contents/ContentsView";
 import MyPage from "./component/member/MyPage";
@@ -26,6 +27,7 @@ import MyReview from "./component/member/MyReview";
 import MyQna from "./component/member/MyQna";
 import MyRequest from "./component/member/MyRequest";
 import Notice from "./component/notice/Notice";
+
 
 // import WritePost from './component/post/WritePost';
 // import MyPage from './component/member/MyPage';
@@ -46,14 +48,14 @@ function App() {
         <Route path="/reviewView/:rseq" element={<ReviewView />} /> {/* 수정된 부분 */}
         <Route path="/rcommunity" element={<RCommunityList />} /> 
         <Route path="/rpostwrite" element={<RPostWrite />} /> 
-        <Route path="/rCommunityDetail/:rnum" element={<RCommunityDetail />} />
+        <Route path="/rCommunityView/:rnum" element={<RCommunityView />} />
         <Route path="/join" element={<Join />} />
         <Route path="/writeQna" element={<WriteQna />} />
         <Route path="/qnaView/:qseq" element={<QnaView/>} />
         <Route path="/mycourse" element={<Mycourse />} />
         <Route path="/kakaosaveinfo/:nickname" element={<Kakaosaveinfo />} />
         <Route path="/naversaveinfo/:nickname" element={<Naversaveinfo />} />
-        <Route path="/contents" element={<Contents />} />
+        <Route path="/contents" element={<ContentsList />} />
         <Route path="/ctest" element={<Testcontents />} />
         <Route path="/getContentsView/:cseq" element={<ContentsView />} />
         <Route path="/rCommunityUpdate/:rnum" element={<RCommunityUpdate />} />

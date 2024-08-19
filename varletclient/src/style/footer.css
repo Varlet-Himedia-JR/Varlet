@@ -9,6 +9,7 @@
     bottom: 0px;
     padding: 0 50px;
     overflow: hidden; 
+    z-index: 100;
   }
   
   .footer_menu, .footer_menu2 {
