@@ -1,0 +1,52 @@
+.background img{
+    background-size: cover; /* 배경 이미지를 요소 크기에 맞게 조정 */
+    background-position: center; /* 이미지를 가운데로 배치 */
+    background-repeat: no-repeat; /* 이미지를 반복하지 않도록 설정 */
+    background-attachment: fixed; /* 배경을 고정하여 스크롤할 때도 이미지가 따라오도록 설정 */
+    top: 0;
+    left: 0;
+    min-height: 100%;
+    width: 100%;
+    height: 100vh; /* 페이지 전체 높이를 차지하도록 설정 */
+    position: relative; /* 자식 요소들이 배경 위에 배치되도록 설정 */
+    z-index: -1; /* 배경을 뒤로 보내기 위해 z-index 설정 */
+  }
+
+  
+  .joinlabel {
+    font-family: 'Mplus 1p Bold', sans-serif;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 46px;
+    line-height: 30px;
+    color: #000000;
+    text-align: center;
+    margin-top: 50px; /* 이 값을 조정하여 라벨을 위로 이동 */
+    margin-bottom: 100px; /* 하단 여백도 필요에 따라 조정 */
+  }
+
+    
+  .field label {
+    display: flex;
+    font-family: 'Mplus 1p Bold', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 22px;
+    color: #000000;
+    margin-bottom: 5px;
+  }
+  
+  .joinform {
+    position: relative;
+    width: 500px;
+    height: 1150px;
+    background: #beeaf5;
+    border: 1px solid #000000;
+    border-radius: 25px;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-top: 60px;
+    margin-bottom: 240px;
+    background: linear-gradient(to bottom, #00BFFF, #E0FFFF);
+    }

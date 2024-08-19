@@ -53,9 +53,11 @@ function Login() {
                 <button onClick={ ()=>{ navigate('/join') } }>회원가입</button>
             </div>
             <div className='snslogin'>
+                <div className='chat'><img src="http://localhost:8070/images/chat.png"/></div>
                 <button onClick={()=>{
                     window.location.href='http://localhost:8070/member/kakaoStart';
                 }}>KAKAO 로그인</button>
+                <div className='naver'><img src="http://localhost:8070/images/naver.png"/></div>
                 <button onClick={()=>{
                     window.location.href='http://localhost:8070/member/naverStart';
                 }}>NAVER 로그인</button>

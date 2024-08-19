@@ -1,14 +1,17 @@
 /* 로그인 폼 전체 스타일 */
 .loginform {
     position: relative;
-    width: 300px;
+    width: 500px;
     height: 550px; /* 높이를 자동으로 조정 */ /* 상단 여백을 100px로 설정하고 중앙 정렬 */
     background: #beeaf5;
     border: 1px solid #000000;
     border-radius: 25px;
     padding: 20px;
     box-sizing: border-box;
-  }
+    margin-top: 60px;
+    margin-bottom: 240px;
+    background: linear-gradient(to bottom, #00BFFF, #E0FFFF);
+    }
   
   /* 로그인 제목 */
   .loginlabel {
@@ -25,11 +28,12 @@
   
   /* 입력 필드 스타일 */
   .field {
+    display: flex;
     margin-bottom: 15px;
   }
   
   .field label {
-    display: block;
+    display: flex;
     font-family: 'Mplus 1p Bold', sans-serif;
     font-style: normal;
     font-weight: 700;
@@ -41,19 +45,21 @@
 
 
   .field input {
-    width: 100%;
-    height: 22px;
+    width: 80%;
+    height: 30px;
     padding: 5px;
     font-size: 15px;
+    margin-left: 5px;
     border: 1px solid #000000;
     border-radius: 5px;
     box-sizing: border-box;
   }
 
   .field input[type="text"]{
-    width: 100%;
-    height: 22px;
+    width: 80%;
+    height: 30px;
     padding: 5px;
+    margin-left: 20px;
     font-size: 15px;
     border: 1px solid #000000;
     border-radius: 5px;
@@ -68,12 +74,12 @@
   }
   
   .btns button {
-    width: 120px;
-    height: 26px;
+    width: 200px;
+    height: 35px;
     font-family: 'Mplus 1p Bold', sans-serif;
     font-style: normal;
-    font-weight: 700;
-    font-size: 15px;
+    font-weight: 800;
+    font-size: 25px;
     line-height: 22px;
     color: #FFFFFF;
     border: none;
@@ -89,6 +95,7 @@
   }
   
   .btns button:nth-of-type(2) {
+    margin-right: 10px;
     background-color: #C6FF99; /* 회원가입 버튼 색상 */
   }
   
@@ -99,16 +106,34 @@
     gap: 10px;
     margin-top: 20px;
   }
-  
+  .chat{
+    display: flex;
+    position: absolute;
+    width: 30px;
+    margin-top: 15px;
+    margin-left: 100px;
+  }
+
+  .naver{
+      display: flex;
+      position: absolute;
+      width: 30px;
+      margin-top: 75px;
+      margin-left: 100px;
+  }
+
+
+
   .snslogin button {
-    width: 255px;
-    height: 26px;
+    width: 450px;
+    height: 40px;
     font-family: 'Mplus 1p Bold', sans-serif;
     font-style: normal;
-    font-weight: 700;
-    font-size: 15px;
+    font-weight: 900;
+    font-size: 25px;
     line-height: 22px;
-    color: #FFFFFF;
+    color: #000000;
+    
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -118,10 +143,12 @@
   }
   
   .snslogin button:nth-of-type(1) {
+    margin-left: 10px;
     background-color: #FDF300; /* KAKAO 로그인 버튼 색상 */
   }
   
   .snslogin button:nth-of-type(2) {
+    margin-left: 10px;
     background-color: #5DFF43; /* NAVER 로그인 버튼 색상 */
   }
   
