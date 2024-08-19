@@ -8,7 +8,7 @@ import '../../style/contents.css';
 import '../../style/paging.css';
 
 function Contents() {
-
+//지금 안쓰는 중
     const [contentsList, setContentsList] = useState([]);
     const [paging, setPaging] = useState({});
     const [beginend, setBeginend] = useState([]);
@@ -19,6 +19,7 @@ function Contents() {
             .then((result) => {
                 setContentsList(result.data.contentsList);
                 setPaging(result.data.paging);
+                
 
                 const pageArr = [];
                 for (let i = result.data.paging.beginPage; i <= result.data.paging.endPage; i++) {

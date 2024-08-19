@@ -59,7 +59,7 @@ function Heading() {
                     {!userCookie && <div className='login' onClick={LoginWindow}>로그인</div>}
                     {!userCookie && <div className='join' onClick={JoinWindow}>회원가입</div>}
                 </div>
-                    {getCookie('user')? (<h2 onClick={handleNicknameClick}>{getCookie('user').nickname}님</h2>) : null}
+                    {getCookie('user')? (<div className='myinfo' onClick={handleNicknameClick}>{getCookie('user').nickname}님</div>) : null}
                     {getCookie('user')?<div className='logout' onClick={() => { logout() }}>로그아웃</div>:''}
                     <div className='menu'>
                     <img src="http://localhost:8070/images/menu.png" onClick={

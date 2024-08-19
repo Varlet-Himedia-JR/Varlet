@@ -44,8 +44,8 @@
   }
   
   .varlet img {
-    width: 500px;
-    height: 500px;
+    /* width: 500px; */
+    height: 100%;
     top: 10px;
     left: 70%;
     mix-blend-mode: multiply;
