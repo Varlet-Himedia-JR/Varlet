@@ -102,6 +102,17 @@ public class RCommunityService {
         rcr.delete(rc);
     }
 
+    // 사용자 ID로 게시물 목록을 찾기
+    public List<RCommunity> getPostsByUserId(String userid) {
+        return rcr.findByUserid(userid);
+    }
 
+    public List<RCommunity> getPostsByUserIdAndLocation(String userid, Integer location) {
+        return rcr.findByUseridAndLocation(userid, location);
+    }
+
+    public List<RCommunity> getPostsByUserIdAndLocation(String userid, Integer location, Integer location2) {
+        return rcr.findByUseridAndLocationAndLocation2(userid, location, location2);
+    }
 
 }
