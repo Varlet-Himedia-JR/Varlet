@@ -8,7 +8,8 @@ import { setCookie, getCookie} from "../../util/cookieUtil";
 
 import Heading from '../headerfooter/Heading';
 import Footer from '../headerfooter/Footer';
-import '../../style/login.css'
+import '../../style/login.css';
+
 function Login() {
     const [userid, setUserid] = useState('');
     const [pwd, setPwd] = useState('');
@@ -32,6 +33,9 @@ function Login() {
             }
         }catch(err){ console.error(err)}
     }
+
+
+
     return (
         <>
         <Heading/>
@@ -52,10 +56,16 @@ function Login() {
                 <button onClick={ ()=>{ onLoginLocal() } }>로그인</button>
                 <button onClick={ ()=>{ navigate('/join') } }>회원가입</button>
             </div>
+            <div  className='findbtn'>
+            <button onClick={ ()=>{ navigate('/findId') } }>아이디 찾기</button>
+            <button onClick={ ()=>{ navigate('/join') } }>비밀번호 찾기</button>
+            </div>
             <div className='snslogin'>
+                <div className='chat'><img src="http://localhost:8070/images/chat.png"/></div>
                 <button onClick={()=>{
                     window.location.href='http://localhost:8070/member/kakaoStart';
                 }}>KAKAO 로그인</button>
+                <div className='naver'><img src="http://localhost:8070/images/naver.png"/></div>
                 <button onClick={()=>{
                     window.location.href='http://localhost:8070/member/naverStart';
                 }}>NAVER 로그인</button>

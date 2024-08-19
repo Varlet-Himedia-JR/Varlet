@@ -4,6 +4,7 @@ import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
 import Heading from '../headerfooter/Heading';
 import Footer from '../headerfooter/Footer';
+import '../../style/join.css'
 function Join() {
 
     const [userid, setUserid] = useState('');
@@ -76,9 +77,11 @@ function Join() {
     return (
         <>
         <Heading/>
-        <div className='loginform'>
-
-            <div className="logo" style={{fontSize:"2.0rem"}}>회원가입</div>
+        <div style={{ paddingTop: '100px' }}>
+            <div className='background'><img src="http://localhost:8070/images/Beach.jpg"/></div>
+        </div>
+        <div className='joinform'>
+            <div className="joinlabel" style={{fontSize:"2.0rem"}}>회원가입</div>
             <div className='field'>
                 <label>아이디</label>
                 <input type="text" value={userid} onChange={

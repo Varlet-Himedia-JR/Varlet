@@ -46,13 +46,13 @@ function Heading() {
     return (
         <div className='header'>
             <div className='category_menu'>
-                <div className='rcommunity'onClick={ ()=>{ navigate('/rcommunity') } }>여행 코스 의뢰</div>
-                <div className='contents' onClick={ ()=>{ window.location.href='/contents' } } >즐길거리</div>
-                <div className='logo'>
+            <div className='logo'>
                     <img src="http://localhost:8070/images/varlet.png" onClick={
                         ()=>{ navigate('/') }
                     }/>
                 </div>
+                <div className='rcommunity'onClick={ ()=>{ navigate('/rcommunity') } }>여행 코스 의뢰</div>
+                <div className='contents' onClick={ ()=>{ window.location.href='/contents' } } >즐길거리</div>
                 <div className='reviewBoard' onClick={ ()=>{ window.location.href='/reviewList' } } >리뷰게시판</div>
                 <div className='mycourse' onClick={ ()=>{ logCheck('/mycourse') } } >나의 여행</div>
                 <div className='auth-buttons'>

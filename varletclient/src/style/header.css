@@ -21,8 +21,8 @@
     align-items: center;
     width: 1800px;
     height: 100px;
-    padding: 0 20px;
-    margin-left: 270px;
+    padding: 0 -70px;
+    margin-left: 0px;
 }
 
 /* 로고 스타일 */

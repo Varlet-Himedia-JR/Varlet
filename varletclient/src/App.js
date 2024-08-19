@@ -27,6 +27,7 @@ import MyReview from "./component/member/MyReview";
 import MyQna from "./component/member/MyQna";
 import MyRequest from "./component/member/MyRequest";
 import Notice from "./component/notice/Notice";
+import FindId from "./component/member/FindId";
 
 
 import 'ckeditor5/ckeditor5.css';
@@ -44,30 +45,45 @@ function App() {
     <div className="App" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <Routes>
         <Route path="/" element={<Main />} />
+        {/* 회원 관리 */}
+        <Route path="/join" element={<Join />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/kakaosaveinfo/:nickname" element={<Kakaosaveinfo />} />
+        <Route path="/naversaveinfo/:nickname" element={<Naversaveinfo />} />
+        <Route path="/findId" element={<FindId />} />
+
+        
+        {/* 고객센터 */}
         <Route path="/qna" element={<Qna />} />
+        <Route path="/writeQna" element={<WriteQna />} />
+        <Route path="/qnaView/:qseq" element={<QnaView/>} />
+
+        {/* 여행 리뷰 */}
         <Route path="/reviewList" element={<ReviewList />} />
         <Route path="/writeReview" element={<WriteReview />} />
-        <Route path="/reviewView/:rseq" element={<ReviewView />} /> {/* 수정된 부분 */}
+        <Route path="/reviewView/:rseq" element={<ReviewView />} />
+
+        {/* 여행코스 의뢰 */}
         <Route path="/rcommunity" element={<RCommunityList />} /> 
         <Route path="/rpostwrite" element={<RPostWrite />} /> 
         <Route path="/rCommunityView/:rnum" element={<RCommunityView />} />
-        <Route path="/join" element={<Join />} />
-        <Route path="/writeQna" element={<WriteQna />} />
-        <Route path="/qnaView/:qseq" element={<QnaView/>} />
+        <Route path="/rCommunityUpdate/:rnum" element={<RCommunityUpdate />} />
+        <Route path="/rCommunityDetail/:rnum/rcCommunityWrite" element={<RcCommunityWrite />} />
+        
+        
         <Route path="/mycourse" element={<Mycourse />} />
-        <Route path="/kakaosaveinfo/:nickname" element={<Kakaosaveinfo />} />
-        <Route path="/naversaveinfo/:nickname" element={<Naversaveinfo />} />
+        {/* 여행 콘텐츠 */}
         <Route path="/contents" element={<ContentsList />} />
         <Route path="/ctest" element={<Testcontents />} />
         <Route path="/getContentsView/:cseq" element={<ContentsView />} />
-        <Route path="/rCommunityUpdate/:rnum" element={<RCommunityUpdate />} />
-        <Route path="/rCommunityDetail/:rnum/rcCommunityWrite" element={<RcCommunityWrite />} />
+
+        {/* 마이페이지 */}
         <Route path="/myPage" element={<MyPage />} />
         <Route path="/myInfo" element={<MyInfo />} />
         <Route path="/myReview" element={<MyReview />} />
         <Route path="/myQna" element={<MyQna />} />
         <Route path="/myRequest" element={<MyRequest />} />
+        {/* 공지사항 */}
         <Route path="/notice" element={<Notice />} />
         <Route path="/contentsWrite" element={<ContentsWrite />} />
 

@@ -82,6 +82,12 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/main/"))
             return true;
+        if (path.startsWith("/member/findId"))
+            return true;
+
+        if (path.startsWith("/member/verifyCodeAndFindId"))
+            return true;
+
 
 
         if (path.startsWith("/images/"))
@@ -150,7 +156,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
 
         if (path.startsWith("/rcommunity/updatePicked"))
-        return true;
+            return true;
         if (path.startsWith("/rcommunity/rCommunityUpdate"))
             return true;
         if (path.startsWith("/rcommunity/getPostList"))
