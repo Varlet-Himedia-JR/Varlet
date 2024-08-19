@@ -9,6 +9,8 @@ import Qna from "./component/qna/Qna";
 import RCommunityList from "./component/request/RCommunityList";
 import RPostWrite from "./component/request/RPostWrite";
 import RCommunityDetail from "./component/request/RCommunityDetail";
+import RCommunityUpdate from "./component/request/RCommunityUpdate";
+import RcCommunityWrite from "./component/request/RcCommunityWrite";
 import Join from './component/member/Join';
 import WriteQna from './component/qna/WriteQna';
 import QnaView from './component/qna/QnaView';
@@ -21,6 +23,9 @@ import ContentsView from "./component/contents/ContentsView";
 import MyPage from "./component/member/MyPage";
 import MyInfo from "./component/member/MyInfo";
 import MyReview from "./component/member/MyReview";
+import MyQna from "./component/member/MyQna";
+import MyRequest from "./component/member/MyRequest";
+import Notice from "./component/notice/Notice";
 
 // import WritePost from './component/post/WritePost';
 // import MyPage from './component/member/MyPage';
@@ -51,9 +56,14 @@ function App() {
         <Route path="/contents" element={<Contents />} />
         <Route path="/ctest" element={<Testcontents />} />
         <Route path="/getContentsView/:cseq" element={<ContentsView />} />
+        <Route path="/rCommunityUpdate/:rnum" element={<RCommunityUpdate />} />
+        <Route path="/rCommunityDetail/:rnum/rcCommunityWrite" element={<RcCommunityWrite />} />
         <Route path="/myPage" element={<MyPage />} />
         <Route path="/myInfo" element={<MyInfo />} />
         <Route path="/myReview" element={<MyReview />} />
+        <Route path="/myQna" element={<MyQna />} />
+        <Route path="/myRequest" element={<MyRequest />} />
+        <Route path="/notice" element={<Notice />} />
 
         
         

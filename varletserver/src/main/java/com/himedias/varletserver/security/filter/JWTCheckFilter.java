@@ -101,6 +101,10 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/qna/passCheck"))
             return true;
 
+        if (path.startsWith("/notice/noticeList/"))
+            return true;
+
+
         if (path.startsWith("/member/emailCheck"))
             return true;
 
@@ -123,8 +127,6 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
 
 
-        if (path.startsWith("/rcommunity/getPostList"))
-            return true;
         if (path.startsWith("/favicon.ico"))
             return true;
         //course
@@ -132,12 +134,10 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/course/getMycourse/"))
             return true;
-        if (path.startsWith("/rcommunity/writePost"))
-            return true;
+
         if (path.startsWith("/course/getDuration/"))
             return true;
-        if (path.startsWith("/rcommunity/rCommunityDetail"))
-            return true;
+
         if (path.startsWith("/rcommunity/suggestPlus"))
             return true;
         if (path.startsWith("/member/refresh/"))
@@ -147,6 +147,17 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/review/writeReview"))
             return true;
 
+        if (path.startsWith("/rcommunity/rCommunityUpdate"))
+            return true;
+        if (path.startsWith("/rcommunity/getPostList"))
+            return true;
+        if (path.startsWith("/rcommunity/writePost"))
+            return true;
+        if (path.startsWith("/rcommunity/rCommunityDetail"))
+            return true;
+        if (path.startsWith("/rcommunity/rCommunityDelete"))
+            return true;
+        //community
         if (path.startsWith("/review/getReviewView/"))
             return true;
         if (path.startsWith("/review/reviewDelete/"))
@@ -161,6 +172,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
 
 
+
+
         //contents
         if (path.startsWith("/contents/contentsList/"))
             return true;
@@ -170,6 +183,12 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         //timetable
         if (path.startsWith("/timetable/inserTimetable"))
+            return true;
+        if (path.startsWith("/timetable/getTseq/"))
+            return true;
+
+        //dayschedule
+        if (path.startsWith("/dayschedule/insertDayschedule"))
             return true;
 
         return false;

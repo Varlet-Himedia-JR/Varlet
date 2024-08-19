@@ -40,17 +40,17 @@ public class Dayschedule {
     @NotNull
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "day_date", nullable = false)
-    private Timestamp dayDate;
+    private Timestamp day_date;
 
     @NotNull
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "start_time", nullable = false)
-    private Timestamp startTime;
+    private Timestamp start_time;
 
     @NotNull
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "end_time", nullable = false)
-    private Timestamp endTime;
+    private Timestamp end_time;
 
     @Column(name = "price")
     private int price;

@@ -3,10 +3,7 @@ package com.himedias.varletserver.controller;
 import com.himedias.varletserver.entity.Timetable;
 import com.himedias.varletserver.service.TimetableService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
@@ -21,6 +18,13 @@ public class TimetableController {
     public HashMap<String, Object> join(@RequestBody Timetable timetable){
         HashMap<String, Object> result = new HashMap<String, Object>();
         ts.insertTimetable(timetable);
+        return result;
+    }
+
+    @GetMapping("/getTseq/{selectedCourse}")
+    public HashMap<String, Object> getTseq(@PathVariable String selectedCourse){
+        HashMap<String,Object> result = new HashMap<String,Object>();
+        result.put("tseq",ts.getTseq(selectedCourse).getTseq());
         return result;
     }
 }

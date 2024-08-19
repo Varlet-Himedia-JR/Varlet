@@ -1,3 +1,4 @@
+
 package com.himedias.varletserver.service;
 
 
@@ -6,8 +7,10 @@ import com.himedias.varletserver.entity.Member;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.Optional;
 
 @Service
@@ -85,25 +88,6 @@ public class MemberService {
 //        }
 //    }
 
-    public void updateProfile(Member member) {
-        // mr.save( member );
-        Optional<Member> m = mr.findByNickname( member.getNickname() );
-        if( m.isPresent() ){
-            Member mem = m.get();
-            mem.setEmail( member.getEmail() );
-            mem.setNickname( member.getNickname() );
-            mem.setPhone( member.getPhone() );
-            mem.setPwd( member.getPwd() );
-            mem.setProfileimg( member.getProfileimg() );
-        }else{
-            return;
-        }
-    }
-
-    public void updateMember(Member member) {
-        mr.save(member);
-    }
-
     @Autowired
     private HttpSession session;
 
@@ -114,4 +98,7 @@ public class MemberService {
         }
     }
 
+    public void updateInfo(Member member) {
+        mr.save(member);
+    }
 }

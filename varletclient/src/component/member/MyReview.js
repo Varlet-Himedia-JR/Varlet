@@ -1,66 +1,67 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { getCookie } from '../../util/cookieUtil'; // 쿠키 유틸리티 임포트
+import { useNavigate} from 'react-router-dom';
 import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
 import '../../style/review.css';
+import { useSelector } from 'react-redux';
 
 function MyReview() {
     const [reviewList, setReviewList] = useState([]);
-    const [page, setPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filteredReviews, setFilteredReviews] = useState([]);
+    const [page, setPage] = useState(1); // 현재 페이지
+    const [hasMore, setHasMore] = useState(true); // 더 로드할 데이터가 있는지 여부
+    const [searchTerm, setSearchTerm] = useState(''); // 검색어
+    const [filteredReviews, setFilteredReviews] = useState([]); // 필터된 리뷰 목록
     const navigate = useNavigate();
 
-    // 로그인된 사용자 ID 가져오기 (쿠키에서)
-    const userid = getCookie('userid'); // 쿠키에서 userid 가져오기
-
+    // Redux 상태에서 로그인 사용자 정보 가져오기
+    const loginUser = useSelector(state => state.user);
+    
+    // 데이터 로드 함수
     const loadReviews = useCallback(async (pageNumber) => {
         try {
-            const result = await axios.get(`/api/review/reviewList/${pageNumber}`, {
-                params: { userid } // 사용자 ID를 쿼리 파라미터로 전달
-            });
-            const { reviewList: newReviews, paging } = result.data;
+            const result = await axios.get(`/review/reviewList/${pageNumber}`, { params: { userid: loginUser.userid } });
+            const { reviewList: newReviews, hasMore: moreData } = result.data;
 
             if (Array.isArray(newReviews) && newReviews.length > 0) {
                 setReviewList(prevReviews => [...prevReviews, ...newReviews]);
                 setPage(pageNumber);
-
-                if (!paging || (paging && paging.next === null)) {
-                    setHasMore(false);
-                }
+                setHasMore(moreData); // 다음 페이지가 있는지 여부를 업데이트
             } else {
                 setHasMore(false);
             }
         } catch (err) {
             console.error(err);
         }
-    }, [userid]);
+    }, [loginUser.id]);
 
+    // 필터링 함수
     const filterReviews = useCallback(() => {
         if (searchTerm.trim() === '') {
             setFilteredReviews(reviewList);
         } else {
             const lowercasedTerm = searchTerm.toLowerCase();
             const filtered = reviewList.filter(review =>
-                review.title.toLowerCase().includes(lowercasedTerm)
+                review.title.toLowerCase().includes(lowercasedTerm) ||
+                review.userid.toLowerCase().includes(lowercasedTerm)
             );
             setFilteredReviews(filtered);
         }
     }, [searchTerm, reviewList]);
 
+    // 스크롤 이벤트 핸들러
     const handleScroll = useCallback(() => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         const scrollHeight = document.documentElement.scrollHeight;
         const clientHeight = document.documentElement.clientHeight;
 
+        // 스크롤이 페이지 하단에 도달했을 때
         if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore) {
             loadReviews(page + 1);
         }
     }, [page, hasMore, loadReviews]);
 
+    // 컴포넌트 마운트 시 스크롤 이벤트 리스너 추가
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         return () => {
@@ -68,18 +69,22 @@ function MyReview() {
         };
     }, [handleScroll]);
 
+    // 초기 데이터 로드
     useEffect(() => {
         loadReviews(page);
     }, [loadReviews, page]);
 
+    // 검색어 변경 핸들러
     function handleSearchChange(event) {
         setSearchTerm(event.target.value);
     }
 
+    // 검색어가 변경될 때마다 필터링
     useEffect(() => {
         filterReviews();
     }, [searchTerm, filterReviews]);
 
+    // 검색어 클리어 핸들러
     function handleClearSearch() {
         setSearchTerm('');
     }
@@ -89,7 +94,7 @@ function MyReview() {
     }
 
     return (
-        <article>
+        <>
             <Heading />
             <div className='subPage'>
                 <div className='reviewList' style={{ flex: "4" }}>
@@ -102,11 +107,11 @@ function MyReview() {
                             type="text"
                             value={searchTerm}
                             onChange={handleSearchChange}
-                            placeholder="제목으로 검색"
+                            placeholder="제목 또는 작성자 아이디로 검색"
                         />
                         {searchTerm && (
                             <button className="clear-button" onClick={handleClearSearch}>
-                                &times;
+                                &times; {/* 'X' 문자 */}
                             </button>
                         )}
                     </div>
@@ -136,11 +141,12 @@ function MyReview() {
                             )
                         }
                     </div>
+                    {/* 로딩 중 표시 */}
                     {hasMore && <div className="loading">Loading more reviews...</div>}
                 </div>
             </div>
             <Footer />
-        </article>
+        </>
     );
 }
 

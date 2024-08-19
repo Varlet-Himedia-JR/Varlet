@@ -22,6 +22,7 @@ function Main() {
     <Heading/>
     <div style={{ paddingTop: '100px' }}>
     <div className='background'><img src="http://localhost:8070/images/Beach.jpg"/></div>
+    <div onClick={()=>{navigate("/notice")}}>공지사항</div>
     </div>
     <Footer/>
     </>
