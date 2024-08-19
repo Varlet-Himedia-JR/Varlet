@@ -11,6 +11,7 @@ function ContentsView() {
     const { cseq } = useParams();
     const navigate = useNavigate();
 
+
     useEffect(
         () => {
             axios.get(`/api/contents/getContentsView/${cseq}`)
@@ -21,12 +22,13 @@ function ContentsView() {
                 .catch((err) => { console.error(err) })
         }, []
     )
-    function addSchedule (cseq){
-        navigate(`/getContentsView/${cseq}`);
+
+    function addSchedule(cseq) {
+        navigate('/mycourse', { state: { cseq } });
     }
 
     return (
-        <article>
+        <>
             <Heading />
             <div className='subPage'>
 
@@ -60,7 +62,7 @@ function ContentsView() {
                                         <tr>
                                             <td>기간</td>
                                             <td>
-                                                {contents.cstartTime?contents.cstartTime.substring(0,10)+'~'+contents.cendTime.substring(0,10) :''}
+                                                {contents.cstartTime ? contents.cstartTime.substring(0, 10) + '~' + contents.cendTime.substring(0, 10) : ''}
                                             </td>
                                         </tr>
                                         <tr>
@@ -69,27 +71,19 @@ function ContentsView() {
                                         </tr>
                                     </table>
                                 </tbody>
-                                <tbody>
-
-                                </tbody>
                             </div>
                         ) : (<div>Loading</div>)
                     }
                     <div className='btns'>
-                        {/* {
-                        (contents.userid == getCookie('user').userid)?(
-                            <button onClick={qnaDelete}>삭제</button>
-                        ):(<></>)
-                        } */}
-                        {getCookie('user')?(
-                            <button onClick={addSchedule(contents.cseq)}>추가</button>
-                        ):(<></>)}
+                        {getCookie('user') ? (
+                            <button onClick={() => { addSchedule(contents.cseq) }}>추가</button>) : (
+                            <button style={{ display: 'none' }} onClick={() => { addSchedule(contents.cseq) }}>추가</button>)}
                         <button onClick={() => { navigate('/contents') }}>목록으로</button>
                     </div>
                 </div>
             </div>
-            <Footer />
-        </article>
+            {/* <Footer /> */}
+        </>
     )
 }
 

@@ -125,6 +125,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/member/logout"))
             return true;
+        if (path.startsWith("/member/userReviews"))
+            return true;
 
 
         if (path.startsWith("/favicon.ico"))
@@ -153,9 +155,11 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/rcommunity/writePost"))
             return true;
-        if (path.startsWith("/rcommunity/rCommunityDetail"))
+        if (path.startsWith("/rcommunity/rCommunityView"))
             return true;
         if (path.startsWith("/rcommunity/rCommunityDelete"))
+            return true;
+        if (path.startsWith("/rcommunity/getMyList"))
             return true;
         //community
         if (path.startsWith("/review/getReviewView/"))
@@ -179,6 +183,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
 
         if (path.startsWith("/contents/getContentsView/"))
+            return true;
+
+        if (path.startsWith("/contents/getContent/"))
             return true;
 
         //timetable

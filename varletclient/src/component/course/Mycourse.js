@@ -4,10 +4,9 @@ import Footer from './../headerfooter/Footer';
 import '../../style/course.css';
 import CourseContents from '../contents/CourseContents';
 import Timetablemaker from './Timetablemaker';
-import { getCookie } from "../../util/cookieUtil";
 import Timetable from './Timetable';
-import Timetable2 from './Timetable2';
-
+import { getCookie } from "../../util/cookieUtil";
+import { useLocation } from 'react-router-dom';
 import Heading from '../headerfooter/Heading';
 
 function Mycourse() {
@@ -17,12 +16,21 @@ function Mycourse() {
     const [daySchedule, setDaySchedule] = useState([]);
     const userCookie = getCookie('user');
     const [ttmaker, setTtmaker] = useState();
-
+    const location = useLocation();
+    const { cseq } = location.state || {};
     const [cellWidth, setCellWidth] = useState(0);
+    const [isCourseContentsVisible, setIsCourseContentsVisible] = useState(false);
+    const [isCourseCustom, setIsCourseCustom] = useState(false);
 
     const handleCourseChange = (event) => {
         setSelectedCourse(event.target.value);
     };
+
+    useEffect(() => {
+        if (cseq) {
+            setIsCourseContentsVisible(true);
+        }
+    }, [cseq]);
 
     useEffect(() => {
         jaxios.get(`/api/course/getTnames/${userCookie.userid}`)
@@ -33,26 +41,25 @@ function Mycourse() {
                 }
             })
             .catch((err) => { console.error(err); });
-    }, [userCookie.userid]);
+    }, []);
 
     useEffect(() => {
         if (selectedCourse) {
             jaxios.get(`/api/course/getMycourse/${selectedCourse}/${userCookie.userid}`)
                 .then((result) => {
                     setCourseDuration(result.data.duration);
+                    // const cellElement = document.querySelector('.cell');
+                    // if (cellElement) {
+                    //     const width = cellElement.getBoundingClientRect().width;
+                    //     setCellWidth(width);
+                    // }
                     setDaySchedule(result.data.dayschedule);
                 })
                 .catch((err) => { console.error(err); });
         }
     }, [selectedCourse]);
 
-    useEffect(() => {
-        const cellElement = document.querySelector('.cell');
-        if (cellElement) {
-            const width = cellElement.getBoundingClientRect().width;
-            setCellWidth(width);
-        }
-    }, []);
+   
 
     const selectComponent = {
         ttmaker: <Timetablemaker />,
@@ -67,8 +74,7 @@ function Mycourse() {
         }
     };
 
-    const [isCourseContentsVisible, setIsCourseContentsVisible] = useState(false);
-    const [isCourseCustom, setIsCourseCustom] = useState(false);
+
     const getHeight = () => {
         if (isCourseCustom || isCourseContentsVisible) {
             return '50%';
@@ -86,9 +92,9 @@ function Mycourse() {
 
     return (
 
-        <div style={{ width: '100%' }}>
-            <Heading/>
-            <div className='mycourse_container' style={{position:'relative', top:'100px'}}>
+        <div style={{ width: '100%'}}>
+            <Heading />
+            <div className='mycourse_container' style={{ position: 'relative', top: '100px' }}>
                 <div className="coursemenu" style={{
                 }}>
 
@@ -138,7 +144,7 @@ function Mycourse() {
                 </div>
                 <div className='timetable' >
                     {/* <Timetable courseDuration={courseDuration} daySchedule={daySchedule} /> */}
-                    <Timetable2 courseDuration={courseDuration} daySchedule={daySchedule} />
+                    <Timetable courseDuration={courseDuration} daySchedule={daySchedule} />
                 </div>
 
             </div>
@@ -156,8 +162,7 @@ function Mycourse() {
                             X
                         </button>
                     </div>
-                    <div style={{ height: '40px', position: 'fixed', top: '50%' }}></div>
-                    <CourseContents courseDuration={courseDuration} selectedCourse={selectedCourse} />
+                    <CourseContents courseDuration={courseDuration} selectedCourse={selectedCourse} cseq={cseq} />
                 </div>
             )}
             {isCourseCustom && (

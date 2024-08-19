@@ -112,9 +112,10 @@ function MyInfo() {
         <div className='loginform'>
             <div className="logo" style={{ fontSize: "2.0rem" }}>회원 정보 수정</div>
             <div className='field'>
-                <label>아이디</label>
-                <input type="text" value={userid} onChange={(e) => setUserid(e.target.value)} />
-            </div>
+            <label>아이디</label>
+            <input type="text" value={userid} onChange={(e) => setUserid(e.target.value)} disabled />
+        </div>
+
             <div className='field'>
                 <label>비밀번호</label>
                 <input

@@ -6,27 +6,32 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "rcrecommend")
+@Table(name = "rcrecommend", schema = "varlet")
 public class Rcrecommend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rcnum", nullable = false)
-    private Integer id;
+    private Integer rcnum;
 
     @NotNull
-    @Column(name = "rnum", nullable = false)
-    private Integer rnum;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "rnum", nullable = false)
+    private RCommunity rnum;
 
-    @Size(max = 50)
     @NotNull
-    @Column(name = "userid", nullable = false, length = 50)
-    private String userid;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "userid", nullable = false)
+    private Member userid;
 
     @Size(max = 2000)
     @NotNull

@@ -105,5 +105,4 @@ public class ReviewService {
     public List<Review> getReviewsByUserId(String userid) {
         return rr.findByUserid(userid);
     }
-
 }
