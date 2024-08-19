@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
 @Service
 @Transactional
 public class ContentsService {
@@ -34,4 +36,7 @@ public class ContentsService {
     }
 
 
+    public void writeContents(Contents contents) {
+        cr.save(contents);
+    }
 }

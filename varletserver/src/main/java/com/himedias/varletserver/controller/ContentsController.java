@@ -1,6 +1,7 @@
 package com.himedias.varletserver.controller;
 
 import com.himedias.varletserver.dto.Paging;
+import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
 import com.himedias.varletserver.entity.Contents;
 import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.Qna;
@@ -9,6 +10,7 @@ import com.himedias.varletserver.service.ContentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -20,8 +22,8 @@ public class ContentsController {
     ContentsService cs;
 
     @GetMapping("/contentsList/{page}")
-    public HashMap<String,Object> contentsList(@PathVariable("page") int page){
-        HashMap<String,Object> result = new HashMap<String,Object>();
+    public HashMap<String, Object> contentsList(@PathVariable("page") int page) {
+        HashMap<String, Object> result = new HashMap<String, Object>();
         Paging paging = new Paging();
         paging.setPage(page);
         paging.setDisplayRow(10);
@@ -31,14 +33,14 @@ public class ContentsController {
         paging.calPaging();
 
         result.put("contentsList", contentsPage.getContent());
-        result.put("paging",paging);
+        result.put("paging", paging);
 
         return result;
 
     }
 
     @GetMapping("/getContentsView/{cseq}")
-    public HashMap<String,Object> getQnaView(@PathVariable("cseq") int cseq){
+    public HashMap<String, Object> getQnaView(@PathVariable("cseq") int cseq) {
         HashMap<String, Object> result = new HashMap<>();
         Contents contents = cs.getQnaView(cseq);
         contents.toString();
@@ -46,7 +48,12 @@ public class ContentsController {
         return result;
     }
 
-
-
+    @PostMapping("/wrtieContents")
+    public HashMap<String, Object> writeContents(@RequestBody Contents contents) {
+        HashMap<String, Object> result = new HashMap<>();
+        cs.writeContents(contents);
+        result.put("msg", "ok");
+        return result;
+    }
 
 }

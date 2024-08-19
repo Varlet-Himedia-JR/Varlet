@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
 import '../../style/contents.css';
+import { getCookie } from "../../util/cookieUtil";
+import jaxios from '../../util/jwtUtil';
+
 
 function ReviewList() {
     const [contentsList, setContentsList] = useState([]);
@@ -12,6 +15,19 @@ function ReviewList() {
     const [searchTerm, setSearchTerm] = useState(''); // 검색어
     const [filteredContents, setFilteredContents] = useState([]); // 필터된 리뷰 목록
     const navigate = useNavigate();
+
+    const writeContents = () => {
+        console.log('------');
+        console.log(getCookie('user'));
+        for(let i = 0; i<getCookie('user').roleNames.length;i++){
+            if(getCookie('user').roleNames[i]=='ADMIN'){
+                return navigate('/contentsWrite');
+            }
+        }
+        alert('권한이 없습니다');
+    }
+
+   
 
     // 데이터 로드 함수
     const loadContents = useCallback(async (pageNumber) => {
@@ -92,10 +108,11 @@ function ReviewList() {
         navigate(`/getContentsView/${cseq}`);
     }
 
+
     return (
         <>
             <Heading />
-            <div className='mycourseContentsList' style={{ paddingTop: '100px', bottom:'100px' }}>
+            <div className='mycourseContentsList' style={{ paddingTop: '100px', bottom: '100px' }}>
                 <div className="contents-container" style={{ paddingTop: '100px' }}>
                     <div className="search-container" style={{ marginBottom: "20px" }}>
                         <input
@@ -109,6 +126,7 @@ function ReviewList() {
                                 &times; {/* 'X' 문자 */}
                             </button>
                         )}
+                        <button onClick={writeContents}>등록</button>
                     </div>
                     {
                         Array.isArray(filteredContents) && filteredContents.length > 0 ? (
@@ -138,7 +156,7 @@ function ReviewList() {
                                                     <td>{contents.cstartTime.substring(0, 10)} ~ {contents.cendTime.substring(0, 10)}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>{contents.cost=='0'?'무료': <img style={{width:'15px'}} src="http://localhost:8070/images/contents/won.png"/> }</td>
+                                                    <td>{contents.cost == '0' ? '무료' : <img style={{ width: '15px' }} src="http://localhost:8070/images/contents/won.png" />}</td>
                                                 </tr>
                                             </table>
                                         </tbody>
@@ -149,7 +167,7 @@ function ReviewList() {
                     }
                 </div>
             </div>
-            {/* <Footer /> */}
+            <Footer />
         </>
     );
 }

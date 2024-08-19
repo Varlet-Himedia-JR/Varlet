@@ -30,6 +30,7 @@ import Notice from "./component/notice/Notice";
 
 
 import 'ckeditor5/ckeditor5.css';
+import ContentsWrite from "./component/contents/ContentsWrite";
 
 // import WritePost from './component/post/WritePost';
 // import MyPage from './component/member/MyPage';
@@ -68,6 +69,7 @@ function App() {
         <Route path="/myQna" element={<MyQna />} />
         <Route path="/myRequest" element={<MyRequest />} />
         <Route path="/notice" element={<Notice />} />
+        <Route path="/contentsWrite" element={<ContentsWrite />} />
 
         
         {/* <Route path="/main" element={<Main />} />

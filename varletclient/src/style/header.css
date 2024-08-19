@@ -3,7 +3,7 @@
     position: fixed; /* 헤더를 화면 상단에 고정 */
     top: 0; /* 화면 상단에 위치 */
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     height: 100px;
     width: 100%;
     align-items: center;
@@ -19,7 +19,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 1400px;
+    width: 1800px;
     height: 100px;
     padding: 0 20px;
     margin-left: 270px;
@@ -27,9 +27,9 @@
 
 /* 로고 스타일 */
 .logo img{
-    width: 450px;
-    height: 300px;
-    margin-top: -95px;
+    /* width: 450px; */
+    height: 100px;
+    /* margin-top: -95px; */
     
 }
 .logo {
@@ -39,7 +39,7 @@
     font-size:50px;
     padding: 0 auto;
     cursor: pointer;
-    width: 350px;
+    width: 642px;
     height: 99px;
     text-align: center;
     overflow: hidden;
@@ -49,11 +49,11 @@
 }
 
 /* 각 카테고리 텍스트 스타일 */
-.rcommunity, .reviewBoard, .contents, .mycourse {
+.rcommunity, .reviewBoard, .contents, .mycourse, .myinfo {
     font-family: 'Inter', sans-serif;
     font-weight: 900;
     font-size: 22px;
-    color: #000000;
+    color: white;
     cursor: pointer;
     margin: 0 15px;
 }
