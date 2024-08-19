@@ -33,13 +33,6 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
     @Modifying
     @Query("UPDATE RCommunity r SET r.picked = :picked WHERE r.rnum = :rnum")
     int updatePicked(@Param("rnum") String rnum, @Param("picked") char picked);
-
-    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked, " +
-            "COALESCE(COUNT(rc), 0) AS replyCount " +
-            "FROM RCommunity r LEFT JOIN Rcrecommend rc ON r.rnum = rc.rcnum " +
-            "GROUP BY r.rnum " +
-            "ORDER BY r.rnum DESC")
-    List<RCommunitySummary> findAllWithReplyCount();
     // 사용자 ID로 게시물 목록을 찾기
     List<RCommunity> findByUserid(String userid);
 

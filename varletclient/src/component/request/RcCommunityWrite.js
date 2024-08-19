@@ -5,6 +5,7 @@ import Heading from '../headerfooter/Heading';
 import Footer from '../headerfooter/Footer';
 import { createEditor } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
+
 function RcCommunityWrite() {
     const { rnum } = useParams(); // URL에서 rnum 파라미터를 추출합니다.
     const [files, setFiles] = useState([]); // 파일 객체와 미리보기 URL을 관리
@@ -16,6 +17,10 @@ function RcCommunityWrite() {
     });
     const [post, setPost] = useState(null); // 게시글 정보를 저장하는 상태
     const navigate = useNavigate();
+    <script
+    type="text/javascript"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=발급받은 APP KEY를 넣으시면 됩니다.&libraries=services,clusterer"
+    ></script>
 
     useEffect(() => {
         // 컴포넌트가 마운트되거나 rnum이 변경될 때 게시글 정보를 가져옵니다.
@@ -91,19 +96,17 @@ function RcCommunityWrite() {
         children: [{ text: "We have some base content." }]
       }
     ]);
+
     return (
 
-        <div className="App">
-        <h1>React Editors</h1 >
-        <h2>Start editing to see Slate in action!</h2>
-        <Slate
-          editor={editor}
-          value={value}
-          onChange={(newValue) => setValue(newValue)}
-        >
-          <Editable style={{ border: "1px solid black" }}/>
-        </Slate>
-      </div>
+        <Map
+        center={{ lat: 33.5563, lng: 126.79581 }}
+        style={{ width: "100%", height: "360px" }}
+      >
+        <MapMarker position={{ lat: 33.55635, lng: 126.795841 }}>
+          <div style={{color:"#000"}}>Hello World!</div>
+        </MapMarker>
+      </Map>        
      );
 }
 

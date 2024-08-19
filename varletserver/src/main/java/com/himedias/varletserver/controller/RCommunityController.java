@@ -23,7 +23,6 @@ public class RCommunityController {
     @Autowired
     private RCommunityService rcs;
 
-
     @GetMapping("/getPostList")
     public HashMap<String, Object> getPostList(
             @RequestParam(required = false) Integer location,
@@ -36,7 +35,7 @@ public class RCommunityController {
         } else if (location != null) {
             postList = rcs.getPostListByLocation(location);
         } else {
-            postList = rcs.getPostListWithReplyCount();  // 댓글 수를 포함한 전체 게시글 반환
+            postList = rcs.getAllPosts();  // 필터링하지 않고 전체 게시글 반환
         }
 
         result.put("postlist", postList);
@@ -45,6 +44,7 @@ public class RCommunityController {
 
     @PostMapping("/writePost")
     public ResponseEntity<HashMap<String, Object>> writePost(@RequestBody RCommunityWrite rCommunityWrite) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        String userId = authentication.getName();  // 로그인한 사용자의 ID
 //        System.out.println(userId);
 //        rCommunityWrite.setUserid(userId);  // 로그인한 사용자의 ID를 DTO에 설정
@@ -84,29 +84,7 @@ public class RCommunityController {
         return result;
     }
 
-    @GetMapping("/getMyList/{userid}")
-    public HashMap<String, Object> getMyList(@PathVariable String userid,
-                                             @RequestParam(required = false) Integer location,
-                                             @RequestParam(required = false) Integer location2) {
-        HashMap<String, Object> result = new HashMap<>();
-        List<RCommunity> postList;
-
-        if (location != null && location2 != null) {
-            // 특정 지역과 하위 지역으로 게시물 필터링
-            postList = rcs.getPostsByUserIdAndLocation(userid, location, location2);
-        } else if (location != null) {
-            // 특정 지역으로 게시물 필터링
-            postList = rcs.getPostsByUserIdAndLocation(userid, location);
-        } else {
-            // 사용자의 모든 게시물 조회
-            postList = rcs.getPostsByUserId(userid);
-        }
-
-        result.put("postlist", postList); // 'postlist'라는 키로 결과를 저장
-        return result; // 결과 반환
-    }
-
-
+//    @GetMapping("/getMyList")
 
     @PostMapping("/updatePicked/{rnum}")
     public ResponseEntity<?> updatePicked(@PathVariable String rnum, @RequestBody HashMap<String, String> body) {
