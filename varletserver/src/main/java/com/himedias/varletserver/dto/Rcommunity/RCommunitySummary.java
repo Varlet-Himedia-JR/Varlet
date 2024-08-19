@@ -14,6 +14,8 @@ public interface RCommunitySummary {
     Integer getViews();
     String getTitle();
     int getReward();
-
     char getPicked();
+    int getReplyCount();
+
+
 }

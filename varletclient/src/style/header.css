@@ -7,8 +7,9 @@
     height: 100px;
     width: 100%;
     align-items: center;
-    background: linear-gradient(180deg, #00BDF9 0%, #61D8FE 49.5%, #FFED8C 100%);
+    background:#0085FF ;
     z-index: 100;
+    border-bottom: 1px solid#000000;
 }
 
 
@@ -35,7 +36,7 @@
     position: relative;
     font-family: 'Inter', sans-serif;
     font-weight: 900;
-    font-size: 36px;
+    font-size:50px;
     padding: 0 auto;
     cursor: pointer;
     width: 350px;
@@ -51,7 +52,7 @@
 .rcommunity, .reviewBoard, .contents, .mycourse {
     font-family: 'Inter', sans-serif;
     font-weight: 900;
-    font-size: 18px;
+    font-size: 22px;
     color: #000000;
     cursor: pointer;
     margin: 0 15px;
@@ -66,7 +67,7 @@
 .login, .join, .logout {
     font-family: 'Inter', sans-serif;
     font-weight: 900;
-    font-size: 18px;
+    font-size: 22px;
     color: #000000;
     background-color: #0085FF;
     border-radius: 20px;

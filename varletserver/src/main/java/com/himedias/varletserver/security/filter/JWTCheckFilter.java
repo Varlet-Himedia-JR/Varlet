@@ -101,6 +101,10 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/qna/passCheck"))
             return true;
 
+        if (path.startsWith("/notice/noticeList/"))
+            return true;
+
+
         if (path.startsWith("/member/emailCheck"))
             return true;
 
@@ -145,6 +149,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/review/writeReview"))
             return true;
 
+        if (path.startsWith("/rcommunity/updatePicked"))
+        return true;
         if (path.startsWith("/rcommunity/rCommunityUpdate"))
             return true;
         if (path.startsWith("/rcommunity/getPostList"))
@@ -157,7 +163,20 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/rcommunity/getMyList"))
             return true;
+        if (path.startsWith("/rcommunity/pick"))
+            return true;
         //community
+        if (path.startsWith("/rcrecommend/updateReplyPicked"))
+            return true;
+        if (path.startsWith("/rcrecommend/deleteReply"))
+            return true;
+        if (path.startsWith("/rcrecommend/fileup"))
+            return true;
+        if (path.startsWith("/rcrecommend/getReplies"))
+            return true;
+        if (path.startsWith("/rcrecommend/writeRecommend"))
+            return true;
+        //recommunity
         if (path.startsWith("/review/getReviewView/"))
             return true;
         if (path.startsWith("/review/reviewDelete/"))

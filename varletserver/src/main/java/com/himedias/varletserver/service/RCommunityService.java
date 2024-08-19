@@ -1,15 +1,15 @@
 package com.himedias.varletserver.service;
 
 import com.himedias.varletserver.dao.RCommunityRepository;
+import com.himedias.varletserver.dao.RcrecommendRepository;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
 import com.himedias.varletserver.entity.RCommunity;
-import org.apache.catalina.User;
+import com.himedias.varletserver.entity.Rcrecommend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,8 +21,11 @@ public class RCommunityService {
     @Autowired
     private RCommunityRepository rcr;
 
-    public List<RCommunitySummary> getAllPosts() {
-        return rcr.findAllBy(Sort.by(Sort.Direction.DESC, "rnum"));
+    @Autowired
+    private RcrecommendRepository rcrr;
+
+    public List<RCommunitySummary> getPostListWithReplyCount() {
+        return rcr.findAllWithReplyCount(); // 댓글 수를 포함한 쿼리 호출
     }
 
     public List<RCommunitySummary> getPostListByLocation(int location) {
@@ -33,9 +36,6 @@ public class RCommunityService {
         return rcr.findByLocationAndLocation2(location, location2, Sort.by(Sort.Direction.DESC, "rnum"));
     }
 
-    public RCommunity getPostById(int rnum) {
-        return rcr.findPostById(rnum);
-    }
 
     @Transactional
     public HashMap<String, Object> writePost(RCommunityWrite rCommunityWrite) {
@@ -97,11 +97,29 @@ public class RCommunityService {
         return result;
     }
 
+    @Transactional
     public void deleteRCommunity(int rnum) {
         RCommunity rc = rcr.findById(rnum).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
         rcr.delete(rc);
     }
 
+    @Transactional
+    public boolean updatePicked(String rnum, char picked) {
+        int updatedRows = rcr.updatePicked(rnum, picked);
+        return updatedRows > 0;
+    }
 
+    // 사용자 ID로 게시물 목록을 찾기
+    public List<RCommunity> getPostsByUserId(String userid) {
+        return rcr.findByUserid(userid);
+    }
+
+    public List<RCommunity> getPostsByUserIdAndLocation(String userid, Integer location) {
+        return rcr.findByUseridAndLocation(userid, location);
+    }
+
+    public List<RCommunity> getPostsByUserIdAndLocation(String userid, Integer location, Integer location2) {
+        return rcr.findByUseridAndLocationAndLocation2(userid, location, location2);
+    }
 
 }

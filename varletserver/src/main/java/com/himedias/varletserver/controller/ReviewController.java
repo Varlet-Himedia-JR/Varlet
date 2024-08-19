@@ -163,7 +163,4 @@ public class ReviewController {
     public List<Review> getReviewsByUser(@RequestParam String userid) {
         return rs.getReviewsByUserId(userid);
     }
-
-
-
 }
