@@ -3,9 +3,11 @@ package com.himedias.varletserver.controller;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
 import com.himedias.varletserver.entity.RCommunity;
+import com.himedias.varletserver.entity.Review;
 import com.himedias.varletserver.service.RCommunityService;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -83,6 +85,28 @@ public class RCommunityController {
         return result;
     }
 
-//    @GetMapping("/getMyList")
+    @GetMapping("/getMyList/{userid}")
+    public HashMap<String, Object> getMyList(@PathVariable String userid,
+                                             @RequestParam(required = false) Integer location,
+                                             @RequestParam(required = false) Integer location2) {
+        HashMap<String, Object> result = new HashMap<>();
+        List<RCommunity> postList;
+
+        if (location != null && location2 != null) {
+            // 특정 지역과 하위 지역으로 게시물 필터링
+            postList = rcs.getPostsByUserIdAndLocation(userid, location, location2);
+        } else if (location != null) {
+            // 특정 지역으로 게시물 필터링
+            postList = rcs.getPostsByUserIdAndLocation(userid, location);
+        } else {
+            // 사용자의 모든 게시물 조회
+            postList = rcs.getPostsByUserId(userid);
+        }
+
+        result.put("postlist", postList); // 'postlist'라는 키로 결과를 저장
+        return result; // 결과 반환
+    }
+
+
 
 }
