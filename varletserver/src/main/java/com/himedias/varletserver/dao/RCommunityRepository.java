@@ -41,6 +41,7 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
             "ORDER BY r.rnum DESC")
     List<RCommunitySummary> findAllWithReplyCount();
 
+    // 사용자 ID로 게시물 목록을 찾기
     List<RCommunity> findByUserid(String userid);
 
     List<RCommunity> findByUseridAndLocation(String userid, Integer location);
