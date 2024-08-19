@@ -1,103 +1,101 @@
-/* 전체 헤더 스타일 */
 .header {
-    position: fixed; /* 헤더를 화면 상단에 고정 */
-    top: 0; /* 화면 상단에 위치 */
-    display: flex;
-    justify-content: space-between;
-    height: 100px;
+    position: absolute;
     width: 100%;
-    align-items: center;
-    background:#0085FF ;
-    z-index: 100;
-    border-bottom: 1px solid#000000;
+    height: 100px;
+    mix-blend-mode: normal;
+    margin-bottom: 5px;
 }
 
-
-
-/* 카테고리 메뉴 스타일 */
 .category_menu {
+    position: absolute;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    width: 1800px;
-    height: 100px;
-    padding: 0 -70px;
-    margin-left: 0px;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    background: #8af5f5cc; /* White with 80% opacity */
+    backdrop-filter: blur(5px); /* Optional: Adds a blur effect to the background */
+    border-radius: 0 0 20px 20px;
 }
 
-/* 로고 스타일 */
-.logo img{
-    /* width: 450px; */
-    height: 100px;
-    /* margin-top: -95px; */
-    
-}
-.logo {
-    position: relative;
-    font-family: 'Inter', sans-serif;
-    font-weight: 900;
-    font-size:50px;
-    padding: 0 auto;
+.logo img {
+    width: 400px;
+    height: 70px;
+    mix-blend-mode: normal;
     cursor: pointer;
-    width: 642px;
-    height: 99px;
-    text-align: center;
-    overflow: hidden;
-    mix-blend-mode: multiply;
-
-
 }
 
-/* 각 카테고리 텍스트 스타일 */
-.rcommunity, .reviewBoard, .contents, .mycourse, .myinfo {
-    font-family: 'Inter', sans-serif;
-    font-weight: 900;
-    font-size: 22px;
-    color: white;
+.contents, .rcommunity, .reviewBoard, .mycourse, .login, .join, .myinfo, .logout {
+    font-family: 'Mplus 1p Bold';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18.5px;
+    line-height: 22px;
+    color: #000000;
     cursor: pointer;
-    margin: 0 15px;
+    margin: 0 10px;
 }
 
-/* 인증 버튼 스타일 */
+.rcommunity {
+    width: 140px;
+    height: 27px;
+}
+
+.contents {
+    width: 60px;
+    height: 27px;
+}
+
+.reviewBoard {
+    width: 100px;
+    height: 27px;
+}
+
+.mycourse {
+    width: 160px;
+    height: 27px;
+}
+
+.login {
+    width: 60px;
+    height: 20px;
+}
+
+.join {
+    width: 80px;
+    height: 20px;
+    margin-right: 20px;;
+}
+
+.myinfo {
+    width: 80px;
+    height: 27px;
+    margin-right: -70px;
+}
+
+.logout {
+    width: 80px;
+    height: 20px;
+    margin-left: -70px;
+}
+
+.profileimg {
+    width:67px;
+    height:67px;
+    border-radius:25%;
+    border:1px dotted blue;
+}
+
 .auth-buttons {
     display: flex;
     align-items: center;
 }
 
-.login, .join, .logout {
-    font-family: 'Inter', sans-serif;
-    font-weight: 900;
-    font-size: 22px;
-    color: #000000;
-    background-color: #0085FF;
-    border-radius: 20px;
-    padding: 5px 20px;
-    margin-left: 10px;
-    cursor: pointer;
-    text-align: center;
-    border: 2px #000000 solid;
-
-}
-
-.join {
-    background-color: #C6FF99;
-    border: 2px #000000 solid;
-}
-
-.logout {
-    background-color: #ffc369;
-}
-h2{
-    font-family: 'Inter', sans-serif;
-    color: #007BFF;
-    font-weight: 900;
-    cursor: pointer;
-    font-size: 18px;
-    text-align: center;
-}
-/* icon */
-.menu {
-    width: 60px;
-    margin-right: 50px;
-    justify-content: right;
+.line {
+    position: relative;
+    width: 27px;
+    height: 0px;
+    border: 1px solid #000000;
+    transform: rotate(90deg);
+    margin: 0 10px;
 }

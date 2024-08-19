@@ -40,7 +40,7 @@ function Login() {
         <>
         <Heading/>
         <div style={{ paddingTop: '100px' }}>
-            <div className='background'><img src="http://localhost:8070/images/Beach.jpg"/></div>
+            <div className='background'><img src="http://localhost:8070/images/oceans.jpg"/></div>
         </div>
         <div className="loginform" style={{paddingTop: '100px'}}>
             <div className='loginlabel'>로그인</div>
