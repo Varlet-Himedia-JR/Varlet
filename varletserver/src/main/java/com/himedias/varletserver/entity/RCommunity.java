@@ -78,6 +78,5 @@ public class RCommunity {
             this.picked = 'N';
         }
     }
-
 }
 
