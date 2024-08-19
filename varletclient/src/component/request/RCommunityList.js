@@ -19,10 +19,7 @@ function PostList() {
 
   const fetchAllPosts = () => {
     axios.get('/api/rcommunity/getPostList')
-      .then(response => {
-        setPosts(response.data.postlist);
-        console.log('Fetched posts:', response.data); // 로그 추가
-      })
+      .then(response => {setPosts(response.data.postlist); console.log(response.data)})
       .catch(error => console.error('Error fetching posts:', error));
   };
 
@@ -85,40 +82,55 @@ function PostList() {
   return (
     <>
       <Heading />
-        <div className='w-full max-w-[1700px] mx-auto px-1 mt-28 '>
-          <div className='mt-28 '> 
-            <div className='flex justify-between items-baseline '>
-              <h1 className='text-3xl font-semibold'>의뢰 게시판</h1>
+      <div className='w-full max-w-[1700px] mx-auto px-1 mt-28 '>
+        <div className='mt-28 '> {/* 여기에 margin-bottom 추가 */}
+          <div className='flex justify-between items-baseline '>
+          <h1 className='text-3xl font-semibold'>의뢰 게시판</h1>
+        </div>
+        <div className='w-full'>
+          <ul className='mb-4'>
+            <li className='flex items-center mb-4'>
+              <span className='mr-4 text-lg font-medium'>지역 선택</span>
+              <select
+                className='border rounded px-2 py-1'
+                value={location}
+                onChange={handleLocationChange}>
+                  <option value="1">전체</option>
+                  <option value="2">서울특별시</option>
+                  <option value="3">부산광역시</option>
+                  <option value="4">대구광역시</option>
+                  <option value="5">인천광역시</option>
+                  <option value="6">광주광역시</option>
+                  <option value="7">대전광역시</option>
+                  <option value="8">울산광역시</option>
+                  <option value="9">세종특별자치시</option>
+                  <option value="10">경기도</option>
+                  <option value="11">강원도</option>
+                  <option value="12">충청북도</option>
+                  <option value="13">충청남도</option>
+                  <option value="14">전라북도</option>
+                  <option value="15">전라남도</option>
+                  <option value="16">경상북도</option>
+                  <option value="17">경상남도</option>
+                  <option value="18">제주도</option>
+                </select>
+          <div className="flex ml-auto space-x-4">
+            <div 
+              className="bg-blue-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer"
+              onClick={searchPosts}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                <path d="M21 21l-6 -6" />
+              </svg>
+              <span className="text-xl font-bold">검색</span>
             </div>
-            <div className='w-full'>
-              <ul className='mb-4'>
-                <li className='flex items-center mb-4'>
-                  <span className='mr-4 text-lg font-medium'>지역 선택</span>
-                  <select
-                    className='border rounded px-2 py-1'
-                    value={location}
-                    onChange={handleLocationChange}
-                  >
-                    <option value="1">전체</option>
-                    {/* 기타 옵션들 */}
-                  </select>
-                  <div className="flex ml-auto space-x-4">
-                    <div 
-                      className="bg-blue-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer"
-                      onClick={searchPosts}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-                        <path d="M21 21l-6 -6" />
-                      </svg>
-                      <span className="text-xl font-bold">검색</span>
-                    </div>
 
-                    {searching && (
-                      <div
-                        className='bg-red-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer'
-                        onClick={cancelSearch}
+            {searching && (
+              <div
+                className='bg-red-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer'
+                onClick={cancelSearch}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                           <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
