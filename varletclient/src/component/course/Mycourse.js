@@ -59,7 +59,7 @@ function Mycourse() {
         }
     }, [selectedCourse]);
 
-   
+
 
     const selectComponent = {
         ttmaker: <Timetablemaker />,
@@ -92,7 +92,7 @@ function Mycourse() {
 
     return (
 
-        <div style={{ width: '100%'}}>
+        <div style={{ width: '100%' }}>
             <Heading />
             <div className='mycourse_container' style={{ position: 'relative', top: '100px' }}>
                 <div className="coursemenu" style={{
@@ -142,10 +142,8 @@ function Mycourse() {
                         ))}
                     </div> */}
                 </div>
-                <div className='timetable' >
-                    {/* <Timetable courseDuration={courseDuration} daySchedule={daySchedule} /> */}
-                    <Timetable courseDuration={courseDuration} daySchedule={daySchedule} />
-                </div>
+                {/* <Timetable courseDuration={courseDuration} daySchedule={daySchedule} /> */}
+                <Timetable courseDuration={courseDuration} daySchedule={daySchedule} />
 
             </div>
             <ul className='floating'>
