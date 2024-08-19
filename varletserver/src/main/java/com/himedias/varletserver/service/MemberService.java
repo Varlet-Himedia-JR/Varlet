@@ -15,7 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @Transactional
@@ -127,5 +130,37 @@ public class MemberService {
         return mr.findByUserid(userid, pageRequest);
     }
 
+    @Autowired
+    private EmailService es;
 
+    private Map<String, String> verificationCodes = new HashMap<>();
+
+    // 인증 코드 생성 및 이메일 발송
+    public void sendVerificationCode(String email) {
+        String verificationCode = generateVerificationCode();
+        verificationCodes.put(email, verificationCode);
+
+        // 이메일 발송
+        String subject = "valet 인증코드 ";
+        String text = "인증번호 : " + verificationCode;
+        es.sendSimpleMessage(email, subject, text);
+        System.out.println(verificationCode);
+    }
+
+    // 인증 코드 생성 로직 (6자리 숫자 코드)
+    private String generateVerificationCode() {
+        return String.format("%06d", new Random().nextInt(999999));
+    }
+
+    // 이메일과 인증 코드를 검증하여 아이디 반환
+    public String verifyCodeAndFindId(String email, String code) {
+        String storedCode = verificationCodes.get(email);
+
+        if (storedCode != null && storedCode.equals(code)) {
+            verificationCodes.remove(email); // 검증 후 코드 삭제
+            return mr.findId(email).orElse(null);
+        } else {
+            return null;
+        }
+    }
 }

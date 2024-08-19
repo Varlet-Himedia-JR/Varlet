@@ -378,9 +378,34 @@ public class MemberController {
             result.put("reviewList", reviewPage.getContent());
             result.put("paging", paging);
             result.put("status", "success");
+
         } catch (Exception e) {
             result.put("status", "error");
             result.put("message", e.getMessage());
+        }
+        return result;
+    }
+
+
+    @PostMapping("/findId/{email}")
+    public HashMap<String, Object> findId(@PathVariable("email") String email) {
+        HashMap<String, Object> result = new HashMap<>();
+        ms.sendVerificationCode(email);
+        result.put("msg", "ok");
+        return result;
+    }
+
+    // 인증 코드 검증 및 아이디 반환 API
+    @GetMapping("/verifyCodeAndFindId/{email}/{code}")
+    public HashMap<String, Object> verifyCodeAndFindId(@PathVariable("email") String email,@PathVariable("code") String code) {
+        HashMap<String, Object> result = new HashMap<>();
+        String userid = ms.verifyCodeAndFindId(email, code);
+
+        if (userid != null) {
+            result.put("userid",userid);
+            result.put("msg", "yes");
+        } else {
+            result.put("msg", "no");
         }
         return result;
     }

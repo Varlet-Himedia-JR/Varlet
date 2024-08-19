@@ -42,4 +42,8 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     // 사용자 ID에 따른 리뷰를 가져오는 메서드
     @Query("SELECT r FROM Review r WHERE r.userid = :userid")
     Page<Review> findByUserid(@Param("userid") String userid, Pageable pageable);
+
+
+    @Query("select m.userid from Member m where m.email = :email")
+    Optional<String> findId(@Param("email") String email);
 }
