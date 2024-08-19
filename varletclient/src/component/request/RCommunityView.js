@@ -560,7 +560,7 @@ return (
                   )}
                 </div>
               </div>
-              <span className="w-2/12 text-center flex items-center justify-center gap-2">
+              <span className="w-2/12 text-center text-nowrap flex items-center justify-center gap-2">
                 {post.picked === "Y" ? (
                   reply.rpicked === "Y" ? (
                     <>
