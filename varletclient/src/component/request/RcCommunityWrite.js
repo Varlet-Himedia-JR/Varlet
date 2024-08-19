@@ -1,113 +1,37 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import axios from '../../util/jwtUtil';
-import { useNavigate, useParams } from 'react-router-dom';
-import Heading from '../headerfooter/Heading';
-import Footer from '../headerfooter/Footer';
-import { createEditor } from "slate";
-import { Slate, Editable, withReact } from "slate-react";
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import jaxios from '../../util/jwtUtil';
+import { getCookie } from '../../util/cookieUtil';
+import moment from 'moment';
+import { Map, CustomOverlayMap } from "react-kakao-maps-sdk";
+
+const {kakao} = window;
 
 function RcCommunityWrite() {
-    const { rnum } = useParams(); // URL에서 rnum 파라미터를 추출합니다.
-    const [files, setFiles] = useState([]); // 파일 객체와 미리보기 URL을 관리
-    const [formData, setFormData] = useState({
-        content: '',
-        image: '',
-        saveimages: '',
-        rnum: rnum || 1, // rnum을 URL에서 가져오고, 없으면 1로 설정합니다.
-    });
-    const [post, setPost] = useState(null); // 게시글 정보를 저장하는 상태
-    const navigate = useNavigate();
-    <script
-    type="text/javascript"
-    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=발급받은 APP KEY를 넣으시면 됩니다.&libraries=services,clusterer"
-    ></script>
 
-    useEffect(() => {
-        // 컴포넌트가 마운트되거나 rnum이 변경될 때 게시글 정보를 가져옵니다.
-        const fetchPost = async () => {
-            try {
-                const response = await axios.get(`/api/recommend/getPost/${rnum}`);
-                setPost(response.data);
-            } catch (error) {
-                console.error("게시글 정보를 가져오는 데 실패했습니다.", error);
-            }
-        };
 
-        fetchPost();
-    }, [rnum]);
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+  useEffect(() =>{
+    const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+    const options = { //지도를 생성할 때 필요한 기본 옵션
+    center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+    level: 3 //지도의 레벨(확대, 축소 정도)
     };
-
-    const handleFileChange = (event) => {
-        const newFiles = Array.from(event.target.files);
-        const newPreviews = [];
-
-        newFiles.forEach(file => {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                newPreviews.push({ src: e.target.result, file });
-                if (newPreviews.length === newFiles.length) {
-                    setFiles(prevFiles => [...prevFiles, ...newPreviews]);
-                }
-            };
-            reader.readAsDataURL(file);
-        });
-    };
-
-    const handleRemoveFile = (fileToRemove) => {
-        setFiles(prevFiles => prevFiles.filter(file => file.file !== fileToRemove));
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const postData = new FormData();
-        postData.append('content', formData.content);
-        postData.append('image', formData.image);
-        postData.append('saveimages', formData.saveimages);
-        postData.append('rnum', formData.rnum);
-
-        for (let i = 0; i < files.length; i++) {
-            postData.append('files', files[i]);
-        }
-
-        try {
-            const response = await axios.post(`/api/recommend/writeRecommend/${formData.rnum}`, postData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            console.log(response.data);
-            navigate(`/RcommunityView/${rnum}`);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-    const editor = useMemo(() => withReact(createEditor()), []);
-    const [value, setValue] = useState([
-      {
-        type: "paragraph",
-        children: [{ text: "We have some base content." }]
-      }
-    ]);
-
-    return (
-
-        <Map
-        center={{ lat: 33.5563, lng: 126.79581 }}
-        style={{ width: "100%", height: "360px" }}
-      >
-        <MapMarker position={{ lat: 33.55635, lng: 126.795841 }}>
-          <div style={{color:"#000"}}>Hello World!</div>
-        </MapMarker>
-      </Map>        
-     );
+    const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴  
+  })
+ 
+ 
+  return (
+    <div id='map' style={{
+      width: '500px',
+      height: '360px',
+      position: 'absolute',
+      top: '100px',
+      left: '50%',
+      transform: 'translateX(-50%)'  // centering the map in the container  // centering the map in the container   // centering the map in the container   // centering the map in the container   // centering the map in the container   // centering the map in the container   // centering the
+    }}>
+    
+  </div>
+  )
 }
 
-export default RcCommunityWrite;
+export default RcCommunityWrite

@@ -40,7 +40,7 @@ function RCommunityUpdate() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    jaxios.get(`/api/rcommunity/rCommunityDetail/${rnum}`)
+    jaxios.get(`/api/rcommunity/rCommunityView/${rnum}`)
       .then((response) => {
         const post = response.data.post;
         setTitle(post.title);
@@ -101,7 +101,7 @@ function RCommunityUpdate() {
     })
       .then(() => {
         alert('게시물이 성공적으로 수정되었습니다.');
-        navigate(`/rCommunityDetail/${rnum}`);
+        navigate(`/rCommunityView/${rnum}`);
       })
       .catch((err) => {
         console.error('게시물 수정에 실패했습니다:', err);
