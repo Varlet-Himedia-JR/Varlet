@@ -2,7 +2,7 @@
     position: absolute;
     width: 100%;
     height: 100px;
-    background: linear-gradient(180deg, #FFED8C 35.5%, #FCF6D7 64%, #93C7E8 79.5%, #0085FF 100%);
+    background: linear-gradient(180deg, #FCF6D7 35.5%,#FCF6D7 60%, #FCF6D7 79.5%, #FFED8C 100%);
     display: flex;
     justify-content: space-between;
     align-items: center;
