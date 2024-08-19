@@ -47,7 +47,6 @@ public class RCommunityController {
 
     @PostMapping("/writePost")
     public ResponseEntity<HashMap<String, Object>> writePost(@RequestBody RCommunityWrite rCommunityWrite) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        String userId = authentication.getName();  // 로그인한 사용자의 ID
 //        System.out.println(userId);
 //        rCommunityWrite.setUserid(userId);  // 로그인한 사용자의 ID를 DTO에 설정

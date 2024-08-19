@@ -249,7 +249,7 @@ const replyDelete = (rcnum) => {
   const handlepicked = (rcnum) => {
     // 채택 전에 확인 메시지 표시
     const isConfirmed = window.confirm("채택은 번복이 불가능합니다. 진행하시겠습니까?");
-  
+    
     if (isConfirmed) {
       // 사용자가 확인을 누른 경우
       // 1. 선택된 답글의 rpicked를 'Y'로 변경
@@ -284,139 +284,136 @@ return (
       
 
   <div class="w-full max-w-6xl mx-auto px-4 py-9">
-  <div class="border-b pb-4 mb-6">
-    <div class="mr-4">
-        
+    <div class="border-b pb-4 mb-6">
+      <div class="mr-4"> 
         <span className='text-left'>
           no.
           {post.rnum}
         </span>
       </div>
-    <div class="flex justify-between items-center"> {/* 변경된 부분 */}
-      <h1 class="text-3xl font-bold mb-2">{post.title}</h1>
       <div class="flex justify-between items-center"> {/* 변경된 부분 */}
-      {post.picked === "Y" ? (
-        <div class="flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#1e90ff" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-            <path d="M9 12l2 2l4 -4" />
-          </svg>
-          <div class="text-2xl font-bold ml-2">채택 완료</div>
+        <h1 class="text-3xl font-bold mb-2">{post.title}</h1>
+        <div class="flex justify-between items-center"> {/* 변경된 부분 */}
+          {post.picked === "Y" ? (
+            <div class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#1e90ff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                <path d="M9 12l2 2l4 -4" />
+              </svg>
+              <div class="text-2xl font-bold ml-2">채택 완료</div>
+            </div>
+          ) : (
+            <div class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moneybag" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M9.5 3h5a1.5 1.5 0 0 1 1.5 1.5a3.5 3.5 0 0 1 -3.5 3.5h-1a3.5 3.5 0 0 1 -3.5 -3.5a1.5 1.5 0 0 1 1.5 -1.5z" />
+                <path d="M4 17v-1a8 8 0 1 1 16 0v1a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" />
+              </svg>
+              <div class="text-2xl font-bold ml-2">설정 포인트: {post.reward}</div>
+            </div>
+          )}
         </div>
-      ) : (
-        <div class="flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moneybag" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M9.5 3h5a1.5 1.5 0 0 1 1.5 1.5a3.5 3.5 0 0 1 -3.5 3.5h-1a3.5 3.5 0 0 1 -3.5 -3.5a1.5 1.5 0 0 1 1.5 -1.5z" />
-            <path d="M4 17v-1a8 8 0 1 1 16 0v1a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" />
-          </svg>
-          <div class="text-2xl font-bold ml-2">설정 포인트: {post.reward}</div>
-        </div>
-      )}
-    </div>
-    </div>
-
-
+       </div>
        <div class="flex items-center text-muted-foreground text-sm mt-4">
-      <div class="mr-4">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="w-4 h-4 mr-1 inline-block"
-        >
-          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-        {maskedid(post.userid)}
-      </div>
-      <div class="mr-4">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="w-4 h-4 mr-1 inline-block"
-        >
-          <path d="M8 2v4"></path>
-          <path d="M16 2v4"></path>
-          <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-          <path d="M3 10h18"></path>
-        </svg>
-        <span className='text-left'>
-          작성일:
-          {new Date(post.writedate).toLocaleDateString('ko-KR', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-          }).replace(/\./g, '.').replace(/\.$/, '')}
-        </span>
-      </div>
-      <div>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="w-4 h-4 mr-1 inline-block"
-        >
-          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-          <circle cx="12" cy="12" r="3"></circle>
-        </svg>
-        {post.views}
+        <div class="mr-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-4 h-4 mr-1 inline-block"
+          >
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          {maskedid(post.userid)}
+        </div>
+        <div class="mr-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-4 h-4 mr-1 inline-block"
+          >
+            <path d="M8 2v4"></path>
+            <path d="M16 2v4"></path>
+            <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+            <path d="M3 10h18"></path>
+          </svg>
+          <span className='text-left'>
+            작성일:
+            {new Date(post.writedate).toLocaleDateString('ko-KR', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            }).replace(/\./g, '.').replace(/\.$/, '')}
+          </span>
+        </div>
+        <div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-4 h-4 mr-1 inline-block"
+          >
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          {post.views}
+        </div>
       </div>
     </div>
-  </div>
 
   <div class="prose prose-lg">
     <div className="bg-gray-100 p-8 rounded-lg mb-8">
       <div>
-      <div>
-      <div class="mr-4 text-2xl font-bold mb-2">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="w-5 h-5 mr-1 inline-block"
-        >
-          <path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"></path>
-          <path d="M15 5.764v15"></path>
-          <path d="M9 3.236v15"></path>
-        </svg>
-        <span onClick={toggleShowLocation} style={{ cursor: 'pointer' }}>
-          여행 예상지:(클릭하여 확인)
-        </span>
-      </div>
+        <div>
+          <div class="mr-4 text-2xl font-bold mb-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-5 h-5 mr-1 inline-block"
+            >
+              <path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"></path>
+              <path d="M15 5.764v15"></path>
+              <path d="M9 3.236v15"></path>
+            </svg>
+            <span onClick={toggleShowLocation} style={{ cursor: 'pointer' }}>
+              여행 예상지:(클릭하여 확인)
+            </span>
+          </div>
 
-      {showLocation && (
-        <div className="text-xl">
-          {getLocationName(post.location, post.location2)}
+          {showLocation && (
+            <div className="text-xl">
+              {getLocationName(post.location, post.location2)}
+            </div>
+          )}
         </div>
-      )}
-    </div>
       </div>
       <div class="mr-4 text-2xl font-bold mb-2">
         <svg
@@ -439,22 +436,21 @@ return (
         <span onClick={toggleShowDates} style={{ cursor: 'pointer' }}>
           상세 여행 일정:(클릭하여 확인)
         </span>
-            </div>
+      </div>
       <div>
-      {showDates && (
-        <div className="text-xl">
-          여행 시작일: {extractDate(post.startdate)} <br />
-          여행 종료일: {extractDate(post.enddate)}  <br />
-          총 여행 일수: {getTravelDuration(post.startdate, post.enddate)} 
-        </div>
-      )}
-    </div>
+        {showDates && (
+          <div className="text-xl">
+            여행 시작일: {extractDate(post.startdate)} <br />
+            여행 종료일: {extractDate(post.enddate)}  <br />
+            총 여행 일수: {getTravelDuration(post.startdate, post.enddate)} 
+          </div>
+        )}
+      </div>
       <div className="text-lg leading-relaxed min-h-[40rem] w-full">
         <pre className="whitespace-pre-wrap">{post.content}</pre>
       </div>
     </div>
   </div>
-
   <div class="border-t pt-6 mt-6">
     <div class="flex justify-end gap-2 mb-4">
       <div className="flex items-center gap-2">
@@ -477,17 +473,16 @@ return (
         목록으로
       </button>
       <button
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
-              onClick={test}>
-              test
-            </button>
+        className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+        onClick={test}>
+        test
+      </button>
     </div>
-
     <div 
       className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-lg p-4 bg-blue-50 text-blue-800 dark:bg-gray-800 dark:text-blue-400 rounded-lg shadow-lg cursor-pointer flex items-center justify-center space-x-3 hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors duration-300"
       onClick={writerecommend}
     >
-      <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-blue-800 dark:text-blue-400" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-blue-800 dark:text-blue-400" viewBox="0 0 24 24" strokeWidth="1.5"    stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
         <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
         <path d="M13.5 6.5l4 4" />
@@ -541,86 +536,87 @@ return (
       </form>
     )}
     <div class="space-y-4">
-  {replies && replies.length > 0 ? (
-    replies.map((reply, index) => (
-      <div key={index} class="flex items-start gap-4">
-        <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
-          <img class="aspect-square h-full w-full" alt="@user" src="/placeholder-user.jpg" />
-        </span>
-        <div class="grid gap-1.5">
-        <div className="flex items-center gap-2 text-sm">
-  <div className="font-medium">{maskeduser(reply.userid)}</div>
-  <div className="text-muted-foreground">{new Date(reply.writedate).toLocaleDateString('ko-KR')}</div>
-  <div className="flex items-center gap-2">
-    {(post.userid === getCookie('user').userid) && (
-      <>
-        <button 
-          className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"                   
-          onClick={() => handlepicked(reply.rcnum)}>
-          채택하기
-        </button>
-      </>
-    )}
-  </div>
-</div>
-
-<span className="w-2/12 text-center flex items-center justify-center gap-2">
-  {reply.rpicked === "Y" ? (
-    <>
-      채택 완료
-      <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-circle-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#1e90ff" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-        <path d="M9 12l2 2l4 -4" />
-      </svg>
-    </>
-  ) : (
-    reply.rpicked === "N" ? "채택 진행중" : "미정"
-  )}
-</span>
-
-          <p>{reply.content}</p>
-          <div className="flex flex-wrap mt-4">
-          {reply.images && reply.images.length > 0 && (
-                  <div className="flex flex-wrap gap-4">
-                    {reply.images.map((image) => (
-                      <div key={image.id} className="w-64 h-64 overflow-hidden">
-                        <img
-                          src={`/api/${image.filePath}`} 
-                          alt={image.imag_name}
-                          className="object-cover w-full h-full"
-                        />
-                      </div>
-                    ))}
-                  </div>
+      {replies && replies.length > 0 ? (
+        replies.map((reply, index) => (
+          <div key={index} class="flex items-start gap-4">
+            <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
+              <img class="aspect-square h-full w-full" alt="@user" src="/placeholder-user.jpg" />
+            </span>
+            <div class="grid gap-1.5">
+              <div className="flex items-center gap-2 text-sm">
+                <div className="font-medium">{maskeduser(reply.userid)}</div>
+                <div className="text-muted-foreground">{new Date(reply.writedate).toLocaleDateString('ko-KR')}</div>
+                <div className="flex items-center gap-2">
+                  {/* post.userid와 쿠키에서 가져온 userid가 같고, post.picked이 'N'일 때만 버튼 표시 */}
+                  {(post.userid === getCookie('user').userid && post.picked === 'N') && (
+                    <>
+                      <button 
+                        className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"                   
+                        onClick={() => handlepicked(reply.rcnum)}>
+                        채택하기
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+              <span className="w-2/12 text-center flex items-center justify-center gap-2">
+                {post.picked === "Y" ? (
+                  reply.rpicked === "Y" ? (
+                    <>
+                      채택
+                      <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-circle-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#1e90ff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                        <path d="M9 12l2 2l4 -4" />
+                      </svg>
+                    </>
+                  ) : (
+                    "미채택"
+                  )
+                ) : (
+                  reply.rpicked === "N" ? "채택 진행중" : "미정"
                 )}
-          </div>  
-          <div class="flex justify-end gap-2 mb-4">
-            <div className="flex items-center gap-2">
-            {(reply.user === getCookie('user')?.user) && (
-                <>
-                  <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"                   
-                  onClick={replyUpdate}>
-                    수정
-                  </button>
-                  <button
-                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
-                    onClick={() => replyDelete(reply.rcnum)}>
-                    삭제
-                  </button>
-                </>
-              )}
+              </span>
+              <p>{reply.content}</p>
+              <div className="flex flex-wrap mt-4">
+              {reply.images && reply.images.length > 0 && (
+                      <div className="flex flex-wrap gap-4">
+                        {reply.images.map((image) => (
+                          <div key={image.id} className="w-64 h-64 overflow-hidden">
+                            <img
+                              src={`/api/${image.filePath}`} 
+                              alt={image.imag_name}
+                              className="object-cover w-full h-full"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                </div>  
+                <div class="flex justify-end gap-2 mb-4">
+                  <div className="flex items-center gap-2">
+                  {(reply.user === getCookie('user')?.user) && (
+                      <>
+                        <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"                   
+                        onClick={replyUpdate}>
+                          수정
+                        </button>
+                        <button
+                          className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                          onClick={() => replyDelete(reply.rcnum)}>
+                          삭제
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          ))
+        ) : (
+          <p>답글이 없습니다.</p>
+        )}
       </div>
-    ))
-  ) : (
-    <p>답글이 없습니다.</p>
-  )}
-</div>
-
-    
   </div>
 </div>
 
