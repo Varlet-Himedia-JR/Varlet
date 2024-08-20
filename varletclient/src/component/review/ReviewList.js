@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import jaxios from '../../util/jwtUtil';
 import { useNavigate } from 'react-router-dom';
 import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
+import { getCookie } from "../../util/cookieUtil";
 import '../../style/review.css';
 
 function ReviewList() {
@@ -13,10 +14,14 @@ function ReviewList() {
     const [filteredReviews, setFilteredReviews] = useState([]); // 필터된 리뷰 목록
     const navigate = useNavigate();
 
+    // 쿠키에서 사용자 ID를 가져옴
+    const userCookie = getCookie('user');
+    const userid = userCookie?.userid || null;
+
     // 데이터 로드 함수
     const loadReviews = useCallback(async (pageNumber) => {
         try {
-            const result = await axios.get(`/api/review/reviewList/${pageNumber}`);
+            const result = await jaxios.get(`/api/review/reviewList/${pageNumber}`);
             const { reviewList: newReviews, paging } = result.data;
 
             if (Array.isArray(newReviews) && newReviews.length > 0) {
@@ -89,7 +94,13 @@ function ReviewList() {
         setSearchTerm('');
     }
 
+    // 리뷰 제목 클릭 핸들러
     function onReviewView(rseq) {
+        if (!userid) {
+            alert('로그인이 필요합니다');
+            navigate('/login'); // 로그인 페이지로 이동
+            return;
+        }
         navigate(`/reviewView/${rseq}`);
     }
 
@@ -128,7 +139,7 @@ function ReviewList() {
                                 filteredReviews.map((review, idx) => (
                                     <div className="row" key={idx}>
                                         <div className="col">{review.rseq}</div>
-                                        <div className="col" style={{ textAlign: "left" }} onClick={() => onReviewView(review.rseq)}>
+                                        <div className="col" style={{ textAlign: "left", cursor: "pointer", textDecoration: "underline" }} onClick={() => onReviewView(review.rseq)}>
                                             {review.userid}
                                         </div>
                                         <div className="col">{review.title}</div>

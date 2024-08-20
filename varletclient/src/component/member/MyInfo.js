@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import DaumPostcode from "react-daum-postcode";
-import jaxios from '../../util/jwtUtil';
-import { getCookie, removeCookie } from "../../util/cookieUtil";
 import { useDispatch } from 'react-redux';
+import jaxios from '../../util/jwtUtil';
+import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
 import { logoutAction } from '../../store/userSlice';
 
 function MyInfo() {
@@ -20,7 +20,8 @@ function MyInfo() {
     const [profileimg, setProfileimg] = useState('');
     const [imgStyle, setImgStyle] = useState({ display: "none" });
     const [showPostcode, setShowPostcode] = useState(false);
-    const [oldpwd, setOldpwd]= useState('');
+    const [oldPwd, setOldPwd] = useState('');
+    const [originalEmail, setOriginalEmail] = useState(''); // 이메일 중복 체크를 위한 상태
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -29,6 +30,7 @@ function MyInfo() {
         const userCookie = getCookie('user');
         if (userCookie) {
             setUserid(userCookie.userid || '');
+            setOldPwd(userCookie.oldPwd || '');
             setPwd(userCookie.pwd || '');
             setPwdChk(userCookie.pwd || '');
             setName(userCookie.name || '');
@@ -39,13 +41,15 @@ function MyInfo() {
             setAddress(userCookie.address || '');
             setDAddress(userCookie.dAddress || '');
             setProfileimg(userCookie.profileimg || '');
+            setOriginalEmail(userCookie.email || ''); // 쿠키에서 이메일 초기화
         }
     }, []);
 
     async function onSubmit() {
-        if (!userid) return alert('아이디를 입력하세요');
-        if (!pwd) return alert('비밀번호를 입력하세요');
-        if (pwd !== pwdChk) return alert('비밀번호 확인이 일치하지 않습니다');
+        const userCookie = getCookie('user');
+        
+        if (!oldPwd) return alert('현재 비밀번호를 입력하세요');
+        if (pwd && pwd !== pwdChk) return alert('비밀번호 확인이 일치하지 않습니다');
         if (!name) return alert('이름을 입력하세요');
         if (!nickname) return alert('닉네임을 입력하세요');
         if (!email) return alert('이메일을 입력하세요');
@@ -53,17 +57,17 @@ function MyInfo() {
         if (!dAddress) return alert('상세주소를 입력하세요');
         const userCookie = getCookie('user');
         try {
-            // Check if userid and nickname are available
-            let result = await jaxios.post('/api/member/useridCheck', null, { params: { userid } });
-            if (result.data.msg === 'no') return alert('아이디가 중복됩니다');
-
-            if (userCookie.nickname!=nickname){
-                result = await jaxios.post('/api/member/nicknameCheck', null, { params: { nickname } });
-                if (result.data.msg === 'no') return alert('닉네임이 중복됩니다');
+            // 서버에 현재 비밀번호 검증 요청
+            // let pwdCheckResult = await jaxios.get('/api/member/pwdCheck', { params: { oldPwd, userid } });
+            // if (pwdCheckResult.data.msg === 'no') return alert('현재 비밀번호가 일치하지 않습니다');
+    
+            // Check if email is duplicated when it's changed
+            if (email !== originalEmail) {
+                let emailCheckResult = await jaxios.get('/api/member/emailCheck', { params: { email } });
+                if (emailCheckResult.data.msg === 'no') return alert('이메일이 중복됩니다');
             }
-
             // Send update request
-            result = await jaxios.post('/api/member/updateInfo', {
+            let updateResult = await jaxios.post('/api/member/updateInfo', {
                 userid,
                 pwd,
                 name,
@@ -76,7 +80,8 @@ function MyInfo() {
                 profileimg
             });
 
-            if (result.data.msg === 'ok') {
+    
+            if (updateResult.data.msg === 'ok') {
                 if (window.confirm('수정이 완료되었습니다. 로그아웃 후 로그인 페이지로 이동합니다.')) {
                     dispatch(logoutAction());
                     removeCookie("user");
@@ -123,12 +128,12 @@ function MyInfo() {
                 <label>현재 비밀번호</label>
                 <input
                     type="password"
-                    onChange={(e) => setOldpwd(e.target.value)}
-                    placeholder="비밀번호 입력"
+                    onChange={(e) => setOldPwd(e.target.value)}
+                    placeholder="현재 비밀번호 입력"
                 />
             </div>
             <div className='field'>
-                <label>새로운 비밀번호</label>
+                <label>비밀번호</label>
                 <input
                     type="password"
                     onChange={(e) => setPwd(e.target.value)}
@@ -183,7 +188,7 @@ function MyInfo() {
             </div>
             <div className='field'>
                 <label>프로필사진 미리보기</label>
-                <div><img src={profileimg} style={imgStyle} /></div>
+                <div><img src={profileimg} style={imgStyle} alt="프로필 미리보기" /></div>
             </div>
             <div className='btns'>
                 <button onClick={onSubmit}>수정완료</button>

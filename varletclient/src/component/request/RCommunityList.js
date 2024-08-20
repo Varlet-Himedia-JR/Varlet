@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Heading from '../headerfooter/Heading';
 import Footer from '../headerfooter/Footer';
 import { location1Data, location2Data } from '../request/LocaionData';
+import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
 
 function PostList() {
   const [posts, setPosts] = useState([]);
@@ -61,13 +62,17 @@ function PostList() {
     return userid.length > 2 ? userid.slice(0, 2) + '****' : userid;
   };
 
-  const requestwrite = () => {
-    navigate('/rpostwrite');
-  };
 
-  const RcommunityView = (postId) => {
-    navigate(`/RcommunityView/${postId}`);
-  };
+
+  function logCheck(src) {
+    if (getCookie('user') == null) {
+      alert("로그인이 필요한 서비스입니다.")
+        navigate('/login');
+    } else {
+        navigate(src);
+    }
+}
+
 
   const handleLocationChange = (e) => {
     setLocation(parseInt(e.target.value, 10)); // 숫자형으로 변환하여 저장
@@ -116,7 +121,7 @@ function PostList() {
                 </select>
           <div className="flex ml-auto space-x-4">
             <div 
-              className="bg-blue-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer"
+              className="bg-customblue text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer hover:bg-blue-200 dark:hover:bg-gray-700"
               onClick={searchPosts}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -129,7 +134,8 @@ function PostList() {
 
             {searching && (
               <div
-                className='bg-red-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer'
+                className='bg-customblue text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer
+                 hover:bg-blue-200 dark:hover:bg-gray-700'
                 onClick={cancelSearch}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -142,15 +148,15 @@ function PostList() {
                     )}
 
                     <div 
-                      className="bg-red-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer"
-                      onClick={requestwrite}
+                      className="bg-customblue text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer hover:bg-blue-200 dark:hover:bg-gray-700"
+                      onClick={ ()=>{ logCheck('/rpostwrite') } }
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                         <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
                         <path d="M13.5 6.5l4 4" />
                       </svg>
-                      <span className="text-xl font-bold">의뢰하기</span>
+                      <span className="text-xl font-bold" >의뢰하기</span>
                     </div>
                   </div>
                 </li>
@@ -169,7 +175,7 @@ function PostList() {
                       ))}
                     </select>
                     <div 
-                      className="ml-auto bg-blue-300 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer"
+                      className="ml-auto bg-customblue text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer hover:bg-blue-200 dark:hover:bg-gray-700"
                       onClick={searchPostsByLocation2}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -199,7 +205,7 @@ function PostList() {
                       <span className='w-1/12 text-center bg-blue-500 text-white rounded-full px-2 py-1 text-xs'>
                         {post.rnum}
                       </span>
-                      <span className='w-4/12 text-left cursor-pointer text-blue-500' onClick={() => RcommunityView(post.rnum)}>
+                      <span className='w-4/12 text-left cursor-pointer text-blue-500' onClick={ ()=>{ logCheck(`/RcommunityView/${post.rnum}`) } }>
                         {post.title},{post.replyCount}
                       </span>
                       <span className='w-2/12 text-center'>{location1Data[post.location]}</span>
