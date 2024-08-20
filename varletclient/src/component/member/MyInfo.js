@@ -55,7 +55,7 @@ function MyInfo() {
         if (!email) return alert('이메일을 입력하세요');
         if (!phone) return alert('전화번호를 입력하세요');
         if (!dAddress) return alert('상세주소를 입력하세요');
-    
+        const userCookie = getCookie('user');
         try {
             // 서버에 현재 비밀번호 검증 요청
             // let pwdCheckResult = await jaxios.get('/api/member/pwdCheck', { params: { oldPwd, userid } });
@@ -66,7 +66,6 @@ function MyInfo() {
                 let emailCheckResult = await jaxios.get('/api/member/emailCheck', { params: { email } });
                 if (emailCheckResult.data.msg === 'no') return alert('이메일이 중복됩니다');
             }
-    
             // Send update request
             let updateResult = await jaxios.post('/api/member/updateInfo', {
                 userid,
@@ -80,6 +79,7 @@ function MyInfo() {
                 dAddress,
                 profileimg
             });
+
     
             if (updateResult.data.msg === 'ok') {
                 if (window.confirm('수정이 완료되었습니다. 로그아웃 후 로그인 페이지로 이동합니다.')) {
@@ -95,7 +95,7 @@ function MyInfo() {
             alert('서버 오류');
         }
     }
-    
+
 
     async function fileupload(e) {
         const formData = new FormData();

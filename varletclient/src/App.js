@@ -32,6 +32,7 @@ import House from "./component/house/House";
 
 import 'ckeditor5/ckeditor5.css';
 import ContentsWrite from "./component/contents/ContentsWrite";
+import Pay from "./component/pay/Pay";
 
 // import WritePost from './component/post/WritePost';
 // import MyPage from './component/member/MyPage';
@@ -87,6 +88,9 @@ function App() {
         {/* 공지사항 */}
         <Route path="/notice" element={<Notice />} />
         <Route path="/contentsWrite" element={<ContentsWrite />} />
+        {/* 결제 */}
+        <Route path="/pay" element={<Pay />} />
+
 
         
         {/* <Route path="/main" element={<Main />} />

@@ -76,7 +76,8 @@ function ContentsView() {
                     }
                     <div className='btns'>
                         {getCookie('user') ? (
-                            <button onClick={() => { addSchedule(contents.cseq) }}>추가</button>) : (
+                            <button onClick={() => { addSchedule(contents.cseq) }}>일정추가</button>
+                        ) : (
                             <button style={{ display: 'none' }} onClick={() => { addSchedule(contents.cseq) }}>추가</button>)}
                         <button onClick={() => { navigate('/contents') }}>목록으로</button>
                     </div>

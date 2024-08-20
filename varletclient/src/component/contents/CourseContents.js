@@ -96,9 +96,9 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
 
     // 스크롤 이벤트 핸들러
     const handleScroll = useCallback(() => {
-        const scrollTop = window.pageYOffset || document.documentElement.contentstable.scrollTop;
-        const scrollHeight = document.documentElement.contentstable.scrollHeight;
-        const clientHeight = document.documentElement.contentstable.clientHeight;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = document.documentElement.clientHeight;
 
         // 스크롤이 페이지 하단에 도달했을 때
         if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore) {

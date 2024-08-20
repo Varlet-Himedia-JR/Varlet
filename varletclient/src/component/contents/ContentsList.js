@@ -42,7 +42,6 @@ function ReviewList() {
             if (Array.isArray(newContents) && newContents.length > 0) {
                 setContentsList(prevReviews => [...prevReviews, ...newContents]);
                 setPage(pageNumber);
-
                 // 다음 페이지가 없으면 hasMore를 false로 설정
                 if (!paging || (paging && paging.next === null)) {
                     setHasMore(false);
@@ -147,36 +146,28 @@ function ReviewList() {
                     {
                         Array.isArray(filteredContents) && filteredContents.length > 0 ? (
                             filteredContents.map((contents, idx) => (
-                                <div className="contents-item" key={idx} onClick={() => { getContentsView(contents.cseq) }}>
-                                    <div className="contents-row">
-                                        <div className="contents-col" style={{ textAlign: "left" }}>
-                                            <h2>{contents.cname}</h2>
-                                            <img className="contents-img" src={contents.contentsimg} alt={contents.cname} />
+                                <div className="bg-white rounded-lg overflow-hidden shadow-lg transition-all hover:scale-105" key={idx} onClick={() => { getContentsView(contents.cseq) }}>
+                                    <img
+                                        src={contents.contentsimg}
+                                        alt="Product 1"
+                                        width="600"
+                                        height="450"
+                                        className="w-full h-60 object-cover"
+                                        style={{ aspectRatio: '400 / 300', objectFit: 'cover' }}
+                                    />
+                                    <div className="p-4">
+                                        <h3 className="text-lg font-semibold mb-2">{contents.cname}</h3>
+                                        <p className="text-muted-foreground mb-4">{contents.location} {contents.location2}</p>
+                                        <p className="text-muted-foreground mb-4">{contents.cstartTime.substring(0, 10)} - {contents.cendTime.substring(0, 10)}</p>
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-primary font-semibold">{contents.cost == 0 ? '무료' : contents.cost}</span>
+                                            {/* <button className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 rounded-md px-3">
+                                                Buy Now
+                                            </button> */}
                                         </div>
-                                        <tbody>
-                                            <table>
-                                                {/* <tr>
-                                                    <td>번호</td>
-                                                    <td>{contents.cseq}</td>
-                                                </tr> */}
-                                                <tr>
-                                                    {/* <td>종류</td> */}
-                                                    <td>{contents.ctype}</td>
-                                                </tr>
-                                                <tr>
-                                                    {/* <td>지역</td> */}
-                                                    <td>{contents.location} {contents.location2}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>{contents.cstartTime.substring(0, 10)} ~ {contents.cendTime.substring(0, 10)}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>{contents.cost == '0' ? '무료' : <img style={{ width: '15px' }} src="http://localhost:8070/images/contents/won.png" />}</td>
-                                                </tr>
-                                            </table>
-                                        </tbody>
                                     </div>
                                 </div>
+
                             ))
                         ) : (<h2>list가 없습니다.</h2>)
                     }
