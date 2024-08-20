@@ -70,10 +70,10 @@ function WriteReview() {
     };
 
     return (
-        <article>
+        <>
             <Heading/>
             <h2>Write Review</h2>
-            <div className='subPage'>
+            <div className='subPage' style={{paddingTop:'100px'}}>
                 <div className="reviewWriteForm" style={{ flex: "4" }}>
                     <div className="field">
                         <label>title</label>
@@ -111,7 +111,7 @@ function WriteReview() {
                 </div>
             </div>
             <Footer/>
-        </article>
+        </>
     );
 }
 
