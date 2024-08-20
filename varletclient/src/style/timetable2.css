@@ -7,7 +7,7 @@
 
 .courserow {
     display: flex;
-    /* border:1px solid black; */
+    border:1px solid black;
     border-collapse: collapse;
     margin:0px;
     padding: 0px;

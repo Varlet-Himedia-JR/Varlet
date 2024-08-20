@@ -3,7 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import jaxios from '../../util/jwtUtil';
 import { location1Data, location2Data } from '../request/LocaionData';
 import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
-
+import Footer from '../headerfooter/Footer';
+import Heading from '../headerfooter/Heading';
 function RCommunityView() {
   const { rnum } = useParams();
   const navigate = useNavigate();
@@ -230,7 +231,7 @@ const replyDelete = (rcnum) => {
         // 답글 작성 폼이 열릴 때 스크롤 이동
         setTimeout(() => {
             if (replyFormRef.current) {
-                replyFormRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                replyFormRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
             }
         }, 0);
     } 
@@ -281,9 +282,9 @@ const replyDelete = (rcnum) => {
 
 
 return (
-      
-
-  <div class="w-full max-w-6xl mx-auto px-4 py-9">
+        <>
+              <Heading />
+  <div class="w-full max-w-6xl mx-auto px-4 py-9 mt-28">
     <div class="border-b pb-4 mb-6">
       <div class="mr-4"> 
         <span className='text-left'>
@@ -456,27 +457,22 @@ return (
       <div className="flex items-center gap-2">
         {(post.userid === getCookie('user').userid) && (
           <>
-            <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"                   
+            <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"                   
             onClick={rcommunityupdate}>
               수정
             </button>
             <button
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"
               onClick={() => deleteCommunity(post.rnum)}>
               삭제
             </button>
+            <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700" onClick={() => navigate('/myRequest')}>내 의뢰 목록</button>
           </>
         )}
       </div>
-      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+      <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"
         onClick={returnList}>
         목록으로
-      </button>
-      <button onClick={() => navigate('/myRequest')}>To My Request</button>
-      <button
-        className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
-        onClick={test}>
-        test
       </button>
     </div>
     <div 
@@ -488,7 +484,7 @@ return (
         <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
         <path d="M13.5 6.5l4 4" />
       </svg>
-      <span className="text-xl font-bold flex items-center">
+      <span className="text-xl font-bold flex items-center hover:bg-green   ">
       {showReplyForm ? '답글 작성 닫기' : '답글 작성 열기'}
       </span>
     </div>
@@ -510,6 +506,7 @@ return (
                       onChange={handleFileChange}
                       className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                       />
+
                       <label>파일 미리보기</label>
 
                       <div className="flex flex-wrap mt-4">
@@ -541,8 +538,12 @@ return (
         replies.map((reply, index) => (
           <div key={index} class="flex items-start gap-4">
             <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
-              <img class="aspect-square h-full w-full" alt="@user" src="/placeholder-user.jpg" />
-            </span>
+            <img
+              className="aspect-square h-full w-full object-cover"
+              alt="@user"
+              src={reply.profileimage || '/placeholder-user.jpg'} 
+            />           
+           </span>
             <div class="grid gap-1.5">
               <div className="flex items-center gap-2 text-sm">
                 <div className="font-medium">{maskeduser(reply.userid)}</div>
@@ -560,7 +561,7 @@ return (
                   )}
                 </div>
               </div>
-              <span className="w-2/12 text-center flex items-center justify-center gap-2">
+              <span className="w-2/12 text-center text-nowrap flex items-center justify-center gap-2">
                 {post.picked === "Y" ? (
                   reply.rpicked === "Y" ? (
                     <>
@@ -598,12 +599,12 @@ return (
                   <div className="flex items-center gap-2">
                   {(reply.user === getCookie('user')?.user) && (
                       <>
-                        <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"                   
+                        <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"                   
                         onClick={replyUpdate}>
                           수정
                         </button>
                         <button
-                          className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                          className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"
                           onClick={() => replyDelete(reply.rcnum)}>
                           삭제
                         </button>
@@ -620,7 +621,8 @@ return (
       </div>
   </div>
 </div>
-
+<Footer />
+</>
     );
   };
   
