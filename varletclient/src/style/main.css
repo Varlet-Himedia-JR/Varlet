@@ -1,0 +1,48 @@
+.background {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    z-index: -1; 
+  }
+  
+  .background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+  }
+  
+  .main {
+    position: relative; 
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    width: 1400px; 
+    height: 100vh;
+    margin: 0 auto; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    text-align: center;
+    padding-top: 100px;
+  }
+  
+  /* BEST */
+  .best{
+  position: absolute;
+  width: 72.05px;
+  height: 21px;
+  display: flex;
+  margin-left: 300px;
+  font-family: 'Luckiest Guy';
+  font-style: normal;
+  font-weight: 1000;
+  font-size: 30px;
+  line-height: 30px;
+  z-index: 3;
+  
+  color: #0019FE;
+  
+  transform: rotate(-37.81deg);
+  }
