@@ -35,6 +35,28 @@ function Main() {
     autoplay: true, // 자동 재생
     autoplaySpeed: 1500 // 자동 재생 시 슬라이드 간격 (ms)
   };
+  const [noticeList, setNoticeList] = useState([]);
+  const [paging, setPaging ] = useState({});
+  const [ beginend, setBeginend ] = useState([]);
+
+  useEffect(
+    ()=>{
+        axios.get('/api/notice/noticeList/1')
+        .then((result)=>{
+            setNoticeList(result.data.noticeList);
+            setPaging(result.data.paging);
+
+            const pageArr = [];
+            for (let i = result.data.paging.beginPage; i <= result.data.paging.endPage; i++) {
+                pageArr.push(i);
+            }
+            setBeginend(pageArr);
+            console.log('Paging:', paging);
+              console.log('Beginend:', beginend);
+        })
+        .catch((err)=>{console.error(err);})
+    },[]
+)
 
   // useEffect(() => {
   //   // 리뷰 데이터 로드
@@ -74,7 +96,6 @@ function Main() {
         </div>
       </div>
 <div style={{ paddingTop: '100px' }}>
-        <div className='background'><img src="http://localhost:8070/images/Beach.jpg" /></div>
         <hr></hr>
         <div>
           <h2>최근 등록된 콘텐츠</h2>

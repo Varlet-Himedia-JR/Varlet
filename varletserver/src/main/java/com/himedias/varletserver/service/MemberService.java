@@ -168,8 +168,10 @@ public class MemberService {
         Member member = mr.findByUserId(userid);
         if (member != null && member.getProfileimg() != null) {
             return member.getProfileimg(); // 프로필 이미지 URL 반환
+
         }
         return null; // 프로필 이미지가 없으면 null 반환
+
     }
 
 }

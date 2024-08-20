@@ -84,15 +84,16 @@
   .findbtn button{
     background: rgb(255, 255, 255, 0);
     cursor: pointer;
-    border: none;
     width: 180px;
     height: 25px;
-    display: flex;
+
     font-family: 'Mplus 1p Bold', sans-serif;
     font-style: normal;
     font-weight: 600;
+    margin-top: 15px;
     font-size: 15px;
     line-height: 22px;
+    margin-left: 30px;
   }
   
   .btns button {
@@ -104,7 +105,6 @@
     font-weight: 800;
     font-size: 20px;
     line-height: 22px;
-
     border: none;
     border-radius: 5px;
     cursor: pointer;

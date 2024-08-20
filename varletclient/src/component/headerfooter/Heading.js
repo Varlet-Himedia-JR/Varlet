@@ -41,10 +41,10 @@ function Heading() {
     }
     useEffect(() => {
         if (!userCookie) return;
-        
+        console.log("쿠키형태"+userCookie);
         axios.get('/api/member/getMyProfileImg', { params: { userid: userCookie } })
-            .then((response) => {
-                const profileImgUrl = response.data.profileimg;
+            .then((result) => {
+                const profileImgUrl = result.data.profileimg;
                 if (profileImgUrl) {
                     setImgSrc(profileImgUrl);
                 }
