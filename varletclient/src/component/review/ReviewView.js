@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import jaxios from '../../util/jwtUtil';
+import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getCookie } from '../../util/cookieUtil';
-import Heading from './../headerfooter/Heading';
-import Footer from './../headerfooter/Footer';
 import '../../style/review.css';
+import Heading from '../headerfooter/Heading';
+import Footer from '../headerfooter/Footer';
 
 function ReviewView() {
     const [review, setReview] = useState({});
     const [isEditing, setIsEditing] = useState(false);
-    const [editForm, setEditForm] = useState({ title: '', content: '', reviewimgs: [] });
-    const [selectedFiles, setSelectedFiles] = useState([]);
-    const [previewImages, setPreviewImages] = useState([]);
+    const [editForm, setEditForm] = useState({ title: '', content: '', reviewimg: '' });
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewImage, setPreviewImage] = useState('');
     const [replies, setReplies] = useState([]);
     const [newReply, setNewReply] = useState('');
     const { rseq } = useParams();
@@ -19,22 +19,18 @@ function ReviewView() {
 
     const userId = getCookie('user').userid; // 로그인된 사용자 ID
 
+
     useEffect(() => {
         // 리뷰 데이터 로드
-        jaxios.get(`/api/review/getReviewView/${rseq}`)
+        axios.get(`/api/review/getReviewView/${rseq}`)
             .then((result) => {
-                const reviewData = result.data.review;
-                setReview(reviewData);
-                console.log(reviewData);
-                console.log(review);
+                setReview(result.data.review);
                 setEditForm({
-                    title: reviewData.title,
-                    content: reviewData.content,
-                    reviewimgs: reviewData.reviewimgs || [] // Ensure it's an array
+                    title: result.data.review.title,
+                    content: result.data.review.content,
+                    reviewimg: result.data.review.reviewimg
                 });
-                // 이미지 URL 설정
-                const reviewImgs = reviewData.reviewimgs || [];
-                setPreviewImages(reviewImgs.map(img => `http://localhost:8070/images/${img}`));
+                setPreviewImage(result.data.review.reviewimg ? `http://localhost:8070/images/${result.data.review.reviewimg}` : '');
             })
             .catch((err) => {
                 console.error(err);
@@ -42,7 +38,7 @@ function ReviewView() {
             });
 
         // 댓글 데이터 로드
-        jaxios.get(`/api/reply/getReplies/${rseq}`)
+        axios.get(`/api/reply/getReplies/${rseq}`)
             .then((result) => {
                 setReplies(result.data.replies || []);
             })
@@ -53,15 +49,9 @@ function ReviewView() {
     }, [rseq]);
 
     function reviewDelete() {
-        if (!userId) {
-            alert('로그인이 필요합니다.');
-            navigate('/login');
-            return;
-        }
-
         const isConfirmed = window.confirm("정말로 삭제하시겠습니까?");
         if (isConfirmed) {
-            jaxios.delete(`/api/review/reviewDelete/${rseq}`)
+            axios.delete(`/api/review/reviewDelete/${rseq}`)
                 .then(() => {
                     navigate('/reviewList');
                 })
@@ -74,38 +64,43 @@ function ReviewView() {
     }
 
     function reviewEdit() {
-        if (!userId) {
-            alert('로그인이 필요합니다.');
-            navigate('/login');
-            return;
-        }
-
         const formData = new FormData();
         formData.append('title', editForm.title);
         formData.append('content', editForm.content);
 
-        selectedFiles.forEach((file, index) => {
-            formData.append(`reviewimg${index + 1}`, file);
-        });
+        if (selectedFile) {
+            formData.append('reviewimg', selectedFile);
+        } else {
+            formData.append('reviewimg', editForm.reviewimg);
+        }
 
         formData.append('indate', new Date().toISOString());
 
-        jaxios.post(`/api/review/updateReview/${rseq}`, formData, {
+        axios.post(`/api/review/updateReview/${rseq}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
             .then(() => {
                 setIsEditing(false);
-                jaxios.get(`/api/review/getReviewView/${rseq}`)
+                // 리뷰 업데이트 후 댓글 데이터 다시 로드
+                axios.get(`/api/review/getReviewView/${rseq}`)
                     .then((result) => {
-                        const reviewData = result.data.review;
-                        setReview(reviewData);
+                        setReview(result.data.review);
                         setEditForm({
-                            title: reviewData.title,
-                            content: reviewData.content,
-                            reviewimgs: reviewData.reviewimgs || [] // Ensure it's an array
+                            title: result.data.review.title,
+                            content: result.data.review.content,
+                            reviewimg: result.data.review.reviewimg
                         });
-                        const reviewImgs = reviewData.reviewimgs || [];
-                        setPreviewImages(reviewImgs.map(img => `http://localhost:8070/images/${img}`));
+                        setPreviewImage(result.data.review.reviewimg ? `http://localhost:8070/images/${result.data.review.reviewimg}` : '');
+                        
+                        // 댓글 데이터 다시 로드
+                        axios.get(`/api/reply/getReplies/${rseq}`)
+                            .then((result) => {
+                                setReplies(result.data.replies || []);
+                            })
+                            .catch((err) => {
+                                console.error(err);
+                                setReplies([]);
+                            });
                     })
                     .catch((err) => {
                         console.error(err);
@@ -125,11 +120,10 @@ function ReviewView() {
     }
 
     function handleFileChange(event) {
-        const files = Array.from(event.target.files);
-        if (files.length > 0) {
-            const newFiles = [...selectedFiles, ...files].slice(0, 5); // Limit to 5 files
-            setSelectedFiles(newFiles);
-            setPreviewImages(newFiles.map(file => URL.createObjectURL(file)));
+        const file = event.target.files[0];
+        setSelectedFile(file);
+        if (file) {
+            setPreviewImage(URL.createObjectURL(file));
         }
     }
 
@@ -138,19 +132,13 @@ function ReviewView() {
     }
 
     function handleNewReplySubmit() {
-        if (!userId) {
-            alert('로그인이 필요합니다.');
-            navigate('/login');
-            return;
-        }
-
         if (newReply.trim()) {
             const reply = {
                 rseq: review.rseq,
-                userid: userId, // 로그인된 사용자 ID
+                userid: userId, // 로그인이 되어 있으면 사용자 ID, 아니면 guest
                 content: newReply
             };
-            jaxios.post(`/api/reply/addReply`, reply)
+            axios.post(`/api/reply/addReply`, reply)
                 .then((result) => {
                     setReplies(prevReplies => [...prevReplies, result.data.reply]);
                     setNewReply('');
@@ -161,22 +149,16 @@ function ReviewView() {
         }
     }
 
-    function handleReplyDelete(replyId) {
-        if (!userId) {
-            alert('로그인이 필요합니다.');
-            navigate('/login');
-            return;
-        }
-
-        const reply = replies.find(reply => reply.renum === replyId);
-        if (reply.userid !== userId) {
+    function handleReplyDelete(replyId, replyUserId) {
+        // 현재 로그인한 사용자와 댓글 작성자가 같은지 확인
+        if (replyUserId !== userId) {
             alert("댓글 작성자만 삭제할 수 있습니다.");
             return;
         }
 
         const isConfirmed = window.confirm("정말로 이 댓글을 삭제하시겠습니까?");
         if (isConfirmed) {
-            jaxios.delete(`/api/reply/deleteReply/${replyId}`, {
+            axios.delete(`/api/reply/deleteReply/${replyId}`, {
                 data: { userId } // 사용자 ID를 요청 본문에 포함
             })
                 .then(() => {
@@ -191,10 +173,6 @@ function ReviewView() {
     }
 
     function handleBackToList() {
-        navigate('/reviewList'); // reviewList 페이지로 돌아감
-    }
-
-    function handleonToList() {
         navigate('/myReview'); // MyReview 페이지로 돌아감
     }
 
@@ -203,7 +181,7 @@ function ReviewView() {
 
     return (
         <>
-         <Heading/>
+        <Heading/>
             <div className='subPage'>
                 <div className="review" style={{ flex: "4" }}>
                     {
@@ -253,41 +231,30 @@ function ReviewView() {
                                 </div>
 
                                 <div className='field'>
-                                    <label>Images</label>
+                                    <label>Image</label>
                                     {isEditing ? (
-                                        <div>
+                                        <>
                                             <input
                                                 type="file"
-                                                multiple
                                                 onChange={handleFileChange}
                                             />
-                                            {previewImages.length > 0 && (
-                                                <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '10px' }}>
-                                                    {previewImages.map((img, index) => (
-                                                        <img
-                                                            key={index}
-                                                            src={img}
-                                                            alt={`Preview ${index + 1}`}
-                                                            style={{ maxWidth: '200px', maxHeight: '200px', margin: '5px' }}
-                                                        />
-                                                    ))}
-                                                </div>
+                                            {previewImage && (
+                                                <img
+                                                    src={previewImage}
+                                                    alt="Preview"
+                                                    style={{ maxWidth: '300px', maxHeight: '300px' }}
+                                                />
                                             )}
-                                        </div>
+                                        </>
                                     ) : (
-                                        (review.reviewimgs && review.reviewimgs.length > 0) ? (
-                                            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                                                {review.reviewimgs.map((img, index) => (
-                                                    <img
-                                                        key={index}
-                                                        src={`http://localhost:8070/images/${img}`}
-                                                        alt={`Review ${index + 1}`}
-                                                        style={{ maxWidth: '200px', maxHeight: '200px', margin: '5px' }}
-                                                    />
-                                                ))}
+                                        review.reviewimg && (
+                                            <div>
+                                                <img
+                                                    src={`http://localhost:8070/images/${review.reviewimg}`}
+                                                    alt="Review"
+                                                    style={{ maxWidth: '300px', maxHeight: '300px' }}
+                                                />
                                             </div>
-                                        ) : (
-                                            <div>No image available</div>
                                         )
                                     )}
                                 </div>
@@ -303,7 +270,7 @@ function ReviewView() {
                                                         <div>{reply.content}</div>
                                                         <div>{reply.writedate ? new Date(reply.writedate).toLocaleString() : 'Unknown date'}</div>
                                                         {reply.userid === userId && (
-                                                            <button onClick={() => handleReplyDelete(reply.renum)}>삭제</button>
+                                                            <button onClick={() => handleReplyDelete(reply.renum, reply.userid)}>삭제</button>
                                                         )}
                                                     </div>
                                                 ))
@@ -321,32 +288,36 @@ function ReviewView() {
                                         </div>
                                     </div>
                                 )}
-
-                                <div className='buttons'>
-                                    <button onClick={handleBackToList}>목록으로</button>
-                                    {isUserAuthorized && (
-                                        <>
-                                            {!isEditing ? (
-                                                <>
-                                                    <button onClick={() => setIsEditing(true)}>수정</button>
-                                                    <button onClick={reviewDelete}>삭제</button>
-                                                    <button onClick={handleonToList}>내 리뷰</button>
-                                                </>
-                                            ) : (
-                                                <button onClick={reviewEdit}>저장</button>
-                                            )}
-                                        </>
-                                    )}
-                                </div>
                             </div>
                         ) : (
-                            <div>리뷰를 불러올 수 없습니다.</div>
+                            <div>Loading...</div>
                         )
                     }
+                    <div className='btns'>
+                        {
+                            isUserAuthorized ? (
+                                <>
+                                    {isEditing ? (
+                                        <>
+                                            <button onClick={reviewEdit}>Save</button>
+                                            <button onClick={() => setIsEditing(false)}>Cancel</button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <button onClick={reviewDelete}>Delete</button>
+                                            <button onClick={() => setIsEditing(true)}>Edit</button>
+                                        </>
+                                    )}
+                                    <button onClick={handleBackToList}>To My List</button>
+                                </>
+                            ) : null
+                        }
+                        <button onClick={() => { navigate('/reviewList') }}>Back to List</button>
+                    </div>
                 </div>
             </div>
             <Footer/>
-        </>
+            </>
     );
 }
 
