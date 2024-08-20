@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useSelector, useDispatch } from 'react-redux';
 import Heading from './headerfooter/Heading';
@@ -17,7 +17,9 @@ function Main() {
   const lUser = useSelector(state => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const [best]
+  const [review, setReview] = useState(null);
+  const [previewImage, setPreviewImage] = useState('');
+  const { rseq } = useParams();
   const images = [
     "https://via.placeholder.com/800x400?text=Slide+1",
     "https://via.placeholder.com/800x400?text=Slide+2",
@@ -34,12 +36,45 @@ function Main() {
     autoplaySpeed: 1500 // 자동 재생 시 슬라이드 간격 (ms)
   };
 
+  // useEffect(() => {
+  //   // 리뷰 데이터 로드
+  //   axios.get(`/api/review/getReviewView/${rseq}`)
+  //       .then((result) => {
+  //           const reviewData = result.data.review;
+  //           setReview(reviewData);
+            
+  //           // 리뷰 이미지 URL 설정
+  //           if (reviewData.reviewimg) {
+  //               setPreviewImage(`http://localhost:8070/images/${reviewData.reviewimg}`);
+  //           }
+  //       })
+  //       .catch((err) => {
+  //           console.error(err);
+  //           setReview({});
+  //       });
+  // }, [rseq]); // rseq가 변경될 때마다 실행되도록 설정
+  
   return (
     <>
-      <Heading />
+      <Heading/>
       <div style={{ paddingTop: '100px' }}>
+        <div className='background'><img src="http://localhost:8070/images/oceans.jpg" alt="Background" /></div>
+        <div className='main'>
+          <div className='best'>
+            BEST
+          </div>
+          <div className='field'>
+            <label>Image</label>
+            {previewImage ? (
+              <img src={previewImage} alt="Review" style={{ maxWidth: '300px', maxHeight: '300px' }} />
+            ) : (
+              <div>No image available</div>
+            )}
+          </div>
+        </div>
+      </div>
+<div style={{ paddingTop: '100px' }}>
         <div className='background'><img src="http://localhost:8070/images/Beach.jpg" /></div>
-        <div onClick={() => { navigate("/notice") }}><h2>공지사항</h2></div>
         <hr></hr>
         <div>
           <h2>최근 등록된 콘텐츠</h2>
@@ -80,7 +115,7 @@ function Main() {
           </div>
         </div>
       </div>
-      <Footer />
+      <Footer/>
     </>
   )
 }

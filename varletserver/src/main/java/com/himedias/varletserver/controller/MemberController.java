@@ -425,6 +425,18 @@ public class MemberController {
         }
         return result;
     }
-
+    @GetMapping("/getMyProfileImg")
+    public ResponseEntity<Map<String, Object>> getMyProfileImg(@RequestParam("userid") String userid) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            String profileImgUrl = ms.getProfileImageUrl(userid);
+            response.put("profileimg", profileImgUrl);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("error", "Unable to retrieve profile image");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
 
 }
