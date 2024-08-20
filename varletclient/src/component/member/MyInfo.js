@@ -116,7 +116,7 @@ function MyInfo() {
     };
 
     return (
-        <div className='loginform'>
+        <div className='loginform' >
             <div className="logo" style={{ fontSize: "2.0rem" }}>MY INFO EDIT</div>
             <div className='field'>
                 <label>아이디</label>

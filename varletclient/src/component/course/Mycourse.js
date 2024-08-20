@@ -36,8 +36,10 @@ function Mycourse() {
         jaxios.get(`/api/course/getTnames/${userCookie.userid}`)
             .then((result) => {
                 setMycourse(result.data.mycourse);
+                // setMycourse(result.data.mycourse.tname);
                 if (result.data.mycourse.length > 0) {
-                    setSelectedCourse(result.data.mycourse[0]);
+                    console.log(result.data.mycourse);
+                    setSelectedCourse(result.data.mycourse[0].tname);
                 }
             })
             .catch((err) => { console.error(err); });
@@ -48,16 +50,14 @@ function Mycourse() {
             jaxios.get(`/api/course/getMycourse/${selectedCourse}/${userCookie.userid}`)
                 .then((result) => {
                     setCourseDuration(result.data.duration);
-                    // const cellElement = document.querySelector('.cell');
-                    // if (cellElement) {
-                    //     const width = cellElement.getBoundingClientRect().width;
-                    //     setCellWidth(width);
-                    // }
                     setDaySchedule(result.data.dayschedule);
+                    setCellWidth(`${90 / (result.data.duration.length)}%`)
                 })
                 .catch((err) => { console.error(err); });
         }
     }, [selectedCourse]);
+
+
 
 
 
@@ -94,7 +94,7 @@ function Mycourse() {
 
         <div style={{ width: '100%' }}>
             <Heading />
-            <div>
+            <div style={{ width: '100%' }}>
                 <div className='mycourse_container' style={{ position: 'relative', top: '100px' }}>
                     <div className="coursemenu" style={{
                     }}>
@@ -237,7 +237,7 @@ function Mycourse() {
                             X
                         </button>
                     </div>
-                    <CourseContents courseDuration={courseDuration} selectedCourse={selectedCourse} cseq={cseq} />
+                    <CourseContents courseDuration={courseDuration} selectedCourse={selectedCourse} cseq={cseq} cellWidth={cellWidth} />
                 </div>
             )}
             {isCourseCustom && (

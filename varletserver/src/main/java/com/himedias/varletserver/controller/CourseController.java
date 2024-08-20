@@ -26,6 +26,8 @@ public class CourseController {
         return result;
     }
 
+
+
     @GetMapping("/getDuration/{mycourse}")
     public HashMap<String,Object> getDuration(@PathVariable String mycourse) {
         HashMap<String,Object> result = new HashMap<String,Object>();

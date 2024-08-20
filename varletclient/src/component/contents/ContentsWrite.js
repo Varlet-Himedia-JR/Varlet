@@ -54,7 +54,7 @@ function ContentsWrite() {
                 cost: cost,
                 contentsimg: contentsimg
             });
-            let result = await axios.post('/api/contents/writeContents', {ctype,cname,location,location2,cstart_time,cend_time,cost,contentsimg});
+            let result = await jaxios.post('/api/contents/writeContents', {ctype,cname,location,location2,cstart_time,cend_time,cost,contentsimg});
             if (result.data.msg == 'ok') {
                 alert('작성완료');
                 navigate('/contents');

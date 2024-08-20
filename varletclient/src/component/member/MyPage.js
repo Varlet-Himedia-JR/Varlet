@@ -9,13 +9,13 @@ function MyPage() {
     return (
         <>
         <Heading/>
-        <div style={{ padding: '20px' }}>
-            <h2>My Page</h2>
+        <div style={{paddingTop:'100px'}}>
+            <h1>My Page</h1>
             <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
                 <button onClick={() => navigate('/myQNA')} style={buttonStyle}>
                     My QNA
                 </button>
-                <button onClick={() => navigate('/myINFO')} style={buttonStyle}>
+                <button onClick={() => navigate('/checkPwd')} style={buttonStyle}>
                     My INFO
                 </button>
                 <button onClick={() => navigate('/myREVIEW')} style={buttonStyle}>
