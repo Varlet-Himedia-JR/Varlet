@@ -86,22 +86,6 @@ public class ReviewService {
         }
     }
 
-
-
-    public String saveFile(MultipartFile file) throws IOException {
-        // Define the file storage location
-        String uploadDir = "path/to/save/directory/";
-
-        // Generate the file path
-        String fileName = file.getOriginalFilename();
-        File targetFile = new File(uploadDir + fileName);
-
-        // Save the file to the local file system
-        file.transferTo(targetFile);
-
-        return fileName;
-    }
-
     public List<Review> getReviewsByUserId(String userid) {
         return rr.findByUserid(userid);
     }
