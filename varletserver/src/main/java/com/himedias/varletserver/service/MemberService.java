@@ -40,6 +40,15 @@ public class MemberService {
         }
     }
 
+    public Member getMemberByUserid(String userid) {
+        Optional<Member> mem = mr.findByUserid( userid );
+        if( !mem.isPresent() ){
+            return null;
+        }else {
+            return mem.get();
+        }
+    }
+
 //    @Autowired
 //    FollowRepository fr;
 //

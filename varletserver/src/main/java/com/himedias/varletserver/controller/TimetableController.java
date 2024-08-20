@@ -14,6 +14,14 @@ public class TimetableController {
     @Autowired
     TimetableService ts;
 
+    @GetMapping("/getAllMyCourse/{userid}")
+    public HashMap<String,Object> getAllMyCourse(@PathVariable String userid) {
+        HashMap<String,Object> result = new HashMap<String,Object>();
+        result.put("mycourse",ts.getAllMyCourse(userid));
+//        result.put("mycourse",cs.getAllMycourseByUserid(userid));
+        return result;
+    }
+
     @PostMapping("/inserTimetable")
     public HashMap<String, Object> join(@RequestBody Timetable timetable){
         HashMap<String, Object> result = new HashMap<String, Object>();

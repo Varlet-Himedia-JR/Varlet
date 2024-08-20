@@ -32,6 +32,7 @@ import House from "./component/house/House";
 import 'ckeditor5/ckeditor5.css';
 import ContentsWrite from "./component/contents/ContentsWrite";
 import Pay from "./component/pay/Pay";
+import CheckPwd from "./component/member/CheckPwd";
 
 // import WritePost from './component/post/WritePost';
 // import MyPage from './component/member/MyPage';
@@ -81,6 +82,7 @@ function App() {
 
         {/* 마이페이지 */}
         <Route path="/myPage" element={<MyPage />} />
+        <Route path="/checkPwd" element={<CheckPwd />} />
         <Route path="/myInfo" element={<MyInfo />} />
         <Route path="/myReview" element={<MyReview />} />
         <Route path="/myQna" element={<MyQna />} />

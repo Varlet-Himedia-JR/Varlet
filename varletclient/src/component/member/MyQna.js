@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
-import '../../style/mypage.css';
+import '../../style/customer.css';
 import { getCookie } from "../../util/cookieUtil";
 
 function MyQna() {
   const [myqnaList, setMyqnaList] = useState([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true); // 더 많은 데이터가 있는지 플래그
+  const [paging, setPaging] = useState({});
+  const [beginend, setBeginend] = useState([]);
   const navigate = useNavigate();
 
   // 쿠키에서 userid 가져오기
@@ -23,68 +23,45 @@ function MyQna() {
   // 로그인 사용자 ID 결정 (쿠키에서 가져오거나 Redux에서 가져오거나)
   const currentUserid = userid || reduxUserid;
 
-  // 데이터 로드 함수
-  const loadQnaList = useCallback(async (pageNum) => {
-    try {
-      const result = await axios.get(`/api/qna/qnaList/${pageNum}`);
-      const filteredQnaList = result.data.qnaList.filter(qna => qna.userid === currentUserid);
-      const sortedQnaList = filteredQnaList.sort((a, b) => a.qseq - b.qseq);
+  useEffect(() => {
+    axios.get('/api/qna/qnaList/1')
+      .then((result) => {
+        // 로그인한 사용자와 작성자가 동일한 게시글만 필터링
+        const filteredQnaList = result.data.qnaList.filter(qna => qna.userid === currentUserid);
+        // 번호를 역순으로 정렬
+        const sortedQnaList = filteredQnaList.sort((a, b) => a.qseq - b.qseq);
+        setMyqnaList(sortedQnaList);
+        setPaging(result.data.paging);
 
-      // 데이터가 없으면 더 이상 로드하지 않음
-      if (sortedQnaList.length === 0) {
-        setHasMore(false);
-        return;
-      }
-
-      setMyqnaList(prevList => [...prevList, ...sortedQnaList]);
-      setPage(pageNum);
-    } catch (err) {
-      console.error(err);
-    }
+        const pageArr = [];
+        for (let i = result.data.paging.beginPage; i <= result.data.paging.endPage; i++) {
+          pageArr.push(i);
+        }
+        setBeginend(pageArr);
+      })
+      .catch((err) => { console.error(err); });
   }, [currentUserid]);
 
-  // 스크롤 이벤트 핸들러
-  const handleScroll = useCallback(() => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const scrollHeight = document.documentElement.scrollHeight;
-    const clientHeight = document.documentElement.clientHeight;
+  function onPageMove(page) {
+    axios.get(`/api/qna/qnaList/${page}`)
+      .then((result) => {
+        const filteredQnaList = result.data.qnaList.filter(qna => qna.userid === currentUserid);
+        const sortedQnaList = filteredQnaList.sort((a, b) => a.qseq - b.qseq);
+        setMyqnaList(sortedQnaList);
+        setPaging(result.data.paging);
 
-    // 스크롤이 페이지 하단에 도달했을 때
-    if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore) {
-      loadQnaList(page + 1);
-    }
-  }, [page, hasMore, loadQnaList]);
-
-  // 컴포넌트 마운트 시 스크롤 이벤트 리스너 추가
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [handleScroll]);
-
-  // 초기 데이터 로드
-  useEffect(() => {
-    loadQnaList(page);
-  }, [loadQnaList]);
+        const pageArr = [];
+        for (let i = result.data.paging.beginPage; i <= result.data.paging.endPage; i++) {
+          pageArr.push(i);
+        }
+        setBeginend(pageArr);
+      })
+      .catch((err) => { console.error(err); });
+  }
 
   // 비밀번호 확인 절차 없이 바로 QnA 상세보기로 이동
   async function onQnaView(qseq) {
-    let result = await axios.get(`/api/qna/getQnaView/${qseq}`);
-    if (result.data.qna.security === 'N') {
-      navigate(`/qnaView/${qseq}`);
-    } else {
-      let inputPass = window.prompt('패스워드를 입력하세요', '');
-      if (inputPass === null) {
-        return;
-      }
-      let res = await axios.post(`/api/qna/passCheck`, null, { params: { qseq, inputPass } });
-      if (res.data.msg === 'OK') {
-        navigate(`/qnaView/${qseq}`);
-      } else {
-        alert('패스워드가 일치하지 않습니다.');
-      }
-    }
+    navigate(`/qnaView/${qseq}`);
   }
 
   return (
@@ -129,6 +106,41 @@ function MyQna() {
               <div>등록된 문의가 없습니다.</div>
             )
           }
+          <div id="paging" style={{ textAlign: "center", padding: "10px" }}>
+            {
+              paging.prev ? (
+                <span style={{ cursor: "pointer" }} onClick={() => { onPageMove(paging.beginPage - 1) }}>
+                  ◀
+                </span>
+              ) : (
+                <div></div>
+              )
+            }
+            {
+              beginend.length > 0 ? (
+                beginend.map((page, idx) => (
+                  <span
+                    style={{ cursor: "pointer", margin: "0 5px" }}
+                    key={idx}
+                    onClick={() => { onPageMove(page) }}
+                  >
+                    {page}
+                  </span>
+                ))
+              ) : (
+                <span>1</span>
+              )
+            }
+            {
+              paging.next ? (
+                <span style={{ cursor: "pointer" }} onClick={() => { onPageMove(paging.endPage + 1) }}>
+                  ▶
+                </span>
+              ) : (
+                <div></div>
+              )
+            }
+          </div>
         </div>
       </div>
       <Footer />

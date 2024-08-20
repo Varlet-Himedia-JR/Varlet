@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import '../../style/Timetable.css';
-import '../../style/timetable2.css';
 import { useNavigate, useLocation  } from "react-router-dom";
 
 function Pay() {
