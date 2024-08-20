@@ -19,15 +19,19 @@ function ReviewList() {
     const writeContents = () => {
         console.log('------');
         console.log(getCookie('user'));
-        for(let i = 0; i<getCookie('user').roleNames.length;i++){
-            if(getCookie('user').roleNames[i]=='ADMIN'){
-                return navigate('/contentsWrite');
+        if (!getCookie('user')) {
+            navigate('/login');
+        } else {
+            for (let i = 0; i < getCookie('user').roleNames.length; i++) {
+                if (getCookie('user').roleNames[i] == 'ADMIN') {
+                    return navigate('/contentsWrite');
+                }
             }
+            alert('권한이 없습니다');
         }
-        alert('권한이 없습니다');
     }
 
-   
+
 
     // 데이터 로드 함수
     const loadContents = useCallback(async (pageNumber) => {
@@ -114,8 +118,9 @@ function ReviewList() {
             <Heading />
             <div className='mycourseContentsList' style={{ paddingTop: '100px', bottom: '100px' }}>
                 <div className="contents-container" style={{ paddingTop: '100px' }}>
-                    <div className="search-container" style={{ marginBottom: "20px" }}>
+                    <div className="search-container" style={{ marginBottom: "20px", width: "100%" }}>
                         <input
+                            className='search-bar'
                             type="text"
                             value={searchTerm}
                             onChange={handleSearchChange}
@@ -126,16 +131,26 @@ function ReviewList() {
                                 &times; {/* 'X' 문자 */}
                             </button>
                         )}
-                        <button onClick={writeContents}>등록</button>
+                        {/* <button className='writeButton' onClick={writeContents}>등록</button> */}
+                        <div
+                            className="bg-blue-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer w-32"
+                            onClick={writeContents}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                                <path d="M13.5 6.5l4 4" />
+                            </svg>
+                            <span className="text-xl font-bold">등록</span>
+                        </div>
                     </div>
                     {
                         Array.isArray(filteredContents) && filteredContents.length > 0 ? (
                             filteredContents.map((contents, idx) => (
                                 <div className="contents-item" key={idx} onClick={() => { getContentsView(contents.cseq) }}>
                                     <div className="contents-row">
-                                        <div className="contents-col" style={{ display: "none" }}>{contents.cseq}</div>
                                         <div className="contents-col" style={{ textAlign: "left" }}>
-                                            <strong>{contents.cname}</strong>
+                                            <h2>{contents.cname}</h2>
                                             <img className="contents-img" src={contents.contentsimg} alt={contents.cname} />
                                         </div>
                                         <tbody>
