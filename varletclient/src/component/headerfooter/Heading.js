@@ -39,20 +39,20 @@ function Heading() {
             navigate(src);
         }
     }
-    useEffect(() => {
-        if (!userCookie) return;
-        console.log("쿠키형태"+userCookie);
-        axios.get('/api/member/getMyProfileImg', { params: { userid: userCookie } })
-            .then((result) => {
-                const profileImgUrl = result.data.profileimg;
-                if (profileImgUrl) {
-                    setImgSrc(profileImgUrl);
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    }, [userCookie]);
+    // useEffect(() => {
+    //     if (!userCookie) return;
+    //     console.log("쿠키형태"+userCookie);
+    //     axios.get('/api/member/getMyProfileImg', { params: { userid: userCookie } })
+    //         .then((result) => {
+    //             const profileImgUrl = result.data.profileimg;
+    //             if (profileImgUrl) {
+    //                 setImgSrc(profileImgUrl);
+    //             }
+    //         })
+    //         .catch((err) => {
+    //             console.error(err);
+    //         });
+    // }, [userCookie]);
 
     const handleNicknameClick = () => {
         navigate('/myPage');
