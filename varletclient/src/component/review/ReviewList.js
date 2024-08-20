@@ -5,6 +5,8 @@ import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
 import { getCookie } from "../../util/cookieUtil";
 import '../../style/review.css';
+import axios from 'axios';
+
 
 function ReviewList() {
     const [reviewList, setReviewList] = useState([]);
@@ -21,7 +23,7 @@ function ReviewList() {
     // 데이터 로드 함수
     const loadReviews = useCallback(async (pageNumber) => {
         try {
-            const result = await jaxios.get(`/api/review/reviewList/${pageNumber}`);
+            const result = await axios.get(`/api/review/reviewList/${pageNumber}`);
             const { reviewList: newReviews, paging } = result.data;
 
             if (Array.isArray(newReviews) && newReviews.length > 0) {
