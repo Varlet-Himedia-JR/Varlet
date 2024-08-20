@@ -1,198 +1,182 @@
-import React from 'react'
+// /**
+//  * v0 by Vercel.
+//  * @see https://v0.dev/t/W4nWGFtZcG7
+//  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
+//  */
+// "use client"
 
-function Testcontents() {
-  return (
-    <div>
-      <div class="flex flex-col min-h-dvh">
-  <header class="bg-background border-b px-4 lg:px-6 h-14 flex items-center">
-    <a class="flex items-center justify-center" href="#">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="size-6 text-primary"
-      >
-        <path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z"></path>
-        <path d="M10 2c1 .5 2 2 2 5"></path>
-      </svg>
-      <span class="sr-only">Apple</span>
-    </a>
-    <nav class="ml-auto flex gap-4 sm:gap-6">
-      <a class="text-sm font-medium hover:underline underline-offset-4 text-primary-foreground" href="#">
-        iPhone 14
-      </a>
-      <a class="text-sm font-medium hover:underline underline-offset-4 text-primary-foreground" href="#">
-        iPhone 13
-      </a>
-      <a class="text-sm font-medium hover:underline underline-offset-4 text-primary-foreground" href="#">
-        iPhone 12
-      </a>
-      <a class="text-sm font-medium hover:underline underline-offset-4 text-primary-foreground" href="#">
-        iPhone 11
-      </a>
-    </nav>
-  </header>
-  <main class="flex-1">
-    <section class="w-full pt-12 md:pt-24 lg:pt-32">
-      <div class="container space-y-10 xl:space-y-16">
-        <div class="grid max-w-[1300px] mx-auto gap-4 px-4 sm:px-6 md:px-10 md:grid-cols-2 md:gap-16">
-          <div>
-            <img
-              src="/placeholder.svg"
-              width="800"
-              height="600"
-              alt="iPhone 14 Pro"
-              class="mx-auto aspect-[4/3] overflow-hidden rounded-xl object-cover object-center"
-            />
-          </div>
-          <div class="flex flex-col items-start space-y-4">
-            <h1 class="lg:leading-tighter text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl xl:text-[3.4rem] 2xl:text-[3.75rem]">
-              iPhone 14 Pro
-            </h1>
-            <p class="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-              The most advanced Pro camera system ever. A lightning-fast chip. And always-on display. iPhone 14 Pro
-              is a huge leap forward.
-            </p>
-            <button
-              class="whitespace-nowrap ring-offset-background focus-visible:ring-offset-2 inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-              href="#"
-            >
-              Buy Now
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="w-full py-12 md:py-24 lg:py-32">
-      <div class="container space-y-12 px-4 md:px-6">
-        <div class="flex flex-col items-center justify-center space-y-4 text-center">
-          <div class="space-y-2">
-            <h2 class="text-3xl font-bold tracking-tighter sm:text-5xl">All iPhone Models</h2>
-            <p class="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Browse through our selection of the latest iPhone models and find the one that's right for you.
-            </p>
-          </div>
-        </div>
-        <div class="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
-          <div class="grid gap-4 bg-background rounded-lg p-6 shadow-sm">
-            <img
-              src="/placeholder.svg"
-              width="400"
-              height="300"
-              alt="iPhone 14 Pro"
-              class="mx-auto aspect-video overflow-hidden rounded-lg object-cover object-center"
-            />
-            <div class="grid gap-1">
-              <h3 class="text-lg font-bold">iPhone 14 Pro</h3>
-              <p class="text-sm text-muted-foreground">$999</p>
-              <button
-                class="whitespace-nowrap ring-offset-background focus-visible:ring-offset-2 inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                href="#"
-              >
-                Buy
-              </button>
-            </div>
-          </div>
-          <div class="grid gap-4 bg-background rounded-lg p-6 shadow-sm">
-            <img
-              src="/placeholder.svg"
-              width="400"
-              height="300"
-              alt="iPhone 14"
-              class="mx-auto aspect-video overflow-hidden rounded-lg object-cover object-center"
-            />
-            <div class="grid gap-1">
-              <h3 class="text-lg font-bold">iPhone 14</h3>
-              <p class="text-sm text-muted-foreground">$799</p>
-              <button
-                class="whitespace-nowrap ring-offset-background focus-visible:ring-offset-2 inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                href="#"
-              >
-                Buy
-              </button>
-            </div>
-          </div>
-          <div class="grid gap-4 bg-background rounded-lg p-6 shadow-sm">
-            <img
-              src="/placeholder.svg"
-              width="400"
-              height="300"
-              alt="iPhone 13"
-              class="mx-auto aspect-video overflow-hidden rounded-lg object-cover object-center"
-            />
-            <div class="grid gap-1">
-              <h3 class="text-lg font-bold">iPhone 13</h3>
-              <p class="text-sm text-muted-foreground">$699</p>
-              <button
-                class="whitespace-nowrap ring-offset-background focus-visible:ring-offset-2 inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                href="#"
-              >
-                Buy
-              </button>
-            </div>
-          </div>
-          <div class="grid gap-4 bg-background rounded-lg p-6 shadow-sm">
-            <img
-              src="/placeholder.svg"
-              width="400"
-              height="300"
-              alt="iPhone 12"
-              class="mx-auto aspect-video overflow-hidden rounded-lg object-cover object-center"
-            />
-            <div class="grid gap-1">
-              <h3 class="text-lg font-bold">iPhone 12</h3>
-              <p class="text-sm text-muted-foreground">$599</p>
-              <button
-                class="whitespace-nowrap ring-offset-background focus-visible:ring-offset-2 inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                href="#"
-              >
-                Buy
-              </button>
-            </div>
-          </div>
-          <div class="grid gap-4 bg-background rounded-lg p-6 shadow-sm">
-            <img
-              src="/placeholder.svg"
-              width="400"
-              height="300"
-              alt="iPhone 11"
-              class="mx-auto aspect-video overflow-hidden rounded-lg object-cover object-center"
-            />
-            <div class="grid gap-1">
-              <h3 class="text-lg font-bold">iPhone 11</h3>
-              <p class="text-sm text-muted-foreground">$499</p>
-              <button
-                class="whitespace-nowrap ring-offset-background focus-visible:ring-offset-2 inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                href="#"
-              >
-                Buy
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-  <footer class="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-    <p class="text-xs text-muted-foreground">© 2024 Apple Inc. All rights reserved.</p>
-    <nav class="sm:ml-auto flex gap-4 sm:gap-6">
-      <a class="text-xs hover:underline underline-offset-4 text-primary-foreground" href="#">
-        Terms of Service
-      </a>
-      <a class="text-xs hover:underline underline-offset-4 text-primary-foreground" href="#">
-        Privacy
-      </a>
-    </nav>
-  </footer>
-</div>
-    </div>
-  )
-}
+// import { useState } from "react"
+// import { Button } from "@/components/ui/button"
 
-export default Testcontents
+// export default function Testcontents() {
+//   const [isForSale, setIsForSale] = useState(true)
+//   const properties = [
+//     {
+//       id: 1,
+//       image: "/placeholder.svg",
+//       name: "Single-Family Home",
+//       description: "Spacious 4-bedroom, 3-bathroom home with a large backyard.",
+//       bedrooms: 4,
+//       bathrooms: 3,
+//       sqft: 2500,
+//     },
+//     {
+//       id: 2,
+//       image: "/placeholder.svg",
+//       name: "Luxury Condo",
+//       description: "Stunning 2-bedroom, 2-bathroom condo with panoramic views.",
+//       bedrooms: 2,
+//       bathrooms: 2,
+//       sqft: 1800,
+//     },
+//     {
+//       id: 3,
+//       image: "/placeholder.svg",
+//       name: "Townhouse",
+//       description: "3-bedroom, 2.5-bathroom townhouse with a private patio.",
+//       bedrooms: 3,
+//       bathrooms: 2.5,
+//       sqft: 1900,
+//     },
+//     {
+//       id: 4,
+//       image: "/placeholder.svg",
+//       name: "Multi-Family Home",
+//       description: "2-unit property with a 2-bedroom and a 1-bedroom unit.",
+//       bedrooms: 3,
+//       bathrooms: 3,
+//       sqft: 2800,
+//     },
+//     {
+//       id: 5,
+//       image: "/placeholder.svg",
+//       name: "Vacant Land",
+//       description: "Buildable lot with stunning mountain views.",
+//       bedrooms: 0,
+//       bathrooms: 0,
+//       sqft: 10000,
+//     },
+//   ]
+//   return (
+//     <section className="w-full py-12 md:py-24 lg:py-32">
+//       <div className="container px-4 md:px-6">
+//         <div className="flex items-center justify-between mb-8">
+//           <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+//             {isForSale ? "Properties for Sale" : "Properties for Rent"}
+//           </h1>
+//           <Button variant={isForSale ? "secondary" : "primary"} onClick={() => setIsForSale(!isForSale)}>
+//             {isForSale ? "View Rentals" : "View Sales"}
+//           </Button>
+//         </div>
+//         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+//           {properties.map((property) => (
+//             <div
+//               key={property.id}
+//               className="relative overflow-hidden rounded-lg shadow-lg group hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
+//             >
+//               <img
+//                 src="/placeholder.svg"
+//                 alt={property.name}
+//                 width={450}
+//                 height={300}
+//                 className="object-cover w-full h-64 group-hover:opacity-50"
+//                 style={{ aspectRatio: "450/300", objectFit: "cover" }}
+//               />
+//               <div className="absolute inset-0 z-10 flex flex-col justify-end p-6 bg-gradient-to-t from-black/75 to-transparent group-hover:opacity-0 transition-opacity duration-300">
+//                 <h3 className="text-xl font-bold text-white">{property.name}</h3>
+//                 <p className="text-sm text-white">{property.description}</p>
+//               </div>
+//               <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 bg-background opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+//                 <div className="grid gap-2">
+//                   <div className="flex items-center gap-2 text-muted-foreground">
+//                     <BedIcon className="w-5 h-5" />
+//                     <span>{property.bedrooms} Bedrooms</span>
+//                   </div>
+//                   <div className="flex items-center gap-2 text-muted-foreground">
+//                     <BathIcon className="w-5 h-5" />
+//                     <span>{property.bathrooms} Bathrooms</span>
+//                   </div>
+//                   <div className="flex items-center gap-2 text-muted-foreground">
+//                     <RulerIcon className="w-5 h-5" />
+//                     <span>{property.sqft} sq ft</span>
+//                   </div>
+//                 </div>
+//                 <Button className="mt-4">Book Now</Button>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+//     </section>
+//   )
+// }
+
+// function BathIcon(props) {
+//   return (
+//     <svg
+//       {...props}
+//       xmlns="http://www.w3.org/2000/svg"
+//       width="24"
+//       height="24"
+//       viewBox="0 0 24 24"
+//       fill="none"
+//       stroke="currentColor"
+//       strokeWidth="2"
+//       strokeLinecap="round"
+//       strokeLinejoin="round"
+//     >
+//       <path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5" />
+//       <line x1="10" x2="8" y1="5" y2="7" />
+//       <line x1="2" x2="22" y1="12" y2="12" />
+//       <line x1="7" x2="7" y1="19" y2="21" />
+//       <line x1="17" x2="17" y1="19" y2="21" />
+//     </svg>
+//   )
+// }
+
+
+// function BedIcon(props) {
+//   return (
+//     <svg
+//       {...props}
+//       xmlns="http://www.w3.org/2000/svg"
+//       width="24"
+//       height="24"
+//       viewBox="0 0 24 24"
+//       fill="none"
+//       stroke="currentColor"
+//       strokeWidth="2"
+//       strokeLinecap="round"
+//       strokeLinejoin="round"
+//     >
+//       <path d="M2 4v16" />
+//       <path d="M2 8h18a2 2 0 0 1 2 2v10" />
+//       <path d="M2 17h20" />
+//       <path d="M6 8v9" />
+//     </svg>
+//   )
+// }
+
+
+// function RulerIcon(props) {
+//   return (
+//     <svg
+//       {...props}
+//       xmlns="http://www.w3.org/2000/svg"
+//       width="24"
+//       height="24"
+//       viewBox="0 0 24 24"
+//       fill="none"
+//       stroke="currentColor"
+//       strokeWidth="2"
+//       strokeLinecap="round"
+//       strokeLinejoin="round"
+//     >
+//       <path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z" />
+//       <path d="m14.5 12.5 2-2" />
+//       <path d="m11.5 9.5 2-2" />
+//       <path d="m8.5 6.5 2-2" />
+//       <path d="m17.5 15.5 2-2" />
+//     </svg>
+//   )
+// }

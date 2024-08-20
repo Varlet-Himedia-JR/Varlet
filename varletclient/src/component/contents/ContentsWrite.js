@@ -17,7 +17,9 @@ import { location1Data, location2Data } from '../request/LocaionData';
 function ContentsWrite() {
     const [cname, setCname] = useState('');
     const [ctype, setCtype] = useState('축제');
-    const [location, setLocation] = useState('1');
+    const [lnum, setLnum] = useState('1');
+    const [lnum2, setLnum2] = useState('');
+    const [location, setLocation] = useState('');
     const [location2, setLocation2] = useState('');
     const [cstart_time, setCstart_time] = useState('');
     const [cend_time, setCend_time] = useState('');
@@ -27,14 +29,15 @@ function ContentsWrite() {
     const userCookie = getCookie('user');
     const [contentsimg, setContentsimg] = useState('');
     const [imgStyle, setImgStyle] = useState({ display: "none" });
+    const [contents, setContents] = useState({});
 
     async function fileupload(e) {
         const formData = new FormData();
         formData.append('image', e.target.files[0]);
         const result = await axios.post('/api/member/fileupload', formData);
-
         setContentsimg(`http://localhost:8070/uploads/${result.data.filename}`);
         console.log(result.data.filename);
+
 
         setImgStyle({ display: "block", width: "200px" });
     }
@@ -65,66 +68,35 @@ function ContentsWrite() {
     // }
 
     async function handleSubmit() {
-        // if (cname == '') { return alert('콘텐츠명을 입력하세요'); }
-        // if (cost == '') { return alert('비용을 입력하세요'); }
-        // if (contentsimg == '') { return alert('이미지를 등록하세요'); }
 
-        // try {
-        //     let result = await axios.post('/api/contents/writeContents', {
-        //         ctype: ctype,
-        //         cname: cname,
-        //         location: location,
-        //         location2: location2,
-        //         cstart_time: cstart_time,
-        //         cend_time: cend_time,
-        //         cost: cost,
-        //         contentsimg: contentsimg
-        //     });
-
-
-        //     // result = await axios.post('/api/member/nicknameCheck', null, {params:{nickname}} );
-        //     // if(result.data.msg == 'no' ){
-        //     //     return alert('닉네임이 중복됩니다');
-        //     // }
-
-        //     result = await axios.post('/api/contents/writeContents', {
-        //         ctype: ctype,
-        //         cname: cname,
-        //         location: location,
-        //         location2: location2,
-        //         cstart_time: cstart_time,
-        //         cend_time: cend_time,
-        //         cost: cost,
-        //         contentsimg: contentsimg
-        //     });
-        //     if (result.data.msg == 'ok') {
-        //         alert('회원 가입이 완료되었습니다. 로그인하세요');
-        //         navigate('/');
-        //     }
-        // } catch (err) {
-        //     console.error(err);
-        // }
-        console.log({
-            ctype: ctype,
-            cname: cname,
-            location: location,
-            location2: location2,
-            cstart_time: cstart_time,
-            cend_time: cend_time,
-            cost: cost,
-            contentsimg: contentsimg
-        });
-        alert('---해치웠나?---');
-        
+        try {
+            console.log({
+                ctype: ctype,
+                cname: cname,
+                location: location,
+                location2: location2,
+                cstart_time: cstart_time,
+                cend_time: cend_time,
+                cost: cost,
+                contentsimg: contentsimg
+            });
+            let result = await axios.post('/api/contents/writeContents', {ctype,cname,location,location2,cstart_time,cend_time,cost,contentsimg});
+            if (result.data.msg == 'ok') {
+                alert('작성완료');
+                navigate('/contents');
+            }
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     useEffect(() => {
-        if (location2Data[location]) {
-            setLocation2(location2Data[location][0] || '');
+        if (location2Data[lnum]) {
+            setLnum2(location2Data[lnum][0] || '');
         } else {
-            setLocation2('');
+            setLnum2('');
         }
-    }, [location]);
+    }, [lnum]);
 
     const onInputChange = (event) => {
         const { name, value } = event.target;
@@ -166,7 +138,6 @@ function ContentsWrite() {
             <Heading />
             <div class="flex justify-center">
                 <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-4xl" data-v0-t="card">
-                    <form onSubmit={handleSubmit}>
                         <div class="flex flex-col space-y-1.5 p-6">
                             <h1 class="whitespace-nowrap font-semibold tracking-tight text-4xl">컨텐츠 등록</h1>
                         </div>
@@ -182,8 +153,11 @@ function ContentsWrite() {
 
                                     <select
                                         className='border rounded px-2 py-1'
-                                        value={location}
-                                        onChange={(e) => { setLocation(e.currentTarget.value) }}
+                                        value={lnum}
+                                        onChange={(e) => {
+                                            setLnum(e.currentTarget.value);
+                                            setLocation(e.currentTarget.options[e.currentTarget.selectedIndex].text);
+                                        }}
                                     >
                                         <option value="1">전체</option>
                                         <option value="2">서울특별시</option>
@@ -214,11 +188,14 @@ function ContentsWrite() {
                                     </label>
                                     <select
                                         className='border rounded px-2 py-1'
-                                        value={location2}
-                                        onChange={(e) => { setLocation2(e.currentTarget.value) }}
+                                        value={lnum2}
+                                        onChange={(e) => {
+                                            setLnum2(e.currentTarget.value);
+                                            setLocation2(e.currentTarget.options[e.currentTarget.selectedIndex].text);
+                                        }}
                                     >
                                         <option value="">전체</option>
-                                        {location2Data[location]?.map((loc) => (
+                                        {location2Data[lnum]?.map((loc) => (
                                             <option key={loc.value} value={loc.value}>{loc.label}</option>
                                         ))}
                                     </select>
@@ -340,13 +317,12 @@ function ContentsWrite() {
                                     작성 취소
                                 </button>
                                 <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
-                                    type="submit"
+                                   onClick={handleSubmit}
                                 >
                                     작성 완료
                                 </button>
                             </div>
                         </div>
-                    </form>
                 </div>
             </div>
             <Footer />

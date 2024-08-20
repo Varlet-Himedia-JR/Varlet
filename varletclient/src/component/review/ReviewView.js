@@ -166,7 +166,7 @@ function ReviewView() {
     const formattedDate = review?.indate ? new Date(review.indate).toLocaleDateString() : '';
 
     return (
-        <article>
+        <>
             <div className='subPage'>
                 <div className="review" style={{ flex: "4" }}>
                     {
@@ -299,7 +299,7 @@ function ReviewView() {
                     </div>
                 </div>
             </div>
-        </article>
+            </>
     );
 }
 

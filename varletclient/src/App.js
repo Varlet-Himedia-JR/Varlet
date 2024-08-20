@@ -77,7 +77,7 @@ function App() {
         <Route path="/house" element={<House />} />
         {/* 여행 콘텐츠 */}
         <Route path="/contents" element={<ContentsList />} />
-        <Route path="/ctest" element={<Testcontents />} />
+        <Route path="/testlist" element={<Testcontents />} />
         <Route path="/getContentsView/:cseq" element={<ContentsView />} />
 
         {/* 마이페이지 */}
