@@ -70,7 +70,7 @@ function WriteReview() {
     };
 
     return (
-        <article>
+        <>
             <Heading/>
             <h2>Write Review</h2>
             <div className='subPage'>
@@ -111,7 +111,7 @@ function WriteReview() {
                 </div>
             </div>
             <Footer/>
-        </article>
+            </>
     );
 }
 
