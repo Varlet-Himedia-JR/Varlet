@@ -1,9 +1,12 @@
 package com.himedias.varletserver.service;
 
+import com.himedias.varletserver.dao.MemberRepository;
 import com.himedias.varletserver.dao.RCommunityRepository;
 import com.himedias.varletserver.dao.RcrecommendRepository;
+import com.himedias.varletserver.dto.Rcommunity.RCommunityMyList;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
+import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.RCommunity;
 import com.himedias.varletserver.entity.Rcrecommend;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -23,6 +27,9 @@ public class RCommunityService {
 
     @Autowired
     private RcrecommendRepository rcrr;
+
+    @Autowired
+    private MemberRepository mr;
 
     public List<RCommunitySummary> getAllPosts() {
         return rcr.findAllBy(Sort.by(Sort.Direction.DESC, "rnum"));
@@ -45,6 +52,16 @@ public class RCommunityService {
     public HashMap<String, Object> writePost(RCommunityWrite rCommunityWrite) {
         HashMap<String, Object> result = new HashMap<>();
 
+        // 유효한 사용자 ID인지 확인
+        Optional<Member> memberOptional = mr.findByUserid(rCommunityWrite.getUserid());
+        if (memberOptional.isEmpty()) {
+            result.put("success", false);
+            result.put("message", "유효하지 않은 사용자 ID입니다.");
+            return result;
+        }
+
+        Member member = memberOptional.get();
+
         // RCommunity 객체 생성 및 필드 설정
         RCommunity post = new RCommunity();
         post.setTitle(rCommunityWrite.getTitle());
@@ -52,15 +69,15 @@ public class RCommunityService {
         post.setLocation(rCommunityWrite.getLocation());
         post.setLocation2(rCommunityWrite.getLocation2());
         post.setReward(rCommunityWrite.getReward());
-        post.setUserid(rCommunityWrite.getUserid());
-        post.setStartdate(rCommunityWrite.getStartdate());
-        post.setEnddate(rCommunityWrite.getEnddate());
+        post.setUserid(member);  // Member 엔티티 설정
+        post.setStartdate(rCommunityWrite.getStartdate().toLocalDateTime());
+        post.setEnddate(rCommunityWrite.getEnddate().toLocalDateTime());
         post.setViews(0);
-        post.setPicked(rCommunityWrite.getPicked()); // picked 값 설정
+        post.setPicked(rCommunityWrite.getPicked());
 
         // 게시글 저장
         RCommunity savedPost = rcr.save(post);
-        System.out.println("post??" + post);
+
         result.put("success", true);
         result.put("post", savedPost);
         return result;
@@ -79,22 +96,42 @@ public class RCommunityService {
     public HashMap<String, Object> updatePost(int rnum, RCommunityWrite rCommunityWrite) {
         HashMap<String, Object> result = new HashMap<>();
 
-        RCommunity post = rcr.findPostById(rnum);
-        if (post == null) {
+        // 게시글 찾기
+        Optional<RCommunity> postOptional = rcr.findById(rnum);
+        if (postOptional.isEmpty()) {
             result.put("success", false);
             result.put("message", "게시물을 찾을 수 없습니다.");
             return result;
         }
 
+        RCommunity post = postOptional.get();
+
+        // DTO에서 값을 가져와 게시글 업데이트
         post.setTitle(rCommunityWrite.getTitle());
         post.setContent(rCommunityWrite.getContent());
         post.setLocation(rCommunityWrite.getLocation());
         post.setLocation2(rCommunityWrite.getLocation2());
         post.setReward(rCommunityWrite.getReward());
-        post.setStartdate(rCommunityWrite.getStartdate());
-        post.setEnddate(rCommunityWrite.getEnddate());
+        post.setPicked(rCommunityWrite.getPicked());
 
-        rcr.save(post);  // 수정된 게시글 저장
+        // 날짜 변환
+        post.setStartdate(rCommunityWrite.getStartdate().toLocalDateTime());
+        post.setEnddate(rCommunityWrite.getEnddate().toLocalDateTime());
+
+        // 사용자 ID 체크 (옵션: 필요한 경우)
+        if (rCommunityWrite.getUserid() != null) {
+            Optional<Member> memberOptional = mr.findByUserid(rCommunityWrite.getUserid());
+            if (memberOptional.isEmpty()) {
+                result.put("success", false);
+                result.put("message", "유효하지 않은 사용자 ID입니다.");
+                return result;
+            }
+            Member member = memberOptional.get();
+            post.setUserid(member); // 유효한 사용자 ID로 설정
+        }
+
+        // 게시글 저장
+        rcr.save(post);
 
         result.put("success", true);
         result.put("post", post);
@@ -112,17 +149,20 @@ public class RCommunityService {
         int updatedRows = rcr.updatePicked(rnum, picked);
         return updatedRows > 0;
     }
-
-    // 사용자 ID로 게시물 목록을 찾기
-    public List<RCommunity> getPostsByUserId(String userid) {
+    // Member 객체를 userid로 조회
+    public Optional<Member> findMemberByUserid(String userid) {
+        return mr.findByUserid(userid);
+    }
+    // 기존 메소드들
+    public List<RCommunityMyList> getPostsByUserId(Member userid) {
         return rcr.findByUserid(userid);
     }
 
-    public List<RCommunity> getPostsByUserIdAndLocation(String userid, Integer location) {
+    public List<RCommunityMyList> getPostsByUserIdAndLocation(Member userid, Integer location) {
         return rcr.findByUseridAndLocation(userid, location);
     }
 
-    public List<RCommunity> getPostsByUserIdAndLocation(String userid, Integer location, Integer location2) {
+    public List<RCommunityMyList> getPostsByUserIdAndLocationAndLocation2(Member userid, Integer location, Integer location2) {
         return rcr.findByUseridAndLocationAndLocation2(userid, location, location2);
     }
 

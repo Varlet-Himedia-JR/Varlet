@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 
@@ -15,11 +14,11 @@ import java.sql.Timestamp;
  */
 @Getter
 @Setter
-@Transactional
 public class RCommunityWrite {
 
-    @NotNull
-    private String userid;
+    @NotBlank
+    @Size(max = 50)
+    private String userid;  // 사용자 ID
 
     @NotNull
     private int location;
@@ -28,15 +27,14 @@ public class RCommunityWrite {
     private int location2;
 
     @NotNull
-    @Size(min = 0)
     private int reward;
 
     @NotBlank
-    @Size(min = 0, max = 50)
+    @Size(min = 1, max = 50)  // 제목의 최소, 최대 길이 제약 조건을 추가
     private String title;
 
     @NotBlank
-    @Size(min = 0, max = 2500)
+    @Size(min = 1, max = 2500)  // 내용의 최소, 최대 길이 제약 조건을 추가
     private String content;
 
     @NotNull
@@ -45,6 +43,5 @@ public class RCommunityWrite {
     @NotNull
     private Timestamp enddate;
 
-    private char picked;
-
+    private char picked = 'N';  // 기본값 설정
 }
