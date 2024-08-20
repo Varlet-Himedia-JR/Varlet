@@ -57,7 +57,7 @@ function QnaView() {
                         {isAuthor && (
                             <>
                                 <button onClick={qnaDelete}>삭제</button>
-                                <button onClick={() => navigate('/myQna')}>To My Qna</button>
+                                <button onClick={() => navigate('/myQna')}>내 QNA</button>
                             </>
                         )}
                         <button onClick={() => navigate('/qna')}>목록으로</button>
