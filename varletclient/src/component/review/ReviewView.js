@@ -7,7 +7,7 @@ import Footer from './../headerfooter/Footer';
 import '../../style/review.css';
 
 function ReviewView() {
-    const [review, setReview] = useState(null);
+    const [review, setReview] = useState({});
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState({ title: '', content: '', reviewimgs: [] });
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -17,7 +17,7 @@ function ReviewView() {
     const { rseq } = useParams();
     const navigate = useNavigate();
 
-    const userId = getCookie('user')?.userid; // 로그인된 사용자 ID
+    const userId = getCookie('user').userid; // 로그인된 사용자 ID
 
     useEffect(() => {
         // 리뷰 데이터 로드
@@ -25,6 +25,8 @@ function ReviewView() {
             .then((result) => {
                 const reviewData = result.data.review;
                 setReview(reviewData);
+                console.log(reviewData);
+                console.log(review);
                 setEditForm({
                     title: reviewData.title,
                     content: reviewData.content,

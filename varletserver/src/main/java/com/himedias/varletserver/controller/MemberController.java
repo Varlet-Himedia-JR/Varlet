@@ -253,21 +253,24 @@ public class MemberController {
         return result;
     }
 
-    /*@PostMapping("/pwdCheck")
-    public HashMap<String, Object> pwdCheck(@RequestParam("oldPwd") String oldPwd, @RequestParam("userid") String userid) {
+    @PostMapping("/pwdCheck")
+    public HashMap<String, Object> pwdCheck(@RequestParam("password") String password, @RequestParam("userid") String userid) {
+        System.out.println(password+"/"+userid);
         HashMap<String, Object> result = new HashMap<>();
-        Member mem = ms.getMember(userid);
+        Member mem = ms.getMemberByUserid(userid);
         PasswordEncoder pe = cc.passwordEncoder(); // 암호화 방식 일관되게 설정
-
         // 비밀번호 검증
-        if (pe.matches(oldPwd, mem.getPwd())) {
+        System.out.println("--------test pwdCheck-------");
+        System.out.println(pe.encode(password));
+        System.out.println(mem.getPwd());
+        if (pe.matches(password, mem.getPwd())) {
             result.put("msg", "yes");
         } else {
             result.put("msg", "no");
         }
 
         return result;
-    }*/
+    }
 
 
 

@@ -6,6 +6,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
+import java.util.List;
+
 @Service
 @Transactional
 public class TimetableService {
@@ -20,5 +23,9 @@ public class TimetableService {
 
     public Timetable getTseq(String selectedCourse) {
         return tr.findTimetableByTname(selectedCourse);
+    }
+
+    public List<Timetable> getAllMyCourse(String userid) {
+        return tr.findByUserid(userid);
     }
 }

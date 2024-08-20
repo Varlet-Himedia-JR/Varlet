@@ -110,7 +110,6 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/notice/noticeList/"))
             return true;
 
-
         if (path.startsWith("/member/emailCheck"))
             return true;
 
@@ -218,6 +217,10 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/timetable/getTseq/"))
             return true;
+        if (path.startsWith("/timetable/getAllMyCourse/"))
+            return true;
+
+
 
         //dayschedule
         if (path.startsWith("/dayschedule/insertDayschedule"))

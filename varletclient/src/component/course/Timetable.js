@@ -1,21 +1,35 @@
 import React, { useState, useEffect } from 'react';
 // import '../../style/Timetable.css';
-import '../../style/timetable2.css';
+// import '../../style/timetable2.css';
 import { useNavigate } from "react-router-dom";
 
-const Timetable2 = ({ courseDuration, daySchedule }) => {
+const Timetable = ({ courseDuration, daySchedule,cseq,cellWidth }) => {
     const [days, setDays] = useState([]);
     const times = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
     const [dayschedule, setDayschedule] = useState([]);
     const [schedule, setSchedule] = useState({});
-    const [cellwidth, setCellWidth] = useState([]);
+    const [cellwidth, setCellwidth] = useState('');
     const navigate = useNavigate();
     useEffect(() => {
         if (courseDuration && courseDuration.length > 0) {
+            console.log(courseDuration.length);
             setDays(courseDuration);
-            setCellWidth(`${90 / (days.length)}%`);
+            console.log(days.length);
+            console.log(cellwidth);
+        }
+        console.log(cellWidth);
+        if (cellWidth > 0) {
+            setCellwidth(cellWidth);
         }
     }, [courseDuration]);
+
+    useEffect(() => {
+        console.log(cellWidth);
+        if (cellWidth > 0) {
+            setCellwidth(cellWidth);
+        }
+    }, [cellwidth]);
+
 
     useEffect(() => {
         if (daySchedule && daySchedule.length > 0) {
@@ -40,9 +54,8 @@ const Timetable2 = ({ courseDuration, daySchedule }) => {
 
     return (
         <div className="timetable">
-
             <div className="courserow">
-                <div className="coursecell" style={{ width: '100px' }}></div>
+                <div className="coursecell" style={{ width: '10%' }}></div>
                 {days.map(day => (
                     <div key={day} className="coursecell" style={{ width: cellwidth }}>
                         {day}
@@ -51,7 +64,7 @@ const Timetable2 = ({ courseDuration, daySchedule }) => {
             </div>
             {times.map(time => (
                 <div key={time} className="courserow">
-                    <div className="coursecell" style={{ width: '100px' }}>{time}</div>
+                    <div className="coursecell" style={{ width: '10%' }}>{time}</div>
                     {days.map((_, index) => (
                         <div key={index} className="coursecell" style={{ width: cellwidth }}></div>
                     ))}
@@ -88,10 +101,10 @@ const Timetable2 = ({ courseDuration, daySchedule }) => {
                     </button>
                 </div>
             </main>
-            <button onClick={pay} style={{border:'1px solid black'}}>이거 누르면 결제</button>
+            <button onClick={pay} style={{border:'1px solid black'}}>이거 누르면    결제</button>
         </div>
 
     );
 };
 
-export default Timetable2;
+export default Timetable;
