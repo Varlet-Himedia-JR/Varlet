@@ -1,10 +1,14 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
+import Heading from './../headerfooter/Heading';
+import Footer from './../headerfooter/Footer';
 
 function MyPage() {
     const navigate = useNavigate();
 
     return (
+        <>
+        <Heading/>
         <div style={{ padding: '20px' }}>
             <h2>My Page</h2>
             <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
@@ -22,6 +26,8 @@ function MyPage() {
                 </button>
             </div>
         </div>
+        <Footer/>
+        </>
     );
 }
 

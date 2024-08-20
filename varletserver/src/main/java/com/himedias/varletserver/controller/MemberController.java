@@ -253,6 +253,25 @@ public class MemberController {
         return result;
     }
 
+    /*@PostMapping("/pwdCheck")
+    public HashMap<String, Object> pwdCheck(@RequestParam("oldPwd") String oldPwd, @RequestParam("userid") String userid) {
+        HashMap<String, Object> result = new HashMap<>();
+        Member mem = ms.getMember(userid);
+        PasswordEncoder pe = cc.passwordEncoder(); // 암호화 방식 일관되게 설정
+
+        // 비밀번호 검증
+        if (pe.matches(oldPwd, mem.getPwd())) {
+            result.put("msg", "yes");
+        } else {
+            result.put("msg", "no");
+        }
+
+        return result;
+    }*/
+
+
+
+
     @PostMapping("/nicknameCheck")
     public HashMap<String, Object> nicknameCheck(@RequestParam("nickname") String nickname) {
         HashMap<String, Object> result = new HashMap<String, Object>();
