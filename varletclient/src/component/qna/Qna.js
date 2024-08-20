@@ -51,7 +51,7 @@ function Qna() {
 
   async function onQnaView(qseq){
       let result = await axios.get(`/api/qna/getQnaView/${qseq}`);
-      if(result.data.qna.security == 'N'){
+      if(result.data.qna.security == 'Y'){
           navigate(`/qnaView/${qseq}`);
       }else{
           let inputPass = window.prompt('패스워드를 입력하세요','');
