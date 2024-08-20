@@ -72,11 +72,11 @@ function WriteReview() {
     return (
         <>
             <Heading/>
-            <h2>Write Review</h2>
-            <div className='subPage' style={{paddingTop:'100px'}}>
+            <h2>여행 후기 쓰기</h2>
+            <div className='subPage' style={{paddingTop:'120px'}}>
                 <div className="reviewWriteForm" style={{ flex: "4" }}>
                     <div className="field">
-                        <label>title</label>
+                        <label>제목</label>
                         <input 
                             type="text" 
                             value={title} 
@@ -84,7 +84,7 @@ function WriteReview() {
                         />
                     </div>
                     <div className="field">
-                        <label>content</label>
+                        <label>내용</label>
                         <textarea 
                             rows="7" 
                             value={content} 
@@ -92,7 +92,7 @@ function WriteReview() {
                         ></textarea>
                     </div>
                     <div className="field">
-                        <label>image</label>
+                        <label>사진</label>
                         <input 
                             type="file" 
                             accept="image/*" 

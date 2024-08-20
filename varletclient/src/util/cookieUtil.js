@@ -5,7 +5,7 @@ const cookies = new Cookies()
 export const setCookie=(name,value)=>{
     return cookies.set(name,value, {path:'/'})
 }
-// 쿠키 일기
+// 쿠키 읽기
 export const getCookie=(name)=>{
     return cookies.get(name)
     
