@@ -55,8 +55,7 @@ function MyInfo() {
         if (!email) return alert('이메일을 입력하세요');
         if (!phone) return alert('전화번호를 입력하세요');
         if (!dAddress) return alert('상세주소를 입력하세요');
-        const userCookie = getCookie('user');
-        try {
+            try {
             // 서버에 현재 비밀번호 검증 요청
             // let pwdCheckResult = await jaxios.get('/api/member/pwdCheck', { params: { oldPwd, userid } });
             // if (pwdCheckResult.data.msg === 'no') return alert('현재 비밀번호가 일치하지 않습니다');

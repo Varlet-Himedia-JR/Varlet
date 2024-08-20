@@ -88,7 +88,7 @@ const Timetable2 = ({ courseDuration, daySchedule }) => {
                     </button>
                 </div>
             </main>
-            <button onClick={pay}>결제</button>
+            <button onClick={pay} style={{border:'1px solid black'}}>이거 누르면 결제</button>
         </div>
 
     );
