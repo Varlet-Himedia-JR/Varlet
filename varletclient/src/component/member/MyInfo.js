@@ -20,6 +20,7 @@ function MyInfo() {
     const [profileimg, setProfileimg] = useState('');
     const [imgStyle, setImgStyle] = useState({ display: "none" });
     const [showPostcode, setShowPostcode] = useState(false);
+    const [oldpwd, setOldpwd]= useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -50,15 +51,17 @@ function MyInfo() {
         if (!email) return alert('이메일을 입력하세요');
         if (!phone) return alert('전화번호를 입력하세요');
         if (!dAddress) return alert('상세주소를 입력하세요');
-    
+        const userCookie = getCookie('user');
         try {
             // Check if userid and nickname are available
             let result = await jaxios.post('/api/member/useridCheck', null, { params: { userid } });
             if (result.data.msg === 'no') return alert('아이디가 중복됩니다');
-    
-            result = await jaxios.post('/api/member/nicknameCheck', null, { params: { nickname } });
-            if (result.data.msg === 'no') return alert('닉네임이 중복됩니다');
-    
+
+            if (userCookie.nickname!=nickname){
+                result = await jaxios.post('/api/member/nicknameCheck', null, { params: { nickname } });
+                if (result.data.msg === 'no') return alert('닉네임이 중복됩니다');
+            }
+
             // Send update request
             result = await jaxios.post('/api/member/updateInfo', {
                 userid,
@@ -72,7 +75,7 @@ function MyInfo() {
                 dAddress,
                 profileimg
             });
-    
+
             if (result.data.msg === 'ok') {
                 if (window.confirm('수정이 완료되었습니다. 로그아웃 후 로그인 페이지로 이동합니다.')) {
                     dispatch(logoutAction());
@@ -87,7 +90,7 @@ function MyInfo() {
             alert('서버 오류');
         }
     }
-    
+
 
     async function fileupload(e) {
         const formData = new FormData();
@@ -112,15 +115,22 @@ function MyInfo() {
         <div className='loginform'>
             <div className="logo" style={{ fontSize: "2.0rem" }}>MY INFO EDIT</div>
             <div className='field'>
-            <label>아이디</label>
-            <input type="text" value={userid} onChange={(e) => setUserid(e.target.value)} disabled />
-        </div>
+                <label>아이디</label>
+                <input type="text" value={userid} onChange={(e) => setUserid(e.target.value)} disabled />
+            </div>
 
             <div className='field'>
-                <label>비밀번호</label>
+                <label>현재 비밀번호</label>
                 <input
                     type="password"
-                    value={pwd}
+                    onChange={(e) => setOldpwd(e.target.value)}
+                    placeholder="비밀번호 입력"
+                />
+            </div>
+            <div className='field'>
+                <label>새로운 비밀번호</label>
+                <input
+                    type="password"
                     onChange={(e) => setPwd(e.target.value)}
                     placeholder="비밀번호 입력"
                 />
@@ -129,7 +139,6 @@ function MyInfo() {
                 <label>비밀번호 확인</label>
                 <input
                     type="password"
-                    value={pwdChk}
                     onChange={(e) => setPwdChk(e.target.value)}
                     placeholder="비밀번호 확인 입력"
                 />

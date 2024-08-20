@@ -23,7 +23,6 @@ public class Contents {
     private Timestamp cstartTime;
     @CreationTimestamp
     private Timestamp cendTime;
-    @CreationTimestamp
     private int cost;
     private String contentsimg;
 

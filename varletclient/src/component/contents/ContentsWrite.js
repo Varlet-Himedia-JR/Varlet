@@ -42,33 +42,7 @@ function ContentsWrite() {
         setImgStyle({ display: "block", width: "200px" });
     }
 
-
-
-
-
-
-    // async function handleSubmit(){
-    //     try {
-    //         let result = await jaxios.post('/api/contents/writeContents', {
-    //             ctype: ctype,
-    //             cname: cname,
-    //             location: location,
-    //             location2: location2,
-    //             cstart_time: cstart_time,
-    //             cend_time: cend_time,
-    //             cost: cost,
-    //             contentsimg: contentsimg
-    //         })
-    //         if (result.data.msg == 'ok') {
-    //             alert('등록 완료');
-    //             navigate('/contents');
-    //         }
-    //     }
-
-    // }
-
     async function handleSubmit() {
-
         try {
             console.log({
                 ctype: ctype,
@@ -98,14 +72,14 @@ function ContentsWrite() {
         }
     }, [lnum]);
 
-    const onInputChange = (event) => {
-        const { name, value } = event.target;
-        if (name === 'startDate') {
-            setCstart_time(value);
-        } else if (name === 'endDate') {
-            setCend_time(value);
-        }
-    };
+    // const onInputChange = (event) => {
+    //     const { name, value } = event.target;
+    //     if (name === 'startDate') {
+    //         setCstart_time(value);
+    //     } else if (name === 'endDate') {
+    //         setCend_time(value);
+    //     }
+    // };
 
     const today = new Date();
 
