@@ -1,109 +1,110 @@
-import React, { useState, useEffect } from 'react';
-// import '../../style/Timetable.css';
-// import '../../style/timetable2.css';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 
-const Timetable = ({ courseDuration, daySchedule,cseq,cellWidth }) => {
+const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
     const [days, setDays] = useState([]);
     const times = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
     const [dayschedule, setDayschedule] = useState([]);
     const [schedule, setSchedule] = useState({});
-    const [cellwidth, setCellwidth] = useState('');
+    const [cellwidth, setCellwidth] = useState(cellWidth);
+    const [cellposition, setCellposition] = useState([]);
     const navigate = useNavigate();
+    const courseCellRef = useRef(null); // reference for the coursecell
+
     useEffect(() => {
         if (courseDuration && courseDuration.length > 0) {
-            console.log(courseDuration.length);
             setDays(courseDuration);
-            console.log(days.length);
-            console.log(cellwidth);
+            // console.log(days);
         }
-        console.log(cellWidth);
         if (cellWidth > 0) {
             setCellwidth(cellWidth);
         }
-    }, [courseDuration]);
-
-    useEffect(() => {
-        console.log(cellWidth);
-        if (cellWidth > 0) {
-            setCellwidth(cellWidth);
-        }
-    }, [cellwidth]);
-
+    }, [courseDuration, cellWidth]);
 
     useEffect(() => {
         if (daySchedule && daySchedule.length > 0) {
-            // console.log(daySchedule);
             setDayschedule(daySchedule);
+            const position = [];
+            for (let i = 0; i < daySchedule.length; i++) {
+                let x = 0;
+                let y = 0;
+                let l = 0;
+
+                for (let j = days.length-1; j >= 0; j--) {
+                    if (days[j].substring(5, 10) === daySchedule[i].day_date.substring(5, 10)) {
+                        x = j;
+                        break;  // 일치하는 날짜를 찾으면 루프를 종료합니다.
+                    }
+                }
+
+                for (let j = 0; j < times.length; j++) {
+                    if (times[j].substring(0, 2) === daySchedule[i].start_time.substring(11, 13)) {
+                        y = j;
+                        break;  // 일치하는 시간을 찾으면 루프를 종료합니다.
+                    }
+                }
+
+                let startTime = new Date(daySchedule[i].start_time);
+                let endTime = new Date(daySchedule[i].end_time);
+
+                // 두 시간 사이의 차이(밀리초 단위)
+                let differenceInMillis = endTime - startTime;
+
+                // 밀리초를 시간으로 변환
+                l = differenceInMillis / (1000 * 60 * 60);
+
+                // x, y, l을 객체로 position 배열에 추가
+                position.push({ x:x, y:y, l:l });
+            }
+            setCellposition(position);
+            console.log(position);
+
         }
     }, [daySchedule]);
-    function pay(){
+
+    const getCourseCellWidthInPixels = () => {
+        if (courseCellRef.current) {
+            return courseCellRef.current.offsetWidth;
+        }
+        return 0;
+    };
+
+    useEffect(() => {
+        if (courseCellRef.current) {
+            const courseCellPixelWidth = getCourseCellWidthInPixels();
+            setCellwidth(courseCellPixelWidth); // Update state with pixel width
+        }
+    }, [days, cellwidth]);
+
+    function pay() {
         navigate('/pay', { state: { dayschedule } });
     }
-
-    // const addClass = (day, time) => {
-    //     const className = prompt("수업명을 입력하세요:");
-    //     if (className) {
-    //         setSchedule(prevSchedule => ({
-    //             ...prevSchedule,
-    //             [day + time]: className
-    //         }));
-    //     }
-    // };
-
 
     return (
         <div className="timetable">
             <div className="courserow">
-                <div className="coursecell" style={{ width: '10%' }}></div>
-                {days.map(day => (
-                    <div key={day} className="coursecell" style={{ width: cellwidth }}>
+                <div className="coursecell" style={{ width: `${cellwidth / 2}%` }}></div>
+                {days.map((day, index) => (
+                    <div key={day} className="coursecell" ref={index === 0 ? courseCellRef : null} style={{ width: `${cellwidth}%` }}>
                         {day}
                     </div>
                 ))}
             </div>
             {times.map(time => (
                 <div key={time} className="courserow">
-                    <div className="coursecell" style={{ width: '10%' }}>{time}</div>
+                    <div className="coursecell" style={{ width: `${cellwidth / 2}%` }}>{time}</div>
                     {days.map((_, index) => (
-                        <div key={index} className="coursecell" style={{ width: cellwidth }}></div>
+                        <div key={index} className="coursecell" style={{ width: `${cellwidth}%` }}></div>
                     ))}
                 </div>
-
             ))}
             {dayschedule.map((contents, index) => (
-                <div key={index} className="coursecell" style={{ width: cellwidth }}>{contents.dtitle}/{contents.price}</div>
+                <div key={index} className="datacell" style={{ right:`${cellposition[index].x*cellwidth}px`, top: `${cellposition[index].y*40}px`, height:`${cellposition[index].l*40}px`, backgroundColor: 'red', color: 'white', width: `${getCourseCellWidthInPixels()}px` }}>
+                    {contents.dtitle}
+                </div>
             ))}
-            <main className="flex-1 p-4">
-                <div className="grid grid-cols-6 gap-4">
-                    {days.map(day => (
-                        <div key={day} className="col-span-1 text-center">{day}</div>
-                    ))}
-                </div>
-                <div className="grid grid-cols-6 gap-4 mt-4">
-                    <div className="col-span-1 h-24 border">오전 9시</div>
-                    <div className="col-span-1 h-24 border">오전 10시</div>
-                    <div className="col-span-1 h-24 border">오전 11시</div>
-                    <div className="col-span-1 h-24 border">오후 12시</div>
-                    <div className="col-span-1 h-24 border">오후 1시</div>
-                    <div className="col-span-1 h-24 border">오후 2시</div>
-                    <div className="col-span-1 h-24 border">오후 3시</div>
-                    <div className="col-span-1 h-24 border">오후 4시</div>
-                    <div className="col-span-1 h-24 border">오후 5시</div>
-                    <div className="col-span-1 h-24 border">오후 6시</div>
-                    <div className="col-span-1 h-24 border">오후 7시</div>
-                    <div className="col-span-1 h-24 border">오후 8시</div>
-                    <div className="col-span-1 h-24 border">오후 9시</div>
-                </div>
-                <div className="absolute bottom-4 right-4 flex gap-2">
-                    <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 text-red-500">
-                        수업 목록에서 검색
-                    </button>
-                </div>
-            </main>
-            <button onClick={pay} style={{border:'1px solid black'}}>이거 누르면    결제</button>
+            <button onClick={pay} style={{ border: '1px solid black' }}>결제</button>
         </div>
-
     );
 };
 
