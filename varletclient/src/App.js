@@ -27,7 +27,6 @@ import MyQna from "./component/member/MyQna";
 import MyRequest from "./component/member/MyRequest";
 import Notice from "./component/notice/Notice";
 import FindId from "./component/member/FindId";
-
 import House from "./component/house/House";
 
 import 'ckeditor5/ckeditor5.css';
@@ -74,6 +73,7 @@ function App() {
         
         <Route path="/mycourse" element={<Mycourse />} />
         <Route path="/house" element={<House />} />
+        
         {/* 여행 콘텐츠 */}
         <Route path="/contents" element={<ContentsList />} />
         <Route path="/testlist" element={<Testcontents />} />
@@ -85,6 +85,7 @@ function App() {
         <Route path="/myReview" element={<MyReview />} />
         <Route path="/myQna" element={<MyQna />} />
         <Route path="/myRequest" element={<MyRequest />} />
+
         {/* 공지사항 */}
         <Route path="/notice" element={<Notice />} />
         <Route path="/contentsWrite" element={<ContentsWrite />} />

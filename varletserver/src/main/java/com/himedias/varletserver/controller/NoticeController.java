@@ -17,7 +17,6 @@ public class NoticeController {
     @Autowired
     NoticeService ns;
 
-
     @GetMapping("/noticeList/{page}")
     public HashMap<String,Object> noticeList(@PathVariable("page") int page){
         HashMap<String,Object> result = new HashMap<String,Object>();
