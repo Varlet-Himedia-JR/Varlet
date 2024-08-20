@@ -166,7 +166,7 @@ function ReviewView() {
     const formattedDate = review?.indate ? new Date(review.indate).toLocaleDateString() : '';
 
     return (
-        <article>
+        <>
             <div className='subPage'>
                 <div className="review" style={{ flex: "4" }}>
                     {
@@ -282,24 +282,24 @@ function ReviewView() {
                                 <>
                                     {isEditing ? (
                                         <>
-                                            <button onClick={reviewEdit}>Save</button>
-                                            <button onClick={() => setIsEditing(false)}>Cancel</button>
+                                            <button onClick={reviewEdit}>저장</button>
+                                            <button onClick={() => setIsEditing(false)}>수정 취소</button>
                                         </>
                                     ) : (
                                         <>
-                                            <button onClick={reviewDelete}>Delete</button>
-                                            <button onClick={() => setIsEditing(true)}>Edit</button>
+                                            <button onClick={reviewDelete}>후기 삭제</button>
+                                            <button onClick={() => setIsEditing(true)}>후기 수정</button>
                                         </>
                                     )}
-                                    <button onClick={handleBackToList}>To My Review</button>
+                                    <button onClick={handleBackToList}>내가 쓴 후기</button>
                                 </>
                             ) : null
                         }
-                        <button onClick={() => { navigate('/reviewList') }}>Back to List</button>
+                        <button onClick={() => { navigate('/reviewList') }}>돌아가기</button>
                     </div>
                 </div>
             </div>
-        </article>
+            </>
     );
 }
 

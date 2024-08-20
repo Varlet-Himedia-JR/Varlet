@@ -48,9 +48,11 @@ public class ContentsController {
         return result;
     }
 
-    @PostMapping("/wrtieContents")
+    @PostMapping("/writeContents")
     public HashMap<String, Object> writeContents(@RequestBody Contents contents) {
         HashMap<String, Object> result = new HashMap<>();
+        System.out.println("-----writeContents-----");
+        System.out.println(contents.toString());
         cs.writeContents(contents);
         result.put("msg", "ok");
         return result;

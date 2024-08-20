@@ -10,7 +10,6 @@ import RCommunityList from "./component/request/RCommunityList";
 import RPostWrite from "./component/request/RPostWrite";
 import RCommunityView from "./component/request/RCommunityView";
 import RCommunityUpdate from "./component/request/RCommunityUpdate";
-import RcCommunityWrite from "./component/request/RcCommunityWrite";
 import Join from './component/member/Join';
 import WriteQna from './component/qna/WriteQna';
 import QnaView from './component/qna/QnaView';
@@ -29,6 +28,7 @@ import MyRequest from "./component/member/MyRequest";
 import Notice from "./component/notice/Notice";
 import FindId from "./component/member/FindId";
 
+import House from "./component/house/House";
 
 import 'ckeditor5/ckeditor5.css';
 import ContentsWrite from "./component/contents/ContentsWrite";
@@ -68,13 +68,14 @@ function App() {
         <Route path="/rpostwrite" element={<RPostWrite />} /> 
         <Route path="/rCommunityView/:rnum" element={<RCommunityView />} />
         <Route path="/rCommunityUpdate/:rnum" element={<RCommunityUpdate />} />
-        <Route path="/rCommunityDetail/:rnum/rcCommunityWrite" element={<RcCommunityWrite />} />
+        
         
         
         <Route path="/mycourse" element={<Mycourse />} />
+        <Route path="/house" element={<House />} />
         {/* 여행 콘텐츠 */}
         <Route path="/contents" element={<ContentsList />} />
-        <Route path="/ctest" element={<Testcontents />} />
+        <Route path="/testlist" element={<Testcontents />} />
         <Route path="/getContentsView/:cseq" element={<ContentsView />} />
 
         {/* 마이페이지 */}

@@ -94,4 +94,7 @@ public class Member {
             indate = Timestamp.from(Instant.now());
         }
     }
+
+
+
 }
