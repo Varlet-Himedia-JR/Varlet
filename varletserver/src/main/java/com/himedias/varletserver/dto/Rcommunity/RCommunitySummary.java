@@ -1,20 +1,35 @@
 package com.himedias.varletserver.dto.Rcommunity;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * Projection for {@link com.himedias.varletserver.entity.RCommunity}
  */
 public interface RCommunitySummary {
     int getRnum();
-    String getUserid();  // 여기서 메서드명을 getUserId로 수정
+
     int getLocation();
+
     int getLocation2();
-    Timestamp getWritedate();
-    Integer getViews();
+
+    int getViews();
+
     String getTitle();
-    int getReward();
+
     char getPicked();
+
+    LocalDateTime getWritedate();
+
+    MemberInfo getUserid();
+
+    /**
+     * Projection for {@link com.himedias.varletserver.entity.Member}
+     */
+    interface MemberInfo {
+        String getUserid();
+
+    }
 
 
 }

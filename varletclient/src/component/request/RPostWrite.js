@@ -20,24 +20,24 @@ function RPostWritePost()  {
   const [location, setLocation] = useState('1');
   const [location2, setLocation2] = useState('');
   const [reward, setReward] = useState('');
-  const [userPoint, setUserPoint] = useState(0);
+  // const [userPoint, setUserPoint] = useState(0);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const navigate = useNavigate();
   const loginUser = useSelector(state => state.user);
   const userCookie = getCookie('user');
 
-  useEffect(() => {
-    if (userCookie) {
-      jaxios.get(`/api/user/point?userid=${userCookie.userid}`)
-        .then(response => {
-          setUserPoint(response.data.point);
-        })
-        .catch(error => {
-          console.error('사용자 포인트를 가져오는데 실패했습니다:', error);
-        });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (userCookie) {
+  //     jaxios.get(`/api/user/point?userid=${userCookie.userid}`)
+  //       .then(response => {
+  //         setUserPoint(response.data.point);
+  //       })
+  //       .catch(error => {
+  //         console.error('사용자 포인트를 가져오는데 실패했습니다:', error);
+  //       });
+  //   }
+  // }, []);
   
 //location 함수
 const LocationChange = (e) => {

@@ -3,80 +3,53 @@ package com.himedias.varletserver.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "rcommunity")
+@Getter
+@Setter
 public class RCommunity {
 
-    @Getter
-    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int rnum;
 
-    @Getter
-    @Setter
-    @Column(name = "userid", nullable = false, length = 50)
-    private String userid;  // 여기서 필드명을 userId로 수정
-
-    @Getter
-    @Setter
     @Column(nullable = false)
     private int location;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private int location2;
 
-    @Getter
-    @Setter
-    @Column(nullable = false, columnDefinition = "int default 0")
-    private int views;
+    @Column(nullable = false)
+    private int views = 0;
 
-    @Getter
-    @Setter
     @Column(nullable = false, length = 50)
     private String title;
 
-    @Getter
-    @Setter
     @Column(nullable = false, length = 2500)
     private String content;
 
-    @Getter
-    @Setter
-    @Column(nullable = false, columnDefinition = "int default 0")
-    private int reward;
+    @Column(nullable = false)
+    private int reward = 0;
 
-    @Getter
-    @Setter
-    @Column(nullable = false, columnDefinition = "char(1) default 'N'")
-    private char picked;
+    @Column(nullable = false, length = 1)
+    private char picked = 'N';
 
-    @Getter
-    @Setter
-    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
-    private Timestamp writedate;
+    @Column(nullable = false)
+    private LocalDateTime writedate = LocalDateTime.now();
 
-    @Getter
-    @Setter
-    @Column(name = "startdate", nullable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
-    private Timestamp startdate;
+    @Column(nullable = false)
+    private LocalDateTime startdate = LocalDateTime.now();
 
-    @Getter
-    @Setter
-    @Column(name = "enddate", nullable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
-    private Timestamp enddate;
+    @Column(nullable = false)
+    private LocalDateTime enddate = LocalDateTime.now();
 
-
-    @PrePersist
-    public void prePersist() {
-        if (this.picked == '\u0000') {  // picked 필드의 기본값이 설정되지 않은 경우
-            this.picked = 'N';
-        }
-    }
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "userid", nullable = false)
+    private Member userid;
 }
-
