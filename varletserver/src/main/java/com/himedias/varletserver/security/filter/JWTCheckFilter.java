@@ -52,9 +52,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             Timestamp indate = (Timestamp) claims.get("indate");
             Character isLogin = (Character) claims.get("isLogin");
             List<String> roleNames = (List<String>) claims.get("roleNames");
-
+            Integer point = (Integer) claims.get("points");
             // 추출한 정보를 사용하여 MemberDTO 객체를 생성합니다.
-            MemberDTO memberDTO = new MemberDTO(userid, pwd, name,nickname, email, phone, provider, snsid, profileimg, zipCode, address, dAddress, indate, isLogin, roleNames);
+            MemberDTO memberDTO = new MemberDTO(userid, pwd, name,nickname, email, phone, provider, snsid, profileimg, zipCode, address, dAddress, indate, isLogin, roleNames, point);
             log.info("-----------------------------------");
             log.info(memberDTO);
             log.info(memberDTO.getAuthorities()); // 사용자 권한을 로그에 기록합니다.
