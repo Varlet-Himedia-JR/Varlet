@@ -68,22 +68,31 @@
 }
 
 .myinfo {
-    width: 80px;
-    height: 27px;
-    margin-right: -70px;
+    width: 60px;
+    height: 20px;
 }
 
 .logout {
     width: 80px;
     height: 20px;
-    margin-left: -70px;
+    margin-right: 20px;;
 }
 
 .profileimg {
     width:67px;
     height:67px;
-    border-radius:25%;
-    border:1px dotted blue;
+}
+
+.profileimg img {
+    width:70px;
+    height:70px;
+    z-index: 4;
+    border-radius: 50%;
+}
+
+.loginUserInfo{
+    display: flex;
+    align-items: center;
 }
 
 .auth-buttons {
@@ -91,11 +100,6 @@
     align-items: center;
 }
 
-.line {
-    position: relative;
-    width: 27px;
-    height: 0px;
-    border: 1px solid #000000;
-    transform: rotate(90deg);
-    margin: 0 10px;
-}
+
+
+

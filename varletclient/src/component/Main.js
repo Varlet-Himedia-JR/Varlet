@@ -1,144 +1,72 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useSelector, useDispatch } from 'react-redux';
 import Heading from './headerfooter/Heading';
 import Footer from './headerfooter/Footer';
-import { loginAction, logoutAction } from '../store/userSlice';
-import jaxios from '../util/jwtUtil';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { setCookie, getCookie, removeCookie } from "../util/cookieUtil";
-import '../style/main.css'
+import '../style/main.css';
 
 function Main() {
-  const [loginUser, setLoginUser] = useState({});
-  const lUser = useSelector(state => state.user);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [review, setReview] = useState(null);
-  const [previewImage, setPreviewImage] = useState('');
-  const { rseq } = useParams();
-  const images = [
-    "https://via.placeholder.com/800x400?text=Slide+1",
-    "https://via.placeholder.com/800x400?text=Slide+2",
-    "https://via.placeholder.com/800x400?text=Slide+3",
-    "https://via.placeholder.com/800x400?text=Slide+4",
-  ];
+  const [images, setImages] = useState([]); // 슬라이더에 사용할 이미지 목록
+
   const settings = {
-    dots: true, // 슬라이더 하단에 점을 표시
-    infinite: true, // 무한 루프
-    speed: 500, // 슬라이드 넘어가는 속도 (ms)
-    slidesToShow: 1, // 한번에 보여줄 슬라이드 개수
-    slidesToScroll: 1, // 스크롤 시 넘어가는 슬라이드 개수
-    autoplay: true, // 자동 재생
-    autoplaySpeed: 1500 // 자동 재생 시 슬라이드 간격 (ms)
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 1500
   };
-  const [noticeList, setNoticeList] = useState([]);
-  const [paging, setPaging ] = useState({});
-  const [ beginend, setBeginend ] = useState([]);
 
-  useEffect(
-    ()=>{
-        axios.get('/api/notice/noticeList/1')
-        .then((result)=>{
-            setNoticeList(result.data.noticeList);
-            setPaging(result.data.paging);
+  useEffect(() => {
+    // 리뷰 데이터 로드
+    axios.get('/api/review/reviewList')
+      .then((result) => {
+        const reviewData = result.data.review;
 
-            const pageArr = [];
-            for (let i = result.data.paging.beginPage; i <= result.data.paging.endPage; i++) {
-                pageArr.push(i);
-            }
-            setBeginend(pageArr);
-            console.log('Paging:', paging);
-              console.log('Beginend:', beginend);
-        })
-        .catch((err)=>{console.error(err);})
-    },[]
-)
+        // 조회수가 200 이상인 리뷰의 첫 번째 이미지 URL만 필터링
+        if (reviewData && reviewData.length > 0) {
+          const filteredImages = reviewData
+            .filter(review => review.views >= 200 && review.reviewimg) // 조회수가 200 이상이고 이미지가 있는 리뷰만 필터링
+            .map(review => `http://localhost:8070/images/${review.reviewimg}`); // 첫 번째 이미지 URL 설정
+          
+          setImages(filteredImages);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
-  // useEffect(() => {
-  //   // 리뷰 데이터 로드
-  //   axios.get(`/api/review/getReviewView/${rseq}`)
-  //       .then((result) => {
-  //           const reviewData = result.data.review;
-  //           setReview(reviewData);
-            
-  //           // 리뷰 이미지 URL 설정
-  //           if (reviewData.reviewimg) {
-  //               setPreviewImage(`http://localhost:8070/images/${reviewData.reviewimg}`);
-  //           }
-  //       })
-  //       .catch((err) => {
-  //           console.error(err);
-  //           setReview({});
-  //       });
-  // }, [rseq]); // rseq가 변경될 때마다 실행되도록 설정
-  
   return (
     <>
-      <Heading/>
+      <Heading />
       <div style={{ paddingTop: '100px' }}>
         <div className='background'><img src="http://localhost:8070/images/oceans.jpg" alt="Background" /></div>
         <div className='main'>
-          <div className='best'>
-            BEST
-          </div>
+          <div className='best'>BEST</div>
           <div className='field'>
-            <label>Image</label>
-            {previewImage ? (
-              <img src={previewImage} alt="Review" style={{ maxWidth: '300px', maxHeight: '300px' }} />
-            ) : (
-              <div>No image available</div>
-            )}
+            <div>
+              <h2>최근 등록된 콘텐츠</h2>
+              <div style={{ width: "600px", margin: "0 auto" }}>
+                <Slider {...settings}>
+                  {images.map((image, index) => (
+                    <div key={index}>
+                      <img src={image} alt={`Slide ${index + 1}`} style={{ width: "100%", height: "auto" }} />
+                    </div>
+                  ))}
+                </Slider>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-<div style={{ paddingTop: '100px' }}>
-        <hr></hr>
-        <div>
-          <h2>최근 등록된 콘텐츠</h2>
-          <div style={{ width: "600px", margin: "0 auto" }}>
-            <Slider {...settings}>
-              {images.map((image, index) => (
-                <div key={index}>
-                  <img src={image} alt={`Slide ${index + 1}`} style={{ width: "100%", height: "auto" }} />
-                </div>
-              ))}
-            </Slider>
-          </div>
-        </div>
-        <br></br>
-        <div>
-          <h2>Best Review</h2>
-          <div style={{ width: "600px", margin: "0 auto" }}>
-            <Slider {...settings}>
-              {images.map((image, index) => (
-                <div key={index}>
-                  <img src={image} alt={`Slide ${index + 1}`} style={{ width: "100%", height: "auto" }} />
-                </div>
-              ))}
-            </Slider>
-          </div>
-        </div>
-        <br></br>
-        <div>
-          <h2 onClick={()=>{navigate('/testlist')}}>Test Component</h2>
-          <div style={{ width: "600px", margin: "0 auto" }}>
-            <Slider {...settings}>
-              {images.map((image, index) => (
-                <div key={index}>
-                  <img src={image} alt={`Slide ${index + 1}`} style={{ width: "100%", height: "auto" }} />
-                </div>
-              ))}
-            </Slider>
-          </div>
-        </div>
-      </div>
-      <Footer/>
+      <Footer />
     </>
-  )
+  );
 }
 
-export default Main
+export default Main;

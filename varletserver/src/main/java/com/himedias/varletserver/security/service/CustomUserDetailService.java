@@ -50,10 +50,12 @@ public class CustomUserDetailService implements UserDetailsService {
                 member.getSnsid(),
                 member.getIndate(),
                 member.getIs_login(),
-                member.getMemberRoleList().stream().map(memberRole -> memberRole.name()).collect(Collectors.toList())
+                member.getMemberRoleList().stream()// 사용자 역할 리스트를 스트림으로 변환
+                        .map(memberRole -> memberRole.name()) // 각 역할의 이름을 추출
+                        .collect(Collectors.toList()) // 리스트로 수집
         );
         log.info(memberdto);
         log.info(member);
-        return memberdto;
+        return memberdto; // MemberDTO를 반환하여 Spring Security에서 사용자 정보를 사용할 수 있도록 합니다.
     }
 }

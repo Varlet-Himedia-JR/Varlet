@@ -1,19 +1,21 @@
-.background img{
-    background-size: cover; /* 배경 이미지를 요소 크기에 맞게 조정 */
-    background-position: center; /* 이미지를 가운데로 배치 */
-    background-repeat: no-repeat; /* 이미지를 반복하지 않도록 설정 */
-    background-attachment: fixed; /* 배경을 고정하여 스크롤할 때도 이미지가 따라오도록 설정 */
-    top: 0;
-    left: 0;
-    min-height: 100%;
-    width: 100%;
-    height: 100vh; /* 페이지 전체 높이를 차지하도록 설정 */
-    position: relative; /* 자식 요소들이 배경 위에 배치되도록 설정 */
-    z-index: -1; /* 배경을 뒤로 보내기 위해 z-index 설정 */
-  }
-
+/* 로그인 폼 전체 스타일 */
+.loginform {
+  position: relative; 
+  z-index: 1;
+  background: rgb(255, 255, 255, 0.7);
+  padding: 20px;
+  border-radius: 10px;
+  width: 1400px; 
+  height: 100vh;
+  margin: 0 auto; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  text-align: center;
+  padding-top: 100px;
   
-  .joinlabel {
+  }
+  
+  /* 로그인 제목 */
+  .loginlabel {
     font-family: 'Mplus 1p Bold', sans-serif;
     font-style: normal;
     font-weight: 800;
@@ -21,11 +23,19 @@
     line-height: 30px;
     color: #000000;
     text-align: center;
-    margin-top: 50px; /* 이 값을 조정하여 라벨을 위로 이동 */
+    margin-top: -60px; /* 이 값을 조정하여 라벨을 위로 이동 */
     margin-bottom: 100px; /* 하단 여백도 필요에 따라 조정 */
   }
-
-    
+  
+  /* 입력 필드 스타일 */
+  .field {
+    display: flex;
+    margin-bottom: 15px;
+    align-items: center;
+    text-align: center;
+    margin-left: 550px;
+  }
+  
   .field label {
     display: flex;
     font-family: 'Mplus 1p Bold', sans-serif;
@@ -35,18 +45,144 @@
     line-height: 22px;
     color: #000000;
     margin-bottom: 5px;
+    text-align: center;
+    align-items: center;
+  }
+
+
+  .field input {
+    width: 200px;
+    height: 30px;
+    padding: 5px;
+    font-size: 15px;
+    margin-left: 5px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: white;
+  }
+
+  .field input[type="text"]{
+    width: 200px;
+    height: 30px;
+    padding: 5px;
+    margin-left: 20px;
+    font-size: 15px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    box-sizing: border-box;
   }
   
-  .joinform {
-    position: relative;
-    width: 500px;
-    height: 1150px;
-    background: #beeaf5;
-    border: 1px solid #000000;
-    border-radius: 25px;
-    padding: 20px;
-    box-sizing: border-box;
-    margin-top: 60px;
-    margin-bottom: 240px;
-    background: linear-gradient(to bottom, #00BFFF, #E0FFFF);
-    }
+  /* 버튼 그룹 스타일 */
+  .btns {
+    display: flex;
+    margin-top: 20px;
+    align-items: center;
+    text-align: center;
+    margin-left: 500px;
+  }
+  .findbtn button{
+    background: rgb(255, 255, 255, 0);
+    cursor: pointer;
+    width: 180px;
+    height: 25px;
+
+    font-family: 'Mplus 1p Bold', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    margin-top: 15px;
+    font-size: 15px;
+    line-height: 22px;
+    margin-left: 30px;
+  }
+  
+  .btns button {
+    background: rgb(255, 255, 255, 0);
+    width: 200px;
+    height: 35px;
+    font-family: 'Mplus 1p Bold', sans-serif;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 20px;
+    line-height: 22px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 텍스트 가운데 정렬 */
+  }
+  
+  
+  /* SNS 로그인 버튼 그룹 스타일 */
+  .snslogin {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    align-items: center;
+    text-align: center;
+  }
+  .chat img {
+    display: flex;
+    position: absolute;
+    width: 30px;
+    margin-top: 15px;
+    margin-left: -120px;
+  }
+
+  .naver img{
+      display: flex;
+      position: absolute;
+      width: 30px;
+      margin-top: 15px;
+      margin-left: -120px;
+  }
+
+
+
+  .snslogin button {
+    width: 350px;
+    height: 40px;
+    font-family: 'Mplus 1p Bold', sans-serif;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 25px;
+    line-height: 22px;
+    color: hsl(0, 0%, 0%);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 텍스트 가운데 정렬 */
+
+  }
+  
+  .snslogin button:nth-of-type(1) {
+    margin-left: 10px;
+    background-color: #FDF300; /* KAKAO 로그인 버튼 색상 */
+  }
+  
+  .snslogin button:nth-of-type(2) {
+    margin-left: 10px;
+    background-color: #5DFF43; /* NAVER 로그인 버튼 색상 */
+  }
+  
+  /* 배경 이미지 스타일 */
+  .background {
+    position: pixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    z-index: -1; /* 로그인 폼 뒤에 배경 이미지 배치 */
+  }
+  
+  .background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 이미지 비율 유지 및 컨테이너에 맞게 크기 조절 */
+  }
+  

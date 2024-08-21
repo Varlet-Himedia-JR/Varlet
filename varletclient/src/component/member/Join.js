@@ -1,6 +1,5 @@
 import React, {useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
-import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
 import Heading from '../headerfooter/Heading';
 import Footer from '../headerfooter/Footer';
@@ -16,10 +15,9 @@ function Join() {
     const [phone, setPhone] = useState('');
     const [zipCode, setZipCode] = useState('');
     const [address, setAddress] = useState('');
-    const [dAddress, setDAddress] = useState('');
+    const [d_address, setD_address] = useState('');
     const [profileimg, setProfileimg] = useState('');
     const [imgStyle, setImgStyle] = useState({display:"none"});
-    const [showPostcode, setShowPostcode] = useState(false);
 
 
 
@@ -33,8 +31,7 @@ function Join() {
         if(nickname==''){ return alert('닉네임을 입력하세요');}
         if(email==''){ return alert('이메일을 입력하세요');}
         if(phone==''){ return alert('전화번호를 입력하세요');}
-        if(dAddress==''){ return alert('상세주소를 입력하세요');}
-        
+        if(d_address==''){ return alert('상세주소를 입력하세요');}
         try{
             let result = await axios.post('/api/member/useridCheck', null, {params:{userid}} );
             if(result.data.msg == 'no' ){
@@ -42,12 +39,15 @@ function Join() {
             }
 
             result = await axios.post('/api/member/nicknameCheck', null, {params:{nickname}} );
-            if(result.data.msg == 'no' ){
+            if(result.data.msg === 'no' ){
                 return alert('닉네임이 중복됩니다');
             }
 
-            result = await axios.post('/api/member/join', {userid, pwd, name,nickname,email,phone,zipCode,address,dAddress,profileimg });
-            if(result.data.msg=='ok'){
+            result = await axios.post('/api/member/join', {userid, pwd, name,nickname,email,phone,zipCode,address,d_address,profileimg });
+            console.log(d_address);
+            
+            if(result.data.msg ==='ok'){
+                
                 alert('회원 가입이 완료되었습니다. 로그인하세요');
                 navigate('/');
             }
@@ -56,6 +56,7 @@ function Join() {
         }
     }
 
+    
     async function fileupload(e){
         const formData = new FormData();
         formData.append('image', e.target.files[0]);
@@ -63,17 +64,22 @@ function Join() {
         
         setProfileimg(`http://localhost:8070/uploads/${result.data.filename}`);
         console.log(result.data.filename);
-        
         setImgStyle({display:"block", width:"200px"});
     }
 
+    const openPostcodePopup = () => {
+        window.open('/popup/postcode', '주소 찾기', 'width=500,height=402');
+        window.addEventListener('message', function (event) {
+          if (event.origin === window.location.origin) {
+            const { zipCode, address } = event.data;
+            setZipCode(zipCode);
+            setAddress(address);
+          }
+        });
+      };
 
-    const handlePostcodeComplete = (data) => {
-      setZipCode(data.zonecode);
-      setAddress(data.address);
-      setShowPostcode(false);
-    };
-
+    
+    
     return (
         <>
         <Heading/>
@@ -126,16 +132,9 @@ function Join() {
             </div>
             <div className="field">
                 <label>우편번호</label>
-                <input type="text"  style={{flex:"2"}} value={zipCode} onChange={(e)=>{
-                     setZipCode( e.currentTarget.value );
-                }} readOnly/>
-                <button style={{ flex: "1" }} onClick={() => { setShowPostcode(true) }}>우편번호 찾기</button>
+                <input type="text" style={{ flex: "2" }} value={zipCode} onChange={(e) => { setZipCode(e.currentTarget.value); }} readOnly />
+                <button style={{ flex: "1" }} onClick={openPostcodePopup}>우편번호 찾기</button>
             </div>
-            {showPostcode && (
-                <div className="postcode-popup">
-                    <DaumPostcode onComplete={handlePostcodeComplete} />
-                </div>
-            )}
             <div className="field" >
                 <label>주소</label>
                 <input type="text" value={address} onChange={
@@ -144,8 +143,8 @@ function Join() {
             </div>
             <div className="field">
                 <label>상세주소</label>
-                <input type="text" value={dAddress} onChange={
-                      (e)=>{  setDAddress( e.currentTarget.value ); }
+                <input type="text" value={d_address} onChange={
+                      (e)=>{ setD_address( e.currentTarget.value ); }
                 } placeholder='상세주소 입력'/>
             </div>
             <div className='field'>
@@ -163,9 +162,9 @@ function Join() {
             </div>
         
         </div>
-        {/* <Footer/> */}
+        <Footer/>
     </>
-    )
+    );
 }
 
-export default Join
+export default Join;

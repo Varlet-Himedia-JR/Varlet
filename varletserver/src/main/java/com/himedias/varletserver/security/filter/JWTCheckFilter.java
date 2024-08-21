@@ -26,12 +26,17 @@ public class JWTCheckFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        // 요청 헤더에서 "Authorization" 값을 가져옵니다.
         String authHeaderStr = request.getHeader("Authorization");
         try {
-            //Bearer accestoken...
+            // "Bearer " 접두사를 제거하고 실제 JWT 토큰만 추출합니다.
             String accessToken = authHeaderStr.substring(7);
+
+            // JWT 토큰을 검증하고 클레임을 추출합니다.
             Map<String, Object> claims = JWTUtil.validateToken(accessToken);
             log.info("JWT claims: " + claims);
+
+            // 클레임에서 사용자 정보를 추출합니다.
             String userid = (String) claims.get("userid");
             String pwd = (String) claims.get("pwd");
             String name = (String) claims.get("name");
@@ -48,18 +53,23 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             Character isLogin = (Character) claims.get("isLogin");
             List<String> roleNames = (List<String>) claims.get("roleNames");
 
-
+            // 추출한 정보를 사용하여 MemberDTO 객체를 생성합니다.
             MemberDTO memberDTO = new MemberDTO(userid, pwd, name,nickname, email, phone, provider, snsid, profileimg, zipCode, address, dAddress, indate, isLogin, roleNames);
             log.info("-----------------------------------");
             log.info(memberDTO);
-            log.info(memberDTO.getAuthorities()); // 권한 추출
+            log.info(memberDTO.getAuthorities()); // 사용자 권한을 로그에 기록합니다.
 
+            // UsernamePasswordAuthenticationToken 객체를 생성하여 인증 정보를 설정합니다.
             UsernamePasswordAuthenticationToken authenticationToken
                     = new UsernamePasswordAuthenticationToken(memberDTO, pwd, memberDTO.getAuthorities());
+            // SecurityContext에 인증 정보를 설정합니다.
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
+            // 필터 체인에서 다음 필터로 요청을 전달합니다.
             filterChain.doFilter(request, response);
         } catch (Exception e) {
+            // JWT 검증 중 오류가 발생하면 로그에 기록하고 클라이언트에 오류 메시지를 반환합니다.
+            log.error("JWT Check Error..............");
             log.error("JWT Check Error..............");
             log.error(e.getMessage());
             Gson gson = new Gson();
@@ -73,12 +83,12 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        // 요청 URI를 가져옵니다.
         String path = request.getRequestURI();
+
         log.info("check uri............." + path);
 
-        if (request.getMethod().equals("OPTIONS"))
-            return true;
-        if (path.startsWith("/member/loginlocal"))
+        if (request.getMethod().equals("OPTIONS")) // CORS preflight 요청은 필터를 적용하지 않음.
             return true;
         if (path.startsWith("/main/"))
             return true;
@@ -89,15 +99,60 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
 
 
-
-        if (path.startsWith("/images/"))
-            return true;
-
-        if (path.startsWith("/uploads/"))
-            return true;
-
+        // 회원가입
         if (path.startsWith("/member/join"))
             return true;
+        if (path.startsWith("/member/emailCheck"))
+            return true;
+        if (path.startsWith("/member/nicknameCheck"))
+            return true;
+        if (path.startsWith("/member/pwdCheck"))
+            return true;
+
+        // 로그인
+        if (path.startsWith("/member/loginlocal"))
+            return true;
+
+        // sns 로그인
+        if (path.startsWith("/member/kakaoStart"))
+            return true;
+        if (path.startsWith("/member/kakaoLogin"))
+            return true;
+        if (path.startsWith("/member/naverStart"))
+            return true;
+        if (path.startsWith("/member/naverLogin"))
+            return true;
+
+        // 로그아웃
+        if (path.startsWith("/member/logout"))
+            return true;
+
+
+        if (path.startsWith("/member/getMyProfileImg"))
+            return true;
+        if (path.startsWith("/member/fileupload"))
+            return true;
+        if (path.startsWith("/member/updateInfo"))
+            return true;
+        if (path.startsWith("/member/userReviews"))
+            return true;
+        if (path.startsWith("/member/checkEmail"))
+            return true;
+
+
+        // 이미지 관련
+        if (path.startsWith("/images/"))
+            return true;
+        if (path.startsWith("/uploads/"))
+            return true;
+        if (path.startsWith("/favicon.ico"))
+            return true;
+
+
+
+
+
+        // 고객센터
         if (path.startsWith("/qna/qna"))
             return true;
         if (path.startsWith("/qna/writeQna"))
@@ -110,36 +165,12 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/notice/noticeList/"))
             return true;
 
-        if (path.startsWith("/member/emailCheck"))
-            return true;
-
-        if (path.startsWith("/member/nicknameCheck"))
-            return true;
-        if (path.startsWith("/member/pwdCheck"))
-            return true;
-
-        if (path.startsWith("/member/fileupload"))
-            return true;
-        if (path.startsWith("/member/kakaoStart"))
-            return true;
-        if (path.startsWith("/member/kakaoLogin"))
-            return true;
-        if (path.startsWith("/member/naverStart"))
-            return true;
-        if (path.startsWith("/member/naverLogin"))
-            return true;
-        if (path.startsWith("/member/updateInfo"))
-            return true;
-        if (path.startsWith("/member/logout"))
-            return true;
-        if (path.startsWith("/member/userReviews"))
-            return true;
-        if (path.startsWith("/member/checkEmail"))
-            return true;
 
 
-        if (path.startsWith("/favicon.ico"))
-            return true;
+
+
+
+
         //course
         if (path.startsWith("/course/getTnames/"))
             return true;
@@ -174,6 +205,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/rcommunity/pick"))
             return true;
+
         //community
         if (path.startsWith("/rcrecommend/updateReplyPicked"))
             return true;
@@ -185,6 +217,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/rcrecommend/writeRecommend"))
             return true;
+
         //recommunity
         if (path.startsWith("/review/getReviewView/"))
             return true;
