@@ -24,7 +24,7 @@ import MyPage from "./component/member/MyPage";
 import MyInfo from "./component/member/MyInfo";
 import MyReview from "./component/member/MyReview";
 import MyQna from "./component/member/MyQna";
-import MyRCommunity from "./component/request/MyRCommunity";
+import MyRequest from "./component/member/MyRequest";
 import Notice from "./component/notice/Notice";
 import FindId from "./component/member/FindId";
 import House from "./component/house/House";
@@ -86,7 +86,7 @@ function App() {
         <Route path="/myInfo" element={<MyInfo />} />
         <Route path="/myReview" element={<MyReview />} />
         <Route path="/myQna" element={<MyQna />} />
-        <Route path="/myRCommunity" element={<MyRCommunity />} />
+        <Route path="/myRequest" element={<MyRequest />} />
 
         {/* 공지사항 */}
         <Route path="/notice" element={<Notice />} />

@@ -1,12 +1,15 @@
 package com.himedias.varletserver.dto.Rcommunity;
 
-import java.sql.Timestamp;
+import com.himedias.varletserver.entity.MemberRole;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Projection for {@link com.himedias.varletserver.entity.RCommunity}
  */
-public interface RCommunitySummary {
+
+public interface RCommunityInfo {
     int getRnum();
 
     int getLocation();
@@ -17,20 +20,34 @@ public interface RCommunitySummary {
 
     String getTitle();
 
+    String getContent();
+
+    int getReward();
+
     char getPicked();
 
     LocalDateTime getWritedate();
 
-    String getUserid();
+    LocalDateTime getStartdate();
+
+    LocalDateTime getEnddate();
+
+    MemberInfo getUserid();
 
     /**
      * Projection for {@link com.himedias.varletserver.entity.Member}
      */
     interface MemberInfo {
-
         String getUserid();
 
+        String getName();
+
+        String getNickname();
+
+        String getSnsid();
+
+        String getProfileimg();
+
+        List<MemberRole> getMemberRoleList();
     }
-
-
 }
