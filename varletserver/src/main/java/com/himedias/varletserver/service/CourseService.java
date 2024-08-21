@@ -23,10 +23,13 @@ public class CourseService {
     public List<String> getTnamesByUserid(String userid) {
         return cr.findTnamesByUserid(userid);
     }
+    public List<Timetable> getMycourseByTseq(String tseq, String userid) {
+        return cr.findMycourseByTseq(tseq,userid);
+    }
 
 
-    public List<String> getDurationByTnames(String mycourse) {
-        Optional<Timetable> tt = cr.findDurationByTnames(mycourse);
+    public List<String> getDurationByTseq(String tseq) {
+        Optional<Timetable> tt = cr.findDurationByTseq(tseq);
         List<String> duration = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -51,9 +54,9 @@ public class CourseService {
 
     }
 
-    public List<Dayschedule> getDaySchedules(String tnames, String userid) {
-        Timetable tt = cr.findTseqByTnamesAndUserid(tnames,userid);
-        int tseq = tt.getTseq();
+    public List<Dayschedule> getDaySchedules(String tseq, String userid) {
+//        Timetable tt = cr.findTseqByTnamesAndUserid(tnames,userid);
+//        int tseq = tt.getTseq();
         return cr.findDayschedule(tseq);
 
     }
