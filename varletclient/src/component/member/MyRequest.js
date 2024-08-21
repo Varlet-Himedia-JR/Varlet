@@ -11,8 +11,6 @@ const MyRequest = () => {
     const loginUser = useSelector(state => state.user);
     const userid = getCookie('user');
     const [posts, setPosts] = useState([]);
-    const [location, setLocation] = useState('');
-    const [location2, setLocation2] = useState('');
     const [isLocation2Visible, setIsLocation2Visible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -48,16 +46,6 @@ const MyRequest = () => {
         }
     };
 
-    const handleLocationChange = (e) => {
-        const newLocation = e.target.value;
-        setLocation(newLocation);
-        setLocation2('');
-        setIsLocation2Visible(newLocation !== '');
-    };
-
-    const handleLocation2Change = (e) => {
-        setLocation2(e.target.value);
-    };
 
     // const cancelSearch = () => {
     //     setLocation('');
@@ -66,64 +54,13 @@ const MyRequest = () => {
     //     setPosts([]);
     // };
 
-    const maskedId = (userid) => {
-        return userid.length > 2 ? userid.slice(0, 2) + '****' : userid;
-    };
+
 
     return (
         <>
             <Heading />
             <div className='w-full max-w-[1700px] mx-auto px-1 mt-28'>
-                <div className='mt-28'>
-                    <div className='flex justify-between items-baseline'>
-                        <h1 className='text-3xl font-semibold'>MY REQUEST</h1>
-                    </div>
-                    <div className='w-full'>
-                        {/* <ul className='mb-4'>
-                            <li className='flex items-center mb-4'>
-                                <span className='mr-4 text-lg font-medium'>지역 선택</span>
-                                <select
-                                    className='border rounded px-2 py-1'
-                                    value={location}
-                                    onChange={handleLocationChange}
-                                >
-                                    <option value="">전체</option>
-                                    {Object.keys(location1Data).map((key) => (
-                                        <option key={key} value={key}>{location1Data[key]}</option>
-                                    ))}
-                                </select>
-                                {location && (
-                                    <>
-                                        <div className="ml-auto">
-                                            {isLocation2Visible && (
-                                                <select
-                                                    className='border rounded px-2 py-1'
-                                                    value={location2}
-                                                    onChange={handleLocation2Change}
-                                                >
-                                                    <option value="">전체</option>
-                                                    {location2Data[location]?.map((loc) => (
-                                                        <option key={loc.value} value={loc.value}>{loc.label}</option>
-                                                    ))}
-                                                </select>
-                                            )}
-                                            <button
-                                                className="ml-4 bg-customblue text-white px-4 py-2 rounded"
-                                                onClick={fetchPosts}
-                                            >
-                                                검색
-                                            </button>
-                                            <button
-                                                className="ml-4 bg-red-500 text-white px-4 py-2 rounded"
-                                                onClick={cancelSearch}
-                                            >
-                                                검색 취소
-                                            </button>
-                                        </div>
-                                    </>
-                                )}
-                            </li>
-                        </ul> */}
+
                         <ul>
                             <li className='flex font-bold text-black border-b border-gray-300 pb-2 mb-2'>
                                 <span className='w-1/12 text-center'>번호</span>
@@ -135,11 +72,10 @@ const MyRequest = () => {
                                 <span className='w-1/12 text-center'>채택 여부</span>
                                 <span className='w-1/12 text-center'>조회수</span>
                             </li>
-                            {posts.length > 0 ? (
+                            {/* {posts.length > 0 ? (
                                 posts.slice().reverse().map((post) => (
                                     <li key={post.rnum} className='flex items-center border-b border-gray-300 py-2'>
                                         <span className='w-1/12 text-center bg-blue-500 text-white rounded-full px-2 py-1 text-xs'>
-                                            {post.rnum}
                                         </span>
                                         <Link to={`/rCommunityView/${post.rnum}`} className='w-4/12 text-left cursor-pointer text-blue-500'>
                                             {post.title}
@@ -150,7 +86,6 @@ const MyRequest = () => {
                                         <span className='w-2/12 text-center'>
                                             {location2Data[post.location]?.find(item => item.value === post.location2)?.label || "전체"}
                                         </span>
-                                        <span className='w-2/12 text-center'>{maskedId(post.userid.userid)}</span>
                                         <span className='w-2/12 text-center'>
                                             {new Date(post.writedate).toLocaleDateString('ko-KR', {
                                                 year: 'numeric',
@@ -177,13 +112,12 @@ const MyRequest = () => {
                                 ))
                             ) : (
                                 <p className='text-center'>게시물이 없습니다.</p>
-                            )}
+                            )} */}
                         </ul>
                         {loading && <p className='text-center'>불러오는 중...</p>}
                         {error && <p className='text-center text-red-500'>{error}</p>}
-                    </div>
+
                 </div>
-            </div>
             <Footer />
         </>
     );

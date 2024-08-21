@@ -65,7 +65,7 @@ public class RCommunityController {
     @GetMapping("/getMyList/{userid}")
     public HashMap<String, Object> getMyList(@PathVariable("userid") String userid) {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("postlist", rcs.getMyAllPosts(userid));
+//        result.put("postlist", rcs.getMyAllPosts(userid));
         return result; // 결과 반환
     }
 
