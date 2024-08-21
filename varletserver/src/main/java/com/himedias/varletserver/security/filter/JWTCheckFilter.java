@@ -136,6 +136,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/member/userReviews"))
             return true;
+        if (path.startsWith("/member/checkEmail"))
+            return true;
 
 
         // 이미지 관련

@@ -21,7 +21,7 @@ function MyPage() {
                 <button onClick={() => navigate('/myREVIEW')} style={buttonStyle}>
                     My REVIEW
                 </button>
-                <button onClick={() => navigate('/myRCommunity')} style={buttonStyle}>
+                <button onClick={() => navigate('/myREQUEST')} style={buttonStyle}>
                     My REQUEST
                 </button>
             </div>

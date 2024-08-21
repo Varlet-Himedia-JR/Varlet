@@ -45,7 +45,7 @@ public class CustomUserDetailService implements UserDetailsService {
                 member.getProfileimg(),
                 member.getZipCode(),
                 member.getAddress(),
-                member.getD_address(),
+                member.getDAddress(),
                 member.getProvider(),
                 member.getSnsid(),
                 member.getIndate(),

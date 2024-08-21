@@ -5,6 +5,7 @@ import { location1Data, location2Data } from '../request/LocaionData';
 import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
 import Footer from '../headerfooter/Footer';
 import Heading from '../headerfooter/Heading';
+import { cookies } from 'next/headers';
 function RCommunityView() {
   const { rnum } = useParams();
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ function RCommunityView() {
   const [removedFiles, setRemovedFiles] = useState([]);
   const [replies, setReplies] = useState([]); 
   const replyFormRef = useRef(null);
-
+  const currentUserId = userCookie ? userCookie.userid : '';
 
 
   useEffect(() => {
@@ -28,6 +29,9 @@ function RCommunityView() {
           .then((response) => {
               setPost(response.data.post);
               console.log("post?", response.data.post)
+              console.log("쿠키데이터확인",userCookie)
+              console.log("쿠키데이터확인",userCookie.userid)
+              console.log("포스트 유저", post.userid)
           })
           .catch((err) => {
               console.error(err);
@@ -38,6 +42,7 @@ function RCommunityView() {
           .then((response) => {
               setReplies(response.data.recommend); // 답글 리스트 상태 업데이트
               console.log("댓글정보?", response.data.recommend);
+              console.log("댓글정보2", response.data.userCookie)
           })
           .catch((err) => {
               console.error(err);
@@ -179,6 +184,11 @@ const replyDelete = (rcnum) => {
           navigate('/rcommunity');
       }
   };
+  const myrequestList = () => {
+    if (window.confirm('내 REQUEST로 돌아가시겠습니까?')) {
+      navigate('/myRequest'); 
+    }
+  };
 
   const test = () =>{
     navigate('/rCommunityDetail/:rnum/rcCommunityWrite')
@@ -186,16 +196,6 @@ const replyDelete = (rcnum) => {
 
   const rcommunityupdate = () => {
       navigate(`/rCommunityUpdate/${rnum}`);
-  };
-
-  const maskedid = (userid) => {
-      if (typeof userid === 'string') {
-          if (userid.length > 2) {
-              return userid.slice(0, 2) + '*'.repeat(userid.length - 2);
-          }
-          return '*'.repeat(userid.length);
-      }
-      return '정보 없음';
   };
 
   const getLocationName = (location1, location2) => {
@@ -279,13 +279,14 @@ const replyDelete = (rcnum) => {
     }
   };
   
+  
 
 
 return (
         <>
               <Heading />
-  <div class="w-full max-w-6xl mx-auto px-4 py-9 mt-28">
-    <div class="border-b pb-4 mb-6">
+  <div className='w-full max-w-[1700px] mx-auto px-1 mt-28 '>
+    <div className='mt-28 '>
       <div class="mr-4"> 
         <span className='text-left'>
           no.
@@ -333,7 +334,7 @@ return (
             <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
-          {maskedid(post.userid)}
+          {maskeduser(post.userid)}
         </div>
         <div class="mr-4">
           <svg
@@ -447,7 +448,7 @@ return (
           </div>
         )}
       </div>
-      <div className="text-lg leading-relaxed min-h-[40rem] w-full">
+      <div className="text-lg leading-relaxed min-h-[20rem] w-full">
         <pre className="whitespace-pre-wrap">{post.content}</pre>
       </div>
     </div>
@@ -455,7 +456,7 @@ return (
   <div class="border-t pt-6 mt-6">
     <div class="flex justify-end gap-2 mb-4">
       <div className="flex items-center gap-2">
-        {(post.userid === getCookie('user').userid) && (
+        {(post?.userid?.userid === userCookie.userid) && (
           <>
             <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"                   
             onClick={rcommunityupdate}>
@@ -474,6 +475,11 @@ return (
         onClick={returnList}>
         목록으로
       </button>
+      <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"
+        onClick={myrequestList}>
+        내 REQUEST
+      </button>
+
     </div>
     <div 
       className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-lg p-4 bg-blue-50 text-blue-800 dark:bg-gray-800 dark:text-blue-400 rounded-lg shadow-lg cursor-pointer flex items-center justify-center space-x-3 hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors duration-300"
@@ -549,17 +555,17 @@ return (
                 <div className="font-medium">{maskeduser(reply.userid)}</div>
                 <div className="text-muted-foreground">{new Date(reply.writedate).toLocaleDateString('ko-KR')}</div>
                 <div className="flex items-center gap-2">
-                  {/* post.userid와 쿠키에서 가져온 userid가 같고, post.picked이 'N'일 때만 버튼 표시 */}
-                  {(post.userid === getCookie('user').userid && post.picked === 'N') && (
-                    <>
-                      <button 
-                        className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"                   
-                        onClick={() => handlepicked(reply.rcnum)}>
-                        채택하기
-                      </button>
-                    </>
-                  )}
-                </div>
+                {/* post.userid와 쿠키에서 가져온 userid가 같고, post.picked이 'N'일 때만 버튼 표시 */}
+                {(post?.userid?.userid === userCookie.userid && post.picked === 'N') && (
+                  <>
+                    <button 
+                      className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"                   
+                      onClick={() => handlepicked(reply.rcnum)}>
+                      채택하기
+                    </button>
+                  </>
+                )}
+              </div>
               </div>
               <span className="w-2/12 text-center text-nowrap flex items-center justify-center gap-2">
                 {post.picked === "Y" ? (

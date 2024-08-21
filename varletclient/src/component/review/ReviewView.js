@@ -16,9 +16,7 @@ function ReviewView() {
     const [newReply, setNewReply] = useState('');
     const { rseq } = useParams();
     const navigate = useNavigate();
-
     const userId = getCookie('user').userid; // 로그인된 사용자 ID
-
 
     useEffect(() => {
         // 리뷰 데이터 로드
@@ -125,6 +123,11 @@ function ReviewView() {
         if (file) {
             setPreviewImage(URL.createObjectURL(file));
         }
+    }
+
+    function handleImageRemove() {
+        setSelectedFile(null);
+        setPreviewImage('');
     }
 
     function handleNewReplyChange(event) {
@@ -239,11 +242,20 @@ function ReviewView() {
                                                 onChange={handleFileChange}
                                             />
                                             {previewImage && (
-                                                <img
-                                                    src={previewImage}
-                                                    alt="Preview"
-                                                    style={{ maxWidth: '300px', maxHeight: '300px' }}
-                                                />
+                                                <div className="image-preview">
+                                                    <img
+                                                        src={previewImage}
+                                                        alt="Preview"
+                                                        style={{ maxWidth: '300px', maxHeight: '300px', marginRight: '10px' }}
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={handleImageRemove}
+                                                        style={{ background: 'none', border: 'none', color: 'red', cursor: 'pointer', fontSize: '24px' }}
+                                                    >
+                                                        &times; {/* 'X' 문자 */}
+                                                    </button>
+                                                </div>
                                             )}
                                         </>
                                     ) : (
@@ -317,7 +329,7 @@ function ReviewView() {
                 </div>
             </div>
             <Footer/>
-            </>
+        </>
     );
 }
 

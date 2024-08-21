@@ -36,7 +36,7 @@
     top: 20%;
     left: 33%;
     width: 50%;
-    height: 50%;
+    height: 70%;
     background-color: white;
     z-index: 1000;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -132,6 +132,7 @@ ul.floating li.button.custom {
     display :table;
     /* display: flex; */
     flex-direction: column;
+    background-color: rgb(175, 175, 175);
     border-collapse: collapse;
     width:80%;
 }
@@ -172,4 +173,6 @@ ul.floating li.button.custom {
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius :5px;
+    border:none;
 }

@@ -457,4 +457,22 @@ public class MemberController {
             return result;
     }
 
+    @GetMapping("/checkEmail")
+    public HashMap<String, Object> checkEmail(@RequestParam("email") String email) {
+        HashMap<String, Object> result = new HashMap<>();
+        try {
+            boolean isEmailUnique = ms.isEmailUnique(email);
+            if (isEmailUnique) {
+                result.put("msg", "yes"); // 이메일이 중복되지 않음
+            } else {
+                result.put("msg", "no"); // 이메일 중복됨
+            }
+        } catch (Exception e) {
+            result.put("msg", "error"); // 예외 처리
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
 }
