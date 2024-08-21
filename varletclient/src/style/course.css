@@ -156,7 +156,19 @@ ul.floating li.button.custom {
     padding: 0px;
     border:1px solid black;
     width: 50px;
-    height: 30px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.datacell {
+    position: absolute;
+    border-collapse: collapse;
+    margin:0px;
+    padding: 0px;
+    border:1px solid black;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;

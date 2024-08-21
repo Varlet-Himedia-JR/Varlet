@@ -5,6 +5,7 @@ import Heading from '../headerfooter/Heading';
 import Footer from '../headerfooter/Footer';
 import { location1Data, location2Data } from '../request/LocaionData';
 import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
+import { User } from 'ckeditor5-premium-features';
 
 function PostList() {
   const [posts, setPosts] = useState([]);
@@ -58,9 +59,17 @@ function PostList() {
     fetchAllPosts();
   };
 
-  const maskedid = (userid) => {
-    return userid.length > 2 ? userid.slice(0, 2) + '****' : userid;
-  };
+  const maskeduser = (user) => {
+    // user는 객체로 되어 있어야 함
+    if (user && typeof user.userid === 'string') {
+        const userid = user.userid;
+        if (userid.length > 2) {
+            return userid.slice(0, 2) + '*'.repeat(userid.length - 2);
+        }
+        return '*'.repeat(userid.length);
+    }
+    return '정보 없음';
+};
 
 
 
@@ -206,13 +215,13 @@ function PostList() {
                         {post.rnum}
                       </span>
                       <span className='w-4/12 text-left cursor-pointer text-blue-500' onClick={ ()=>{ logCheck(`/RcommunityView/${post.rnum}`) } }>
-                        {post.title},{post.replyCount}
+                        {post.title}
                       </span>
                       <span className='w-2/12 text-center'>{location1Data[post.location]}</span>
                       <span className='w-2/12 text-center'>
                         {location2Data[post.location]?.find(item => item.value === post.location2)?.label || "전체"}
                       </span>
-                      <span className='w-2/12 text-center'>{maskedid(post.userid)}</span>
+                      <span className='w-2/12 text-center'>{maskeduser(post.userid)}</span>
                       <span className='w-2/12 text-center'>
                         {new Date(post.writedate).toLocaleDateString('ko-KR', {
                           year: 'numeric',

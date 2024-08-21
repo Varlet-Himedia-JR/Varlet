@@ -1,6 +1,8 @@
 package com.himedias.varletserver.dao;
 
+import com.himedias.varletserver.dto.Rcommunity.RCommunityMyList;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
+import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.RCommunity;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -42,9 +44,12 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
     List<RCommunitySummary> findAllWithReplyCount();
 
     // 사용자 ID로 게시물 목록을 찾기
-    List<RCommunity> findByUserid(String userid);
+    @Query("SELECT r FROM RCommunity r WHERE r.userid = :userid")
+    List<RCommunityMyList> findByUserid(@Param("userid") Member userid);
 
-    List<RCommunity> findByUseridAndLocation(String userid, Integer location);
+    @Query("SELECT r FROM RCommunity r WHERE r.userid = :userid AND r.location = :location")
+    List<RCommunityMyList> findByUseridAndLocation(@Param("userid") Member userid, @Param("location") Integer location);
 
-    List<RCommunity> findByUseridAndLocationAndLocation2(String userid, Integer location, Integer location2);
+    @Query("SELECT r FROM RCommunity r WHERE r.userid = :userid AND r.location = :location AND r.location2 = :location2")
+    List<RCommunityMyList> findByUseridAndLocationAndLocation2(@Param("userid") Member userid, @Param("location") Integer location, @Param("location2") Integer location2);
 }

@@ -1,7 +1,9 @@
 package com.himedias.varletserver.controller;
 
+import com.himedias.varletserver.dto.Rcommunity.RCommunityMyList;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
+import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.RCommunity;
 import com.himedias.varletserver.entity.Review;
 import com.himedias.varletserver.service.RCommunityService;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -44,10 +47,7 @@ public class RCommunityController {
 
     @PostMapping("/writePost")
     public ResponseEntity<HashMap<String, Object>> writePost(@RequestBody RCommunityWrite rCommunityWrite) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String userId = authentication.getName();  // 로그인한 사용자의 ID
-//        System.out.println(userId);
-//        rCommunityWrite.setUserid(userId);  // 로그인한 사용자의 ID를 DTO에 설정
+
 
         HashMap<String, Object> result = rcs.writePost(rCommunityWrite);
         return ResponseEntity.ok(result);
@@ -89,17 +89,27 @@ public class RCommunityController {
                                              @RequestParam(required = false) Integer location,
                                              @RequestParam(required = false) Integer location2) {
         HashMap<String, Object> result = new HashMap<>();
-        List<RCommunity> postList;
+        List<RCommunityMyList> postList;
+
+        // 사용자의 Member 객체를 조회
+        Optional<Member> userOptional = rcs.findMemberByUserid(userid);
+
+        if (userOptional.isEmpty()) {
+            result.put("error", "User not found");
+            return result;
+        }
+
+        Member user = userOptional.get();
 
         if (location != null && location2 != null) {
             // 특정 지역과 하위 지역으로 게시물 필터링
-            postList = rcs.getPostsByUserIdAndLocation(userid, location, location2);
+            postList = rcs.getPostsByUserIdAndLocationAndLocation2(user, location, location2);
         } else if (location != null) {
             // 특정 지역으로 게시물 필터링
-            postList = rcs.getPostsByUserIdAndLocation(userid, location);
+            postList = rcs.getPostsByUserIdAndLocation(user, location);
         } else {
             // 사용자의 모든 게시물 조회
-            postList = rcs.getPostsByUserId(userid);
+            postList = rcs.getPostsByUserId(user);
         }
 
         result.put("postlist", postList); // 'postlist'라는 키로 결과를 저장
