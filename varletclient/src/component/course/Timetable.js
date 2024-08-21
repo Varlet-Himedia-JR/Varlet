@@ -37,60 +37,92 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
         setIsScheduledetailVisible(false);
     };
 
-    // 일정 등록 함수
-    const updateDayschedule = async () => {
-
-        const sDateTimeString = `${sdate}T${stime}:00`;
-        const sDateObject = new Date(sDateTimeString);
-        const eDateTimeString = `${sdate}T${etime}:00`;
-        const eDateObject = new Date(eDateTimeString);
-        const dDateString = `${sdate}T00:00:00`;
-        const dDateObject = new Date(dDateString);
-
-        try {
-            let result = await jaxios.post('/api/dayschedule/updateDayschedule', {
-                dtitle: scheduleDetail.dtitle,
-                cseq: scheduleDetail.cseq,
-                userid: scheduleDetail.userid,
-                tseq: scheduleDetail.tseq,
-                day_date: dDateObject,
-                start_time: sDateObject,
-                end_time: eDateObject,
-                price: price,
-                pcount: pcount
-            });
-            if (result.data.msg == 'ok') {
-                alert('등록완료');
-                setIsScheduledetailVisible(false);
+    const deleteDayschedule = async(dseq) => {
+        const isDelete = window.confirm(`${dseq}를 삭제하시겠습니까?`);
+        if (isDelete) {
+            try {
+                const result = await jaxios.post(`/api/dayschedule/deleteDayschedule/${dseq}`);
+                if (result.data.msg == 'ok') {
+                    navigate('/mycourse')    
+                }
+            } catch (err) {
+                console.error(err);
             }
-        } catch (err) {
-            console.error(err);
         }
     }
+
+    // 일정 등록 함수
+    // const updateDayschedule = async () => {
+
+    //     const sDateTimeString = `${sdate}T${stime}:00`;
+    //     const sDateObject = new Date(sDateTimeString);
+    //     const eDateTimeString = `${sdate}T${etime}:00`;
+    //     const eDateObject = new Date(eDateTimeString);
+    //     const dDateString = `${sdate}T00:00:00`;
+    //     const dDateObject = new Date(dDateString);
+
+    //     try {
+    //         let result = await jaxios.post('/api/dayschedule/updateDayschedule', {
+    //             dtitle: scheduleDetail.dtitle,
+    //             cseq: scheduleDetail.cseq,
+    //             userid: scheduleDetail.userid,
+    //             tseq: scheduleDetail.tseq,
+    //             day_date: dDateObject,
+    //             start_time: sDateObject,
+    //             end_time: eDateObject,
+    //             price: price,
+    //             pcount: pcount
+    //         });
+    //         if (result.data.msg == 'ok') {
+    //             alert('등록완료');
+    //             setIsScheduledetailVisible(false);
+    //         }
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // }
 
     const updatePositions = () => {
         if (daySchedule && daySchedule.length > 0) {
             const position = [];
             for (let i = 0; i < daySchedule.length; i++) {
+                console.log(i, '번째 레츠기릿');
+                console.log(daySchedule[i].day_date);
+    
+                // Date 객체로 변환
+                let date = new Date(daySchedule[i].day_date);
+    
+                // 9시간을 더함 (9 * 60 * 60 * 1000 밀리초)
+                date.setTime(date.getTime() + (9 * 60 * 60 * 1000));
+    
+                // 다시 문자열로 변환
+                let adjustedDate = date.toISOString();
+                console.log('조정된 날짜:', adjustedDate);
+    
                 let x = 0;
                 let y = 0;
                 let l = 0;
                 let c = 'black';
-
+    
                 for (let j = days.length - 1; j >= 0; j--) {
-                    if (days[j].substring(5, 10) === daySchedule[i].day_date.substring(5, 10)) {
+                    console.log('day 비교:', days[j].substring(5, 10));
+                    console.log('스케쥴 비교:', adjustedDate.substring(5, 10));
+    
+                    if (days[j].substring(5, 10) === adjustedDate.substring(5, 10)) {
                         x = days.length - 1 - j;
                         break;
+                    } else {
+                        console.log('일치 안함');
                     }
                 }
-
+    
                 for (let j = 0; j < times.length; j++) {
                     if (times[j].substring(0, 2) === daySchedule[i].start_time.substring(11, 13)) {
                         y = j + 1 + daySchedule[i].start_time.substring(14, 16) / 60;
                         break;
                     }
                 }
-
+    
                 let startTime = new Date(daySchedule[i].start_time);
                 let endTime = new Date(daySchedule[i].end_time);
                 let differenceInMillis = endTime - startTime;
@@ -102,6 +134,7 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
             setCellposition(position);
         }
     };
+    
 
     useEffect(() => {
         if (courseDuration && courseDuration.length > 0) {
@@ -110,12 +143,12 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
         if (cellWidth > 0) {
             setCellwidth(cellWidth);
         }
+        updatePositions();
     }, [courseDuration, cellWidth]);
 
     useEffect(() => {
         if (daySchedule && daySchedule.length > 0) {
             setDayschedule(daySchedule);
-            updatePositions();
         }
     }, [daySchedule, days, cellwidth]);
 
@@ -160,8 +193,15 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
             ))}
             {daySchedule.length > 0 ?
                 dayschedule.map((contents, index) => (
-                    <div key={index} className="datacell" style={{ right: `${cellposition[index].x * cellwidth}px`, top: `${cellposition[index].y * 40}px`, height: `${cellposition[index].l * 40}px`, backgroundColor: `${cellposition[index].c}`, color: 'white', width: `${getCourseCellWidthInPixels()}px` }} onClick={()=>scheduleDetail(contents.dseq, index, isScheduledetailVisible)} >
-                        {contents.dtitle}/{contents.start_time}
+                    <div key={index} className="datacell" style={{ right: `${cellposition[index].x * cellwidth}px`, top: `${cellposition[index].y * 40}px`, height: `${cellposition[index].l * 40}px`, backgroundColor: `${cellposition[index].c}`, color: 'white', width: `${getCourseCellWidthInPixels()}px` }} onClick={() => scheduleDetail(contents.dseq, index, isScheduledetailVisible)} >
+                        {contents.dtitle}/{contents.start_time}/{contents.day_date}
+                        <button style={{ position: 'absolute', top: '5px', right: '5px', backgroundColor: 'transparent', border: 'none', color: 'white', fontSize: '16px', cursor: 'pointer', padding: 0 }}
+                            onClick={(e) => {
+                                e.stopPropagation(); // 부모 div의 onClick 이벤트를 막음
+                                deleteDayschedule(contents.dseq, index); // X 버튼 클릭 시 동작
+                            }}>
+                            ×
+                        </button>
                     </div>
                 ))
                 : <></>
