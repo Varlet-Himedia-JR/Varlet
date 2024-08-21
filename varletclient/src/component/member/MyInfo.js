@@ -36,11 +36,12 @@ function MyInfo() {
             setZipCode(userCookie.zipCode || '');
             setAddress(userCookie.address || '');
             setDAddress(userCookie.dAddress || '');
-            setProfileimg(userCookie.profileimg || '');
+            setProfileimg(userCookie.profileimg || ''); // 프로필 이미지 초기화
             setOriginalEmail(userCookie.email || '');
-            setOriginalPwd(userCookie.pwd || ''); // 기존 비밀번호 설정
+            setOriginalPwd(userCookie.pwd || '');
         }
     }, []);
+    
 
     async function checkPassword() {
         try {
@@ -151,11 +152,6 @@ function MyInfo() {
         }
     }
     
-    
-    
-    
-    
-
     async function fileupload(e) {
         const formData = new FormData();
         formData.append('image', e.target.files[0]);
@@ -170,7 +166,7 @@ function MyInfo() {
     }
 
     const handlePostcodeComplete = (data) => {
-        setZipCode(data.zonecode);
+        setZipCode(data.zipCode);
         setAddress(data.address);
         setShowPostcode(false);
     };
