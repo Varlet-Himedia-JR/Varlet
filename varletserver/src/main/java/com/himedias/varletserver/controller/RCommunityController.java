@@ -1,5 +1,6 @@
 package com.himedias.varletserver.controller;
 
+import com.himedias.varletserver.dto.Rcommunity.RCommunityInfo;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityMyList;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
@@ -56,7 +57,7 @@ public class RCommunityController {
     @GetMapping("/rCommunityView/{rnum}")
     public HashMap<String, Object> getPostDetail(@PathVariable("rnum") int rnum) {
         HashMap<String, Object> result = new HashMap<>();
-        RCommunity post = rcs.getPostAndIncreaseViewCount(rnum);
+        RCommunityInfo post = rcs.getPostDetail(rnum);
         result.put("post", post);
         return result;
     }

@@ -63,9 +63,11 @@ function PostList() {
     // user는 객체로 되어 있어야 함
     if (user && typeof user.userid === 'string') {
         const userid = user.userid;
+        // 앞 두 글자 + 별 3개
         if (userid.length > 2) {
-            return userid.slice(0, 2) + '*'.repeat(userid.length - 2);
+            return userid.slice(0, 2) + '*'.repeat(3);
         }
+        // 아이디 길이가 2 이하일 경우 모든 문자를 별로 대체
         return '*'.repeat(userid.length);
     }
     return '정보 없음';

@@ -3,6 +3,7 @@ package com.himedias.varletserver.service;
 import com.himedias.varletserver.dao.MemberRepository;
 import com.himedias.varletserver.dao.RCommunityRepository;
 import com.himedias.varletserver.dao.RcrecommendRepository;
+import com.himedias.varletserver.dto.Rcommunity.RCommunityInfo;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityMyList;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
@@ -83,13 +84,16 @@ public class RCommunityService {
         return result;
     }
 
-    public RCommunity getPostAndIncreaseViewCount(int rnum) {
+    @Transactional
+    public RCommunityInfo getPostDetail(int rnum) {
         RCommunity post = rcr.findPostById(rnum);
+
         if (post != null) {
             post.setViews(post.getViews() + 1);
-            rcr.save(post);  // 업데이트된 게시글 저장
+            rcr.save(post);
         }
-        return post;
+
+        return rcr.findPostInfoById(rnum);
     }
 
     @Transactional

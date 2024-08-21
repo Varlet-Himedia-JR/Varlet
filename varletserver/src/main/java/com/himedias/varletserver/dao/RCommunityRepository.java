@@ -1,5 +1,6 @@
 package com.himedias.varletserver.dao;
 
+import com.himedias.varletserver.dto.Rcommunity.RCommunityInfo;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityMyList;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.entity.Member;
@@ -42,6 +43,16 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
             "GROUP BY r.rnum " +
             "ORDER BY r.rnum DESC")
     List<RCommunitySummary> findAllWithReplyCount();
+
+
+
+    // RCommunityInfo 프로젝션을 반환하는 메서드 추가
+    @Query("SELECT r.rnum AS rnum, r.location AS location, r.location2 AS location2, r.views AS views, r.title AS title, " +
+            "r.content AS content, r.reward AS reward, r.picked AS picked, r.writedate AS writedate, " +
+            "r.startdate AS startdate, r.enddate AS enddate, r.userid AS userid " +
+            "FROM RCommunity r WHERE r.rnum = :rnum")
+    RCommunityInfo findPostInfoById(@Param("rnum") int rnum);
+
 
     // 사용자 ID로 게시물 목록을 찾기
     @Query("SELECT r FROM RCommunity r WHERE r.userid = :userid")
