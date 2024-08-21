@@ -22,7 +22,7 @@ import {persistReducer} from 'redux-persist'; // 상태를 저장하고 복원�
 const reducers = combineReducers({
 
     user : userSlice.reducer,
-    course: courseSlice.reducer, // courseSlice 추가
+    // course: courseSlice.reducer, // courseSlice 추가
 })
 // persistConfig는 상태를 저장할 때의 설정을 정의합니다.
 const persistConfig = {

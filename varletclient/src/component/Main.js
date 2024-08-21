@@ -7,10 +7,12 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import '../style/main.css';
+import { setCookie, getCookie, removeCookie } from "../util/cookieUtil";
 
 function Main() {
   const [images, setImages] = useState([]); // 슬라이더에 사용할 이미지 목록
-
+  const userCookie = getCookie('user');
+  console.log('userCookie:', userCookie);
   const settings = {
     dots: true,
     infinite: true,

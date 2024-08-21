@@ -19,7 +19,7 @@ public class MemberDTO extends User {
         String nickname,
         String email,
         String phone,
-        String zipCode,
+        String zip_code,
         String address,
         String d_address,
         String profileimg,
@@ -27,6 +27,7 @@ public class MemberDTO extends User {
         String snsid,
         Timestamp indate,
         Character isLogin,
+        int point,
         List<String> roleNames
         ) {
         // 부모 클래스인 User의 생성자를 호출합니다.
@@ -44,15 +45,17 @@ public class MemberDTO extends User {
         this.nickname = nickname;
         this.email = email;
         this.phone = phone;
-        this.profileimg = profileimg;
-        this.zipCode = zipCode;
+        this.zip_code = zip_code;
         this.address = address;
-        this.dAddress = d_address;
+        this.d_address = d_address;
         this.provider = provider;
         this.snsid = snsid;
+        this.profileimg = profileimg;
         this.indate = indate;
         this.isLogin = isLogin;
+        this.point = point;
         this.roleNames = roleNames;
+
     }
     private String userid;
     private String pwd;
@@ -60,14 +63,15 @@ public class MemberDTO extends User {
     private String nickname;
     private String email;
     private String phone;
-    private String profileimg;
-    private String zipCode;
+    private String zip_code;
     private String address;
-    private String dAddress;
+    private String d_address;
     private String provider;
     private String snsid;
+    private String profileimg;
     private Timestamp indate;
     private Character isLogin;
+    private int point;
     private List<String> roleNames = new ArrayList<String>();
 
     // JWT 토큰 생성시에 그 안에 넣을 개인 정보들을 Map 형식으로 구성합니다
@@ -80,14 +84,15 @@ public class MemberDTO extends User {
         dataMap.put("nickname", nickname);
         dataMap.put("email", email);
         dataMap.put("phone", phone);
-        dataMap.put("profileimg", profileimg);
-        dataMap.put("zipCode", zipCode);
+        dataMap.put("zip_code", zip_code);
         dataMap.put("address", address);
-        dataMap.put("dAddress", dAddress);
+        dataMap.put("d_address", d_address);
         dataMap.put("provider", provider);
         dataMap.put("snsid", snsid);
+        dataMap.put("profileimg", profileimg);
         dataMap.put("indate", indate);
         dataMap.put("isLogin", isLogin);
+        dataMap.put("point", point);
         dataMap.put("roleNames", roleNames);
         return dataMap;
     }

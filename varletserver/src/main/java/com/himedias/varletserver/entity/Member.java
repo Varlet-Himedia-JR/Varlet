@@ -47,7 +47,7 @@ public class Member {
 
     @Size(max = 20)
     @Column(name = "zip_code", length = 20)
-    private String zipCode;
+    private String zip_code;
 
     @Size(max = 100)
     @Column(name = "address", length = 100)
@@ -55,7 +55,7 @@ public class Member {
 
     @Size(max = 100)
     @Column(name = "d_address", length = 100)
-    private String dAddress;
+    private String d_address;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "indate")
@@ -71,6 +71,9 @@ public class Member {
     @Size(max = 50)
     @Column(name = "snsid", length = 50)
     private String snsid;
+
+    @Column(name = "point", length = 100)
+    private int point;
 
     @Size(max = 300)
     @Column(name = "profileimg", length = 300)

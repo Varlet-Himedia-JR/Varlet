@@ -43,13 +43,14 @@ public class CustomUserDetailService implements UserDetailsService {
                 member.getEmail(),
                 member.getPhone(),
                 member.getProfileimg(),
-                member.getZipCode(),
+                member.getZip_code(),
                 member.getAddress(),
-                member.getDAddress(),
+                member.getD_address(),
                 member.getProvider(),
                 member.getSnsid(),
                 member.getIndate(),
                 member.getIs_login(),
+                member.getPoint(),
                 member.getMemberRoleList().stream()// 사용자 역할 리스트를 스트림으로 변환
                         .map(memberRole -> memberRole.name()) // 각 역할의 이름을 추출
                         .collect(Collectors.toList()) // 리스트로 수집
