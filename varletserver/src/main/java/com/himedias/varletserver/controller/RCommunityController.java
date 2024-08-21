@@ -1,5 +1,7 @@
 package com.himedias.varletserver.controller;
 
+import com.himedias.varletserver.dto.Paging;
+import com.himedias.varletserver.dto.Rcommunity.RCommunityInfo;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityMyList;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
@@ -7,6 +9,7 @@ import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.RCommunity;
 import com.himedias.varletserver.service.RCommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -24,22 +27,38 @@ public class RCommunityController {
     @Autowired
     private RCommunityService rcs;
 
+    public RCommunityController(RCommunityService rcs) {
+        this.rcs = rcs;
+    }
+
     @GetMapping("/getPostList")
     public HashMap<String, Object> getPostList(
             @RequestParam(required = false) Integer location,
-            @RequestParam(required = false) Integer location2) {
+            @RequestParam(required = false) Integer location2,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
         HashMap<String, Object> result = new HashMap<>();
+        Paging paging = new Paging();
+        paging.setPage(page);
+        paging.setDisplayRow(size);
+        paging.setSort(Sort.by(Sort.Direction.DESC, "rnum"));
+
         List<RCommunitySummary> postList;
 
         if (location != null && location2 != null) {
-            postList = rcs.getPostListByLocationAndLocation2(location, location2);
+            postList = rcs.getPostListByLocationAndLocation2(location, location2, paging);
         } else if (location != null) {
-            postList = rcs.getPostListByLocation(location);
+            postList = rcs.getPostListByLocation(location, paging);
         } else {
-            postList = rcs.getAllPosts();  // 필터링하지 않고 전체 게시글 반환
+            postList = rcs.getAllPosts(paging);
         }
 
+        paging.setTotalCount(rcs.getTotalPostCount(location, location2)); // 총 게시물 수 설정
+        paging.calPaging(); // 페이징 계산
+
         result.put("postlist", postList);
+        result.put("paging", paging);
         return result;
     }
 
@@ -61,7 +80,7 @@ public class RCommunityController {
     @GetMapping("/rCommunityView/{rnum}")
     public HashMap<String, Object> getPostDetail(@PathVariable("rnum") int rnum) {
         HashMap<String, Object> result = new HashMap<>();
-        RCommunity post = rcs.getPostAndIncreaseViewCount(rnum);
+        RCommunityInfo post = rcs.getPostDetail(rnum);
         result.put("post", post);
         return result;
     }

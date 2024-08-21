@@ -1,9 +1,12 @@
 package com.himedias.varletserver.dao;
 
+import com.himedias.varletserver.dto.Rcommunity.RCommunityInfo;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityMyList;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
 import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.RCommunity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,6 +18,24 @@ import java.util.List;
 
 @Repository
 public interface RCommunityRepository extends JpaRepository<RCommunity, Integer> {
+
+    @Query("SELECT COUNT(r) FROM RCommunity r WHERE r.location = :location AND r.location2 = :location2")
+    int countByLocationAndLocation2(@Param("location") int location, @Param("location2") int location2);
+
+    @Query("SELECT COUNT(r) FROM RCommunity r WHERE r.location = :location")
+    int countByLocation(@Param("location") int location);
+
+    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
+            "FROM RCommunity r ")
+    Page<RCommunitySummary> findAllBy(Pageable pageable);
+
+    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
+            "FROM RCommunity r WHERE r.location = :location")
+    Page<RCommunitySummary> findByLocation(@Param("location") int location, Pageable pageable);
+
+    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
+            "FROM RCommunity r WHERE r.location = :location AND r.location2 = :location2")
+    Page<RCommunitySummary> findByLocationAndLocation2(@Param("location") int location, @Param("location2") int location2, Pageable pageable);
 
     @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
             "FROM RCommunity r ORDER BY r.rnum DESC")
@@ -56,4 +77,19 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
 
     @Query("SELECT r FROM RCommunity r WHERE r.userid = :userid AND r.location = :location AND r.location2 = :location2")
     List<RCommunityMyList> findByUseridAndLocationAndLocation2(@Param("userid") Member userid, @Param("location") Integer location, @Param("location2") Integer location2);
+
+    // RCommunityInfo 프로젝션을 반환하는 메서드 추가
+    @Query("SELECT r.rnum AS rnum, r.location AS location, r.location2 AS location2, r.views AS views, r.title AS title, " +
+            "r.content AS content, r.reward AS reward, r.picked AS picked, r.writedate AS writedate, " +
+            "r.startdate AS startdate, r.enddate AS enddate, r.userid AS userid " +
+            "FROM RCommunity r WHERE r.rnum = :rnum")
+    RCommunityInfo findPostInfoById(@Param("rnum") int rnum);
+
+
+
+
+
+
+
 }
+
