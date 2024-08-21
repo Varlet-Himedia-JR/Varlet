@@ -1,7 +1,12 @@
 import {createSlice} from '@reduxjs/toolkit'
 // slice 를 만들어 store 에 담고 reducer(action) 로 store(slice)의 상태를 업데이트 합니다
-// 하나의 슬라이스에 여러 자료를 객체형식으로 담고, reducer로 값을 관리합니다
 // reducer안에는 여러가지 동작의 함수들이 담겨서 사용될 수 있습니다
+
+
+// 슬라이스를 만들고 store에 담아 관리합니다.
+// 슬라이스란 Redux 상태(state)의 특정 부분을 관리하는데 사용하는 개념입니다.
+// 하나의 슬라이스에는 여러 가지 상태를 객체 형태로 담고, reducer를 통해 상태를 관리합니다.
+// reducer 안에는 상태를 어떻게 변경할지 정의된 함수들이 담겨 있습니다.
 const initialState = {
     email:'',
     nickname:'',
@@ -22,8 +27,8 @@ const initialState = {
 const courseSlice = createSlice(
     {
         name : 'user' ,   // userSlice 안에 저장되는 저장객체의 이름
-        initialState ,
-        reducers:{
+        initialState ,    // 슬라이스의 초기 상태를 설정합니다.
+        reducers:{        // 상태를 변화시키는 함수들을 정의합니다.
             loginAction:(state, action)=>{
                 // 외부에서 전달되는 객체를 내부의 'user'객체에 저장할껀데
                 // 외부에서 전달되는 객체를 이 안에 쓴 action 이라고 부르고

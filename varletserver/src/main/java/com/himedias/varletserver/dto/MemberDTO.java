@@ -19,10 +19,10 @@ public class MemberDTO extends User {
         String nickname,
         String email,
         String phone,
-        String profileimg,
         String zipCode,
         String address,
-        String dAddress,
+        String d_address,
+        String profileimg,
         String provider,
         String snsid,
         Timestamp indate,
@@ -47,7 +47,7 @@ public class MemberDTO extends User {
         this.profileimg = profileimg;
         this.zipCode = zipCode;
         this.address = address;
-        this.dAddress = dAddress;
+        this.dAddress = d_address;
         this.provider = provider;
         this.snsid = snsid;
         this.indate = indate;

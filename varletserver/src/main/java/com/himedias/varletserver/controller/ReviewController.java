@@ -49,6 +49,13 @@ public class ReviewController {
         return result;
     }
 
+    @GetMapping("/reviewList")
+    public HashMap<String,Object> reviewList(){
+        HashMap<String,Object> result = new HashMap<String,Object>();
+
+        return result;
+    }
+
     @PostMapping("/writeReview")
     public HashMap<String, Object> writeReview(
             @RequestParam("title") String title,

@@ -36,7 +36,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
 @RestController
 @RequestMapping("/member")
 public class MemberController {
@@ -244,6 +243,7 @@ public class MemberController {
     }
 
 
+    // 아이디 중복 체크
     @PostMapping("/useridCheck")
     public HashMap<String, Object> useridCheck(@RequestParam("userid") String userid) {
         HashMap<String, Object> result = new HashMap<String, Object>();
@@ -253,6 +253,7 @@ public class MemberController {
         return result;
     }
 
+    // 비밀번호 확인
     @PostMapping("/pwdCheck")
     public HashMap<String, Object> pwdCheck(@RequestParam("password") String password, @RequestParam("userid") String userid) {
         System.out.println(password+"/"+userid);
@@ -260,9 +261,6 @@ public class MemberController {
         Member mem = ms.getMemberByUserid(userid);
         PasswordEncoder pe = cc.passwordEncoder(); // 암호화 방식 일관되게 설정
         // 비밀번호 검증
-        System.out.println("--------test pwdCheck-------");
-        System.out.println(pe.encode(password));
-        System.out.println(mem.getPwd());
         if (pe.matches(password, mem.getPwd())) {
             result.put("msg", "yes");
         } else {
@@ -286,6 +284,7 @@ public class MemberController {
 
     @PostMapping("/join")
     public HashMap<String, Object> join(@RequestBody Member member) {
+        System.out.println("여기여기역이경깅ㄱ여경ㄱ여ㅓㅎ량뉴리ㅘㅇ늄러ㅏㅣㅗㄴㅇ뮤러ㅣㅘㄴㅇㅁ " + member);
         HashMap<String, Object> result = new HashMap<String, Object>();
         PasswordEncoder pe = cc.passwordEncoder();
         member.setPwd(pe.encode(member.getPwd()));
@@ -434,7 +433,7 @@ public class MemberController {
         return result;
     }
 
-
+    // 로그아웃
     @PostMapping("/logout")
     public Map<String, Object> logout(HttpServletRequest request) {
         HashMap<String, Object> result = new HashMap<>();
@@ -447,13 +446,14 @@ public class MemberController {
         }
         return result;
     }
-    @GetMapping("/getMyProfileImg")
+
+    // 프로필 사진 불러오기
+    @GetMapping("/getMyProfileImg/{userid}")
     public Map<String, Object> getMyProfileImg(@RequestParam("userid") String userid) {
-        System.out.println("Received userid: " + userid);
         Map<String, Object> result = new HashMap<>();
             String profileImgUrl = ms.getProfileImageUrl(userid);
-            result.put("profileimg", profileImgUrl);
-
+            result.put("profileImgUrl", profileImgUrl);
+            System.out.println("뭔데 그래서~~~~~~~~~~~~" + profileImgUrl);
             return result;
     }
 

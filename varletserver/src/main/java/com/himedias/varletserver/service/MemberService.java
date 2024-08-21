@@ -49,19 +49,6 @@ public class MemberService {
         }
     }
 
-//    @Autowired
-//    FollowRepository fr;
-//
-//    public List<Follow> getFollowings(String nickname) {
-//        List<Follow> list = fr.findByFfrom( nickname );
-//        return list;
-//    }
-//
-//    public List<Follow> getFollowers(String nickname) {
-//        List<Follow> list = fr.findByFto( nickname );
-//        return list;
-//    }
-
     public Member getMemberBySnsid(String id) {
         Optional<Member> mem = mr.findBySnsid( id );
         if( !mem.isPresent() ){

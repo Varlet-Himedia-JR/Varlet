@@ -16,7 +16,6 @@ import QnaView from './component/qna/QnaView';
 import Mycourse from "./component/course/Mycourse";
 import Kakaosaveinfo from "./component/member/Kakaosaveinfo";
 import Naversaveinfo from "./component/member/Naversaveinfo";
-import Contents from "./component/contents/Contents";
 import ContentsList from "./component/contents/ContentsList";
 import Testcontents from "./component/contents/Testcontents";
 import ContentsView from "./component/contents/ContentsView";
@@ -28,6 +27,8 @@ import MyRCommunity from "./component/request/MyRCommunity";
 import Notice from "./component/notice/Notice";
 import FindId from "./component/member/FindId";
 import House from "./component/house/House";
+
+import PostCode from "./component/popup/PostCode";
 
 import 'ckeditor5/ckeditor5.css';
 import ContentsWrite from "./component/contents/ContentsWrite";
@@ -76,7 +77,7 @@ function App() {
         <Route path="/house" element={<House />} />
         
         {/* 여행 콘텐츠 */}
-        <Route path="/contents" element={<ContentsList />} />
+        <Route path="/contentsList" element={<ContentsList />} />
         <Route path="/testlist" element={<Testcontents />} />
         <Route path="/getContentsView/:cseq" element={<ContentsView />} />
 
@@ -94,15 +95,8 @@ function App() {
         {/* 결제 */}
         <Route path="/pay" element={<Pay />} />
 
-
-        
-        {/* <Route path="/main" element={<Main />} />
-        <Route path="/writePost" element={<WritePost />} />
-        <Route path="/myPage" element={<MyPage />} />
-        <Route path="/postone/:postid" element={<Postone />} />
-        <Route path="/kakaosaveinfo/:nickname" element={<Kakaosaveinfo />} />
-        <Route path="/editProfile" element={<EditProfile />} />
-        <Route path="/memberPage/:membernick" element={<MemberPage />} /> */}
+        {/* 팝업창 */}
+        <Route path="/popup/postCode" element={<PostCode />} />
       </Routes>
     </div>
   );
