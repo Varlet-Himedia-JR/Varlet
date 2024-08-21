@@ -68,13 +68,18 @@ function Join() {
     }
 
     const openPostcodePopup = () => {
-        window.open('/popup/postcode', '주소 찾기', 'width=500,height=402');
+        const width = 500;
+        const height = 402;
+        const left = (window.screen.width / 2) - (width / 2);
+        const top = (window.screen.height / 2) - (height / 2);
+
+    window.open('/popup/postcode', '주소 찾기', `width=${width},height=${height},left=${left},top=${top}`);
         window.addEventListener('message', function (event) {
           if (event.origin === window.location.origin) {
-            const { zipCode, address } = event.data;
-            console.log(zipCode);
+            const { zip_code, address } = event.data;
+            console.log(zip_code);
             console.log(address);
-            setZip_code(zipCode);
+            setZip_code(zip_code);
             setAddress(address);
           }
         });
@@ -86,84 +91,95 @@ function Join() {
         <>
         <Heading/>
         <div style={{ paddingTop: '100px' }}>
-            <div className='background'><img src="http://localhost:8070/images/Beach.jpg"/></div>
-        </div>
-        <div className='joinform'>
-            <div className="joinlabel" style={{fontSize:"2.0rem"}}>회원가입</div>
-            <div className='field'>
-                <label>아이디</label>
-                <input type="text" value={userid} onChange={
-                    (e)=>{ setUserid( e.currentTarget.value ) }
-                } />
-            </div>
-            <div className='field'>
-                <label>비밀번호</label>
-                <input type="password" value={pwd} onChange={
-                    (e)=>{ setPwd( e.currentTarget.value ) }
-                }/>
-            </div>
-            <div className='field'>
-                <label>비밀번호 확인</label>
-                <input type="password" value={pwdChk} onChange={
-                    (e)=>{ setPwdChk( e.currentTarget.value ) }
-                }/>
-            </div>
-            <div className='field'>
-                <label>이름</label>
-                <input type="text"  value={name} onChange={
-                    (e)=>{ setName( e.currentTarget.value ) }
-                }/>
-            </div>
-            <div className='field'>
-                <label>닉네임</label>
-                <input type="text"  value={nickname} onChange={
-                    (e)=>{ setNickname( e.currentTarget.value ) }
-                }/>
-            </div>
-            <div className='field'>
-                <label>이메일</label>
-                <input type="text"  value={email} onChange={
-                    (e)=>{ setEmail( e.currentTarget.value ) }
-                }/>
-            </div>
-            <div className='field'>
-                <label>전화번호</label>
-                <input type="text" value={phone} onChange={
-                    (e)=>{ setPhone( e.currentTarget.value ) }
-                }/>
-            </div>
-            <div className="field">
-                <label>우편번호</label>
-                <input type="text" style={{ flex: "2" }} value={zip_code} onChange={(e) => { setZip_code(e.currentTarget.value); }} readOnly />
-                <button style={{ flex: "1" }} onClick={openPostcodePopup}>우편번호 찾기</button>
-            </div>
-            <div className="field" >
-                <label>주소</label>
-                <input type="text" value={address} onChange={
-                      (e)=>{ setAddress( e.currentTarget.value ); }
-                } readOnly/>
-            </div>
-            <div className="field">
-                <label>상세주소</label>
-                <input type="text" value={d_address} onChange={
-                      (e)=>{ setD_address( e.currentTarget.value ); }
-                } placeholder='상세주소 입력'/>
-            </div>
-            <div className='field'>
-                <label>프로필사진</label>
-                <input type="file" onChange={(e)=>{ fileupload(e) }}/>
-            </div>
-            <div className='field'>
-                <label>프로필사진 미리보기</label>
-                <div><img src={profileimg} style={imgStyle} /></div>
-            </div>
+            <div className='background'><img src="http://localhost:8070/images/oceans.jpg" alt="Background" /></div>
+            <div className='joinform'>
+                <div className='join_css'>
+                    <div className="joinlabel" style={{fontSize:"2.0rem"}}>회원가입</div>
+                    <div className='join_field'>
+                        <label>아이디</label>
+                        <input type="text" value={userid} onChange={
+                            (e)=>{ setUserid( e.currentTarget.value ) }
+                        } />
+                    </div>
 
-            <div className='btns'>
-                <button onClick={ ()=>{   onSubmit()    }  }>회원가입</button>
-                <button onClick={ ()=>{ navigate('/')   }  }>돌아가기</button>
+                    <div className='join_field'>
+                        <label>비밀번호</label>
+                        <input type="password" value={pwd} onChange={
+                            (e)=>{ setPwd( e.currentTarget.value ) }
+                        }/>
+                    </div>
+
+                    <div className='join_field'>
+                        <label>비밀번호 확인</label>
+                        <input type="password" value={pwdChk} onChange={
+                            (e)=>{ setPwdChk( e.currentTarget.value ) }
+                        }/>
+                    </div>
+
+                    <div className='join_field'>
+                        <label>이름</label>
+                        <input type="text"  value={name} onChange={
+                            (e)=>{ setName( e.currentTarget.value ) }
+                        }/>
+                    </div>
+
+                    <div className='join_field'>
+                        <label>닉네임</label>
+                        <input type="text"  value={nickname} onChange={
+                            (e)=>{ setNickname( e.currentTarget.value ) }
+                        }/>
+                    </div>
+
+                    <div className='join_field'>
+                        <label>이메일</label>
+                        <input type="text"  value={email} onChange={
+                            (e)=>{ setEmail( e.currentTarget.value ) }
+                        }/>
+                    </div>
+
+                    <div className='join_field'>
+                        <label>전화번호</label>
+                        <input type="text" value={phone} onChange={
+                            (e)=>{ setPhone( e.currentTarget.value ) }
+                        }/>
+                    </div>
+
+                    <div className="join_field">
+                        <label>우편번호</label>
+                        <input type="text" value={zip_code} onChange={(e) => { setZip_code(e.currentTarget.value); }} readOnly />
+                        <button onClick={openPostcodePopup}>우편번호 찾기</button>
+                    </div>
+
+                    <div className="join_field" >
+                        <label>주소</label>
+                        <input type="text" value={address} onChange={
+                            (e)=>{ setAddress( e.currentTarget.value ); }
+                        } readOnly/>
+                    </div>
+
+                    <div className="join_field">
+                        <label>상세주소</label>
+                        <input type="text" value={d_address} onChange={
+                            (e)=>{ setD_address( e.currentTarget.value ); }
+                        } placeholder='상세주소 입력'/>
+                    </div>
+
+                    <div className='join_field'>
+                        <label>프로필사진</label>
+                        <input type="file" onChange={(e)=>{ fileupload(e) }}/>
+                    </div>
+
+                    <div className='join_field'>
+                        <div><img src={profileimg} style={imgStyle} /></div>
+                    </div>
+
+                    <div className='join_btn'>
+                        <button onClick={ ()=>{   onSubmit()    }  }>회원가입</button>
+                        <button onClick={ ()=>{ navigate('/')   }  }>돌아가기</button>
+                    </div>
+                </div>
             </div>
-        
-        </div>
+            </div>               
         <Footer/>
     </>
     );

@@ -14,12 +14,11 @@ function MyInfo() {
     const [email, setEmail] = useState('');
     const [nickname, setNickname] = useState('');
     const [phone, setPhone] = useState('');
-    const [zipCode, setZipCode] = useState('');
+    const [zip_code, setZip_code] = useState('');
     const [address, setAddress] = useState('');
     const [d_address, setD_address] = useState('');
     const [profileimg, setProfileimg] = useState('');
     const [imgStyle, setImgStyle] = useState({ display: "none" });
-    const [showPostcode, setShowPostcode] = useState(false);
     const [originalEmail, setOriginalEmail] = useState('');
     const [originalPwd, setOriginalPwd] = useState('');
     const dispatch = useDispatch();
@@ -34,8 +33,8 @@ function MyInfo() {
             setEmail(userCookie.email || '');
             setNickname(userCookie.nickname || '');
             setPhone(userCookie.phone || '');
-            setZipCode(userCookie.zipCode);
-            setAddress(userCookie.address);
+            setZip_code(userCookie.zip_code || '');
+            setAddress(userCookie.address || '');
             setD_address(userCookie.d_address || '');
             setProfileimg(userCookie.profileimg || '');
             setOriginalEmail(userCookie.email || '');
@@ -116,7 +115,7 @@ function MyInfo() {
                 nickname,
                 email,
                 phone,
-                zipCode,
+                zip_code,
                 address,
                 d_address,
                 profileimg
@@ -168,13 +167,18 @@ function MyInfo() {
 
 
     const openPostcodePopup = () => {
-        window.open('/popup/postcode', '주소 찾기', 'width=500,height=402');
+        const width = 500;
+        const height = 402;
+        const left = (window.screen.width / 2) - (width / 2);
+        const top = (window.screen.height / 2) - (height / 2);
+
+    window.open('/popup/postcode', '주소 찾기', `width=${width},height=${height},left=${left},top=${top}`);
         window.addEventListener('message', function (event) {
           if (event.origin === window.location.origin) {
-            const { zipCode, address } = event.data;
-            console.log(zipCode);
+            const { zip_code, address } = event.data;
+            console.log(zip_code);
             console.log(address);
-            setZipCode(zipCode);
+            setZip_code(zip_code);
             setAddress(address);
           }
         });
@@ -223,7 +227,7 @@ function MyInfo() {
             </div>
             <div className="field">
                 <label>우편번호</label>
-                <input type="text" style={{ flex: "2" }} value={zipCode} onChange={(e) => { setZipCode(e.target.value); }} readOnly />
+                <input type="text" style={{ flex: "2" }} value={zip_code} onChange={(e) => { setZip_code(e.target.value); }} readOnly />
                 <button style={{ flex: "1" }} onClick={openPostcodePopup}>우편번호 찾기</button>
             </div>
             <div className="field">

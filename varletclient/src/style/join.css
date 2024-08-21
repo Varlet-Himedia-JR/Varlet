@@ -1,5 +1,5 @@
 /* 로그인 폼 전체 스타일 */
-.loginform {
+.joinform {
   position: relative; 
   z-index: 1;
   background: rgb(255, 255, 255, 0.7);
@@ -13,9 +13,10 @@
   padding-top: 100px;
   
   }
+
   
   /* 로그인 제목 */
-  .loginlabel {
+  .joinlabel {
     font-family: 'Mplus 1p Bold', sans-serif;
     font-style: normal;
     font-weight: 800;
@@ -28,12 +29,13 @@
   }
   
   /* 입력 필드 스타일 */
-  .field {
+.join_field {
     display: flex;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     align-items: center;
     text-align: center;
     margin-left: 550px;
+
   }
   
   .field label {
@@ -62,11 +64,22 @@
     background-color: white;
   }
 
-  .field input[type="text"]{
+  .join_field input[type="text"]{
     width: 200px;
     height: 30px;
     padding: 5px;
-    margin-left: 20px;
+    margin-left: 15px;
+    font-size: 15px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  .join_field input[type="password"]{
+    width: 200px;
+    height: 30px;
+    padding: 5px;
+    margin-left: 15px;
     font-size: 15px;
     border: 1px solid #000000;
     border-radius: 5px;
@@ -74,29 +87,35 @@
   }
   
   /* 버튼 그룹 스타일 */
-  .btns {
+  .join_btn {
+    width: 450px;
     display: flex;
     margin-top: 20px;
     align-items: center;
     text-align: center;
     margin-left: 500px;
+    justify-content: space-between;
   }
-  .findbtn button{
-    background: rgb(255, 255, 255, 0);
-    cursor: pointer;
-    width: 180px;
-    height: 25px;
 
+  .join_field button{
+    cursor: pointer;
+    width: 120px;
+    height: 25px;
     font-family: 'Mplus 1p Bold', sans-serif;
     font-style: normal;
     font-weight: 600;
-    margin-top: 15px;
     font-size: 15px;
     line-height: 22px;
-    margin-left: 30px;
+    border:1px solid black;
+    border-radius: 5px;
+    margin-left: 10px;
   }
   
-  .btns button {
+
+
+
+  .join_btn button {
+    display: flex;
     background: rgb(255, 255, 255, 0);
     width: 200px;
     height: 35px;
@@ -105,10 +124,9 @@
     font-weight: 800;
     font-size: 20px;
     line-height: 22px;
-    border: none;
+    border: 1px solid black;
     border-radius: 5px;
     cursor: pointer;
-    display: flex;
     align-items: center;
     justify-content: center; /* 텍스트 가운데 정렬 */
   }

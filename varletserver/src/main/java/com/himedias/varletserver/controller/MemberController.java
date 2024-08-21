@@ -272,7 +272,7 @@ public class MemberController {
 
 
 
-
+    // 닉네임 중복
     @PostMapping("/nicknameCheck")
     public HashMap<String, Object> nicknameCheck(@RequestParam("nickname") String nickname) {
         HashMap<String, Object> result = new HashMap<String, Object>();
@@ -281,7 +281,7 @@ public class MemberController {
         return result;
     }
 
-
+    // 회원가입
     @PostMapping("/join")
     public HashMap<String, Object> join(@RequestBody Member member) {
         System.out.println("여기여기역이경깅ㄱ여경ㄱ여ㅓㅎ량뉴리ㅘㅇ늄러ㅏㅣㅗㄴㅇ뮤러ㅣㅘㄴㅇㅁ " + member);
@@ -293,6 +293,8 @@ public class MemberController {
         return result;
     }
 
+
+    // 이미지 업로드
     @PostMapping("/fileupload")
     public HashMap<String, Object> fileupload(@RequestParam("image") MultipartFile file) {
 
@@ -315,7 +317,7 @@ public class MemberController {
         return result;
     }
 
-
+    // 리프레시 토큰
     @GetMapping("/refresh/{refreshToken}")
     public Map<String, Object> refresh(@RequestHeader("Authorization") String authHeader,
                                        @PathVariable("refreshToken") String refreshToken
@@ -346,6 +348,8 @@ public class MemberController {
         return Map.of("access_token", newAccessToken, "refresh_token", newRefreshToken);
     }
 
+
+    // 토큰 시간 체크
     private boolean checkTime(Integer exp) {
         java.util.Date expDate = new java.util.Date((long) exp * (1000)); // 밀리초로 변환
         long gap = expDate.getTime() - System.currentTimeMillis(); // 현재 시간과의 차이 계산
@@ -367,16 +371,13 @@ public class MemberController {
 
 
     @PostMapping("/updateInfo")
-    public HashMap<String, Object> updateInfo(@RequestBody Member member, HttpServletRequest request) {
+    public HashMap<String, Object> updateInfo(@RequestBody Member member) {
 
         HashMap<String, Object> result = new HashMap<String, Object>();
         PasswordEncoder pe = cc.passwordEncoder();
         member.setPwd(pe.encode(member.getPwd()));
 
         ms.updateInfo(member);
-        HttpSession session = request.getSession();
-        session.setAttribute("loginUser", member);
-
         result.put("msg", "ok");
         return result;
     }
@@ -409,7 +410,7 @@ public class MemberController {
         return result;
     }
 
-
+    // 아이디 찾기
     @PostMapping("/findId/{email}")
     public HashMap<String, Object> findId(@PathVariable("email") String email) {
         HashMap<String, Object> result = new HashMap<>();
@@ -457,6 +458,8 @@ public class MemberController {
             return result;
     }
 
+
+    // 이메일 중복처리
     @GetMapping("/checkEmail")
     public HashMap<String, Object> checkEmail(@RequestParam("email") String email) {
         HashMap<String, Object> result = new HashMap<>();

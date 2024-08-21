@@ -4,6 +4,7 @@ import com.himedias.varletserver.dao.MemberRepository;
 import com.himedias.varletserver.dto.MemberDTO;
 import com.himedias.varletserver.entity.Member;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -42,14 +43,14 @@ public class CustomUserDetailService implements UserDetailsService {
                 member.getNickname(),
                 member.getEmail(),
                 member.getPhone(),
-                member.getProfileimg(),
                 member.getZip_code(),
                 member.getAddress(),
                 member.getD_address(),
-                member.getProvider(),
-                member.getSnsid(),
                 member.getIndate(),
                 member.getIs_login(),
+                member.getProvider(),
+                member.getSnsid(),
+                member.getProfileimg(),
                 member.getPoint(),
                 member.getMemberRoleList().stream()// 사용자 역할 리스트를 스트림으로 변환
                         .map(memberRole -> memberRole.name()) // 각 역할의 이름을 추출

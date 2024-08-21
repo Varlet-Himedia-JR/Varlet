@@ -5,7 +5,7 @@ function PostcodePopup() {
   const handleComplete = (data) => {
     if (data && data.zonecode && data.address) {
       window.opener.postMessage({
-        zipCode: data.zonecode, // DaumPostcode에서 가져온 우편번호는 zonecode입니다.
+        zip_code: data.zonecode, // DaumPostcode에서 가져온 우편번호는 zonecode입니다.
         address: data.address
       }, window.opener.location.origin);
       window.close();

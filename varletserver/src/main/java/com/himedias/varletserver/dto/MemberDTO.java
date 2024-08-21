@@ -22,11 +22,11 @@ public class MemberDTO extends User {
         String zip_code,
         String address,
         String d_address,
-        String profileimg,
+        Timestamp indate,
+        Character is_login,
         String provider,
         String snsid,
-        Timestamp indate,
-        Character isLogin,
+        String profileimg,
         int point,
         List<String> roleNames
         ) {
@@ -48,15 +48,18 @@ public class MemberDTO extends User {
         this.zip_code = zip_code;
         this.address = address;
         this.d_address = d_address;
+        this.indate = indate;
+        this.is_login = is_login;
         this.provider = provider;
         this.snsid = snsid;
         this.profileimg = profileimg;
-        this.indate = indate;
-        this.isLogin = isLogin;
         this.point = point;
         this.roleNames = roleNames;
 
     }
+
+    // MemberDTO 클래스의 멤버 변수들에 대한 getter 메소드들이 자동 생성된 것으로 가정합니다.
+    // 각 멤버 변수는 해당 클래스의 인스턴스가 가지는 사용자 정보와 관련된 데이터를 저장합니다
     private String userid;
     private String pwd;
     private String name;
@@ -66,11 +69,11 @@ public class MemberDTO extends User {
     private String zip_code;
     private String address;
     private String d_address;
+    private Timestamp indate;
+    private Character is_login;
     private String provider;
     private String snsid;
     private String profileimg;
-    private Timestamp indate;
-    private Character isLogin;
     private int point;
     private List<String> roleNames = new ArrayList<String>();
 
@@ -87,11 +90,11 @@ public class MemberDTO extends User {
         dataMap.put("zip_code", zip_code);
         dataMap.put("address", address);
         dataMap.put("d_address", d_address);
+        dataMap.put("indate", indate);
+        dataMap.put("is_login", is_login);
         dataMap.put("provider", provider);
         dataMap.put("snsid", snsid);
         dataMap.put("profileimg", profileimg);
-        dataMap.put("indate", indate);
-        dataMap.put("isLogin", isLogin);
         dataMap.put("point", point);
         dataMap.put("roleNames", roleNames);
         return dataMap;
