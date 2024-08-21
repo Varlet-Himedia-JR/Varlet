@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { getCookie } from "../../util/cookieUtil";
 import Heading from '../headerfooter/Heading';
 import Footer from '../headerfooter/Footer';
-import { getCookie } from "../../util/cookieUtil";
 import '../../style/review.css';
 
 function WriteReview() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [imagePreview, setImagePreview] = useState('');
+    const [selectedImages, setSelectedImages] = useState([]);
+    const [imagePreviews, setImagePreviews] = useState([]);
     const navigate = useNavigate();
 
     // 쿠키에서 사용자 ID를 가져옴
@@ -19,17 +18,30 @@ function WriteReview() {
     const userid = userCookie?.userid || null;
 
     const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        setSelectedImage(file);
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            setImagePreview('');
+        const files = Array.from(event.target.files);
+        if (files.length + selectedImages.length > 5) {
+            alert('최대 5개의 이미지만 업로드할 수 있습니다.');
+            return;
         }
+
+        setSelectedImages(prevImages => [...prevImages, ...files]);
+
+        const previews = files.map(file => {
+            const reader = new FileReader();
+            return new Promise((resolve) => {
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(file);
+            });
+        });
+
+        Promise.all(previews).then(previewUrls => {
+            setImagePreviews(prevPreviews => [...prevPreviews, ...previewUrls]);
+        });
+    };
+
+    const handleImageRemove = (index) => {
+        setSelectedImages(prevImages => prevImages.filter((_, i) => i !== index));
+        setImagePreviews(prevPreviews => prevPreviews.filter((_, i) => i !== index));
     };
 
     const onSubmit = () => {
@@ -52,9 +64,9 @@ function WriteReview() {
         const formData = new FormData();
         formData.append('title', title);
         formData.append('content', content);
-        if (selectedImage) {
-            formData.append('reviewimg', selectedImage); // reviewimg에 selectedImage 파일을 추가
-        }
+        selectedImages.forEach((image) => {
+            formData.append('reviewimg', image); // 리뷰 이미지로 추가
+        });
         formData.append('userid', userid); // 동적으로 가져온 사용자 ID 설정
     
         axios.post('/api/review/writeReview', formData, {
@@ -67,7 +79,6 @@ function WriteReview() {
             console.error(err);
         });
     };
-    
     
     const onCancel = () => {
         navigate('/reviewList'); // 작성 취소 시 reviewList 페이지로 이동
@@ -96,15 +107,31 @@ function WriteReview() {
                         ></textarea>
                     </div>
                     <div className="field">
-                        <label>사진</label>
+                        <label>사진 (최대 5개)</label>
                         <input 
                             type="file" 
                             accept="image/*" 
                             onChange={handleImageChange} 
+                            multiple // 여러 파일 선택 허용
                         />
-                        {imagePreview && (
+                        {imagePreviews.length > 0 && (
                             <div className="image-preview">
-                                <img src={imagePreview} alt="미리보기" style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                                {imagePreviews.map((preview, index) => (
+                                    <div key={index} className="image-preview-item">
+                                        <img
+                                            src={preview}
+                                            alt={`미리보기 ${index + 1}`}
+                                            style={{ maxWidth: '100px', maxHeight: '100px', marginRight: '10px' }}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => handleImageRemove(index)}
+                                            style={{ background: 'none', border: 'none', color: 'red', cursor: 'pointer' }}
+                                        >
+                                            &times; {/* 'X' 문자 */}
+                                        </button>
+                                    </div>
+                                ))}
                             </div>
                         )}
                     </div>

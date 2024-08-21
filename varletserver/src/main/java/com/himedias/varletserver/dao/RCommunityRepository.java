@@ -21,6 +21,10 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
     List<RCommunitySummary> findAllBy(Sort sort);
 
     @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
+            "FROM RCommunity r WHERE r.userid=:userid ORDER BY r.rnum DESC")
+    List<RCommunity> findAllMy(@Param("userid")String userid);
+
+    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
             "FROM RCommunity r WHERE r.location = :location ORDER BY r.rnum DESC")
     List<RCommunitySummary> findByLocation(int location, Sort sort);
 

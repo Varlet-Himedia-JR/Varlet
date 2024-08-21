@@ -122,7 +122,7 @@ public class MemberService {
                     member.getPhone(),
                     member.getZipCode(),
                     member.getAddress(),
-                    member.getD_address(),
+                    member.getDAddress(),
                     member.getProfileimg()
             );
         } else {
@@ -184,4 +184,7 @@ public class MemberService {
 
     }
 
+    public boolean isEmailUnique(String email) {
+        return !mr.existsByEmail(email);
+    }
 }

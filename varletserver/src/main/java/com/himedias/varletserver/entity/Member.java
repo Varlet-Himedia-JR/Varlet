@@ -55,7 +55,7 @@ public class Member {
 
     @Size(max = 100)
     @Column(name = "d_address", length = 100)
-    private String d_address;
+    private String dAddress;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "indate")
