@@ -15,15 +15,18 @@ public interface CourseRepository extends JpaRepository<Member, String> {
     @Query("SELECT t.tname FROM Timetable t WHERE t.userid = :userid")
     List<String> findTnamesByUserid(@Param("userid") String userid);
 
+    @Query("SELECT t FROM Timetable t WHERE t.tseq = :tseq AND t.userid = :userid")
+    List<Timetable> findMycourseByTseq(String tseq,String userid);
 
-    @Query("SELECT t FROM Timetable t WHERE t.tname = :tname")
-    Optional<Timetable> findDurationByTnames(@Param("tname") String tname);
+    @Query("SELECT t FROM Timetable t WHERE t.tseq = :tseq")
+    Optional<Timetable> findDurationByTseq(@Param("tseq") String tseq);
 
     @Query("SELECT t FROM Timetable t WHERE t.tname = :tname AND t.userid = :userid")
     Timetable findTseqByTnamesAndUserid(@Param("tname")String tname, @Param("userid")String userid);
 
     @Query("SELECT d FROM Dayschedule d WHERE d.tseq = :tseq")
-    List<Dayschedule> findDayschedule(@Param("tseq")int tseq);
+    List<Dayschedule> findDayschedule(@Param("tseq")String tseq);
+
 
 
 }

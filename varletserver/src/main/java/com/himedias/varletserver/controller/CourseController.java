@@ -22,24 +22,24 @@ public class CourseController {
     public HashMap<String,Object> getTnamesByUserid(@PathVariable String userid) {
         HashMap<String,Object> result = new HashMap<String,Object>();
         result.put("mycourse",cs.getTnamesByUserid(userid));
-//        result.put("mycourse",cs.getAllMycourseByUserid(userid));
         return result;
     }
 
 
 
-    @GetMapping("/getDuration/{mycourse}")
-    public HashMap<String,Object> getDuration(@PathVariable String mycourse) {
+    @GetMapping("/getDuration/{tseq}")
+    public HashMap<String,Object> getDuration(@PathVariable String tseq) {
         HashMap<String,Object> result = new HashMap<String,Object>();
-        result.put("duration",cs.getDurationByTnames(mycourse));
+        result.put("duration",cs.getDurationByTseq(tseq));
         return result;
     }
 
-    @GetMapping("/getMycourse/{mycourse}/{userid}")
-    public HashMap<String,Object> getMycourse(@PathVariable String mycourse,@PathVariable String userid) {
+    @GetMapping("/getMycourse/{tseq}/{userid}")
+    public HashMap<String,Object> getMycourse(@PathVariable String tseq,@PathVariable String userid) {
         HashMap<String,Object> result = new HashMap<String,Object>();
-        result.put("duration",cs.getDurationByTnames(mycourse));
-        result.put("dayschedule",cs.getDaySchedules(mycourse, userid));
+        result.put("mycourse",cs.getMycourseByTseq(tseq,userid));
+        result.put("duration",cs.getDurationByTseq(tseq));
+        result.put("dayschedule",cs.getDaySchedules(tseq, userid));
         return result;
     }
 
