@@ -13,7 +13,7 @@ function Join() {
     const [email,setEmail] = useState('');
     const [nickname, setNickname] = useState('');
     const [phone, setPhone] = useState('');
-    const [zipCode, setZipCode] = useState('');
+    const [zip_code, setZip_code] = useState('');
     const [address, setAddress] = useState('');
     const [d_address, setD_address] = useState('');
     const [profileimg, setProfileimg] = useState('');
@@ -43,7 +43,7 @@ function Join() {
                 return alert('닉네임이 중복됩니다');
             }
 
-            result = await axios.post('/api/member/join', {userid, pwd, name,nickname,email,phone,zipCode,address,d_address,profileimg });
+            result = await axios.post('/api/member/join', {userid, pwd, name,nickname,email,phone,zip_code,address,d_address,profileimg });
             console.log(d_address);
             
             if(result.data.msg ==='ok'){
@@ -72,7 +72,9 @@ function Join() {
         window.addEventListener('message', function (event) {
           if (event.origin === window.location.origin) {
             const { zipCode, address } = event.data;
-            setZipCode(zipCode);
+            console.log(zipCode);
+            console.log(address);
+            setZip_code(zipCode);
             setAddress(address);
           }
         });
@@ -132,7 +134,7 @@ function Join() {
             </div>
             <div className="field">
                 <label>우편번호</label>
-                <input type="text" style={{ flex: "2" }} value={zipCode} onChange={(e) => { setZipCode(e.currentTarget.value); }} readOnly />
+                <input type="text" style={{ flex: "2" }} value={zip_code} onChange={(e) => { setZip_code(e.currentTarget.value); }} readOnly />
                 <button style={{ flex: "1" }} onClick={openPostcodePopup}>우편번호 찾기</button>
             </div>
             <div className="field" >

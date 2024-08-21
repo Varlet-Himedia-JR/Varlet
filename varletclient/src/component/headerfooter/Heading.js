@@ -12,7 +12,7 @@ function Heading() {
     const [profileImg, setProfileImg] = useState('http://localhost:8070/images/user.png');
     const dispatch = useDispatch();
     const userCookie = getCookie('user');
-
+    
     const LoginWindow = () => {
         navigate('/login');
     };
@@ -96,6 +96,7 @@ function Heading() {
                         </div>
                         <div className='line'></div>
                         <div className='logout' onClick={logout}>로그아웃</div>
+                        <div>{userCookie.point}</div>
                     </>
                 )}
                 </div>

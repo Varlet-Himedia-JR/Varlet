@@ -26,7 +26,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     Member getWithRoles(@Param("userid")String userid);
 
     @Modifying
-    @Query("UPDATE Member m SET m.pwd = :pwd, m.name = :name, m.nickname = :nickname, m.email = :email, m.phone = :phone, m.zipCode = :zipCode, m.address = :address, m.dAddress = :dAddress, m.profileimg = :profileimg WHERE m.userid = :userid")
+    @Query("UPDATE Member m SET m.pwd = :pwd, m.name = :name, m.nickname = :nickname, m.email = :email, m.phone = :phone, m.zip_code = :zip_code, m.address = :address, m.d_address = :d_address, m.profileimg = :profileimg WHERE m.userid = :userid")
     void updateMember(
             @Param("userid") String userid,
             @Param("pwd") String pwd,
@@ -34,9 +34,9 @@ public interface MemberRepository extends JpaRepository<Member, String> {
             @Param("nickname") String nickname,
             @Param("email") String email,
             @Param("phone") String phone,
-            @Param("zipCode") String zipCode,
+            @Param("zip_code") String zip_code,
             @Param("address") String address,
-            @Param("dAddress") String dAddress,
+            @Param("d_address") String d_address,
             @Param("profileimg") String profileimg
     );
 
