@@ -48,8 +48,9 @@ public class RCommunity {
     @Column(nullable = false)
     private LocalDateTime enddate = LocalDateTime.now();
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "userid", nullable = false)
-    private Member userid;
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @JoinColumn(name = "userid", nullable = false)
+    @Column(nullable = false)
+    private String userid;
 }

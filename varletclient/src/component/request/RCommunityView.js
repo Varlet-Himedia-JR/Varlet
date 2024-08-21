@@ -42,6 +42,7 @@ function RCommunityView() {
           .then((response) => {
               setReplies(response.data.recommend); // 답글 리스트 상태 업데이트
               console.log("댓글정보?", response.data.recommend);
+              console.log("댓글정보2", response.data.userCookie)
           })
           .catch((err) => {
               console.error(err);
@@ -279,8 +280,8 @@ const replyDelete = (rcnum) => {
 return (
         <>
               <Heading />
-  <div class="w-full max-w-6xl mx-auto px-4 py-9 mt-28">
-    <div class="border-b pb-4 mb-6">
+  <div className='w-full max-w-[1700px] mx-auto px-1 mt-28 '>
+    <div className='mt-28 '>
       <div class="mr-4"> 
         <span className='text-left'>
           no.

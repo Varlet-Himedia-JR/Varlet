@@ -3,6 +3,7 @@ package com.himedias.varletserver.service;
 import com.himedias.varletserver.dao.MemberRepository;
 import com.himedias.varletserver.dao.RCommunityRepository;
 import com.himedias.varletserver.dao.RcrecommendRepository;
+import com.himedias.varletserver.dto.Paging;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityInfo;
 import com.himedias.varletserver.dto.Rcommunity.RCommunityMyList;
 import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
@@ -11,6 +12,8 @@ import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.RCommunity;
 import com.himedias.varletserver.entity.Rcrecommend;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,16 +35,29 @@ public class RCommunityService {
     @Autowired
     private MemberRepository mr;
 
-    public List<RCommunitySummary> getAllPosts() {
-        return rcr.findAllBy(Sort.by(Sort.Direction.DESC, "rnum"));
+    public List<RCommunitySummary> getAllPosts(Paging paging) {
+        Pageable pageable = PageRequest.of(paging.getPage() - 1, paging.getDisplayRow(), paging.getSort());
+        return rcr.findAllBy(pageable).getContent();
     }
 
-    public List<RCommunitySummary> getPostListByLocation(int location) {
-        return rcr.findByLocation(location, Sort.by(Sort.Direction.DESC, "rnum"));
+    public List<RCommunitySummary> getPostListByLocation(int location, Paging paging) {
+        Pageable pageable = PageRequest.of(paging.getPage() - 1, paging.getDisplayRow(), paging.getSort());
+        return rcr.findByLocation(location, pageable).getContent();
     }
 
-    public List<RCommunitySummary> getPostListByLocationAndLocation2(int location, int location2) {
-        return rcr.findByLocationAndLocation2(location, location2, Sort.by(Sort.Direction.DESC, "rnum"));
+    public List<RCommunitySummary> getPostListByLocationAndLocation2(int location, int location2, Paging paging) {
+        Pageable pageable = PageRequest.of(paging.getPage() - 1, paging.getDisplayRow(), paging.getSort());
+        return rcr.findByLocationAndLocation2(location, location2, pageable).getContent();
+    }
+
+    public int getTotalPostCount(Integer location, Integer location2) {
+        if (location != null && location2 != null) {
+            return rcr.countByLocationAndLocation2(location, location2);
+        } else if (location != null) {
+            return rcr.countByLocation(location);
+        } else {
+            return (int) rcr.count();
+        }
     }
 
     public RCommunity getPostById(int rnum) {
@@ -70,7 +86,7 @@ public class RCommunityService {
         post.setLocation(rCommunityWrite.getLocation());
         post.setLocation2(rCommunityWrite.getLocation2());
         post.setReward(rCommunityWrite.getReward());
-        post.setUserid(member);  // Member 엔티티 설정
+        post.setUserid(member.getUserid());  // Member 엔티티 설정
         post.setStartdate(rCommunityWrite.getStartdate().toLocalDateTime());
         post.setEnddate(rCommunityWrite.getEnddate().toLocalDateTime());
         post.setViews(0);
@@ -90,9 +106,8 @@ public class RCommunityService {
 
         if (post != null) {
             post.setViews(post.getViews() + 1);
-            rcr.save(post);
+            rcr.save(post);  // 업데이트된 게시글 저장
         }
-
         return rcr.findPostInfoById(rnum);
     }
 
@@ -131,7 +146,7 @@ public class RCommunityService {
                 return result;
             }
             Member member = memberOptional.get();
-            post.setUserid(member); // 유효한 사용자 ID로 설정
+            post.setUserid(member.getUserid()); // 유효한 사용자 ID로 설정
         }
 
         // 게시글 저장
