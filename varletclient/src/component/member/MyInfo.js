@@ -39,9 +39,10 @@ function MyInfo() {
             setD_address(userCookie.d_address || '');
             setProfileimg(userCookie.profileimg || '');
             setOriginalEmail(userCookie.email || '');
-            setOriginalPwd(userCookie.pwd || ''); // 기존 비밀번호 설정
+            setOriginalPwd(userCookie.pwd || '');
         }
     }, []);
+    
 
     async function checkPassword() {
         try {
@@ -152,11 +153,6 @@ function MyInfo() {
         }
     }
     
-    
-    
-    
-    
-
     async function fileupload(e) {
         const formData = new FormData();
         formData.append('image', e.target.files[0]);
@@ -169,6 +165,7 @@ function MyInfo() {
             alert('파일 업로드 오류');
         }
     }
+
 
     const openPostcodePopup = () => {
         window.open('/popup/postcode', '주소 찾기', 'width=500,height=402');
