@@ -86,7 +86,7 @@ public class RCommunityService {
         post.setLocation(rCommunityWrite.getLocation());
         post.setLocation2(rCommunityWrite.getLocation2());
         post.setReward(rCommunityWrite.getReward());
-        post.setUserid(member.getUserid());  // Member 엔티티 설정
+        post.setUserid(member);  // Member 엔티티 설정
         post.setStartdate(rCommunityWrite.getStartdate().toLocalDateTime());
         post.setEnddate(rCommunityWrite.getEnddate().toLocalDateTime());
         post.setViews(0);
@@ -146,7 +146,7 @@ public class RCommunityService {
                 return result;
             }
             Member member = memberOptional.get();
-            post.setUserid(member.getUserid()); // 유효한 사용자 ID로 설정
+            post.setUserid(member); // 유효한 사용자 ID로 설정
         }
 
         // 게시글 저장
@@ -185,9 +185,9 @@ public class RCommunityService {
         return rcr.findByUseridAndLocationAndLocation2(userid, location, location2);
     }
 
-    public List<RCommunity> getMyAllPosts(String userid) {
-        return rcr.findAllMy(userid);
-
-    }
+//    public List<RCommunity> getMyAllPosts(String userid) {
+//        return rcr.findAllMy(userid);
+//
+//    }
 
 }

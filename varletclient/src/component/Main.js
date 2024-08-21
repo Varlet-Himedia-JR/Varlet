@@ -7,6 +7,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import '../style/main.css';
+import { setCookie, getCookie, removeCookie } from "../util/cookieUtil";
 
 function Main() {
   const [reviews, setReviews] = useState([]); // 리뷰 목록
@@ -14,7 +15,8 @@ function Main() {
   const [page, setPage] = useState(1); // 페이지 번호
   const [hasMore, setHasMore] = useState(true); // 더 로드할 데이터가 있는지 여부
   const navigate = useNavigate();
-
+  const userCookie = getCookie('user');
+  console.log('userCookie:', userCookie);
   // 슬라이더 설정
   const sliderSettings = {
     dots: true,

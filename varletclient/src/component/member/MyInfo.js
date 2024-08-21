@@ -16,7 +16,7 @@ function MyInfo() {
     const [phone, setPhone] = useState('');
     const [zipCode, setZipCode] = useState('');
     const [address, setAddress] = useState('');
-    const [dAddress, setDAddress] = useState('');
+    const [d_address, setD_address] = useState('');
     const [profileimg, setProfileimg] = useState('');
     const [imgStyle, setImgStyle] = useState({ display: "none" });
     const [showPostcode, setShowPostcode] = useState(false);
@@ -27,16 +27,17 @@ function MyInfo() {
 
     useEffect(() => {
         const userCookie = getCookie('user');
+        console.log('userCookie:', userCookie);
         if (userCookie) {
             setUserid(userCookie.userid || '');
             setName(userCookie.name || '');
             setEmail(userCookie.email || '');
             setNickname(userCookie.nickname || '');
             setPhone(userCookie.phone || '');
-            setZipCode(userCookie.zipCode || '');
-            setAddress(userCookie.address || '');
-            setDAddress(userCookie.dAddress || '');
-            setProfileimg(userCookie.profileimg || ''); // 프로필 이미지 초기화
+            setZipCode(userCookie.zipCode);
+            setAddress(userCookie.address);
+            setD_address(userCookie.d_address || '');
+            setProfileimg(userCookie.profileimg || '');
             setOriginalEmail(userCookie.email || '');
             setOriginalPwd(userCookie.pwd || '');
         }
@@ -102,7 +103,7 @@ function MyInfo() {
         if (!phone) {
             return alert('전화번호를 입력하세요');
         }
-        if (!dAddress) {
+        if (!d_address) {
             return alert('상세주소를 입력하세요');
         }
     
@@ -117,7 +118,7 @@ function MyInfo() {
                 phone,
                 zipCode,
                 address,
-                dAddress,
+                d_address,
                 profileimg
             });
     
@@ -165,11 +166,19 @@ function MyInfo() {
         }
     }
 
-    const handlePostcodeComplete = (data) => {
-        setZipCode(data.zipCode);
-        setAddress(data.address);
-        setShowPostcode(false);
-    };
+
+    const openPostcodePopup = () => {
+        window.open('/popup/postcode', '주소 찾기', 'width=500,height=402');
+        window.addEventListener('message', function (event) {
+          if (event.origin === window.location.origin) {
+            const { zipCode, address } = event.data;
+            console.log(zipCode);
+            console.log(address);
+            setZipCode(zipCode);
+            setAddress(address);
+          }
+        });
+      };
 
     return (
         <div className='loginform'>
@@ -214,21 +223,16 @@ function MyInfo() {
             </div>
             <div className="field">
                 <label>우편번호</label>
-                <input type="text" style={{ flex: "2" }} value={zipCode} onChange={(e) => setZipCode(e.target.value)} readOnly />
-                <button style={{ flex: "1" }} onClick={() => setShowPostcode(true)}>우편번호 찾기</button>
+                <input type="text" style={{ flex: "2" }} value={zipCode} onChange={(e) => { setZipCode(e.target.value); }} readOnly />
+                <button style={{ flex: "1" }} onClick={openPostcodePopup}>우편번호 찾기</button>
             </div>
-            {showPostcode && (
-                <div className="postcode-popup">
-                    <DaumPostcode onComplete={handlePostcodeComplete} />
-                </div>
-            )}
             <div className="field">
                 <label>주소</label>
                 <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} readOnly />
             </div>
             <div className="field">
                 <label>상세주소</label>
-                <input type="text" value={dAddress} onChange={(e) => setDAddress(e.target.value)} placeholder='상세주소 입력' />
+                <input type="text" value={d_address} onChange={(e) => setD_address(e.target.value)} placeholder='상세주소 입력' />
             </div>
             <div className='field'>
                 <label>프로필사진</label>

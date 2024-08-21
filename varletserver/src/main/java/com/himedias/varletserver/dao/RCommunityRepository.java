@@ -42,10 +42,6 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
     List<RCommunitySummary> findAllBy(Sort sort);
 
     @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
-            "FROM RCommunity r WHERE r.userid=:userid ORDER BY r.rnum DESC")
-    List<RCommunity> findAllMy(@Param("userid")String userid);
-
-    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
             "FROM RCommunity r WHERE r.location = :location ORDER BY r.rnum DESC")
     List<RCommunitySummary> findByLocation(int location, Sort sort);
 
@@ -87,9 +83,15 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
 
 
 
-
-
-
+//    // 사용자 ID로 게시물 목록을 찾기
+//    @Query("SELECT r FROM RCommunity r WHERE r.userid = :userid")
+//    List<RCommunityMyList> findByUserid(@Param("userid") Member userid);
+//
+//    @Query("SELECT r FROM RCommunity r WHERE r.userid = :userid AND r.location = :location")
+//    List<RCommunityMyList> findByUseridAndLocation(@Param("userid") Member userid, @Param("location") Integer location);
+//
+//    @Query("SELECT r FROM RCommunity r WHERE r.userid = :userid AND r.location = :location AND r.location2 = :location2")
+//    List<RCommunityMyList> findByUseridAndLocationAndLocation2(@Param("userid") Member userid, @Param("location") Integer location, @Param("location2") Integer location2);
 
 }
 

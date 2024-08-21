@@ -16,4 +16,8 @@ public class DayscheduleService {
     public void insertDayschedule(Dayschedule dayschedule) {
         dr.save(dayschedule);
     }
+
+    public void deleteDayschedule(String dseq) {
+        dr.deleteById(dseq);
+    }
 }
