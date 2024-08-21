@@ -185,4 +185,9 @@ public class RCommunityService {
         return rcr.findByUseridAndLocationAndLocation2(userid, location, location2);
     }
 
+    public List<RCommunity> getMyAllPosts(String userid) {
+        return rcr.findAllMy(userid);
+
+    }
+
 }

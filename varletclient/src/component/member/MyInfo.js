@@ -20,19 +20,15 @@ function MyInfo() {
     const [profileimg, setProfileimg] = useState('');
     const [imgStyle, setImgStyle] = useState({ display: "none" });
     const [showPostcode, setShowPostcode] = useState(false);
-    const [oldPwd, setOldPwd] = useState('');
-    const [originalEmail, setOriginalEmail] = useState(''); // 이메일 중복 체크를 위한 상태
+    const [originalEmail, setOriginalEmail] = useState('');
+    const [originalPwd, setOriginalPwd] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Initialize state with userCookie values
         const userCookie = getCookie('user');
         if (userCookie) {
             setUserid(userCookie.userid || '');
-            setOldPwd(userCookie.oldPwd || '');
-            setPwd(userCookie.pwd || '');
-            setPwdChk(userCookie.pwd || '');
             setName(userCookie.name || '');
             setEmail(userCookie.email || '');
             setNickname(userCookie.nickname || '');
@@ -41,31 +37,76 @@ function MyInfo() {
             setAddress(userCookie.address || '');
             setDAddress(userCookie.dAddress || '');
             setProfileimg(userCookie.profileimg || '');
-            setOriginalEmail(userCookie.email || ''); // 쿠키에서 이메일 초기화
+            setOriginalEmail(userCookie.email || '');
+            setOriginalPwd(userCookie.pwd || ''); // 기존 비밀번호 설정
         }
     }, []);
 
-    async function onSubmit() {
-        const userCookie = getCookie('user');
-        
-        if (!oldPwd) return alert('현재 비밀번호를 입력하세요');
-        if (pwd && pwd !== pwdChk) return alert('비밀번호 확인이 일치하지 않습니다');
-        if (!name) return alert('이름을 입력하세요');
-        if (!nickname) return alert('닉네임을 입력하세요');
-        if (!email) return alert('이메일을 입력하세요');
-        if (!phone) return alert('전화번호를 입력하세요');
-        if (!dAddress) return alert('상세주소를 입력하세요');
-            try {
-            // 서버에 현재 비밀번호 검증 요청
-            // let pwdCheckResult = await jaxios.get('/api/member/pwdCheck', { params: { oldPwd, userid } });
-            // if (pwdCheckResult.data.msg === 'no') return alert('현재 비밀번호가 일치하지 않습니다');
-    
-            // Check if email is duplicated when it's changed
-            if (email !== originalEmail) {
-                let emailCheckResult = await jaxios.get('/api/member/emailCheck', { params: { email } });
-                if (emailCheckResult.data.msg === 'no') return alert('이메일이 중복됩니다');
+    async function checkPassword() {
+        try {
+            const response = await jaxios.post('/pwdCheck', { userid, pwd });
+            if (response.data.msg === 'yes') {
+                return true;
+            } else {
+                alert('기존 비밀번호와 동일합니다. 새로운 비밀번호를 입력해주세요.');
+                return false;
             }
-            // Send update request
+        } catch (err) {
+            console.error(err);
+            alert('서버 오류');
+            return false;
+        }
+    }
+
+    async function onSubmit() {
+        // 비밀번호 및 비밀번호 확인 검사
+        if (pwd || pwdChk) {
+            if (!pwd) {
+                return alert('비밀번호를 입력하세요');
+            }
+            if (!pwdChk) {
+                return alert('비밀번호 확인칸을 작성해주세요');
+            }
+            if (pwd !== pwdChk) {
+                return alert('비밀번호 확인이 일치하지 않습니다');
+            }
+    
+            // 비밀번호가 입력된 경우에만 비밀번호 확인
+            if (pwd === originalPwd) {
+                const isNewPassword = await checkPassword();
+                if (!isNewPassword) return; // 비밀번호가 기존과 동일할 경우
+            }
+        } else {
+            // 비밀번호가 입력되지 않은 경우
+            alert('비밀번호를 입력하세요');
+            return; // 비밀번호 입력이 없으면 이후 로직을 실행하지 않음
+        }
+    
+        // 이메일 중복 검사
+        if (email !== originalEmail) {
+            const isEmailUnique = await checkEmail();
+            if (!isEmailUnique) return; // 이메일이 중복될 경우, 이후 로직을 실행하지 않음
+        }
+    
+        // 비밀번호가 입력되었고 이메일 중복 검사가 통과된 경우에만 나머지 필드 검사 수행
+        if (!name) {
+            return alert('이름을 입력하세요');
+        }
+        if (!nickname) {
+            return alert('닉네임을 입력하세요');
+        }
+        if (!email) {
+            return alert('이메일을 입력하세요');
+        }
+        if (!phone) {
+            return alert('전화번호를 입력하세요');
+        }
+        if (!dAddress) {
+            return alert('상세주소를 입력하세요');
+        }
+    
+        try {
+            // 정보 업데이트 요청
             let updateResult = await jaxios.post('/api/member/updateInfo', {
                 userid,
                 pwd,
@@ -78,7 +119,6 @@ function MyInfo() {
                 dAddress,
                 profileimg
             });
-
     
             if (updateResult.data.msg === 'ok') {
                 if (window.confirm('수정이 완료되었습니다. 로그아웃 후 로그인 페이지로 이동합니다.')) {
@@ -94,7 +134,27 @@ function MyInfo() {
             alert('서버 오류');
         }
     }
-
+    
+    
+    async function checkEmail() {
+        try {
+            const response = await jaxios.get('/api/member/checkEmail', { params: { email } });
+            if (response.data.msg === 'no') {
+                alert('이메일이 중복됩니다. 다른 이메일을 입력해주세요.');
+                return false;
+            }
+            return true;
+        } catch (err) {
+            console.error('Error details:', err.response ? err.response.data : err.message);
+            alert('서버 오류');
+            return false;
+        }
+    }
+    
+    
+    
+    
+    
 
     async function fileupload(e) {
         const formData = new FormData();
@@ -116,25 +176,17 @@ function MyInfo() {
     };
 
     return (
-        <div className='loginform' >
+        <div className='loginform'>
             <div className="logo" style={{ fontSize: "2.0rem" }}>MY INFO EDIT</div>
             <div className='field'>
                 <label>아이디</label>
                 <input type="text" value={userid} onChange={(e) => setUserid(e.target.value)} disabled />
             </div>
-
-            <div className='field'>
-                <label>현재 비밀번호</label>
-                <input
-                    type="password"
-                    onChange={(e) => setOldPwd(e.target.value)}
-                    placeholder="현재 비밀번호 입력"
-                />
-            </div>
             <div className='field'>
                 <label>비밀번호</label>
                 <input
                     type="password"
+                    value={pwd}
                     onChange={(e) => setPwd(e.target.value)}
                     placeholder="비밀번호 입력"
                 />
@@ -143,6 +195,7 @@ function MyInfo() {
                 <label>비밀번호 확인</label>
                 <input
                     type="password"
+                    value={pwdChk}
                     onChange={(e) => setPwdChk(e.target.value)}
                     placeholder="비밀번호 확인 입력"
                 />

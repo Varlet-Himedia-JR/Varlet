@@ -184,6 +184,11 @@ const replyDelete = (rcnum) => {
           navigate('/rcommunity');
       }
   };
+  const myrequestList = () => {
+    if (window.confirm('내 REQUEST로 돌아가시겠습니까?')) {
+      navigate('/myRequest'); 
+    }
+  };
 
   const test = () =>{
     navigate('/rCommunityDetail/:rnum/rcCommunityWrite')
@@ -470,6 +475,11 @@ return (
         onClick={returnList}>
         목록으로
       </button>
+      <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"
+        onClick={myrequestList}>
+        내 REQUEST
+      </button>
+
     </div>
     <div 
       className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-lg p-4 bg-blue-50 text-blue-800 dark:bg-gray-800 dark:text-blue-400 rounded-lg shadow-lg cursor-pointer flex items-center justify-center space-x-3 hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors duration-300"

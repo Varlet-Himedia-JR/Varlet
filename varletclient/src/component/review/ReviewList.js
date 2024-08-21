@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import jaxios from '../../util/jwtUtil';
 import { useNavigate } from 'react-router-dom';
 import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
 import { getCookie } from "../../util/cookieUtil";
 import '../../style/review.css';
 import axios from 'axios';
-
+import debounce from 'lodash/debounce';
 
 function ReviewList() {
     const [reviewList, setReviewList] = useState([]);
@@ -27,7 +26,13 @@ function ReviewList() {
             const { reviewList: newReviews, paging } = result.data;
 
             if (Array.isArray(newReviews) && newReviews.length > 0) {
-                setReviewList(prevReviews => [...prevReviews, ...newReviews]);
+                // 기존 리뷰와 새로 로드된 리뷰 결합 시 중복 제거
+                setReviewList(prevReviews => {
+                    const reviewMap = new Map();
+                    prevReviews.forEach(review => reviewMap.set(review.rseq, review));
+                    newReviews.forEach(review => reviewMap.set(review.rseq, review));
+                    return Array.from(reviewMap.values());
+                });
                 setPage(pageNumber);
 
                 // 다음 페이지가 없으면 hasMore를 false로 설정
@@ -56,8 +61,8 @@ function ReviewList() {
         }
     }, [searchTerm, reviewList]);
 
-    // 스크롤 이벤트 핸들러
-    const handleScroll = useCallback(() => {
+    // 스크롤 이벤트 핸들러 (디바운스 적용)
+    const handleScroll = useCallback(debounce(() => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         const scrollHeight = document.documentElement.scrollHeight;
         const clientHeight = document.documentElement.clientHeight;
@@ -66,13 +71,14 @@ function ReviewList() {
         if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore) {
             loadReviews(page + 1);
         }
-    }, [page, hasMore, loadReviews]);
+    }, 200), [page, hasMore, loadReviews]);
 
     // 컴포넌트 마운트 시 스크롤 이벤트 리스너 추가
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         return () => {
             window.removeEventListener('scroll', handleScroll);
+            handleScroll.cancel(); // 디바운스 취소
         };
     }, [handleScroll]);
 

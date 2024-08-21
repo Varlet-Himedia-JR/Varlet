@@ -315,3 +315,22 @@
     color: pink;
     font-size: 80px;
 }
+
+.image-preview-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.image-preview-item img {
+    margin-right: 10px;
+}
+
+.image-preview-item button {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-size: 16px;
+}
+
