@@ -143,13 +143,15 @@ function RCommunityView() {
     // user는 객체로 되어 있어야 함
     if (user && typeof user.userid === 'string') {
         const userid = user.userid;
+        // 앞 두 글자 + 별 3개
         if (userid.length > 2) {
-            return userid.slice(0, 2) + '*'.repeat(userid.length - 2);
+            return userid.slice(0, 2) + '*'.repeat(3);
         }
+        // 아이디 길이가 2 이하일 경우 모든 문자를 별로 대체
         return '*'.repeat(userid.length);
     }
     return '정보 없음';
-};
+  };
 
 
 const replyDelete = (rcnum) => {
@@ -284,9 +286,10 @@ const replyDelete = (rcnum) => {
 
 return (
         <>
+        
               <Heading />
-  <div className='w-full max-w-[1700px] mx-auto px-1 mt-28 '>
-    <div className='mt-28 '>
+  <div className='w-full max-w-[1200px] mx-auto px-1 mt-28'>
+    <div className='mt-28 mb-5'>
       <div class="mr-4"> 
         <span className='text-left'>
           no.
@@ -386,68 +389,74 @@ return (
 
   <div class="prose prose-lg">
     <div className="bg-gray-100 p-8 rounded-lg mb-8">
-      <div>
-        <div>
-          <div class="mr-4 text-2xl font-bold mb-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-5 h-5 mr-1 inline-block"
-            >
-              <path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"></path>
-              <path d="M15 5.764v15"></path>
-              <path d="M9 3.236v15"></path>
-            </svg>
-            <span onClick={toggleShowLocation} style={{ cursor: 'pointer' }}>
-              여행 예상지:(클릭하여 확인)
-            </span>
-          </div>
+    <div className="flex  justify-center items-center space-x-8">
+<div className="flex justify-center items-start space-x-8">
+  <div>
+    <div className="text-2xl font-bold mb-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="w-5 h-5 mr-1 inline-block"
+      >
+        <path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"></path>
+        <path d="M15 5.764v15"></path>
+        <path d="M9 3.236v15"></path>
+      </svg>
+      <span onClick={toggleShowLocation} style={{ cursor: 'pointer' }}>
+        여행 예상지:(클릭하여 확인)
+      </span>
+    </div>
 
-          {showLocation && (
-            <div className="text-xl">
-              {getLocationName(post.location, post.location2)}
-            </div>
-          )}
-        </div>
+    {showLocation && (
+      <div className="text-xl mt-2">
+        {getLocationName(post.location, post.location2)}
       </div>
-      <div class="mr-4 text-2xl font-bold mb-2">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="w-5 h-5 mr-1 inline-block"
-        >
-          <path d="M8 2v4"></path>
-          <path d="M16 2v4"></path>
-          <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-          <path d="M3 10h18"></path>
-        </svg>
-        <span onClick={toggleShowDates} style={{ cursor: 'pointer' }}>
-          상세 여행 일정:(클릭하여 확인)
-        </span>
+    )}
+  </div>
+
+  <div>
+    <div className="text-2xl font-bold mb-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="w-5 h-5 mr-1 inline-block"
+      >
+        <path d="M8 2v4"></path>
+        <path d="M16 2v4"></path>
+        <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+        <path d="M3 10h18"></path>
+      </svg>
+      <span onClick={toggleShowDates} style={{ cursor: 'pointer' }}>
+        상세 여행 일정:(클릭하여 확인)
+      </span>
+    </div>
+
+    {showDates && (
+      <div className="text-xl mt-2">
+        여행 시작일: {extractDate(post.startdate)} <br />
+        여행 종료일: {extractDate(post.enddate)} <br />
+        총 여행 일수: {getTravelDuration(post.startdate, post.enddate)}
       </div>
-      <div>
-        {showDates && (
-          <div className="text-xl">
-            여행 시작일: {extractDate(post.startdate)} <br />
-            여행 종료일: {extractDate(post.enddate)}  <br />
-            총 여행 일수: {getTravelDuration(post.startdate, post.enddate)} 
-          </div>
-        )}
-      </div>
+    )}
+  </div>
+</div>
+</div>
+
+
       <div className="text-lg leading-relaxed min-h-[20rem] w-full">
         <pre className="whitespace-pre-wrap">{post.content}</pre>
       </div>
@@ -467,7 +476,7 @@ return (
               onClick={() => deleteCommunity(post.rnum)}>
               삭제
             </button>
-            <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700" onClick={() => navigate('/myRequest')}>내 의뢰 목록</button>
+
           </>
         )}
       </div>
@@ -475,11 +484,6 @@ return (
         onClick={returnList}>
         목록으로
       </button>
-      <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"
-        onClick={myrequestList}>
-        내 REQUEST
-      </button>
-
     </div>
     <div 
       className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-lg p-4 bg-blue-50 text-blue-800 dark:bg-gray-800 dark:text-blue-400 rounded-lg shadow-lg cursor-pointer flex items-center justify-center space-x-3 hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors duration-300"
@@ -627,7 +631,8 @@ return (
       </div>
   </div>
 </div>
-<Footer />
+<Footer/>
+
 </>
     );
   };

@@ -32,12 +32,13 @@ function PostList() {
         setPosts(response.data.postlist);
         setTotalCount(response.data.paging.totalCount); // 전체 게시물 수 설정
         setTotalPages(Math.ceil(response.data.paging.totalCount / size)); // 전체 페이지 수 계산
-        console.log("tkdlwm?",page);
-        console.log("tkdlwm?",totalPages);
-        console.log("유저정보 ", response.data.postlist)
+        console.log("tkdlwm?", page);
+        console.log("tkdlwm?", totalPages);
+        console.log("유저정보 ", response.data.postlist);
       })
       .catch(error => console.error('Error fetching posts:', error));
-  };
+};
+
 
   const searchPosts = () => {
     setPage(1); // 새로운 검색 시 첫 페이지로 설정
@@ -265,79 +266,79 @@ function PostList() {
 
         <div className="mt-4 flex justify-center">
         <ul className="flex items-center space-x-1 h-10 text-base">
-  <li>
-    <a
-      href="#"
-      onClick={(e) => { e.preventDefault(); handlePageChange(page - 10); }}
-      className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 ${page <= 10 ? 'cursor-not-allowed bg-gray-300' : ''}`}
-      aria-disabled={page <= 10}
-    >
-      <span className="sr-only">10 Pages Back</span>
-      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-track-prev" width="22" height="22" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M21 5v14l-8 -7z" />
-  <path d="M10 5v14l-8 -7z" />
-</svg>
-    </a>
-  </li>
-  <li>
-    <a
-      href="#"
-      onClick={(e) => { e.preventDefault(); handlePageChange(page - 1); }}
-      className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 ${page === 1 ? 'cursor-not-allowed bg-gray-300' : ''}`}
-      aria-disabled={page === 1}
-    >
-      <span className="sr-only">Previous</span>
-      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-skip-back" width="22" height="22" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M20 5v14l-12 -7z" />
-  <path d="M4 5l0 14" />
+        <li>
+          <a
+            href="#"
+            onClick={(e) => { e.preventDefault(); handlePageChange(page - 10); }}
+            className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 ${page <= 10 ? 'cursor-not-allowed bg-gray-300' : ''}`}
+            aria-disabled={page <= 10}
+          >
+            <span className="sr-only">10 Pages Back</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-track-prev" width="22" height="22" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <path d="M21 5v14l-8 -7z" />
+        <path d="M10 5v14l-8 -7z" />
       </svg>
-    </a>
-  </li>
-  {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
-    <li key={startPage + index}>
-      <a
-        href="#"
-        onClick={(e) => { e.preventDefault(); handlePageChange(startPage + index); }}
-        className={`flex items-center justify-center px-4 h-10 leading-tight ${page === startPage + index ? 'text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700' : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700'} rounded-md`}
-        aria-current={page === startPage + index ? 'page' : undefined}
-      >
-        {startPage + index}
-      </a>
-    </li>
-  ))}
-  <li>
-    <a
-      href="#"
-      onClick={(e) => { e.preventDefault(); handlePageChange(page + 1); }}
-      className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 ${page === totalPages ? 'cursor-not-allowed bg-gray-300' : ''}`}
-      aria-disabled={page === totalPages}
-    >
-      <span className="sr-only">Next</span>
-      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-skip-forward" width="22" height="22" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M4 5v14l12 -7z" />
-  <path d="M20 5l0 14" />
-</svg>
-    </a>
-  </li>
-  <li>
-    <a
-      href="#"
-      onClick={(e) => { e.preventDefault(); handlePageChange(page + 10); }}
-      className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 ${page >= totalPages - 10 ? 'cursor-not-allowed bg-gray-300' : ''}`}
-      aria-disabled={page >= totalPages - 10}
-    >
-      <span className="sr-only">10 Pages Forward</span>
-      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-track-next" width="22" height="22" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M3 5v14l8 -7z" />
-  <path d="M14 5v14l8 -7z" />
-</svg>
-    </a>
-  </li>
-</ul>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            onClick={(e) => { e.preventDefault(); handlePageChange(page - 1); }}
+            className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 ${page === 1 ? 'cursor-not-allowed bg-gray-300' : ''}`}
+            aria-disabled={page === 1}
+          >
+            <span className="sr-only">Previous</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-skip-back" width="22" height="22" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <path d="M20 5v14l-12 -7z" />
+        <path d="M4 5l0 14" />
+            </svg>
+          </a>
+        </li>
+        {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
+          <li key={startPage + index}>
+            <a
+              href="#"
+              onClick={(e) => { e.preventDefault(); handlePageChange(startPage + index); }}
+              className={`flex items-center justify-center px-4 h-10 leading-tight ${page === startPage + index ? 'text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700' : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700'} rounded-md`}
+              aria-current={page === startPage + index ? 'page' : undefined}
+            >
+              {startPage + index}
+            </a>
+          </li>
+        ))}
+        <li>
+          <a
+            href="#"
+            onClick={(e) => { e.preventDefault(); handlePageChange(page + 1); }}
+            className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 ${page === totalPages ? 'cursor-not-allowed bg-gray-300' : ''}`}
+            aria-disabled={page === totalPages}
+          >
+            <span className="sr-only">Next</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-skip-forward" width="22" height="22" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <path d="M4 5v14l12 -7z" />
+        <path d="M20 5l0 14" />
+      </svg>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            onClick={(e) => { e.preventDefault(); handlePageChange(page + 10); }}
+            className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 ${page >= totalPages - 10 ? 'cursor-not-allowed bg-gray-300' : ''}`}
+            aria-disabled={page >= totalPages - 10}
+          >
+            <span className="sr-only">10 Pages Forward</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-track-next" width="22" height="22" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <path d="M3 5v14l8 -7z" />
+        <path d="M14 5v14l8 -7z" />
+      </svg>
+          </a>
+        </li>
+      </ul>
 
         </div>
       </div>

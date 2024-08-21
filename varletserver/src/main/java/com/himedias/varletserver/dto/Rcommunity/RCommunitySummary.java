@@ -21,7 +21,7 @@ public interface RCommunitySummary {
 
     LocalDateTime getWritedate();
 
-    String getUserid();
+    MemberInfo getUserid();
 
     /**
      * Projection for {@link com.himedias.varletserver.entity.Member}
