@@ -16,7 +16,7 @@ function Mycourse() {
     const [courseDuration, setCourseDuration] = useState([]);
     const [daySchedule, setDaySchedule] = useState([]);
     const userCookie = getCookie('user');
-    const [ttmaker, setTtmaker] = useState();
+    const [ttmaker, setTtmaker] = useState('');
     const location = useLocation();
     const { cseq } = location.state || {};
     const [cellWidth, setCellWidth] = useState(0);
@@ -138,18 +138,18 @@ function Mycourse() {
                                     </option>
                                 ))}
                             </select>
-                            <p>Selected Course: {selectedCourse}</p>
+                            {/* <p>Selected Course: {selectedCourse}</p> */}
                         </div>
                         <div className='course' style={{ width: '100%' }}>
                             {getCookie('user') ? (
-                                <button onClick={handleClickButton} name='ttmaker' >
+                                <button className='coursemenubtn' onClick={handleClickButton} name='ttmaker' >
                                     여행코스 만들기
                                 </button>
                             ) : (<></>)}
-                            {ttmaker === '' ? <></> : ttmaker && <Timetablemaker>{selectComponent[ttmaker]}</Timetablemaker>}
+                            {ttmaker == '' ? <></> : ttmaker && <Timetablemaker>{selectComponent[ttmaker]}</Timetablemaker>}
                         </div>
                         <div ref={timetableRef}></div>
-                        <button onClick={captureTimetable} style={{ marginTop: '20px', padding: '10px' }}>
+                        <button className='coursemenubtn' onClick={captureTimetable} style={{ marginTop: '20px', padding: '10px' }}>
                             시간표 캡쳐하기
                         </button>
                     </div>
@@ -159,21 +159,33 @@ function Mycourse() {
                 </div>
 
             </div>
-            <ul className='floating'>
-                <li className="button search" onClick={onChangeCourseContents}>콘텐츠 목록에서 검색</li>
-                <li className="button custom" onClick={onChangeCourseCustom}>직접 추가</li>
-            </ul>
+            {
+                !(isCourseContentsVisible || isCourseCustom) ?
+                <ul className='floating'>
+                    <li className="button search" onClick={onChangeCourseContents}>콘텐츠 목록에서 검색</li>
+                    <li className="button custom" onClick={onChangeCourseCustom}>직접 추가</li>
+                </ul>
+                :<></>
+            }
 
 
             {isCourseContentsVisible && (
                 <div className="course_contents" >
-                    <div className="cchead" style={{ display: 'flex', justifyContent: 'center' }}>
-                        <h2>course_contents</h2>
-                        <button style={{ border: '1px solid black' }} onClick={onChangeCourseContents}>
+                    <div className="cchead" style={{ display: 'flex', justifyContent: 'space-between', paddingRight: '60px' }}>
+                        course_contents
+                        {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-backspace" width="40" height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round" onClick={onChangeCourseContents}>
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M20 6a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-11l-5 -5a1.5 1.5 0 0 1 0 -2l5 -5z" />
+                            <path d="M12 10l4 4m0 -4l-4 4" />
+                        </svg>
+                        {/* <button style={{ border: '1px solid black' }} >
                             X
-                        </button>
+                        </button> */}
                     </div>
-                    <CourseContents courseDuration={courseDuration} selectedCourse={selectedCourse} cseq={cseq} />
+                    <div style={{ zIndex: '5' }}>
+                        <CourseContents courseDuration={courseDuration} selectedCourse={selectedCourse} cseq={cseq} />
+                    </div>
                 </div>
             )}
             {isCourseCustom && (
