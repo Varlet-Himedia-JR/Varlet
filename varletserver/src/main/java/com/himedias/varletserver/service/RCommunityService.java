@@ -4,10 +4,7 @@ import com.himedias.varletserver.dao.MemberRepository;
 import com.himedias.varletserver.dao.RCommunityRepository;
 import com.himedias.varletserver.dao.RcrecommendRepository;
 import com.himedias.varletserver.dto.Paging;
-import com.himedias.varletserver.dto.Rcommunity.RCommunityInfo;
-import com.himedias.varletserver.dto.Rcommunity.RCommunityMyList;
-import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
-import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
+import com.himedias.varletserver.dto.Rcommunity.*;
 import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.RCommunity;
 import com.himedias.varletserver.entity.Rcrecommend;
@@ -179,15 +176,22 @@ public class RCommunityService {
         // 게시글 작성자 (User)를 조회
         Member member = rc.getUserid();
 
-        // 게시글의 reward를 유저의 포인트에 더함
-        member.setPoint(member.getPoint() + rc.getReward());
-        mr.save(member); // 유저의 포인트 변경 사항을 저장
+        // picked 필드가 "N"인지 확인
+        if ("N".equals(rc.getPicked())) {
+            // picked가 "N"인 경우 포인트 반환
+            member.setPoint(member.getPoint() + rc.getReward());
+            mr.save(member); // 유저의 포인트 변경 사항을 저장
+            result.put("point", member.getPoint()); // 반환된 포인트
+            result.put("message", "게시글이 삭제되었습니다. 포인트가 반환되었습니다.");
+        } else {
+            // picked가 "Y"인 경우 포인트 반환하지 않고 게시글만 삭제
+            result.put("point", member.getPoint()); // 반환된 포인트
+            result.put("message", "게시글이 삭제되었습니다. 포인트는 반환되지 않습니다.");
+        }
 
         // 게시글 삭제
         rcr.delete(rc);
 
-        // 결과로 유저의 최신 포인트 반환
-        result.put("point", member.getPoint());
         result.put("success", true);
         return result;
     }
