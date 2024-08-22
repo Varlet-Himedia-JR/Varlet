@@ -67,6 +67,7 @@ const handleSubmit = (event) => {
   })
   .then(response => {
     console.log('글 작성 성공:', response);
+    console.log("유저?", userCookie.userid)
     alert('의뢰가 성공적으로 등록되었습니다.');
     navigate('/rcommunity'); 
   })
