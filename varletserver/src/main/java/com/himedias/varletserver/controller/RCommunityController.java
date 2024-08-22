@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -70,12 +71,21 @@ public class RCommunityController {
      * @param userid 사용자 ID
      * @return 사용자의 게시물 목록이 포함된 맵
      */
-    @GetMapping("/getMyList/{userid}")
-    public HashMap<String, Object> getMyList(@PathVariable("userid") String userid) {
+    @GetMapping("/getMyList")
+    public HashMap<String, Object> getMyPosts(@AuthenticationPrincipal Member user) {
         HashMap<String, Object> result = new HashMap<>();
-        // result.put("postlist", rcs.getMyAllPosts(userid)); // 사용자의 게시물 조회
-        return result; // 결과 반환
+        try {
+            List<RCommunitySummary> posts = rcs.getPostsByUser(user);
+            result.put("success", true);
+            result.put("posts", posts);
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("message", "게시글을 불러오는 데 실패했습니다.");
+        }
+        return result;
+
     }
+
 
     /**
      * 새 게시물을 작성합니다.

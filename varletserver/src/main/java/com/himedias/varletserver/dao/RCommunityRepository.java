@@ -74,17 +74,10 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
             "ORDER BY r.rnum DESC")
     List<RCommunitySummary> findAllWithReplyCount();
 
-    // 사용자 ID로 게시물 목록을 반환합니다.
-    @Query("SELECT r FROM RCommunity r WHERE r.userid = :userid")
-    List<RCommunityMyList> findByUserid(@Param("userid") Member userid);
-
-    // 특정 위치에서 사용자 ID로 게시물 목록을 반환합니다.
-    @Query("SELECT r FROM RCommunity r WHERE r.userid = :userid AND r.location = :location")
-    List<RCommunityMyList> findByUseridAndLocation(@Param("userid") Member userid, @Param("location") Integer location);
-
-    // 특정 위치와 위치2에서 사용자 ID로 게시물 목록을 반환합니다.
-    @Query("SELECT r FROM RCommunity r WHERE r.userid = :userid AND r.location = :location AND r.location2 = :location2")
-    List<RCommunityMyList> findByUseridAndLocationAndLocation2(@Param("userid") Member userid, @Param("location") Integer location, @Param("location2") Integer location2);
+    // 사용자가 작성한 게시글 목록 조회
+    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
+            "FROM RCommunity r WHERE r.userid = :userid")
+    List<RCommunitySummary> findByUserid(@Param("userid") Member userid);
 
     // 게시글 ID로 RCommunityInfo 프로젝션을 반환합니다.
     @Query("SELECT r.rnum AS rnum, r.location AS location, r.location2 AS location2, r.views AS views, r.title AS title, " +
@@ -92,5 +85,7 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
             "r.startdate AS startdate, r.enddate AS enddate, r.userid AS userid " +
             "FROM RCommunity r WHERE r.rnum = :rnum")
     RCommunityInfo findPostInfoById(@Param("rnum") int rnum);
+
+
 
 }

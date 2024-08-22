@@ -278,37 +278,14 @@ public class RCommunityService {
      * @param userid 사용자 객체
      * @return 사용자 ID에 따른 게시물 목록
      */
-    public List<RCommunityMyList> getPostsByUserId(Member userid) {
-        return rcr.findByUserid(userid);
+    // 사용자가 작성한 게시글 목록 조회
+    public List<RCommunitySummary> getPostsByUser(Member user) {
+        return rcr.findByUserid(user);
     }
 
-    /**
-     * 특정 위치에 따른 사용자 게시물 목록을 조회합니다.
-     * @param userid 사용자 객체
-     * @param location 위치 정보
-     * @return 위치에 따른 사용자 게시물 목록
-     */
-    public List<RCommunityMyList> getPostsByUserIdAndLocation(Member userid, Integer location) {
-        return rcr.findByUseridAndLocation(userid, location);
-    }
 
-    /**
-     * 두 개의 위치 정보를 기준으로 사용자 게시물 목록을 조회합니다.
-     * @param userid 사용자 객체
-     * @param location 첫 번째 위치 정보
-     * @param location2 두 번째 위치 정보
-     * @return 두 위치 정보에 따른 사용자 게시물 목록
-     */
-    public List<RCommunityMyList> getPostsByUserIdAndLocationAndLocation2(Member userid, Integer location, Integer location2) {
-        return rcr.findByUseridAndLocationAndLocation2(userid, location, location2);
-    }
 
-//    /**
-//     * 사용자 ID로 모든 게시물 목록을 조회합니다.
-//     * @param userid 사용자 ID
-//     * @return 사용자 ID에 따른 모든 게시물 목록
-//     */
-//    public List<RCommunity> getMyAllPosts(String userid) {
-//        return rcr.findAllMy(userid);
-//    }
+
+
+
 }
