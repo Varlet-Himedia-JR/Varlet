@@ -4,10 +4,7 @@ import com.himedias.varletserver.dao.MemberRepository;
 import com.himedias.varletserver.dao.RCommunityRepository;
 import com.himedias.varletserver.dao.RcrecommendRepository;
 import com.himedias.varletserver.dto.Paging;
-import com.himedias.varletserver.dto.Rcommunity.RCommunityInfo;
-import com.himedias.varletserver.dto.Rcommunity.RCommunityMyList;
-import com.himedias.varletserver.dto.Rcommunity.RCommunitySummary;
-import com.himedias.varletserver.dto.Rcommunity.RCommunityWrite;
+import com.himedias.varletserver.dto.Rcommunity.*;
 import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.RCommunity;
 import com.himedias.varletserver.entity.Rcrecommend;
@@ -15,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -66,18 +65,25 @@ public class RCommunityService {
 
 
     @Transactional
-    public HashMap<String, Object> writePost(RCommunityWrite rCommunityWrite) {
+    public ResponseEntity<HashMap<String, Object>> writePost(RCommunityWrite rCommunityWrite) {
         HashMap<String, Object> result = new HashMap<>();
 
         // 유효한 사용자 ID인지 확인
-        Optional<Member> memberOptional = mr.findByUserid(rCommunityWrite.getUserid());
+        Optional<Member> memberOptional = mr.findById(rCommunityWrite.getUserid());
         if (memberOptional.isEmpty()) {
             result.put("success", false);
             result.put("message", "유효하지 않은 사용자 ID입니다.");
-            return result;
+            return ResponseEntity.badRequest().body(result);
         }
 
         Member member = memberOptional.get();
+
+        // 포인트 비교 로직
+        if (rCommunityWrite.getReward() > member.getPoint()) {
+            result.put("success", false);
+            result.put("message", "의뢰금은 보유 포인트를 초과할 수 없습니다.");
+            return ResponseEntity.badRequest().body(result);
+        }
 
         // RCommunity 객체 생성 및 필드 설정
         RCommunity post = new RCommunity();
@@ -89,16 +95,21 @@ public class RCommunityService {
         post.setUserid(member);  // Member 엔티티 설정
         post.setStartdate(rCommunityWrite.getStartdate().toLocalDateTime());
         post.setEnddate(rCommunityWrite.getEnddate().toLocalDateTime());
-        post.setViews(0);
-        post.setPicked(rCommunityWrite.getPicked());
 
-        // 게시글 저장
-        RCommunity savedPost = rcr.save(post);
+        // 포인트 차감 및 업데이트
+        member.setPoint(member.getPoint() - rCommunityWrite.getReward());
+        mr.save(member);  // 멤버 정보 업데이트
+
+        rcr.save(post);  // 게시글 저장
 
         result.put("success", true);
-        result.put("post", savedPost);
-        return result;
+        result.put("post", post);
+        result.put("point", member.getPoint());
+
+        return ResponseEntity.ok(result);
     }
+
+
 
     @Transactional
     public RCommunityInfo getPostDetail(int rnum) {
@@ -130,8 +141,6 @@ public class RCommunityService {
         post.setContent(rCommunityWrite.getContent());
         post.setLocation(rCommunityWrite.getLocation());
         post.setLocation2(rCommunityWrite.getLocation2());
-        post.setReward(rCommunityWrite.getReward());
-        post.setPicked(rCommunityWrite.getPicked());
 
         // 날짜 변환
         post.setStartdate(rCommunityWrite.getStartdate().toLocalDateTime());
@@ -139,7 +148,7 @@ public class RCommunityService {
 
         // 사용자 ID 체크 (옵션: 필요한 경우)
         if (rCommunityWrite.getUserid() != null) {
-            Optional<Member> memberOptional = mr.findByUserid(rCommunityWrite.getUserid());
+            Optional<Member> memberOptional = mr.findById(rCommunityWrite.getUserid());
             if (memberOptional.isEmpty()) {
                 result.put("success", false);
                 result.put("message", "유효하지 않은 사용자 ID입니다.");
@@ -158,13 +167,41 @@ public class RCommunityService {
     }
 
     @Transactional
-    public void deleteRCommunity(int rnum) {
+    public HashMap<String, Object> deleteRCommunity(int rnum) {
+        HashMap<String, Object> result = new HashMap<>();
+
+        // 게시글을 조회하고, 게시글이 없으면 예외를 던짐
         RCommunity rc = rcr.findById(rnum).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+
+        // 게시글 작성자 (User)를 조회
+        Member member = rc.getUserid();
+
+        // picked 필드가 "N"인지 확인
+        if ("N".equals(rc.getPicked())) {
+            // picked가 "N"인 경우 포인트 반환
+            member.setPoint(member.getPoint() + rc.getReward());
+            mr.save(member); // 유저의 포인트 변경 사항을 저장
+            result.put("point", member.getPoint()); // 반환된 포인트
+            result.put("message", "게시글이 삭제되었습니다. 포인트가 반환되었습니다.");
+        } else {
+            // picked가 "Y"인 경우 포인트 반환하지 않고 게시글만 삭제
+            result.put("point", member.getPoint()); // 반환된 포인트
+            result.put("message", "게시글이 삭제되었습니다. 포인트는 반환되지 않습니다.");
+        }
+
+        // 게시글 삭제
         rcr.delete(rc);
+
+        result.put("success", true);
+        return result;
     }
+
 
     @Transactional
     public boolean updatePicked(String rnum, char picked) {
+
+
+
         int updatedRows = rcr.updatePicked(rnum, picked);
         return updatedRows > 0;
     }
