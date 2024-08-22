@@ -44,12 +44,23 @@
     /* justify-content: center; */
     /* align-items: flex-start; */
 }
+.cchead{
+    font-family: 'Mplus 1p Bold';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18.5px;
+    line-height: 40px;
+    color: #000000;
+    cursor: pointer;
+    margin: 0 10px;
+}
 .add_contents .cchead{
     position: relative;
     top:0;
     right:0;
     width:100%;
     border:0px;
+   
 }
 
 .add_contents .contents-item:hover {
@@ -99,6 +110,7 @@ ul.floating li.button.search {
     border-radius: 20px 0 0 20px;
     /* background-image: url(/images/container.timetable.search.icon.png); */
     background-position: 20px center;
+z-index: 4;
 }
 
 ul.floating li.button.custom {
@@ -106,14 +118,28 @@ ul.floating li.button.custom {
     border-radius: 0 20px 20px 0;
     /* background-image: url(/images/container.timetable.custom.icon.png); */
     background-position: 10px center;
+    z-index: 4;
+}
+.coursemenubtn{
+    color: #fff;
+    background-color: #1e90ff;
+    border-radius: 20px 20px 20px 20px;
 }
 
 .course {
     margin: 0 auto;
     padding: 20px;
-    background-color: #F0F8FF; /* 밝은 아이보리색 배경 */
+    background-color: #F0F8FF; 
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+    font-family: 'Mplus 1p Bold';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18.5px;
+    line-height: 22px;
+    color: #000000;
+    cursor: pointer;
+    margin: 0 10px;
 }
 
 .mycourse_container{
@@ -155,12 +181,13 @@ ul.floating li.button.custom {
     border-collapse: collapse;
     margin:0px;
     padding: 0px;
-    border:1px solid black;
+    border:1px solid #d6d6d6;
     width: 50px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    color:#777777;
 }
 
 .datacell {
@@ -168,7 +195,7 @@ ul.floating li.button.custom {
     border-collapse: collapse;
     margin:0px;
     padding: 0px;
-    border:1px solid black;
+    border:1px solid #d6d6d6;
     height: 40px;
     display: flex;
     align-items: center;

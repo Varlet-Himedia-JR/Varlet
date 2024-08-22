@@ -4,10 +4,7 @@ import com.himedias.varletserver.entity.Dayschedule;
 import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.service.DayscheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
@@ -21,6 +18,14 @@ public class DayscheduleController {
     public HashMap<String, Object> insertDayschedule(@RequestBody Dayschedule dayschedule){
         HashMap<String, Object> result = new HashMap<String, Object>();
         ds.insertDayschedule(dayschedule);
+        result.put("msg","ok");
+        return result;
+    }
+
+    @PostMapping("/deleteDayschedule/{dseq}")
+    public HashMap<String, Object> deleteDayschedule(@PathVariable("dseq") String dseq){
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        ds.deleteDayschedule(dseq);
         result.put("msg","ok");
         return result;
     }

@@ -66,24 +66,6 @@ public class MemberService {
         return mr.existsByNickname( nickname );
     }
 
-//    public void onFollow(String ffrom, String fto) {
-//        // ffrom 과 fto 로 전달된 값으로 레코드가 있는지 검사
-//        Optional<Follow> rec = fr.findByFfromAndFto(ffrom, fto);
-//        if( !rec.isPresent() ){
-//            Follow f = new Follow();
-//            f.setFfrom(ffrom);
-//            f.setFto(fto);
-//            fr.save( f );
-//        }
-//    }
-
-//    public void onUnFollow(String ffrom, String fto) {
-//        Optional<Follow> rec = fr.findByFfromAndFto(ffrom, fto);
-//        if( rec.isPresent() ){
-//            fr.deleteById( rec.get().getId() );
-//            //fr.delete( rec.get() );
-//        }
-//    }
 
     @Autowired
     private HttpSession session;
@@ -107,9 +89,9 @@ public class MemberService {
                     member.getNickname(),
                     member.getEmail(),
                     member.getPhone(),
-                    member.getZipCode(),
+                    member.getZip_code(),
                     member.getAddress(),
-                    member.getDAddress(),
+                    member.getD_address(),
                     member.getProfileimg()
             );
         } else {

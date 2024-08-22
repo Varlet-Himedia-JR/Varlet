@@ -43,18 +43,20 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             String nickname = (String) claims.get("nickname");
             String email = (String) claims.get("email");
             String phone = (String) claims.get("phone");
+            String zipCode = (String) claims.get("zipCode");
+            String address = (String) claims.get("address");
+            String d_address = (String) claims.get("d_address");
             String provider = (String) claims.get("provider");
             String snsid = (String) claims.get("snsid");
             String profileimg = (String) claims.get("profileimg");
-            String zipCode = (String) claims.get("zipCode");
-            String address = (String) claims.get("address");
-            String dAddress = (String) claims.get("Daddress");
             Timestamp indate = (Timestamp) claims.get("indate");
             Character isLogin = (Character) claims.get("isLogin");
+            int point = (int) claims.get("point");
             List<String> roleNames = (List<String>) claims.get("roleNames");
             Integer point = (Integer) claims.get("points");
             // 추출한 정보를 사용하여 MemberDTO 객체를 생성합니다.
             MemberDTO memberDTO = new MemberDTO(userid, pwd, name,nickname, email, phone, provider, snsid, profileimg, zipCode, address, dAddress, indate, isLogin, roleNames, point);
+
             log.info("-----------------------------------");
             log.info(memberDTO);
             log.info(memberDTO.getAuthorities()); // 사용자 권한을 로그에 기록합니다.
@@ -259,6 +261,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         //dayschedule
         if (path.startsWith("/dayschedule/insertDayschedule"))
+            return true;
+        if (path.startsWith("/dayschedule/deleteDayschedule"))
             return true;
 
         return false;

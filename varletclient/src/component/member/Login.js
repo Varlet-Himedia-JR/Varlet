@@ -14,7 +14,6 @@ import { data } from 'autoprefixer';
 function Login() {
     const [userid, setUserid] = useState('');
     const [pwd, setPwd] = useState('');
-    let lUser = useSelector(state=>state.user)
     const dispatch = useDispatch();  // 쓰기를 위한 함수 생성
     const navigate = useNavigate();
     async function onLoginLocal(){

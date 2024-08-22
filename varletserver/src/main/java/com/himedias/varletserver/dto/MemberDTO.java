@@ -11,6 +11,7 @@ public class MemberDTO extends User {
 
     // 생성자 추가 (포인트 필드 포함)
     public MemberDTO(
+
             String userid,
             String password,
             String name,
@@ -28,6 +29,7 @@ public class MemberDTO extends User {
             List<String> roleNames,
             Integer point // 추가된 포인트 필드
     ) {
+
         super(userid, password,
                 roleNames.stream().map(
                         str -> new SimpleGrantedAuthority("ROLE_" + str)
@@ -39,16 +41,18 @@ public class MemberDTO extends User {
         this.nickname = nickname;
         this.email = email;
         this.phone = phone;
-        this.profileimg = profileimg;
-        this.zipCode = zipCode;
+        this.zip_code = zip_code;
         this.address = address;
-        this.dAddress = d_address;
+        this.d_address = d_address;
         this.provider = provider;
         this.snsid = snsid;
+        this.profileimg = profileimg;
         this.indate = indate;
         this.isLogin = isLogin;
+        this.point = point;
         this.roleNames = roleNames;
         this.point = point; // 포인트 필드 초기화
+
     }
 
     private String userid;
@@ -57,12 +61,12 @@ public class MemberDTO extends User {
     private String nickname;
     private String email;
     private String phone;
-    private String profileimg;
-    private String zipCode;
+    private String zip_code;
     private String address;
-    private String dAddress;
+    private String d_address;
     private String provider;
     private String snsid;
+    private String profileimg;
     private Timestamp indate;
     private Character isLogin;
     private List<String> roleNames = new ArrayList<>();
@@ -79,14 +83,15 @@ public class MemberDTO extends User {
         dataMap.put("nickname", nickname);
         dataMap.put("email", email);
         dataMap.put("phone", phone);
-        dataMap.put("profileimg", profileimg);
-        dataMap.put("zipCode", zipCode);
+        dataMap.put("zip_code", zip_code);
         dataMap.put("address", address);
-        dataMap.put("dAddress", dAddress);
+        dataMap.put("d_address", d_address);
         dataMap.put("provider", provider);
         dataMap.put("snsid", snsid);
+        dataMap.put("profileimg", profileimg);
         dataMap.put("indate", indate);
         dataMap.put("isLogin", isLogin);
+        dataMap.put("point", point);
         dataMap.put("roleNames", roleNames);
         dataMap.put("point", point); // 포인트 필드 추가
         return dataMap;
