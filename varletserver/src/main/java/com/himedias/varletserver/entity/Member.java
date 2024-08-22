@@ -71,8 +71,8 @@ public class Member {
     @Column(name = "snsid", length = 50)
     private String snsid;
 
-    @Column(name = "point", length = 100)
-    private int point;
+//    @Column(name = "point", length = 100)
+//    private int point;
 
     @Size(max = 300)
     @Column(name = "profileimg", length = 300)
@@ -81,7 +81,7 @@ public class Member {
     // 추가된 필드
     @Column(name = "point")
     @ColumnDefault("0") // 기본값 설정
-    private int point;
+    private Integer point;
 
     // 사용자의 등급별 권한들이 저장
     @ElementCollection(fetch = FetchType.LAZY)

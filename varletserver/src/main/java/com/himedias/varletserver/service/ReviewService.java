@@ -27,7 +27,7 @@ public class ReviewService {
     public Page<Review> getReviewList(Paging paging) {
         int pageNumber = paging.getPage() - 1; // PageRequest uses 0-based index
         int pageSize = paging.getDisplayRow();
-        PageRequest pageRequest = PageRequest.of(paging.getPage() - 1, paging.getDisplayRow(), Sort.by(Sort.Order.desc("indate")));
+        PageRequest pageRequest = PageRequest.of(paging.getPage() - 1, paging.getDisplayRow(), Sort.by(Sort.Order.asc("rseq")));
         // Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return rr.findAll(pageRequest);
     }

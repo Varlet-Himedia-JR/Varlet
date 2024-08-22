@@ -2,13 +2,13 @@ import React ,{useState, useEffect} from 'react'
 import axios from '../../util/jwtUtil'
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
 import '../../style/customer.css';
 import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
 import jaxios from '../../util/jwtUtil';
 import moment from 'moment';
 import { location1Data, location2Data } from '../request/LocaionData';
+import Heading from '../headerfooter/Heading';
 
 
 
@@ -131,6 +131,7 @@ const handleSubmit = (event) => {
 return (
   
   <div class="flex justify-center">
+    {/* <Heading/> */}
     <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-4xl" data-v0-t="card">
     <form onSubmit={handleSubmit}>
       <div class="flex flex-col space-y-1.5 p-6">
@@ -257,6 +258,7 @@ return (
         <div class="grid gap-4">
           <label class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg" for="points">
             Points
+            {/* {getCookie('user').point} */}
           </label>
           <input
             class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-base"

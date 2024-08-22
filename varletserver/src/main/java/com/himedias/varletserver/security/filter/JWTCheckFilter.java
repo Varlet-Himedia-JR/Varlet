@@ -51,9 +51,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             String provider = (String) claims.get("provider");
             String snsid = (String) claims.get("snsid");
             String profileimg = (String) claims.get("profileimg");
-            int point = (int) claims.get("point");
+//            int point = (int) claims.get("point");
             List<String> roleNames = (List<String>) claims.get("roleNames");
-            Integer point = (Integer) claims.get("points");
+            Integer point = (Integer) claims.get("point");
             // 추출한 정보를 사용하여 MemberDTO 객체를 생성합니다.
             MemberDTO memberDTO = new MemberDTO(userid, pwd, name,nickname, email, phone, zip_code, address, d_address,indate, is_login, provider, snsid,profileimg, point,roleNames);
 
