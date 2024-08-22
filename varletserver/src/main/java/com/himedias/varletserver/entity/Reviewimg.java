@@ -13,23 +13,22 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "reviewimg") // 엔티티와 매핑될 테이블 이름
+@Table(name = "reviewimg")
 @NoArgsConstructor
 public class Reviewimg {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int iseq; // 이미지 시퀀스 (Primary Key)
+    private int iseq;
 
     @Column(nullable = false)
-    private int rseq; // 리뷰 번호 (Foreign Key)
+    private int rseq;
 
-    private String ipath; // 파일 경로
+    private String ipath;
 
-    private String iname; // 이미지 이름
+    private String iname;
 
     @ManyToOne
     @JoinColumn(name = "rseq", insertable = false, updatable = false)
-    private Review review; // Review 엔티티와의 관계 설정
-
+    private Review review;
 }

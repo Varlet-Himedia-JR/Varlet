@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import jaxios from '../../util/jwtUtil';
 import { useNavigate } from 'react-router-dom';
 import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
@@ -24,7 +25,7 @@ function ReviewList() {
 
         setIsLoading(true); // 로딩 상태를 true로 설정
         try {
-            const result = await axios.get(`/api/review/reviewList/${page}`);
+            const result = await jaxios.get(`/api/review/reviewList/${page}`);
             const { reviewList: newReviews, paging } = result.data;
 
             if (newReviews && newReviews.length > 0) {
