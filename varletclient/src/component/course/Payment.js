@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom";
 
-function Pay() {
-    const location = useLocation();
+function Payment({ daySchedule }) {
 
-    const { dayschedule } = location.state || {};
-    const [daySchedule, setDaySchedule] = useState([]);
-
+    const [dayschedule, setDayschedule] = useState([]);
+    // 결제 함수
     useEffect(() => {
         if (window.IMP) {
             window.IMP.init('imp17261207');
@@ -14,10 +12,6 @@ function Pay() {
         } else {
             console.error("아임포트 SDK가 로드되지 않았습니다.");
         }
-    }, []);
-
-    useEffect(() => {
-        setDaySchedule(dayschedule);
     }, []);
 
     function requestPay() {
@@ -48,19 +42,16 @@ function Pay() {
             }
         });
     }
+    //---------------------------------
 
+    useEffect(() => {
+        if (daySchedule && daySchedule.length > 0) {
+            setDayschedule(daySchedule);
+        }
+    }, [daySchedule]);
 
     return (
         <>
-            {/* <h2>결제내역들</h2>
-            <div>제목/가격/유저아이디/day/시작시간/종료시간/가격/인원수</div>
-            {dayschedule.map((contents, index) => (
-                <div key={index}>
-                    {index + 1}번째 결제내역 : {contents.dtitle}/{contents.price}/{contents.userid}/{contents.day_date.substring(0, 10)}/{contents.start_time.substring(0, 10)}/{contents.end_time.substring(0, 10)}/{contents.price}/{contents.pcount}
-                </div>
-            ))}
-            <button onClick={requestPay}>결제하기</button> */}
-            <hr></hr>
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-xs" data-v0-t="card">
                 <div className="flex flex-col space-y-1.5 p-6">
                     <h3 className="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Payment Summary</h3>
@@ -84,8 +75,9 @@ function Pay() {
                         <span className="text-sm font-medium">Total</span>
                     </div>
                 </div>
-            </div>
 
+            </div>
+            <br></br>
             <div
                 className=" text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer w-32"
                 style={{ backgroundColor: '#1e90ff' }}
@@ -104,4 +96,4 @@ function Pay() {
     )
 }
 
-export default Pay;
+export default Payment

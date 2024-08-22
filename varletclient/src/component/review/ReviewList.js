@@ -1,46 +1,47 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import jaxios from '../../util/jwtUtil';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
 import { getCookie } from "../../util/cookieUtil";
 import '../../style/review.css';
-import axios from 'axios';
-
 
 function ReviewList() {
     const [reviewList, setReviewList] = useState([]);
-    const [page, setPage] = useState(1); // 현재 페이지
-    const [hasMore, setHasMore] = useState(true); // 더 로드할 데이터가 있는지 여부
-    const [searchTerm, setSearchTerm] = useState(''); // 검색어
-    const [filteredReviews, setFilteredReviews] = useState([]); // 필터된 리뷰 목록
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredReviews, setFilteredReviews] = useState([]);
     const navigate = useNavigate();
 
-    // 쿠키에서 사용자 ID를 가져옴
     const userCookie = getCookie('user');
     const userid = userCookie?.userid || null;
 
     // 데이터 로드 함수
-    const loadReviews = useCallback(async (pageNumber) => {
+    const loadReviews = useCallback(async () => {
+        if (isLoading || !hasMore) return;
+
+        setIsLoading(true); // 로딩 상태를 true로 설정
         try {
-            const result = await axios.get(`/api/review/reviewList/${pageNumber}`);
+            const result = await axios.get(`/api/review/reviewList/${page}`);
             const { reviewList: newReviews, paging } = result.data;
 
-            if (Array.isArray(newReviews) && newReviews.length > 0) {
+            if (newReviews && newReviews.length > 0) {
                 setReviewList(prevReviews => [...prevReviews, ...newReviews]);
-                setPage(pageNumber);
-
-                // 다음 페이지가 없으면 hasMore를 false로 설정
-                if (!paging || (paging && paging.next === null)) {
-                    setHasMore(false);
+                setPage(prevPage => prevPage + 1); // 페이지 증가
+                if (!paging || paging.next === null) {
+                    setHasMore(false); // 다음 페이지가 없으면 더 로드할 데이터 없음
                 }
             } else {
                 setHasMore(false);
             }
         } catch (err) {
             console.error(err);
+        } finally {
+            setIsLoading(false); // 로딩 상태를 false로 설정
         }
-    }, []);
+    }, [page, isLoading, hasMore]);
 
     // 필터링 함수
     const filterReviews = useCallback(() => {
@@ -64,11 +65,10 @@ function ReviewList() {
 
         // 스크롤이 페이지 하단에 도달했을 때
         if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore) {
-            loadReviews(page + 1);
+            loadReviews(); // 다음 페이지 로드
         }
-    }, [page, hasMore, loadReviews]);
+    }, [loadReviews, hasMore]);
 
-    // 컴포넌트 마운트 시 스크롤 이벤트 리스너 추가
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         return () => {
@@ -78,29 +78,25 @@ function ReviewList() {
 
     // 초기 데이터 로드
     useEffect(() => {
-        loadReviews(page);
-    }, [loadReviews, page]);
+        loadReviews(); // 첫 페이지 데이터 로드
+    }, []); // 빈 배열을 의존성 배열로 지정하여 첫 로딩 시 한 번만 실행
 
-    // 검색어 변경 핸들러
+    useEffect(() => {
+        filterReviews(); // 검색어가 변경될 때마다 필터링
+    }, [searchTerm, filterReviews]);
+
     function handleSearchChange(event) {
         setSearchTerm(event.target.value);
     }
 
-    // 검색어가 변경될 때마다 필터링
-    useEffect(() => {
-        filterReviews();
-    }, [searchTerm, filterReviews]);
-
-    // 검색어 클리어 핸들러
     function handleClearSearch() {
         setSearchTerm('');
     }
 
-    // 리뷰 제목 클릭 핸들러
     function onReviewView(rseq) {
         if (!userid) {
             alert('로그인이 필요합니다');
-            navigate('/login'); // 로그인 페이지로 이동
+            navigate('/login');
             return;
         }
         navigate(`/reviewView/${rseq}`);
@@ -124,7 +120,7 @@ function ReviewList() {
                         />
                         {searchTerm && (
                             <button className="clear-button" onClick={handleClearSearch}>
-                                &times; {/* 'X' 문자 */}
+                                &times;
                             </button>
                         )}
                     </div>
@@ -154,8 +150,7 @@ function ReviewList() {
                             )
                         }
                     </div>
-                    {/* 로딩 중 표시 */}
-                    {hasMore && <div className="loading">Loading more reviews...</div>}
+                    {isLoading && <div className="loading">Loading more reviews...</div>}
                 </div>
             </div>
             <Footer />
