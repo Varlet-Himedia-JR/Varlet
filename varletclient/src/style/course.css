@@ -68,6 +68,14 @@
 
 }
 
+.addttamker{
+    font-family: 'Mplus 1p Bold';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18.5px;
+    color:#1e90ff
+}
+
 .add_contents .contents-item:hover {
     transform: translateY(0px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0);

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 function Payment({ daySchedule }) {
 
     const [dayschedule, setDayschedule] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0);
+
     // 결제 함수
     useEffect(() => {
         if (window.IMP) {
@@ -47,6 +49,14 @@ function Payment({ daySchedule }) {
     useEffect(() => {
         if (daySchedule && daySchedule.length > 0) {
             setDayschedule(daySchedule);
+            let tempPrice = 0;
+            for(let i = 0;i<dayschedule.length;i++){
+                tempPrice=tempPrice+dayschedule[i].price;
+            }
+            setTotalPrice(tempPrice);
+        } else {
+            setDayschedule([]);
+            setTotalPrice(0);
         }
     }, [daySchedule]);
 
@@ -54,10 +64,11 @@ function Payment({ daySchedule }) {
         <>
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-xs" data-v0-t="card">
                 <div className="flex flex-col space-y-1.5 p-6">
-                    <h3 className="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Payment Summary</h3>
+                    <h3 className="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">일정 결제 목록</h3>
                 </div>
+                <hr></hr>
                 <div className="p-6 grid gap-4">
-                    {dayschedule.map((contents, index) => (
+                    {dayschedule.length > 0 ? dayschedule.map((contents, index) => (
                         <div className="grid gap-1">
                             <div className="text-sm text-muted-foreground">{contents.day_date.substring(5, 10)}</div>
                             <div className="flex items-center justify-between">
@@ -66,13 +77,16 @@ function Payment({ daySchedule }) {
                             </div>
 
                         </div>
-                    ))}
+                    ))
+                        : <div className="grid gap-1">
+                            결제할 목록이 없습니다.
 
-
+                        </div>}
                     <div data-orientation="horizontal" role="none" className="shrink-0 bg-border h-[1px] w-full"></div>
                     <hr></hr>
                     <div className="flex items-center justify-between">
                         <span className="text-sm font-medium">Total</span>
+                        <span className="text-sm font-medium">{totalPrice}</span>
                     </div>
                 </div>
 

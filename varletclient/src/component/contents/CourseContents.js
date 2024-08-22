@@ -187,6 +187,7 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
             if (result.data.msg == 'ok') {
                 alert('등록완료');
                 setIsAddContentsVisible(false);
+                window.location.reload();
             }
         } catch (err) {
             console.error(err);
