@@ -202,12 +202,13 @@ public class RCommunityService {
 
     @Transactional
     public boolean updatePicked(String rnum, char picked) {
-
-
-
         int updatedRows = rcr.updatePicked(rnum, picked);
+
+
+
         return updatedRows > 0;
     }
+
     // Member 객체를 userid로 조회
     public Optional<Member> findMemberByUserid(String userid) {
         return mr.findByUserid(userid);
