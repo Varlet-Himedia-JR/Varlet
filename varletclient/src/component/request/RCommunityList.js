@@ -5,6 +5,7 @@ import Heading from '../headerfooter/Heading';
 import Footer from '../headerfooter/Footer';
 import { location1Data, location2Data } from '../request/LocaionData';
 import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
+import { cookies } from 'next/headers';
 
 function PostList() {
   const [posts, setPosts] = useState([]);
@@ -34,7 +35,8 @@ function PostList() {
         setTotalPages(Math.ceil(response.data.paging.totalCount / size)); // 전체 페이지 수 계산
         console.log("tkdlwm?", page);
         console.log("tkdlwm?", totalPages);
-        console.log("유저정보 ", response.data.postlist);
+        console.log("데이터? ", response.data.postlist);
+        console.log("유저정보?",setCookie.userid)
       })
       .catch(error => console.error('Error fetching posts:', error));
 };
