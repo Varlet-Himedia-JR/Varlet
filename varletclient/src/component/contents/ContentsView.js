@@ -23,8 +23,8 @@ function ContentsView() {
         }, []
     )
 
-    function addSchedule(cseq) {
-        navigate('/mycourse', { state: { cseq } });
+    function addSchedule(contents) {
+        navigate('/mycourse', { state: { contents } });
     }
 
     return (
@@ -75,7 +75,7 @@ function ContentsView() {
                     }
                     <div className='btns'>
                         {getCookie('user') ? (
-                            <button onClick={() => { addSchedule(contents.cseq) }}>일정추가</button>
+                            <button onClick={() => { addSchedule(contents) }}>일정추가</button>
                         ) : (
                             <button style={{ display: 'none' }} onClick={() => { addSchedule(contents.cseq) }}>추가</button>)}
                         <button onClick={() => { navigate('/contentsList') }}>목록으로</button>

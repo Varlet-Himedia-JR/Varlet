@@ -15,4 +15,7 @@ public interface ContentsRepository extends JpaRepository<Contents, Integer> {
     @Query("SELECT c FROM Contents c WHERE " +
             "LOWER(c.cname) LIKE LOWER(CONCAT('%', :query, '%')) ")
     List<Contents> searchByMultipleFields(String query);
+
+    @Query("SELECT c FROM Contents c ORDER BY c.cseq DESC LIMIT 5")
+    List<Contents> getRecentContents();
 }

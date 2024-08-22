@@ -10,16 +10,18 @@ import { useLocation } from 'react-router-dom';
 import Heading from '../headerfooter/Heading';
 import html2canvas from 'html2canvas';
 import Payment from './Payment';
+import SelectedCustomCourse from './CustomCourse';
 function Mycourse() {
     const [selectedCourse, setSelectedCourse] = useState('');
     const [mycourse, setMycourse] = useState([]);
+    const [selectedContents, setSelectedContents] = useState({});
     const [mycoursename, setMycoursename] = useState([]);
     const [courseDuration, setCourseDuration] = useState([]);
     const [daySchedule, setDaySchedule] = useState([]);
     const userCookie = getCookie('user');
     const [ttmaker, setTtmaker] = useState('');
     const location = useLocation();
-    const { cseq } = location.state || {};
+    const { contents } = location.state || {};
     const [cellWidth, setCellWidth] = useState(0);
     const [isCourseContentsVisible, setIsCourseContentsVisible] = useState(false);
     const [isCourseCustom, setIsCourseCustom] = useState(false);
@@ -29,10 +31,15 @@ function Mycourse() {
     };
 
     useEffect(() => {
-        if (cseq) {
-            setIsCourseContentsVisible(true);
+        if (contents) {
+            console.log(contents);
+            setSelectedContents(contents);
         }
-    }, [cseq]);
+    }, [contents]);
+
+    const addDayschedule = async () => {
+        alert('일정등록');
+    }
 
     useEffect(() => {
         // jaxios.get(`/api/course/getTnames/${userCookie.userid}`)
@@ -111,6 +118,9 @@ function Mycourse() {
         setIsCourseContentsVisible(!isCourseContentsVisible);
     };
 
+    const onChangeSelectedCustomCourse = () => {
+        setSelectedContents({});
+    }
     const onChangeCourseCustom = () => {
         setIsCourseCustom(!isCourseCustom);
     };
@@ -185,11 +195,11 @@ function Mycourse() {
                         <br></br>
                         <div className='course' style={{ width: '100%' }}>
                             {getCookie('user') ? (
-                                (ttmaker == '' ? 
-                                // <button className='coursemenubtn' onClick={handleClickButton} name='ttmaker' >
-                                //     여행코스 만들기
-                                // </button>
-                                <p onClick={handleClickButton} name='ttmaker' className='addttamker'>┼ 여행코스 만들기</p>
+                                (ttmaker == '' ?
+                                    // <button className='coursemenubtn' onClick={handleClickButton} name='ttmaker' >
+                                    //     여행코스 만들기
+                                    // </button>
+                                    <p onClick={handleClickButton} name='ttmaker' className='addttamker'>┼ 여행코스 만들기</p>
                                     :
                                     // <svg style={{right:'0'}} xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-backspace" width="40" height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round" onClick={handleClickButton}>
                                     //     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -291,20 +301,224 @@ function Mycourse() {
                         </button> */}
                     </div>
                     <div style={{ zIndex: '5' }}>
-                        <CourseContents courseDuration={courseDuration} selectedCourse={selectedCourse} cseq={cseq} />
+                        <CourseContents courseDuration={courseDuration} selectedCourse={selectedCourse} contents={contents} />
                     </div>
                 </div>
             )}
-            {isCourseCustom && (
-                <div className="course_contents" >
+            {!selectedContents == {} ?
+                <div className='add_contents'>
                     <div className="cchead" style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <h2>course_custom</h2>
-                        <button style={{ border: '1px solid black' }} onClick={onChangeCourseCustom}>
+                        <button style={{ border: '1px solid black' }} onClick={onChangeSelectedCustomCourse}>
                             X
                         </button>
                     </div>
+                    <SelectedCustomCourse selectedContents={selectedContents} />
+                </div>
+                : <></>}
+
+            {isCourseCustom && (
+                <div className='add_contents'>
+                    <button style={{ border: '1px solid black' }} onClick={onChangeCourseCustom}>
+                        X
+                    </button>
+                    <div className="rounded-lg border bg-card text-card-foreground">
+                        <div className="p-6 space-y-6">
+                            <div className="grid grid-cols-1 gap-4">
+                                <div className="space-x-2">
+                                    addcontents
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-backspace" width="40" height="40" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round" onClick={onChangeCourseCustom}>
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M20 6a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-11l-5 -5a1.5 1.5 0 0 1 0 -2l5 -5z" />
+                                        <path d="M12 10l4 4m0 -4l-4 4" />
+                                    </svg>
+                                </div>
+                                <div className="flex space-x-4">
+
+                                    <div className="space-y-2">
+                                        <label
+                                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                            htmlFor="date"
+                                        >
+                                            나의 여행
+                                        </label>
+                                        {mycourse.length > 0 ? <div className="flex justify-between">
+                                            <select
+                                                id="mycourse"
+                                                name="mycourse"
+                                                value={selectedCourse}
+                                                onChange={handleCourseChange}
+                                            >
+                                                {mycourse.map((course, index) => (
+                                                    <option key={index} value={course.tseq}>
+                                                        {course.tname}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div> : <></>}
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label
+                                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                            htmlFor="date"
+                                        >
+                                            Date
+                                        </label>
+                                        <div>
+                                            <select
+                                                id="sdate"
+                                                name="sdate"
+                                                value={1}
+                                            // onChange={(e) => { setSdate(e.currentTarget.value) }}
+                                            >
+                                                {/* {days.map((day, index) => (
+                                                <option key={index} value={day}>
+                                                    {day}
+                                                </option>
+                                            ))} */}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label
+                                            htmlFor="time"
+                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                        >
+                                            Start time
+                                        </label>
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
+                                                <svg
+                                                    className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                                                    aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        fillRule="evenodd"
+                                                        d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
+                                                        clipRule="evenodd"
+                                                    />
+                                                </svg>
+                                            </div>
+                                            <input
+                                                type="time"
+                                                id="stime"
+                                                name="stime"
+                                                className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                required
+                                            // onChange={(e) => { setStime(e.currentTarget.value) }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label
+                                            htmlFor="time"
+                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                        >
+                                            End time
+                                        </label>
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
+                                                <svg
+                                                    className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                                                    aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        fillRule="evenodd"
+                                                        d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
+                                                        clipRule="evenodd"
+                                                    />
+                                                </svg>
+                                            </div>
+                                            <input
+                                                type="time"
+                                                id="etime"
+                                                name="etime"
+                                                className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                required
+                                            // onChange={(e) => { setEtime(e.currentTarget.value) }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div className="grid grid-cols-1 gap-4">
+                                <div className="space-y-2">
+                                    <label
+                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                        htmlFor="title"
+                                    >
+                                        Title
+                                    </label>
+                                    <input
+                                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                        id="title"
+                                        placeholder="Enter a title"
+                                        value={1}
+                                    // onChange={(e) => setTitle(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 gap-4">
+                                <div className="space-y-2">
+                                    <label
+                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                        htmlFor="price"
+                                    >
+                                        가격
+                                    </label>
+                                    <input
+                                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                        id="price"
+                                        placeholder="Enter a price"
+                                        type="number"
+                                        value={1}
+                                    // onChange={(e) => setPrice(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 gap-4">
+                                <div className="space-y-2">
+                                    <label
+                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                        htmlFor="people"
+                                    >
+                                        인원 수
+                                    </label>
+                                    <input
+                                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                        id="people"
+                                        placeholder="Enter the number of people"
+                                        type="number"
+                                        value={1}
+                                    // onChange={(e) => { setPcount(e.currentTarget.value) }}
+
+                                    />
+                                    <button onClick={addDayschedule}>일정등록</button>
+                                    {/* <input type="text" value={1} onChange={(e) => { setPcount(e.currentTarget.value) }} /> */}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* <div className="course_contents" >
+                     <div className="cchead" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                         <h2>course_custom</h2>
+                         <button style={{ border: '1px solid black' }} onClick={onChangeCourseCustom}>
+                             X
+                         </button>
+                     </div>
+                    </div> */}
                 </div>
             )}
+
             <Footer />
         </div>
     );
