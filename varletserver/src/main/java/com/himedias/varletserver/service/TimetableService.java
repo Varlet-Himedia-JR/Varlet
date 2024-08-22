@@ -28,4 +28,8 @@ public class TimetableService {
     public List<Timetable> getAllMyCourse(String userid) {
         return tr.findByUserid(userid);
     }
+
+    public void deleteTimetable(String tseq) {
+        tr.deleteById(tseq);
+    }
 }

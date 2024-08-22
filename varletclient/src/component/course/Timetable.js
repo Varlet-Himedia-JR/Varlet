@@ -86,8 +86,8 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
         if (daySchedule && daySchedule.length > 0) {
             const position = [];
             for (let i = 0; i < daySchedule.length; i++) {
-                console.log(i, '번째 레츠기릿');
-                console.log(daySchedule[i].day_date);
+                // console.log(i, '번째 레츠기릿');
+                // console.log(daySchedule[i].day_date);
 
                 // Date 객체로 변환
                 let date = new Date(daySchedule[i].day_date);
@@ -101,7 +101,7 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
 
                 date = new Date(daySchedule[i].start_time);
                 date.setTime(date.getTime() + (9 * 60 * 60 * 1000));
-                
+
                 let stime = date.toISOString();
 
                 let x = 0;
@@ -110,15 +110,14 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
                 let c = 'black';
 
                 for (let j = days.length - 1; j >= 0; j--) {
-                    console.log('day 비교:', days[j].substring(5, 10));
-                    console.log('스케쥴 비교:', daydate.substring(5, 10));
+                    // console.log('day 비교:', days[j].substring(5, 10));
+                    // console.log('스케쥴 비교:', daydate.substring(5, 10));
 
                     if (days[j].substring(5, 10) === daydate.substring(5, 10)) {
                         x = days.length - 1 - j;
                         break;
-                    } else {
-                        console.log('일치 안함');
                     }
+
                 }
 
                 for (let j = 0; j < times.length; j++) {
@@ -181,25 +180,25 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
     return (
         <div className="timetable">
             <div className="courserow">
-                <div className="coursecell" style={{backgroundColor:`#f2f2f2`, width: `${cellwidth / 2}%` }}></div>
+                <div className="coursecell" style={{ backgroundColor: `#f2f2f2`, width: `${cellwidth / 2}%` }}></div>
                 {days.map((day, index) => (
-                    <div key={day} className="coursecell" ref={index === 0 ? courseCellRef : null} style={{backgroundColor:`#f2f2f2`, width: `${cellwidth}%` }}>
+                    <div key={day} className="coursecell" ref={index === 0 ? courseCellRef : null} style={{ backgroundColor: `#f2f2f2`, width: `${cellwidth}%` }}>
                         {day}
                     </div>
                 ))}
             </div>
             {times.map(time => (
                 <div key={time} className="courserow">
-                    <div className="coursecell" style={{backgroundColor:`#f8f8f8`, width: `${cellwidth / 2}%` }}>{time}</div>
+                    <div className="coursecell" style={{ backgroundColor: `#f8f8f8`, width: `${cellwidth / 2}%` }}>{time}</div>
                     {days.map((_, index) => (
-                        <div key={index} className="coursecell" style={{backgroundColor:`#f8f8f8`, width: `${cellwidth}%` }}></div>
+                        <div key={index} className="coursecell" style={{ backgroundColor: `#f8f8f8`, width: `${cellwidth}%` }}></div>
                     ))}
                 </div>
             ))}
             {daySchedule.length > 0 ?
                 dayschedule.map((contents, index) => (
                     <div key={index} className="datacell" style={{ right: `${cellposition[index].x * cellwidth}px`, top: `${cellposition[index].y * 40}px`, height: `${cellposition[index].l * 40}px`, backgroundColor: `${cellposition[index].c}`, color: 'black', width: `${getCourseCellWidthInPixels()}px` }} onClick={() => scheduleDetail(contents.dseq, index, isScheduledetailVisible)} >
-                        {contents.dtitle}/{contents.price>0?'₩'+contents.price:'무료'}
+                        {contents.dtitle}/{contents.price > 0 ? '₩' + contents.price : '무료'}
                         {/* {contents.start_time}/{contents.day_date} */}
                         <button style={{ position: 'absolute', top: '5px', right: '5px', backgroundColor: 'transparent', border: 'none', color: 'black', fontSize: '16px', cursor: 'pointer', padding: 0 }}
                             onClick={(e) => {
@@ -212,7 +211,26 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
                 ))
                 : <></>
             }
-            <button onClick={pay} style={{ border: '1px solid black' }}>결제</button>
+            {/* <button onClick={pay} style={{ border: '1px solid black' }}>결제</button> */}
+            <br></br>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <div
+                    className=" text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer w-32"
+                    style={{ backgroundColor: '#1e90ff' }}
+                    onClick={pay}
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M3 5m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" />
+                        <path d="M3 10l18 0" />
+                        <path d="M7 15l.01 0" />
+                        <path d="M11 15l2 0" />
+                    </svg>
+                    <span className="text-xl font-bold">결제</span>
+                </div>&nbsp;&nbsp;&nbsp;
+
+            </div>
+            <br></br>
         </div>
     );
 };

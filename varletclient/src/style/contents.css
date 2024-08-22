@@ -72,7 +72,7 @@ height:50%;
 
 .contentstable .row {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     padding: 10px;
     border-bottom: 1px solid #B0E0E6; /* 연한 바다색 테두리 */
 }

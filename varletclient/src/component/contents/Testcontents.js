@@ -17,9 +17,17 @@ function TestContents() {
         <>
             <Heading />
             <div className="flex min-h-[100dvh] flex-col">
-                <section className="w-full bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] py-20 md:py-32">
-                    <div className="container mx-auto flex flex-col items-center justify-center gap-8 px-4 md:flex-row md:gap-12">
-                        <div className="max-w-xl space-y-4 text-center md:text-left">
+                <section className="w-full bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] py-20 md:py-32" style={{
+                            backgroundImage: 'url(http://localhost:8070/images/oceans.jpg)',
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            width: '100%',   // 원하는 너비 설정
+                            zIndex:0
+                        }}>
+
+                    <div className="container  mx-auto flex flex-col items-center justify-center gap-8 px-4 md:flex-row md:gap-12"
+                        >
+                        <div className="max-w-xl space-y-4 text-center md:text-left bg-gradient-to-r from-[#1e90ff] to-[#1e90ff]" >
                             <h1 className="text-4xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl">
                                 Welcome to the Trip Community
                             </h1>

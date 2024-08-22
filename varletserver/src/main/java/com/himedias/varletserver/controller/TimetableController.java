@@ -22,10 +22,18 @@ public class TimetableController {
         return result;
     }
 
-    @PostMapping("/inserTimetable")
-    public HashMap<String, Object> join(@RequestBody Timetable timetable){
+    @PostMapping("/insertTimetable")
+    public HashMap<String, Object> insertTimetable(@RequestBody Timetable timetable){
         HashMap<String, Object> result = new HashMap<String, Object>();
         ts.insertTimetable(timetable);
+        return result;
+    }
+
+    @PostMapping("/deleteTimetable/{tseq}")
+    public HashMap<String, Object> deteteTimetable(@RequestParam("tseq") String tseq){
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        ts.deleteTimetable(tseq);
+        result.put("msg","ok");
         return result;
     }
 

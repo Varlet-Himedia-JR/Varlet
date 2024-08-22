@@ -1,17 +1,18 @@
-.course_contents{
+.course_contents {
     /* display: none; */
     position: fixed;
     z-index: 1;
     /* bottom: 0; */
     /* top:400px; */
-    height:50%;
-    bottom:100px;
+    height: 50%;
+    bottom: 100px;
     width: 100%;
     border-top: 1px solid #d6d6d6;
     box-shadow: 0 0 24px rgba(0, 0, 0, 0.2);
     background-color: #fff;
     /* overflow: hidden; */
-    overflow-y: auto; /* 세로 스크롤을 활성화합니다. */
+    overflow-y: auto;
+    /* 세로 스크롤을 활성화합니다. */
     height:
 }
 
@@ -28,10 +29,12 @@
     z-index: 1;
     padding: 0px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    overflow-y: auto; /* 세로 스크롤을 활성화합니다. */
-    overflow-x: auto; 
+    overflow-y: auto;
+    /* 세로 스크롤을 활성화합니다. */
+    overflow-x: auto;
 }
-.add_contents{
+
+.add_contents {
     position: fixed;
     top: 20%;
     left: 33%;
@@ -44,7 +47,8 @@
     /* justify-content: center; */
     /* align-items: flex-start; */
 }
-.cchead{
+
+.cchead {
     font-family: 'Mplus 1p Bold';
     font-style: normal;
     font-weight: 700;
@@ -54,13 +58,14 @@
     cursor: pointer;
     margin: 0 10px;
 }
-.add_contents .cchead{
+
+.add_contents .cchead {
     position: relative;
-    top:0;
-    right:0;
-    width:100%;
-    border:0px;
-   
+    top: 0;
+    right: 0;
+    width: 100%;
+    border: 0px;
+
 }
 
 .add_contents .contents-item:hover {
@@ -68,18 +73,21 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0);
 }
 
-.cchead{
+.cchead {
     position: fixed;
     background-color: white;
-    width:100%;
-    height:40px;
-    top:50%+100px;
+    width: 100%;
+    height: 40px;
+    top: 50%+100px;
 }
+
 .mycourseContentsList {
     margin: 0 auto;
-    width: 100%; /* 화면 전체 너비 사용 */
+    width: 100%;
+    /* 화면 전체 너비 사용 */
     padding: 20px;
-    background-color: #F0F8FF; /* 밝은 아이보리색 배경 */
+    background-color: #F0F8FF;
+    /* 밝은 아이보리색 배경 */
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -110,7 +118,10 @@ ul.floating li.button.search {
     border-radius: 20px 0 0 20px;
     /* background-image: url(/images/container.timetable.search.icon.png); */
     background-position: 20px center;
-z-index: 4;
+    z-index: 4;
+    display: flex;
+    justify-content: center;
+    width:220px;
 }
 
 ul.floating li.button.custom {
@@ -119,18 +130,22 @@ ul.floating li.button.custom {
     /* background-image: url(/images/container.timetable.custom.icon.png); */
     background-position: 10px center;
     z-index: 4;
+    display: flex;
+    /* justify-content: center; */
+    width:200px;
 }
-.coursemenubtn{
+
+.coursemenubtn {
     color: #fff;
     background-color: #1e90ff;
-    border-radius: 20px 20px 20px 20px;
+    border-radius: 5px 5px 5px 5px;
 }
 
 .course {
     margin: 0 auto;
     padding: 20px;
-    background-color: #F0F8FF; 
-    border-radius: 10px;
+    background-color: rgb(248, 248, 248);
+    /* border-radius: 10px; */
     /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
     font-family: 'Mplus 1p Bold';
     font-style: normal;
@@ -140,36 +155,53 @@ ul.floating li.button.custom {
     color: #000000;
     cursor: pointer;
     margin: 0 10px;
+    border:1px solid #d6d6d6;
 }
 
-.mycourse_container{
-    display:flex;
+.mycourse_container {
+    display: flex;
     justify-content: column;
 }
 
-.coursemenu{
+.coursemenu {
     /* position: fixed; */
-    width:20%;
+    width: 20%;
     /* top: 100px; */
-    
+
 }
 
 .timetable {
-    display :table;
+    display: table;
     /* display: flex; */
     flex-direction: column;
-    background-color: rgb(175, 175, 175);
+    /* background-color: rgb(175, 175, 175); */
     border-collapse: collapse;
-    width:80%;
+    width: 80%;
+}
+
+.tempTable {
+    /* display :table; */
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    /* flex-direction: column; */
+    /* background-color: rgb(175, 175, 175); */
+    border-collapse: collapse;
+    width: 80%;
+    height: 1400px;
+    font-family: 'Mplus 1p Bold';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18.5px;
 }
 
 .courserow {
     display: flex;
     /* border:1px solid black; */
     border-collapse: collapse;
-    margin:0px;
+    margin: 0px;
     padding: 0px;
-    width:100%;
+    width: 100%;
 }
 
 /* .courserow:first-child {
@@ -179,27 +211,27 @@ ul.floating li.button.custom {
 
 .coursecell {
     border-collapse: collapse;
-    margin:0px;
+    margin: 0px;
     padding: 0px;
-    border:1px solid #d6d6d6;
+    border: 1px solid #d6d6d6;
     width: 50px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color:#777777;
+    color: #777777;
 }
 
 .datacell {
     position: absolute;
     border-collapse: collapse;
-    margin:0px;
+    margin: 0px;
     padding: 0px;
-    border:1px solid #d6d6d6;
+    border: 1px solid #d6d6d6;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius :5px;
-    border:none;
+    border-radius: 5px;
+    border: none;
 }
