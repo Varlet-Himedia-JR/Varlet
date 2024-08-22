@@ -32,7 +32,6 @@ function ContentsView() {
             <Heading />
             <div className='subPage'>
 
-                <h2>Contents View</h2>
                 <div className="contents" >
                     {
                         (contents) ? (
@@ -79,11 +78,11 @@ function ContentsView() {
                             <button onClick={() => { addSchedule(contents.cseq) }}>일정추가</button>
                         ) : (
                             <button style={{ display: 'none' }} onClick={() => { addSchedule(contents.cseq) }}>추가</button>)}
-                        <button onClick={() => { navigate('/contents') }}>목록으로</button>
+                        <button onClick={() => { navigate('/contentsList') }}>목록으로</button>
                     </div>
                 </div>
             </div>
-            {/* <Footer /> */}
+            <Footer />
         </>
     )
 }

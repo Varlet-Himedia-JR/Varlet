@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 @Transactional
@@ -38,5 +39,9 @@ public class ContentsService {
 
     public void writeContents(Contents contents) {
         cr.save(contents);
+    }
+
+    public List<Contents> searchContents(String query) {
+        return cr.searchByMultipleFields(query);
     }
 }

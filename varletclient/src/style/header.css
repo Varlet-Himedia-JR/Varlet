@@ -13,8 +13,9 @@
     justify-content: space-between;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 0 0 15px 15px;
+
+    background: rgba(255, 255, 255);
+    border-bottom: 2px solid black;
 
 }
 
@@ -65,26 +66,25 @@
 
 .login {
     width: 60px;
-    height: 20px;
+    height: 27px;
 }
 
 .join {
     width: 80px;
-    height: 20px;
-    margin-right: 20px;
-    ;
+    height: 27px;
+    margin-right: 20px;;
+
 }
 
 .myinfo {
     width: 60px;
-    height: 20px;
+    height: 27px;
 }
 
 .logout {
     width: 80px;
-    height: 20px;
-    margin-right: 20px;
-    ;
+    height: 27px;
+    margin-right: 20px;;
 }
 
 .profileimg {

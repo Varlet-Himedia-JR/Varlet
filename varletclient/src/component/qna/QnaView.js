@@ -17,6 +17,7 @@ function QnaView() {
     }, [qseq]);
 
     function qnaDelete() {
+        alert('정말로 삭제하시겠습니까?');
         axios.delete(`/api/qna/qnaDelete/${qseq}`)
             .then(() => { navigate('/qna'); })
             .catch((err) => { console.error(err); });
@@ -33,21 +34,21 @@ function QnaView() {
                     {
                         (qna) ? (
                             <div className='qnaview'>
-                                <h2>QnA View</h2>
+                                <h2>문의사항</h2>
                                 <div className='field'>
-                                    <label>Subject</label>
+                                    <label>제목</label>
                                     <div>{qna.subject}</div>
                                 </div>
                                 <div className='field'>
-                                    <label>Writer</label>
+                                    <label>작성자</label>
                                     <div>{qna.userid}</div>
                                 </div>
                                 <div className='field'>
-                                    <label>Content</label>
+                                    <label>내용</label>
                                     <div><pre>{qna.content}</pre></div>
                                 </div>
                                 <div className='field'>
-                                    <label>Reply</label>
+                                    <label>답변</label>
                                     <div>{qna.reply}</div>
                                 </div>
                             </div>

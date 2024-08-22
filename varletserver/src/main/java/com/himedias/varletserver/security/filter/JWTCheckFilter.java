@@ -51,9 +51,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             String provider = (String) claims.get("provider");
             String snsid = (String) claims.get("snsid");
             String profileimg = (String) claims.get("profileimg");
-//            int point = (int) claims.get("point");
-            List<String> roleNames = (List<String>) claims.get("roleNames");
             Integer point = (Integer) claims.get("point");
+            List<String> roleNames = (List<String>) claims.get("roleNames");;
+
             // 추출한 정보를 사용하여 MemberDTO 객체를 생성합니다.
             MemberDTO memberDTO = new MemberDTO(userid, pwd, name,nickname, email, phone, zip_code, address, d_address,indate, is_login, provider, snsid,profileimg, point,roleNames);
 
@@ -71,7 +71,6 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (Exception e) {
             // JWT 검증 중 오류가 발생하면 로그에 기록하고 클라이언트에 오류 메시지를 반환합니다.
-            log.error("JWT Check Error..............");
             log.error("JWT Check Error..............");
             log.error(e.getMessage());
             Gson gson = new Gson();
@@ -247,6 +246,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
 
         if (path.startsWith("/contents/getContent/"))
+            return true;
+        if (path.startsWith("/contents/search"))
             return true;
 
         //timetable
