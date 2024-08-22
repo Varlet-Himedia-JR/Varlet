@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -70,10 +71,10 @@ public class RCommunityController {
     }
 
     @PostMapping("/writePost")
-    public ResponseEntity<HashMap<String, Object>> writePost(@RequestBody RCommunityWrite rCommunityWrite) {
-
-
-        HashMap<String, Object> result = rcs.writePost(rCommunityWrite);
+    public ResponseEntity<HashMap<String, Object>> writePost(
+            @RequestBody RCommunityWrite rCommunityWrite) {
+        System.out.println("호출되긴함????================================================================================================");
+        HashMap<String, Object> result = rcs.writePost(rCommunityWrite).getBody();
         return ResponseEntity.ok(result);
     }
 

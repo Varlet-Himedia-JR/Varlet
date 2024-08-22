@@ -15,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -66,18 +68,25 @@ public class RCommunityService {
 
 
     @Transactional
-    public HashMap<String, Object> writePost(RCommunityWrite rCommunityWrite) {
+    public ResponseEntity<HashMap<String, Object>> writePost(RCommunityWrite rCommunityWrite) {
         HashMap<String, Object> result = new HashMap<>();
 
         // 유효한 사용자 ID인지 확인
-        Optional<Member> memberOptional = mr.findByUserid(rCommunityWrite.getUserid());
+        Optional<Member> memberOptional = mr.findById(rCommunityWrite.getUserid().getUserid());
         if (memberOptional.isEmpty()) {
             result.put("success", false);
             result.put("message", "유효하지 않은 사용자 ID입니다.");
-            return result;
+            return ResponseEntity.badRequest().body(result);
         }
 
         Member member = memberOptional.get();
+
+        // 포인트 비교 로직
+        if (rCommunityWrite.getReward() > member.getPoint()) {
+            result.put("success", false);
+            result.put("message", "의뢰금은 보유 포인트를 초과할 수 없습니다.");
+            return ResponseEntity.badRequest().body(result);
+        }
 
         // RCommunity 객체 생성 및 필드 설정
         RCommunity post = new RCommunity();
@@ -89,16 +98,19 @@ public class RCommunityService {
         post.setUserid(member);  // Member 엔티티 설정
         post.setStartdate(rCommunityWrite.getStartdate().toLocalDateTime());
         post.setEnddate(rCommunityWrite.getEnddate().toLocalDateTime());
-        post.setViews(0);
-        post.setPicked(rCommunityWrite.getPicked());
 
-        // 게시글 저장
-        RCommunity savedPost = rcr.save(post);
+        // 포인트 차감 및 업데이트
+        member.setPoint(member.getPoint() - rCommunityWrite.getReward());
+        mr.save(member);  // 멤버 정보 업데이트
+
+        rcr.save(post);  // 게시글 저장
 
         result.put("success", true);
-        result.put("post", savedPost);
-        return result;
+        result.put("post", post);
+        return ResponseEntity.ok(result);
     }
+
+
 
     @Transactional
     public RCommunityInfo getPostDetail(int rnum) {
@@ -131,7 +143,6 @@ public class RCommunityService {
         post.setLocation(rCommunityWrite.getLocation());
         post.setLocation2(rCommunityWrite.getLocation2());
         post.setReward(rCommunityWrite.getReward());
-        post.setPicked(rCommunityWrite.getPicked());
 
         // 날짜 변환
         post.setStartdate(rCommunityWrite.getStartdate().toLocalDateTime());
@@ -139,7 +150,7 @@ public class RCommunityService {
 
         // 사용자 ID 체크 (옵션: 필요한 경우)
         if (rCommunityWrite.getUserid() != null) {
-            Optional<Member> memberOptional = mr.findByUserid(rCommunityWrite.getUserid());
+            Optional<Member> memberOptional = mr.findById(rCommunityWrite.getUserid().getUserid());
             if (memberOptional.isEmpty()) {
                 result.put("success", false);
                 result.put("message", "유효하지 않은 사용자 ID입니다.");

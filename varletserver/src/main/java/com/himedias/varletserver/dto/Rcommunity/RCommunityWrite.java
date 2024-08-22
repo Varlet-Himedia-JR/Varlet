@@ -6,42 +6,45 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Value;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * DTO for {@link com.himedias.varletserver.entity.RCommunity}
  */
-@Getter
-@Setter
+@Value
 public class RCommunityWrite {
 
-    @NotBlank
-    @Size(max = 50)
-    private String userid;  // 사용자 ID
-
-    @NotNull
-    private int location;
-
-    @NotNull
-    private int location2;
-
-    @NotNull
-    private int reward;
-
-    @NotBlank
-    @Size(min = 1, max = 50)  // 제목의 최소, 최대 길이 제약 조건을 추가
-    private String title;
-
-    @NotBlank
-    @Size(min = 1, max = 2500)  // 내용의 최소, 최대 길이 제약 조건을 추가
-    private String content;
-
-    @NotNull
-    private Timestamp startdate;
-
-    @NotNull
-    private Timestamp enddate;
-
+    int location;
+    int location2;
+    String title;
+    String content;
+    int reward;
+    Timestamp startdate;
+    Timestamp enddate;
+    MemberDto userid;
     private char picked = 'N';  // 기본값 설정
+
+    /**
+     * DTO for {@link com.himedias.varletserver.entity.Member}
+     */
+    @Value
+    public static class MemberDto implements Serializable {
+        @Size(max = 50)
+        String userid;
+        @Size(max = 10)
+        String name;
+        @Size(max = 10)
+        String nickname;
+        @Size(max = 50)
+        String provider;
+        @Size(max = 50)
+        String snsid;
+        @Size(max = 300)
+        String profileimg;
+        Integer point;
+    }
 }

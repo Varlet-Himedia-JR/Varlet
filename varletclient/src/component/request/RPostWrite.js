@@ -1,5 +1,5 @@
-import React ,{useState, useEffect} from 'react'
-import axios from '../../util/jwtUtil'
+import React, { useState, useEffect } from 'react';
+import axios from '../../util/jwtUtil';
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import Footer from './../headerfooter/Footer';
@@ -10,76 +10,79 @@ import moment from 'moment';
 import { location1Data, location2Data } from '../request/LocaionData';
 import Heading from '../headerfooter/Heading';
 
-
-
-<script src="../path/to/flowbite/dist/flowbite.min.js"></script>
-
-function RPostWritePost()  {
+function RPostWritePost() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [location, setLocation] = useState('1');
   const [location2, setLocation2] = useState('');
   const [reward, setReward] = useState('');
-  // const [userPoint, setUserPoint] = useState(0);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const navigate = useNavigate();
-  const loginUser = useSelector(state => state.user);
-  const userCookie = getCookie('user');
+  const userCookie = getCookie('user');  // Assuming this is an object with `userid` and `point`
 
-  // useEffect(() => {
-  //   if (userCookie) {
-  //     jaxios.get(`/api/user/point?userid=${userCookie.userid}`)
-  //       .then(response => {
-  //         setUserPoint(response.data.point);
-  //       })
-  //       .catch(error => {
-  //         console.error('사용자 포인트를 가져오는데 실패했습니다:', error);
-  //       });
-  //   }
-  // }, []);
+  const LocationChange = (e) => {
+    setLocation(parseInt(e.target.value)); // 숫자형으로 변환하여 저장
+    setLocation2('');
+  };
+
+  const handleLocation2Change = (e) => {
+    setLocation2(parseInt(e.target.value));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
   
-//location 함수
-const LocationChange = (e) => {
-  setLocation(parseInt(e.target.value)); // 숫자형으로 변환하여 저장
-  setLocation2('');
-};
-
-const handleLocation2Change = (e) => {
-  setLocation2(parseInt(e.target.value));
-};
-
-const handleSubmit = (event) => {
-  event.preventDefault();
-
+    // 포인트 검증 추가
+    if (parseInt(reward, 10) > userCookie.point) {
+      alert('의뢰금은 보유 포인트를 초과할 수 없습니다.');
+      return;
+    }
   
-  const location2Value = location2 === '' ? null : parseInt(location2, 10);
-
-  jaxios.post('/api/rcommunity/writePost', {
-    title: title,
-    content: content,
-    location: parseInt(location, 10),
-    location2: location2Value, // int형으로 변환, 빈 문자열인 경우 null로 처리
-    reward: parseInt(reward, 10),
-    userid: userCookie.userid,
-    startdate: startDate,
-    enddate: endDate    // 추가
-  })
-  .then(response => {
-    console.log('글 작성 성공:', response);
-    console.log("유저?", userCookie.userid)
-    alert('의뢰가 성공적으로 등록되었습니다.');
-    navigate('/rcommunity'); 
-  })
-  .catch(error => {
-    console.error('글 작성 실패:', error);
-    alert('의뢰 등록에 실패했습니다.');
-  });
-};
+    const location2Value = location2 === '' ? null : parseInt(location2, 10);
+  
+    // 요청 본문을 로깅하여 확인
+    console.log({
+      title: title, 
+      content: content,
+      location: parseInt(location, 10),
+      location2: location2Value,
+      reward: parseInt(reward, 10),
+      userid: userCookie.userid, // 수정: userid만 전달
+      startdate: startDate,
+      enddate: endDate
+    });
+  
+    jaxios.post(`/api/rcommunity/writePost`, {
+      title: title,
+      content: content,
+      location: parseInt(location, 10),
+      location2: location2Value,
+      reward: parseInt(reward, 10),
+      userid: userCookie.userid, // 수정: userid만 전달
+      startdate: startDate,
+      enddate: endDate
+    })
+    .then(response => {
+      console.log('글 작성 성공:', response);
+      alert('의뢰가 성공적으로 등록되었습니다.');
+  
+      // 포인트 차감 후 쿠키 업데이트
+      const updatedUser = { ...userCookie, point: userCookie.point - parseInt(reward, 10) };
+      setCookie('user', updatedUser);
+  
+      navigate('/rcommunity'); 
+    })
+    .catch(error => {
+      console.error('글 작성 실패:', error.response ? error.response.data : error.message);
+      alert('의뢰 등록에 실패했습니다.');
+    });
+  };
+  
 
   useEffect(() => {
     if (location2Data[location]) {
-      setLocation2(location2Data[location][0] || '');
+      setLocation2(location2Data[location][0]?.value || '');
     } else {
       setLocation2('');
     }
@@ -103,22 +106,18 @@ const handleSubmit = (event) => {
     }
   };
 
-  const today = new Date();
-
-  moment(startDate).format('YYYY-MM-DD')
+  const today = new Date().toISOString().split('T')[0]; // 현재 날짜를 'YYYY-MM-DD' 형식으로
 
   const returnList = (event) => {
-    window.alert('작성을 취소하시겠습니까?')
-    navigate('/rcommunity');  
+    if (window.confirm('작성을 취소하시겠습니까?')) {
+      navigate('/rcommunity');  
+    }
   };
-
-
 
   const handleStartDateChange = (e) => {
     const selectedStartDate = e.target.value;
     setStartDate(selectedStartDate);
 
-    // 만약 새로운 시작일이 종료일 이후라면 종료일 초기화
     if (endDate && moment(selectedStartDate).isAfter(moment(endDate))) {
       setEndDate(''); // 시작일을 변경했으므로 종료일을 초기화
     }
@@ -128,166 +127,128 @@ const handleSubmit = (event) => {
     setEndDate(e.target.value);
   };
   
-return (
-  
-  <div class="flex justify-center">
-    {/* <Heading/> */}
-    <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-4xl" data-v0-t="card">
-    <form onSubmit={handleSubmit}>
-      <div class="flex flex-col space-y-1.5 p-6">
-        <h1 class="whitespace-nowrap font-semibold tracking-tight text-4xl">여행 의뢰 작성</h1>
-      </div>
-      <div class="p-6 grid gap-8">
-        <div class="grid grid-cols-2 gap-6">
-          <div class="grid gap-4">
-            <label
-              class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
-              for="location"
-            >
-              여행 예정지
-              </label>
-            
-            <select
-              className='border rounded px-2 py-1'
-              value={location}
-              onChange={LocationChange}
-            >
-              <option value="1">전체</option>
-            <option value="2">서울특별시</option>
-            <option value="3">부산광역시</option>
-            <option value="4">대구광역시</option>
-            <option value="5">인천광역시</option>
-            <option value="6">광주광역시</option>
-            <option value="7">대전광역시</option>
-            <option value="8">울산광역시</option>
-            <option value="9">세종특별자치시</option>
-            <option value="10">경기도</option>
-            <option value="11">강원도</option>
-            <option value="12">충청북도</option>
-            <option value="13">충청남도</option>
-            <option value="14">전라북도</option>
-            <option value="15">전라남도</option>
-            <option value="16">경상북도</option>
-            <option value="17">경상남도</option>
-            <option value="18">제주도</option>
-            </select>
+  return (
+    <div className="flex justify-center">
+      <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-4xl" data-v0-t="card">
+        <form onSubmit={handleSubmit}>
+          <div className="flex flex-col space-y-1.5 p-6">
+            <h1 className="whitespace-nowrap font-semibold tracking-tight text-4xl">여행 의뢰 작성</h1>
           </div>
-          <div class="grid gap-4">
-            <label
-              class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
-              for="sub-location"
-            >
-              상세 지역
-            </label>
-            <select
-                  className='border rounded px-2 py-1'
-                  value={location2}
-                  onChange={handleLocation2Change}
-                >
+          <div className="p-6 grid gap-8">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="grid gap-4">
+                <label className="font-medium text-lg" htmlFor="location">여행 예정지</label>
+                <select className='border rounded px-2 py-1' value={location} onChange={LocationChange}>
+                  <option value="1">전체</option>
+                  <option value="2">서울특별시</option>
+                  <option value="3">부산광역시</option>
+                  <option value="4">대구광역시</option>
+                  <option value="5">인천광역시</option>
+                  <option value="6">광주광역시</option>
+                  <option value="7">대전광역시</option>
+                  <option value="8">울산광역시</option>
+                  <option value="9">세종특별자치시</option>
+                  <option value="10">경기도</option>
+                  <option value="11">강원도</option>
+                  <option value="12">충청북도</option>
+                  <option value="13">충청남도</option>
+                  <option value="14">전라북도</option>
+                  <option value="15">전라남도</option>
+                  <option value="16">경상북도</option>
+                  <option value="17">경상남도</option>
+                  <option value="18">제주도</option>
+                </select>
+              </div>
+              <div className="grid gap-4">
+                <label className="font-medium text-lg" htmlFor="sub-location">상세 지역</label>
+                <select className='border rounded px-2 py-1' value={location2} onChange={handleLocation2Change}>
                   <option value="">전체</option>
                   {location2Data[location]?.map((loc) => (
                     <option key={loc.value} value={loc.value}>{loc.label}</option>
                   ))}
                 </select>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-6">
+              <div className="grid gap-4">
+                <label className="font-medium text-lg" htmlFor="start-date">여행 시작일</label>
+                <input
+                  min={today}
+                  type="date"
+                  id="startDate"
+                  name="startDate"
+                  onChange={handleStartDateChange}
+                  value={startDate}
+                  required
+                />
+              </div>
+              <div className="grid gap-4">
+                <label className="font-medium text-lg" htmlFor="end-date">여행 종료일</label>
+                <input
+                  min={startDate ? moment(startDate).format('YYYY-MM-DD') : today}
+                  type="date"
+                  id="endDate"
+                  name="endDate"
+                  onChange={handleEndDateChange}
+                  value={endDate}
+                  required
+                />
+              </div>
+            </div>
+            <div className="grid gap-4">
+              <label className="font-medium text-lg" htmlFor="title">Title</label>
+              <input
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-base"
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Enter a title for your post"
+                required
+              />
+            </div>
+            <div className="grid gap-4">
+              <label className="font-medium text-lg" htmlFor="content">Content</label>
+              <textarea
+                className="flex w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[300px] text-base"
+                id="content"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="Write the content of your post here..."
+                required
+              ></textarea>
+            </div>
+            <div className="grid gap-4">
+              <label className="font-medium text-sm" htmlFor="points">보유 포인트: {userCookie.userid.point}</label>
+              <div className='flex items-center text-center justify-center'>
+                <label className='font-medium'>의뢰금</label>
+                <input
+                  className="flex h-10 w-5/6 ml-2 rounded-md border border-input bg-background px-3 py-2 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-base"
+                  type="number"
+                  id="points"
+                  value={reward}
+                  onChange={RewardChange}
+                  required
+                  placeholder="보유 포인트를 초과할 수 없습니다."
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-4">
+              <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                onClick={returnList}
+              >
+                작성 취소
+              </button>
+              <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                type="submit"
+              >
+                작성 완료
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="grid grid-cols-2 gap-6">
-          <div class="grid gap-4">
-            <label
-              class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
-              for="start-date"
-            >
-              여행 시작일
-            </label>
-            <input
-          min={today
-            ? moment(startDate.dateTo).format('YYYY-MM-DD')
-            :"yyyy-MM-dd"
-          }
-          type="date"
-          id="startDate"
-          name="startDate"
-          onChange={handleStartDateChange}
-          value={startDate}
-          required
-        />
-          </div>
-          <div class="grid gap-4">
-            <label
-              class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
-              for="end-date"
-            >
-              여행 종료일
-            </label>
-            <input
-            min={startDate ? moment(startDate).format('YYYY-MM-DD') : today}
-
-            type="date"
-            id="endDate"
-            name="endDate"
-            onChange={handleEndDateChange}
-            value={endDate}
-            required
-            />
-          </div>
-        </div>
-        <div class="grid gap-4">
-          <label class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg" for="title">
-            Title
-          </label>
-          <input
-            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-base"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Enter a title for your post"
-          />
-        </div>
-        <div class="grid gap-4">
-          <label class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg" for="content">
-            Content
-          </label>
-          <textarea
-            class="flex w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[300px] text-base"
-            id="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Write the content of your post here..."
-          ></textarea>
-        </div>
-        <div class="grid gap-4">
-          <label class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg" for="points">
-            Points
-            {/* {getCookie('user').point} */}
-          </label>
-          <input
-            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-base"
-            type="number"
-            id="points"
-            value={reward}
-            onChange={RewardChange}
-            required
-            placeholder="Enter points"
-          />
-        </div>
-        <div class="flex justify-end gap-4">
-          <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
-          onClick={returnList}
-          >
-            작성 취소
-          </button>
-          <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
-          type="submit"
-          >
-            작성 완료
-          </button>
-        </div>
+        </form>
       </div>
-      </form>
-
     </div>
-  </div>
-);
-};
+  );
+}
 
 export default RPostWritePost;
