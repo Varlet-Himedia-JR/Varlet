@@ -1,17 +1,13 @@
 package com.himedias.varletserver.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
-import java.util.Set;
+import java.util.List;
+
 
 @Data
 @Entity
@@ -33,8 +29,6 @@ public class Review {
 
     private int readcount; // 조회수
 
-    private String reviewimg; // 리뷰 이미지 경로
-
-    /*@OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Reviewimg> reviewimg; // 리뷰 이미지와의 관계 설정*/
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reviewimg> reviewimg; // 리뷰와 관련된 이미지들
 }

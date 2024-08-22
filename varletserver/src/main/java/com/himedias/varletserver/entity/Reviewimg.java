@@ -33,4 +33,3 @@ public class Reviewimg {
     private Review review; // Review 엔티티와의 관계 설정
 
 }
-
