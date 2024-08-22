@@ -191,7 +191,7 @@ function ReviewView() {
     return (
         <>
             <Heading />
-            <div className='subPage'>
+            <div className='subPage' style={{ paddingTop:'100px' }}>
                 <div className="review" style={{ flex: "4" }}>
                     {
                         review ? (

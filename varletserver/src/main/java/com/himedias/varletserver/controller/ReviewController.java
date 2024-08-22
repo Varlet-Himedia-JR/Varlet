@@ -67,6 +67,8 @@ public class ReviewController {
             String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
             String filename = originalFilename.substring(0, originalFilename.lastIndexOf("."));
             String saveFilename = filename + timestamp + extension;
+            System.out.println("---제발---");
+            System.out.println(saveFilename);
 
             Path filePath = Paths.get(uploadDirFile.getAbsolutePath(), saveFilename);
 
@@ -114,7 +116,7 @@ public class ReviewController {
 
                 List<Reviewimg> reviewImgList = filenames.stream().map(filename -> {
                     Reviewimg reviewImg = new Reviewimg();
-                    reviewImg.setIpath("/uploads" + filename);
+                    reviewImg.setIpath("/uploads/" + filename);
                     reviewImg.setIname(filename);
                     reviewImg.setRseq(savedReview.getRseq()); // 연관된 리뷰의 rseq 설정
                     return reviewImg;
