@@ -19,7 +19,6 @@ public class CustomUserDetailService implements UserDetailsService {
 
     private final MemberRepository mr;
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // loadUserByUsername 역할은 전에 사용하던 getMember 메서드의 역할
@@ -28,7 +27,7 @@ public class CustomUserDetailService implements UserDetailsService {
         // 멤버 조회
         Member member = mr.getWithRoles(username);
         // 없으면 Not Found 처리
-        if(member == null) {
+        if (member == null) {
             throw new UsernameNotFoundException(username + " - User Not found");
         }
         System.out.println("----login info----");
@@ -42,18 +41,18 @@ public class CustomUserDetailService implements UserDetailsService {
                 member.getNickname(),
                 member.getEmail(),
                 member.getPhone(),
-                member.getProfileimg(),
-                member.getZip_code(),
+                member.getZipCode(),
                 member.getAddress(),
-                member.getD_address(),
+                member.getDAddress(),
+                member.getProfileimg(),
                 member.getProvider(),
                 member.getSnsid(),
                 member.getIndate(),
                 member.getIs_login(),
-                member.getPoint(),
-                member.getMemberRoleList().stream()// 사용자 역할 리스트를 스트림으로 변환
-                        .map(memberRole -> memberRole.name()) // 각 역할의 이름을 추출
-                        .collect(Collectors.toList()) // 리스트로 수집
+                member.getMemberRoleList().stream()
+                        .map(memberRole -> memberRole.name())
+                        .collect(Collectors.toList()),
+                member.getPoint() // 추가된 필드
         );
         log.info(memberdto);
         log.info(member);
