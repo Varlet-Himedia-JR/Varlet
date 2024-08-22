@@ -6,6 +6,7 @@ import Footer from '../headerfooter/Footer';
 import { location1Data, location2Data } from '../request/LocaionData';
 import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
 import { cookies } from 'next/headers';
+import userSlice from '../../store/userSlice';
 
 function PostList() {
   const [posts, setPosts] = useState([]);
@@ -84,6 +85,7 @@ function PostList() {
       alert("로그인이 필요한 서비스입니다.");
       navigate('/login');
     } else {
+      console.log(cookies)
       navigate(src);
     }
   };

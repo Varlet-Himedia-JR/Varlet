@@ -2,9 +2,20 @@ package com.himedias.varletserver.dao;
 
 import com.himedias.varletserver.entity.Contents;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface ContentsRepository extends JpaRepository<Contents, Integer> {
 
+    // cname, location, location2 필드에서 검색어가 포함된 경우 반환
+    @Query("SELECT c FROM Contents c WHERE " +
+            "LOWER(c.cname) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(c.location) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(c.location2) LIKE LOWER(CONCAT('%', :query, '%'))")
+
+    List<Contents> searchByMultipleFields(String query);
 }

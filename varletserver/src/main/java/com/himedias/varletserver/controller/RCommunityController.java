@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -27,9 +28,7 @@ public class RCommunityController {
     @Autowired
     private RCommunityService rcs;
 
-    public RCommunityController(RCommunityService rcs) {
-        this.rcs = rcs;
-    }
+
 
     @GetMapping("/getPostList")
     public HashMap<String, Object> getPostList(
@@ -70,10 +69,10 @@ public class RCommunityController {
     }
 
     @PostMapping("/writePost")
-    public ResponseEntity<HashMap<String, Object>> writePost(@RequestBody RCommunityWrite rCommunityWrite) {
-
-
-        HashMap<String, Object> result = rcs.writePost(rCommunityWrite);
+    public ResponseEntity<HashMap<String, Object>> writePost(
+            @RequestBody RCommunityWrite rCommunityWrite) {
+        System.out.println("호출되긴함????================================================================================================");
+        HashMap<String, Object> result = rcs.writePost(rCommunityWrite).getBody();
         return ResponseEntity.ok(result);
     }
 
@@ -98,9 +97,7 @@ public class RCommunityController {
     public HashMap<String, Object> deleteCommunityPost(@PathVariable("rnum") int rnum) {
         HashMap<String, Object> result = new HashMap<>();
         try {
-            rcs.deleteRCommunity(rnum);
-            result.put("status", "success");
-            result.put("message", "게시글이 성공적으로 삭제되었습니다.");
+            return rcs.deleteRCommunity(rnum);
         } catch (Exception e) {
             result.put("status", "error");
             result.put("message", "게시글 삭제에 실패했습니다.");

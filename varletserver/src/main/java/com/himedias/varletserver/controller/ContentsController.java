@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/contents")
@@ -58,4 +59,11 @@ public class ContentsController {
         return result;
     }
 
+    // 놀거리 검색
+    @GetMapping("/search")
+    public ResponseEntity<List<Contents>> searchContents(@RequestParam("query") String query) {
+        System.out.println("쿼리가 뭐로가서 찾나 함 보자 " + query);
+        List<Contents> contentsList = cs.searchContents(query);
+        return ResponseEntity.ok(contentsList);
+    }
 }

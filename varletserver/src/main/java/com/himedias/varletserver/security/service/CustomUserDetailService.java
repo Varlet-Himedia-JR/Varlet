@@ -24,7 +24,6 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // loadUserByUsername 역할은 전에 사용하던 getMember 메서드의 역할
         log.info("--------------loadUserByUsername--------------" + username);
-
         // 멤버 조회
         Member member = mr.getWithRoles(username);
         // 없으면 Not Found 처리

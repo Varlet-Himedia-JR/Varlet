@@ -284,7 +284,6 @@ public class MemberController {
     // 회원가입
     @PostMapping("/join")
     public HashMap<String, Object> join(@RequestBody Member member) {
-        System.out.println("여기여기역이경깅ㄱ여경ㄱ여ㅓㅎ량뉴리ㅘㅇ늄러ㅏㅣㅗㄴㅇ뮤러ㅣㅘㄴㅇㅁ " + member);
         HashMap<String, Object> result = new HashMap<String, Object>();
         PasswordEncoder pe = cc.passwordEncoder();
         member.setPwd(pe.encode(member.getPwd()));
@@ -369,7 +368,7 @@ public class MemberController {
         return false;
     }
 
-
+    // 정보수정
     @PostMapping("/updateInfo")
     public HashMap<String, Object> updateInfo(@RequestBody Member member) {
 

@@ -1,9 +1,6 @@
 package com.himedias.varletserver.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -17,7 +14,7 @@ public class Qna {
     private int qseq;
     private String userid;
     private String pass;
-    private String security;
+    private Character security;
     private String subject;
     private String content;
     @CreationTimestamp
@@ -25,4 +22,11 @@ public class Qna {
     private String reply;
     private Timestamp replydate;
 
+
+    @PrePersist
+    public void prePersist() {
+        if (security == null) {
+            security = 'N';
+        }
+    }
 }

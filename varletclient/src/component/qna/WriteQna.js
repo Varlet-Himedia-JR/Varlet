@@ -19,7 +19,10 @@ function WriteQna() {
     const userid = userCookie.userid;
     
     function onSubmit(){
-        axios.post('/api/qna/writeQna',{ subject,content, userid, security,pass})
+        if(!subject){ return alert("제목을 입력해주세요")};
+        if(!pass){ return alert("비밀번호를 입력해주세요")};
+        if(!content){ return alert("문의사항 내용을 입력해주세요")};
+        axios.post('/api/qna/writeQna',{ subject,pass,content, userid, security})
         .then(()=>{ navigate('/qna')})
         .catch((err)=>{
             console.error(err);
