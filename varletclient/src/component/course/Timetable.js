@@ -211,27 +211,9 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
                 ))
                 : <></>
             }
-            {/* <button onClick={pay} style={{ border: '1px solid black' }}>결제</button> */}
-            <br></br>
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <div
-                    className=" text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer w-32"
-                    style={{ backgroundColor: '#1e90ff' }}
-                    onClick={pay}
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M3 5m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" />
-                        <path d="M3 10l18 0" />
-                        <path d="M7 15l.01 0" />
-                        <path d="M11 15l2 0" />
-                    </svg>
-                    <span className="text-xl font-bold">결제</span>
-                </div>&nbsp;&nbsp;&nbsp;
-
-            </div>
             <br></br>
         </div>
+        
     );
 };
 

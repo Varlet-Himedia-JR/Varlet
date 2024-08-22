@@ -185,9 +185,11 @@ function Mycourse() {
                         <br></br>
                         <div className='course' style={{ width: '100%' }}>
                             {getCookie('user') ? (
-                                (ttmaker == '' ? <button className='coursemenubtn' onClick={handleClickButton} name='ttmaker' >
-                                    여행코스 만들기
-                                </button>
+                                (ttmaker == '' ? 
+                                // <button className='coursemenubtn' onClick={handleClickButton} name='ttmaker' >
+                                //     여행코스 만들기
+                                // </button>
+                                <p onClick={handleClickButton} name='ttmaker' className='addttamker'>┼ 여행코스 만들기</p>
                                     :
                                     // <svg style={{right:'0'}} xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-backspace" width="40" height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round" onClick={handleClickButton}>
                                     //     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
