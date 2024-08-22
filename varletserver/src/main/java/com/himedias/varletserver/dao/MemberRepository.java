@@ -21,11 +21,11 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     boolean existsByNickname(String nickname);
 
     // 권한과 같이 조회 - 쿼리가 한번 날라감.
-    @EntityGraph(attributePaths = {"memberRoleList"})
+    @EntityGraph(attributePaths = {"memberRoleList"}) // 권한 조회
     @Query("select m from Member m where m.userid = :userid")
     Member getWithRoles(@Param("userid")String userid);
 
-    @Modifying
+    @Modifying //DB 수정하는 어노테이션
     @Query("UPDATE Member m SET m.pwd = :pwd, m.name = :name, m.nickname = :nickname, m.email = :email, m.phone = :phone, m.zip_code = :zip_code, m.address = :address, m.d_address = :d_address, m.profileimg = :profileimg WHERE m.userid = :userid")
     void updateMember(
             @Param("userid") String userid,

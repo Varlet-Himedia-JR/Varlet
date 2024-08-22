@@ -32,7 +32,7 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler {
 
         // 엑세스 토큰 + 리프레시 토큰 생성
         String accessToken = JWTUtil.generateToken(claims,1); // 엑세스 토큰: 1분 유효
-        String refreshToken = JWTUtil.generateToken(claims, 60*24); // 리프레시 토큰: 24시간 유효
+        String refreshToken = JWTUtil.generateToken(claims, 60*3); // 리프레시 토큰: 24시간 유효
 
         // 생성된 토큰을 claims에 추가합니다.
         claims.put("access_token",accessToken);
