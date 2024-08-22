@@ -15,12 +15,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-
 
 @Service
 public class RCommunityService {
@@ -34,21 +32,45 @@ public class RCommunityService {
     @Autowired
     private MemberRepository mr;
 
+    /**
+     * 모든 게시물을 조회합니다.
+     * @param paging 페이징 및 정렬 정보
+     * @return 게시물 목록
+     */
     public List<RCommunitySummary> getAllPosts(Paging paging) {
         Pageable pageable = PageRequest.of(paging.getPage() - 1, paging.getDisplayRow(), paging.getSort());
         return rcr.findAllBy(pageable).getContent();
     }
 
+    /**
+     * 특정 위치에 따른 게시물 목록을 조회합니다.
+     * @param location 위치 정보
+     * @param paging 페이징 및 정렬 정보
+     * @return 위치에 따른 게시물 목록
+     */
     public List<RCommunitySummary> getPostListByLocation(int location, Paging paging) {
         Pageable pageable = PageRequest.of(paging.getPage() - 1, paging.getDisplayRow(), paging.getSort());
         return rcr.findByLocation(location, pageable).getContent();
     }
 
+    /**
+     * 두 개의 위치 정보를 기준으로 게시물 목록을 조회합니다.
+     * @param location 첫 번째 위치 정보
+     * @param location2 두 번째 위치 정보
+     * @param paging 페이징 및 정렬 정보
+     * @return 두 위치 정보에 따른 게시물 목록
+     */
     public List<RCommunitySummary> getPostListByLocationAndLocation2(int location, int location2, Paging paging) {
         Pageable pageable = PageRequest.of(paging.getPage() - 1, paging.getDisplayRow(), paging.getSort());
         return rcr.findByLocationAndLocation2(location, location2, pageable).getContent();
     }
 
+    /**
+     * 총 게시물 수를 계산합니다.
+     * @param location 위치 정보 (선택적)
+     * @param location2 두 번째 위치 정보 (선택적)
+     * @return 게시물 총 수
+     */
     public int getTotalPostCount(Integer location, Integer location2) {
         if (location != null && location2 != null) {
             return rcr.countByLocationAndLocation2(location, location2);
@@ -59,11 +81,20 @@ public class RCommunityService {
         }
     }
 
+    /**
+     * 게시물 ID로 게시물 정보를 조회합니다.
+     * @param rnum 게시물 ID
+     * @return 게시물 객체
+     */
     public RCommunity getPostById(int rnum) {
         return rcr.findPostById(rnum);
     }
 
-
+    /**
+     * 새 게시물을 작성합니다.
+     * @param rCommunityWrite 게시물 작성 정보
+     * @return 게시물 작성 결과와 정보
+     */
     @Transactional
     public ResponseEntity<HashMap<String, Object>> writePost(RCommunityWrite rCommunityWrite) {
         HashMap<String, Object> result = new HashMap<>();
@@ -109,44 +140,59 @@ public class RCommunityService {
         return ResponseEntity.ok(result);
     }
 
-
-
+    /**
+     * 게시물 상세 정보를 조회합니다.
+     * @param rnum 게시물 ID
+     * @return 게시물 상세 정보
+     */
     @Transactional
     public RCommunityInfo getPostDetail(int rnum) {
         RCommunity post = rcr.findPostById(rnum);
 
         if (post != null) {
-            post.setViews(post.getViews() + 1);
+            post.setViews(post.getViews() + 1);  // 조회수 증가
             rcr.save(post);  // 업데이트된 게시글 저장
         }
         return rcr.findPostInfoById(rnum);
     }
 
-    @Transactional
+    /**
+     * 게시물을 업데이트합니다.
+     * @param rnum 게시물 ID
+     * @param rCommunityWrite 업데이트할 게시물 정보
+     * @return 게시물 업데이트 결과와 정보
+     */
     public HashMap<String, Object> updatePost(int rnum, RCommunityWrite rCommunityWrite) {
         HashMap<String, Object> result = new HashMap<>();
 
         // 게시글 찾기
+        // RCommunity 엔티티를 ID(rnum)로 조회합니다. Optional을 사용하여 게시글이 존재하지 않을 경우를 안전하게 처리합니다.
         Optional<RCommunity> postOptional = rcr.findById(rnum);
         if (postOptional.isEmpty()) {
+            // 게시글이 존재하지 않을 경우, 결과 HashMap에 실패 상태와 메시지를 설정합니다.
             result.put("success", false);
             result.put("message", "게시물을 찾을 수 없습니다.");
             return result;
         }
 
+        // Optional에서 값을 안전하게 추출하여 RCommunity 객체를 가져옵니다.
         RCommunity post = postOptional.get();
 
-        // DTO에서 값을 가져와 게시글 업데이트
+        // DTO(RCommunityWrite)에서 값을 가져와 게시글 업데이트
+        // 전달된 DTO 데이터를 사용하여 게시글의 제목, 내용, 위치 등을 업데이트합니다.
         post.setTitle(rCommunityWrite.getTitle());
         post.setContent(rCommunityWrite.getContent());
         post.setLocation(rCommunityWrite.getLocation());
         post.setLocation2(rCommunityWrite.getLocation2());
 
         // 날짜 변환
+        // DTO의 시작일과 종료일을 LocalDateTime으로 변환하여 게시글의 날짜 필드에 설정합니다.
         post.setStartdate(rCommunityWrite.getStartdate().toLocalDateTime());
         post.setEnddate(rCommunityWrite.getEnddate().toLocalDateTime());
 
         // 사용자 ID 체크 (옵션: 필요한 경우)
+        // DTO에서 사용자 ID가 제공된 경우, 유효한 Member 엔티티인지 확인합니다.
+        // 만약 유효하지 않은 사용자 ID라면, 결과에 실패 상태와 메시지를 설정합니다.
         if (rCommunityWrite.getUserid() != null) {
             Optional<Member> memberOptional = mr.findById(rCommunityWrite.getUserid());
             if (memberOptional.isEmpty()) {
@@ -159,13 +205,21 @@ public class RCommunityService {
         }
 
         // 게시글 저장
+        // 업데이트된 게시글 정보를 데이터베이스에 저장합니다.
         rcr.save(post);
 
+        // 성공 상태와 업데이트된 게시글 정보를 결과 HashMap에 설정합니다.
         result.put("success", true);
         result.put("post", post);
         return result;
     }
 
+
+    /**
+     * 게시물을 삭제합니다. 'picked' 필드의 상태에 따라 포인트를 반환할지 결정합니다.
+     * @param rnum 게시물 ID
+     * @return 게시물 삭제 결과와 포인트 반환 정보
+     */
     @Transactional
     public HashMap<String, Object> deleteRCommunity(int rnum) {
         HashMap<String, Object> result = new HashMap<>();
@@ -198,37 +252,63 @@ public class RCommunityService {
         return result;
     }
 
-
-
+    /**
+     * 게시물의 채택 상태를 업데이트합니다.
+     * @param rnum 게시물 ID
+     * @param picked 채택 상태 ('Y' 또는 'N')
+     * @return 업데이트 성공 여부
+     */
     @Transactional
     public boolean updatePicked(String rnum, char picked) {
         int updatedRows = rcr.updatePicked(rnum, picked);
-
-
-
         return updatedRows > 0;
     }
 
-    // Member 객체를 userid로 조회
+    /**
+     * 사용자 ID로 Member 객체를 조회합니다.
+     * @param userid 사용자 ID
+     * @return Member 객체 (옵션)
+     */
     public Optional<Member> findMemberByUserid(String userid) {
         return mr.findByUserid(userid);
     }
-    // 기존 메소드들
+
+    /**
+     * 사용자 ID로 게시물 목록을 조회합니다.
+     * @param userid 사용자 객체
+     * @return 사용자 ID에 따른 게시물 목록
+     */
     public List<RCommunityMyList> getPostsByUserId(Member userid) {
         return rcr.findByUserid(userid);
     }
 
+    /**
+     * 특정 위치에 따른 사용자 게시물 목록을 조회합니다.
+     * @param userid 사용자 객체
+     * @param location 위치 정보
+     * @return 위치에 따른 사용자 게시물 목록
+     */
     public List<RCommunityMyList> getPostsByUserIdAndLocation(Member userid, Integer location) {
         return rcr.findByUseridAndLocation(userid, location);
     }
 
+    /**
+     * 두 개의 위치 정보를 기준으로 사용자 게시물 목록을 조회합니다.
+     * @param userid 사용자 객체
+     * @param location 첫 번째 위치 정보
+     * @param location2 두 번째 위치 정보
+     * @return 두 위치 정보에 따른 사용자 게시물 목록
+     */
     public List<RCommunityMyList> getPostsByUserIdAndLocationAndLocation2(Member userid, Integer location, Integer location2) {
         return rcr.findByUseridAndLocationAndLocation2(userid, location, location2);
     }
 
+//    /**
+//     * 사용자 ID로 모든 게시물 목록을 조회합니다.
+//     * @param userid 사용자 ID
+//     * @return 사용자 ID에 따른 모든 게시물 목록
+//     */
 //    public List<RCommunity> getMyAllPosts(String userid) {
 //        return rcr.findAllMy(userid);
-//
 //    }
-
 }
