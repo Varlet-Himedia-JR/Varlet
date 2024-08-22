@@ -71,7 +71,35 @@ public class RCRecommendService {
 
     @Transactional
     public boolean updateReplyPicked(int rcnum, char rpicked) {
+        // 답글의 채택 상태 업데이트
         int updatedRows = rcr.updateReplyPicked(rcnum, rpicked);
-        return updatedRows > 0;
+
+        if (updatedRows > 0 && rpicked == 'Y') {
+            // rpicked가 'Y'로 설정된 경우 보상을 지급
+
+            // 답글 정보 조회
+            Rcrecommend reply = rcr.findById(rcnum)
+                    .orElseThrow(() -> new RuntimeException("Reply not found"));
+
+            // 답글이 속한 게시글 조회
+            RCommunity rCommunity = reply.getRnum();
+
+            // 답글 작성자 조회
+            Member replyAuthor = reply.getUserid();
+
+            // 게시글의 보상(reward)을 답글 작성자에게 지급
+            int reward = rCommunity.getReward();
+            replyAuthor.setPoint(replyAuthor.getPoint() + reward);
+
+            // 포인트 업데이트
+            mr.save(replyAuthor);
+
+            // 게시글의 보상을 0으로 설정 (보상이 한 번만 지급되도록)
+            rCommunity.setReward(0);
+            rc.save(rCommunity);
+
+            return true;
+        }
+        return false;
     }
 }

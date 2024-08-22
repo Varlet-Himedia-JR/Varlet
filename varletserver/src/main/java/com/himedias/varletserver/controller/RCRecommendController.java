@@ -123,11 +123,11 @@ public class RCRecommendController {
         }
 
         // String을 Character로 변환
-        Character rpicked = rpickedStr.charAt(0);
+        char rpicked = rpickedStr.charAt(0);
 
         boolean result = rcs.updateReplyPicked(rcnum, rpicked);
         if (result) {
-            return ResponseEntity.ok().body("Reply picked updated successfully");
+            return ResponseEntity.ok().body("Reply picked updated and reward granted successfully");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update reply picked");
         }
