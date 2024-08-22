@@ -134,27 +134,27 @@ function RCommunityView() {
 
 
 
-  const deleteCommunity = (rnum) => {
-    if (window.confirm('정말로 삭제하시겠습니까?')) {
-      jaxios.delete(`/api/rcommunity/rCommunityDelete/${rnum}`)
-        .then((response) => {
-          // 서버 응답에서 업데이트된 포인트 값 받기
+    const deleteCommunity = (rnum) => {
+      if (window.confirm('정말로 삭제하시겠습니까?')) {
+        jaxios.delete(`/api/rcommunity/rCommunityDelete/${rnum}`)
+          .then((response) => {
+            // 서버 응답에서 업데이트된 포인트 값 받기
 
-          // 쿠키 업데이트
-          setCookie('user', { ...userCookie, point: response.data.point});
+            // 쿠키 업데이트
+            setCookie('user', { ...userCookie, point: response.data.point});
 
 
-          // 업데이트된 포인트를 로그에 출력
-          console.log("삭제 후 업데이트된 dbwj:", userCookie);
+            // 업데이트된 포인트를 로그에 출력
+            console.log("삭제 후 업데이트된 dbwj:", userCookie);
 
-          // 페이지 이동
-          navigate('/rcommunity');
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-  };
+            // 페이지 이동
+            navigate('/rcommunity');
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    };
 
 
   const maskeduser = (user) => {

@@ -176,25 +176,28 @@ public class RCommunityService {
         // 게시글 작성자 (User)를 조회
         Member member = rc.getUserid();
 
-        // picked 필드가 "N"인지 확인
-        if ("N".equals(rc.getPicked())) {
-            // picked가 "N"인 경우 포인트 반환
+        // picked 필드가 "Y"인지 확인
+        if (rc.getPicked() == 'Y') {
+            // picked가 'Y'인 경우 포인트 반환하지 않고 게시글만 삭제
+            rcr.delete(rc);
+            result.put("point", member.getPoint()); // 반환된 포인트
+            result.put("success", true);
+            result.put("message", "게시글이 삭제되었습니다. 포인트는 반환되지 않습니다.");
+        } else {
+            // picked가 'Y'가 아닌 경우 포인트 반환
             member.setPoint(member.getPoint() + rc.getReward());
             mr.save(member); // 유저의 포인트 변경 사항을 저장
+
+            // 게시글 삭제
+            rcr.delete(rc);
             result.put("point", member.getPoint()); // 반환된 포인트
+            result.put("success", true);
             result.put("message", "게시글이 삭제되었습니다. 포인트가 반환되었습니다.");
-        } else {
-            // picked가 "Y"인 경우 포인트 반환하지 않고 게시글만 삭제
-            result.put("point", member.getPoint()); // 반환된 포인트
-            result.put("message", "게시글이 삭제되었습니다. 포인트는 반환되지 않습니다.");
         }
 
-        // 게시글 삭제
-        rcr.delete(rc);
-
-        result.put("success", true);
         return result;
     }
+
 
 
     @Transactional

@@ -26,6 +26,6 @@ public class RCommunityWrite {
     Timestamp startdate;
     Timestamp enddate;
     String userid;
-    private char picked = 'N';  // 기본값 설정
+    char picked = 'N';  // 기본값 설정
 
 }
