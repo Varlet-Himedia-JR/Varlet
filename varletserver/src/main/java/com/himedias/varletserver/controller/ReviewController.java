@@ -49,7 +49,8 @@ public class ReviewController {
         Calendar today = Calendar.getInstance();
         long timestamp = today.getTimeInMillis();
 
-        String uploadDirPath = context.getRealPath("/uploads" + uploadDir);
+        // 수정된 경로 구성
+        String uploadDirPath = context.getRealPath(uploadDir); // "/uploads" 경로를 추가하지 않습니다.
         File uploadDirFile = new File(uploadDirPath);
         if (!uploadDirFile.exists()) {
             uploadDirFile.mkdirs();
@@ -84,6 +85,7 @@ public class ReviewController {
     }
 
 
+
     @PostMapping("/writeReview")
     public ResponseEntity<Map<String, Object>> writeReview(
             @RequestParam("title") String title,
@@ -98,8 +100,10 @@ public class ReviewController {
             review.setContent(content);
             review.setUserid(userid);
 
+            // 리뷰 저장
+            Review savedReview = rs.writeReview(review); // 리뷰 저장 후 반환된 엔티티
+
             if (reviewimgs != null && !reviewimgs.isEmpty()) {
-                // Call fileupload method
                 ResponseEntity<Map<String, Object>> uploadResult = fileupload(reviewimgs.toArray(new MultipartFile[0]));
                 if (uploadResult.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
                     return uploadResult;
@@ -110,18 +114,19 @@ public class ReviewController {
 
                 List<Reviewimg> reviewImgList = filenames.stream().map(filename -> {
                     Reviewimg reviewImg = new Reviewimg();
-                    reviewImg.setIpath("/" + uploadDir + "/uploads" + filename); // Update the path to match the upload directory
+                    reviewImg.setIpath("/uploads" + filename);
                     reviewImg.setIname(filename);
+                    reviewImg.setRseq(savedReview.getRseq()); // 연관된 리뷰의 rseq 설정
                     return reviewImg;
                 }).collect(Collectors.toList());
 
-                review.setReviewimg(reviewImgList);
+                // 저장된 리뷰에 이미지 추가
+                savedReview.setReviewimg(reviewImgList);
+                rs.writeReview(savedReview); // 리뷰 업데이트
             }
 
-            rs.writeReview(review);
-
             result.put("status", "success");
-            result.put("review", review);
+            result.put("review", savedReview);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             result.put("status", "error");
@@ -129,6 +134,8 @@ public class ReviewController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
         }
     }
+
+
 
     @PostMapping("/updateReview/{rseq}")
     public ResponseEntity<Map<String, Object>> updateReview(@PathVariable int rseq,
@@ -191,8 +198,27 @@ public class ReviewController {
         try {
             Review review = rs.findById(rseq).orElseThrow(() -> new RuntimeException("Review not found"));
             rs.incrementReadcount(rseq); // 조회수 증가
+
+            Map<String, Object> reviewData = new HashMap<>();
+            reviewData.put("rseq", review.getRseq());
+            reviewData.put("userid", review.getUserid());
+            reviewData.put("title", review.getTitle());
+            reviewData.put("content", review.getContent());
+            reviewData.put("indate", review.getIndate());
+            reviewData.put("readcount", review.getReadcount());
+            reviewData.put("reviewimg", review.getReviewimg().stream()
+                    .map(img -> {
+                        Map<String, Object> imgData = new HashMap<>();
+                        imgData.put("iseq", img.getIseq());
+                        imgData.put("rseq", img.getRseq());
+                        imgData.put("ipath", img.getIpath());
+                        imgData.put("iname", img.getIname());
+                        return imgData;
+                    })
+                    .collect(Collectors.toList()));
+
             result.put("status", "success");
-            result.put("review", review);
+            result.put("review", reviewData);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             result.put("status", "error");
@@ -201,34 +227,35 @@ public class ReviewController {
         }
     }
 
-        @DeleteMapping("/reviewDelete/{rseq}")
-        public ResponseEntity<Map<String, Object>> deleteReview (@PathVariable Integer rseq){
-            Map<String, Object> result = new HashMap<>();
-            try {
-                // 리뷰를 삭제하고 연결된 이미지도 삭제
-                Review review = rs.findById(rseq).orElseThrow(() -> new RuntimeException("Review not found"));
 
-                // 이미지 파일 삭제
-                if (review.getReviewimg() != null) {
-                    for (Reviewimg img : review.getReviewimg()) {
-                        File file = new File(context.getRealPath("/" + uploadDir) + "/" + img.getIname());
-                        if (file.exists()) {
-                            file.delete();
-                        }
+
+    @DeleteMapping("/reviewDelete/{rseq}")
+    public ResponseEntity<Map<String, Object>> deleteReview(@PathVariable Integer rseq) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            Review review = rs.findById(rseq).orElseThrow(() -> new RuntimeException("Review not found"));
+
+            if (review.getReviewimg() != null) {
+                for (Reviewimg img : review.getReviewimg()) {
+                    File file = new File(context.getRealPath(uploadDir) + "/" + img.getIname());
+                    if (file.exists()) {
+                        file.delete();
                     }
                 }
-
-                rs.deleteReview(rseq); // 리뷰 삭제
-                result.put("status", "success");
-                return ResponseEntity.ok(result);
-            } catch (Exception e) {
-                result.put("status", "error");
-                result.put("message", "Failed to delete review: " + e.getMessage());
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
             }
-        }
 
-        @GetMapping("/api/review/reviewList")
+            rs.deleteReview(rseq); // 리뷰 삭제
+            result.put("status", "success");
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            result.put("status", "error");
+            result.put("message", "Failed to delete review: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
+    }
+
+
+    @GetMapping("/api/review/reviewList")
         public ResponseEntity<List<Review>> getReviewsByUser (@RequestParam String userid){
             try {
                 List<Review> reviews = rs.getReviewsByUserId(userid);
@@ -239,24 +266,22 @@ public class ReviewController {
         }
 
     @GetMapping("/reviewList/{page}")
-    public HashMap<String,Object> reviewList(@PathVariable("page") int page){
-        HashMap<String,Object> result = new HashMap<String,Object>();
+    public HashMap<String, Object> reviewList(@PathVariable("page") int page) {
+        HashMap<String, Object> result = new HashMap<>();
 
         Paging paging = new Paging();
         paging.setPage(page);
         paging.setDisplayRow(10);
-
         paging.setSort(Sort.by(Sort.Order.desc("indate")));
         Page<Review> reviewPage = rs.getReviewList(paging);
-
 
         paging.setTotalCount((int) reviewPage.getTotalElements());
         paging.calPaging();
 
-        // Prepare response
         result.put("reviewList", reviewPage.getContent());
         result.put("paging", paging);
 
         return result;
     }
+
 }

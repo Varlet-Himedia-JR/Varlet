@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import jaxios from '../../util/jwtUtil';
 import { useNavigate } from 'react-router-dom';
 import { getCookie } from "../../util/cookieUtil";
 import Heading from '../headerfooter/Heading';
@@ -78,11 +79,7 @@ function WriteReview() {
             formData.append('reviewimg', image);
         });
 
-        axios.post('/api/review/writeReview', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
+        jaxios.post('/api/review/writeReview', formData)
         .then(response => {
             // 서버에서 응답이 성공적으로 반환되면 페이지 이동
             if (response.status === 200) {

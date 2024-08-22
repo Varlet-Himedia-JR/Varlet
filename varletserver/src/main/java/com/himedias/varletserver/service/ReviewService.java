@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,8 +35,10 @@ public class ReviewService {
         return rr.findAll(pageRequest);
     }
 
-    public void writeReview(Review review) {
+    public Review writeReview(Review review) {
         rr.save(review);
+        System.out.println("Saved Review rseq: " + review.getRseq());
+        return review;
     }
 
     public Optional<Review> findById(Integer rseq) {
