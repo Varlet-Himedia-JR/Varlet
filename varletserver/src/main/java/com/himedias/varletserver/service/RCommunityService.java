@@ -72,7 +72,7 @@ public class RCommunityService {
         HashMap<String, Object> result = new HashMap<>();
 
         // 유효한 사용자 ID인지 확인
-        Optional<Member> memberOptional = mr.findById(rCommunityWrite.getUserid().getUserid());
+        Optional<Member> memberOptional = mr.findById(rCommunityWrite.getUserid());
         if (memberOptional.isEmpty()) {
             result.put("success", false);
             result.put("message", "유효하지 않은 사용자 ID입니다.");
@@ -107,6 +107,8 @@ public class RCommunityService {
 
         result.put("success", true);
         result.put("post", post);
+        result.put("point", member.getPoint());
+
         return ResponseEntity.ok(result);
     }
 
@@ -142,7 +144,6 @@ public class RCommunityService {
         post.setContent(rCommunityWrite.getContent());
         post.setLocation(rCommunityWrite.getLocation());
         post.setLocation2(rCommunityWrite.getLocation2());
-        post.setReward(rCommunityWrite.getReward());
 
         // 날짜 변환
         post.setStartdate(rCommunityWrite.getStartdate().toLocalDateTime());
@@ -150,7 +151,7 @@ public class RCommunityService {
 
         // 사용자 ID 체크 (옵션: 필요한 경우)
         if (rCommunityWrite.getUserid() != null) {
-            Optional<Member> memberOptional = mr.findById(rCommunityWrite.getUserid().getUserid());
+            Optional<Member> memberOptional = mr.findById(rCommunityWrite.getUserid());
             if (memberOptional.isEmpty()) {
                 result.put("success", false);
                 result.put("message", "유효하지 않은 사용자 ID입니다.");
@@ -170,7 +171,17 @@ public class RCommunityService {
 
     @Transactional
     public void deleteRCommunity(int rnum) {
+        // 게시글을 조회하고, 게시글이 없으면 예외를 던짐
         RCommunity rc = rcr.findById(rnum).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+
+        // 게시글 작성자 (User)를 조회
+        Member member = rc.getUserid();
+
+        // 게시글의 reward를 유저의 포인트에 더함
+        member.setPoint(member.getPoint() + rc.getReward());
+        mr.save(member); // 유저의 포인트 변경 사항을 저장
+
+        // 게시글 삭제
         rcr.delete(rc);
     }
 

@@ -130,6 +130,8 @@ function RCommunityView() {
       if (window.confirm('정말로 삭제하시겠습니까?')) {
           jaxios.delete(`/api/rcommunity/rCommunityDelete/${rnum}`)
               .then(() => {
+                setCookie('user', { ...userCookie});
+                console.log("삭제시 업뎃됨?", userCookie.point);
                   navigate('/rcommunity');
               })
               .catch((err) => {
@@ -198,6 +200,7 @@ const replyDelete = (rcnum) => {
 
   const rcommunityupdate = () => {
       navigate(`/rCommunityUpdate/${rnum}`);
+      
   };
 
   const getLocationName = (location1, location2) => {
@@ -486,7 +489,7 @@ return (
       </button>
     </div>
     <div 
-      className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-lg p-4 bg-blue-50 text-blue-800 dark:bg-gray-800 dark:text-blue-400 rounded-lg shadow-lg cursor-pointer flex items-center justify-center space-x-3 hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors duration-300"
+      className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-lg p-4 bg-blue-50 text-blue-800 dark:bg-gray-800 dark:text-blue-400 rounded-lg shadow-lg cursor-pointer flex items-center justify-center space-x-3 hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors duration-300 z-[101]"
       onClick={writerecommend}
     >
       <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-blue-800 dark:text-blue-400" viewBox="0 0 24 24" strokeWidth="1.5"    stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">

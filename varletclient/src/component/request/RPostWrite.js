@@ -67,10 +67,10 @@ function RPostWritePost() {
       console.log('글 작성 성공:', response);
       alert('의뢰가 성공적으로 등록되었습니다.');
   
+      // 서버 응답에서 업데이트된 유저 정보 받기
       // 포인트 차감 후 쿠키 업데이트
-      const updatedUser = { ...userCookie, point: userCookie.point - parseInt(reward, 10) };
-      setCookie('user', updatedUser);
-  
+      setCookie('user', { ...userCookie, point: response.data.point});
+
       navigate('/rcommunity'); 
     })
     .catch(error => {
@@ -218,7 +218,7 @@ function RPostWritePost() {
               ></textarea>
             </div>
             <div className="grid gap-4">
-              <label className="font-medium text-sm" htmlFor="points">보유 포인트: {userCookie.userid.point}</label>
+              <label className="font-medium text-sm" htmlFor="points">보유 포인트: {userCookie.point}</label>
               <div className='flex items-center text-center justify-center'>
                 <label className='font-medium'>의뢰금</label>
                 <input

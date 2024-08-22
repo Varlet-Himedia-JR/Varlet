@@ -28,9 +28,7 @@ public class RCommunityController {
     @Autowired
     private RCommunityService rcs;
 
-    public RCommunityController(RCommunityService rcs) {
-        this.rcs = rcs;
-    }
+
 
     @GetMapping("/getPostList")
     public HashMap<String, Object> getPostList(
