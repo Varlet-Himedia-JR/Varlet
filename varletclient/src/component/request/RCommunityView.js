@@ -11,7 +11,6 @@ function RCommunityView() {
   const navigate = useNavigate();
   const [post, setPost] = useState({});
   const [showReplyForm, setShowReplyForm] = useState(false);
-  const userCookie = getCookie('user');
   const [files, setFiles] = useState([]);
   const [content, setContent] = useState('');
   const [image, setImage] = useState([]);
@@ -20,7 +19,14 @@ function RCommunityView() {
   const [removedFiles, setRemovedFiles] = useState([]);
   const [replies, setReplies] = useState([]); 
   const replyFormRef = useRef(null);
-  const currentUserId = userCookie ? userCookie.userid : '';
+  // 상태 변수 선언
+  const [userCookie, setUserCookie] = useState(getCookie('user'));
+
+  // 쿠키가 업데이트될 때마다 userCookie 상태를 갱신
+  useEffect(() => {
+    const updatedUser = getCookie('user');
+    setUserCookie(updatedUser);
+  }, []); // 초기 로딩 시 한 번 실행
 
 
   useEffect(() => {
@@ -126,18 +132,28 @@ function RCommunityView() {
       setRemovedFiles(prevRemoved => [...prevRemoved, fileToRemove.name]); // 삭제된 파일 이름을 추가
   };
 
+
+
   const deleteCommunity = (rnum) => {
-      if (window.confirm('정말로 삭제하시겠습니까?')) {
-          jaxios.delete(`/api/rcommunity/rCommunityDelete/${rnum}`)
-              .then(() => {
-                setCookie('user', { ...userCookie});
-                console.log("삭제시 업뎃됨?", userCookie.point);
-                  navigate('/rcommunity');
-              })
-              .catch((err) => {
-                  console.error(err);
-              });
-      }
+    if (window.confirm('정말로 삭제하시겠습니까?')) {
+      jaxios.delete(`/api/rcommunity/rCommunityDelete/${rnum}`)
+        .then((response) => {
+          // 서버 응답에서 업데이트된 포인트 값 받기
+
+          // 쿠키 업데이트
+          setCookie('user', { ...userCookie, point: response.data.point});
+
+
+          // 업데이트된 포인트를 로그에 출력
+          console.log("삭제 후 업데이트된 dbwj:", userCookie);
+
+          // 페이지 이동
+          navigate('/rcommunity');
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   };
 
 

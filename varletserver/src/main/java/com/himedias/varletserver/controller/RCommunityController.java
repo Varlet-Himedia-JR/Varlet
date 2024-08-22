@@ -97,9 +97,7 @@ public class RCommunityController {
     public HashMap<String, Object> deleteCommunityPost(@PathVariable("rnum") int rnum) {
         HashMap<String, Object> result = new HashMap<>();
         try {
-            rcs.deleteRCommunity(rnum);
-            result.put("status", "success");
-            result.put("message", "게시글이 성공적으로 삭제되었습니다.");
+            return rcs.deleteRCommunity(rnum);
         } catch (Exception e) {
             result.put("status", "error");
             result.put("message", "게시글 삭제에 실패했습니다.");

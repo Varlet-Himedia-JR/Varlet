@@ -170,7 +170,9 @@ public class RCommunityService {
     }
 
     @Transactional
-    public void deleteRCommunity(int rnum) {
+    public HashMap<String, Object> deleteRCommunity(int rnum) {
+        HashMap<String, Object> result = new HashMap<>();
+
         // 게시글을 조회하고, 게시글이 없으면 예외를 던짐
         RCommunity rc = rcr.findById(rnum).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
@@ -183,10 +185,19 @@ public class RCommunityService {
 
         // 게시글 삭제
         rcr.delete(rc);
+
+        // 결과로 유저의 최신 포인트 반환
+        result.put("point", member.getPoint());
+        result.put("success", true);
+        return result;
     }
+
 
     @Transactional
     public boolean updatePicked(String rnum, char picked) {
+
+
+
         int updatedRows = rcr.updatePicked(rnum, picked);
         return updatedRows > 0;
     }
