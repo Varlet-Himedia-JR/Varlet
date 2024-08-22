@@ -122,13 +122,33 @@ function MyInfo() {
             });
     
             if (updateResult.data.msg === 'ok') {
-                if (window.confirm('수정이 완료되었습니다. 로그아웃 후 로그인 페이지로 이동합니다.')) {
-                    dispatch(logoutAction());
-                    removeCookie("user");
-                    navigate('/login');
-                }
-            } else {
-                alert('정보 수정 실패');
+                // 업데이트된 정보를 React 상태에 바로 반영
+                    setName(updateResult.data.name);
+                    setNickname(updateResult.data.nickname);
+                    setEmail(updateResult.data.email);
+                    setPhone(updateResult.data.phone);
+                    setZip_code(updateResult.data.zip_code);
+                    setAddress(updateResult.data.address);
+                    setD_address(updateResult.data.d_address);
+                    setProfileimg(updateResult.data.profileimg);
+
+                // 쿠키 업데이트
+                    const updatedUser = {
+                        ...getCookie('user'),
+                        name: updateResult.data.name,
+                        nickname: updateResult.data.nickname,
+                        email: updateResult.data.email,
+                        phone: updateResult.data.phone,
+                        zip_code: updateResult.data.zip_code,
+                        address: updateResult.data.address,
+                        d_address: updateResult.data.d_address,
+                        profileimg: updateResult.data.profileimg
+                    };
+                setCookie('user', updatedUser);
+                alert('정보수정이 완료되었습니다.');
+                navigate('/');
+                    } else {
+                alert('정보 수정 실패 다시 시도해주세요');
             }
         } catch (err) {
             console.error(err);
@@ -209,42 +229,42 @@ function MyInfo() {
                     placeholder="비밀번호 확인 입력"
                 />
             </div>
-            <div className='field'>
+            <div className='myinfo_name'>
                 <label>이름</label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
             </div>
-            <div className='field'>
+            <div className='myinfo_nickname'>
                 <label>닉네임</label>
                 <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
             </div>
-            <div className='field'>
+            <div className='myinfo_name'>
                 <label>이메일</label>
                 <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
-            <div className='field'>
+            <div className='myinfo_name'>
                 <label>전화번호</label>
                 <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
             </div>
-            <div className="field">
+            <div className="myinfo_name">
                 <label>우편번호</label>
                 <input type="text" style={{ flex: "2" }} value={zip_code} onChange={(e) => { setZip_code(e.target.value); }} readOnly />
                 <button style={{ flex: "1" }} onClick={openPostcodePopup}>우편번호 찾기</button>
             </div>
-            <div className="field">
+            <div className="myinfo_name">
                 <label>주소</label>
                 <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} readOnly />
             </div>
-            <div className="field">
+            <div className="myinfo_name">
                 <label>상세주소</label>
                 <input type="text" value={d_address} onChange={(e) => setD_address(e.target.value)} placeholder='상세주소 입력' />
             </div>
-            <div className='field'>
-                <label>프로필사진</label>
-                <input type="file" onChange={fileupload} />
+            <div className='myinfo_name'>
+            <label>프로필 사진</label>
+                <img src={profileimg} style={{imgStyle}}/>
             </div>
-            <div className='field'>
-                <label>프로필사진 미리보기</label>
-                <div><img src={profileimg} style={imgStyle} alt="프로필 미리보기" /></div>
+            <div className='myinfo_name'>
+                <label>프로필사진 변경</label>
+                <input type="file" onChange={fileupload} />
             </div>
             <div className='btns'>
                 <button onClick={onSubmit}>수정완료</button>

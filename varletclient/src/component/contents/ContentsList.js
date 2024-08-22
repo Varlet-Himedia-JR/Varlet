@@ -8,7 +8,7 @@ import { getCookie } from "../../util/cookieUtil";
 import jaxios from '../../util/jwtUtil';
 
 
-function ReviewList() {
+function ContentsList() {
     const [contentsList, setContentsList] = useState([]);
     const [page, setPage] = useState(1); // 현재 페이지
     const [hasMore, setHasMore] = useState(true); // 더 로드할 데이터가 있는지 여부
@@ -55,17 +55,35 @@ function ReviewList() {
     }, []);
 
     // 필터링 함수
-    const filterContents = useCallback(() => {
+    const filterContents = useCallback(async () => {
         if (searchTerm.trim() === '') {
             setFilteredContents(contentsList);
-        } else {
-            const lowercasedTerm = searchTerm.toLowerCase();
-            const filtered = contentsList.filter(contents =>
-                contents.cname.toLowerCase().includes(lowercasedTerm)
-            );
-            setFilteredContents(filtered);
+        }  else {
+            axios.get('/api/contents/search', { params: { query: searchTerm } })
+                         .then(result => {
+                            const newContents = result.data.contentsList;
+                            setFilteredContents(newContents); // 서버에서 받은 필터링된 결과를 상태에 저장
+                        })
+            .catch(err => console.error(err));
+            setFilteredContents(contentsList);
         }
     }, [searchTerm, contentsList]);
+
+    // // 검색어가 변경될 때마다 서버에서 검색 결과를 로드
+    // useEffect(() => {
+    //     if (searchTerm.trim() === '') {        setFilteredContents(contentsList);}
+    //     if (searchTerm.trim() !== '') {
+    //         // 검색어가 비어있지 않을 때만 검색 요청
+    //         axios.get('/api/contents/search', { params: { searchTerm } })
+    //             .then(result => {
+    //                 const newContents = result.data.contentsList;
+    //                 setFilteredContents(newContents); // 서버에서 받은 필터링된 결과를 상태에 저장
+    //             })
+    //             .catch(err => console.error(err));
+    //     } else {
+    //         setFilteredContents([]); // 검색어가 비어 있을 때는 필터링된 결과를 빈 배열로 설정
+    //     }
+    // }, [searchTerm]);
 
     // 스크롤 이벤트 핸들러
     const handleScroll = useCallback(() => {
@@ -178,4 +196,4 @@ function ReviewList() {
     );
 }
 
-export default ReviewList;
+export default ContentsList;

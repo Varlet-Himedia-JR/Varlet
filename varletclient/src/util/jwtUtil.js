@@ -15,7 +15,7 @@ const beforeReq=async (config)=>{
     const Header = { headers:{'Authorization' : `Bearer ${cUser.access_token}` } }
     const res = await axios.get(`/api/member/refresh/${cUser.refresh_token}`, Header );
 
-     // 서버로부터 받은 새로운 액세스 토큰과 리프레시 토큰을 쿠키에 저장합니다.
+    // 서버로부터 받은 새로운 액세스 토큰과 리프레시 토큰을 쿠키에 저장합니다.
     cUser.access_token = res.data.access_token;
     cUser.refresh_token = res.data.refresh_token;
     setCookie('user', JSON.stringify(cUser), 1);
