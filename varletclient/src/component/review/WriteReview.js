@@ -13,10 +13,10 @@ function WriteReview() {
     const [imagePreviews, setImagePreviews] = useState([]);
     const navigate = useNavigate();
 
-    // 쿠키에서 사용자 ID를 가져옴
     const userCookie = getCookie('user');
     const userid = userCookie?.userid || null;
 
+    // 이미지 선택 핸들러
     const handleImageChange = (event) => {
         const files = Array.from(event.target.files);
         if (files.length + selectedImages.length > 5) {
@@ -26,6 +26,7 @@ function WriteReview() {
 
         setSelectedImages(prevImages => [...prevImages, ...files]);
 
+        // 이미지 미리보기 생성
         const previews = files.map(file => {
             const reader = new FileReader();
             return new Promise((resolve) => {
@@ -39,15 +40,17 @@ function WriteReview() {
         });
     };
 
+    // 이미지 제거 핸들러
     const handleImageRemove = (index) => {
         setSelectedImages(prevImages => prevImages.filter((_, i) => i !== index));
         setImagePreviews(prevPreviews => prevPreviews.filter((_, i) => i !== index));
     };
 
+    // 리뷰 제출 핸들러
     const onSubmit = () => {
         if (!userid) {
             alert('로그인이 필요합니다');
-            navigate('/login'); // 로그인 페이지로 이동
+            navigate('/login');
             return;
         }
 
@@ -55,40 +58,55 @@ function WriteReview() {
             alert('제목을 입력하세요');
             return;
         }
-    
+
         if (!content.trim()) {
             alert('내용을 작성하세요');
             return;
         }
-    
+
+        if (selectedImages.length === 0) {
+            alert('이미지를 1개 이상 삽입해 주세요');
+            return;
+        }
+
         const formData = new FormData();
         formData.append('title', title);
         formData.append('content', content);
+        formData.append('userid', userid);
+
         selectedImages.forEach((image) => {
-            formData.append('reviewimg', image); // 리뷰 이미지로 추가
+            formData.append('reviewimg', image);
         });
-        formData.append('userid', userid); // 동적으로 가져온 사용자 ID 설정
-    
+
         axios.post('/api/review/writeReview', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         })
-        .then(() => { navigate('/reviewList'); })
+        .then(response => {
+            // 서버에서 응답이 성공적으로 반환되면 페이지 이동
+            if (response.status === 200) {
+                navigate('/reviewList', { replace: true });
+            } else {
+                alert('서버 오류: 리뷰 작성에 실패했습니다.');
+            }
+        })
         .catch((err) => {
             console.error(err);
+            alert('서버 오류: 리뷰 작성에 실패했습니다.');
         });
     };
-    
+
+    // 작성 취소 핸들러
     const onCancel = () => {
         navigate('/reviewList'); // 작성 취소 시 reviewList 페이지로 이동
     };
 
     return (
         <>
-            <Heading/>
+            <Heading />
             <h2>여행 후기 쓰기</h2>
-            <div className='subPage' style={{paddingTop:'120px'}}>
+            <div className='subPage' style={{ paddingTop: '120px' }}>
                 <div className="reviewWriteForm" style={{ flex: "4" }}>
                     <div className="field">
                         <label>제목</label>
@@ -112,7 +130,7 @@ function WriteReview() {
                             type="file" 
                             accept="image/*" 
                             onChange={handleImageChange} 
-                            multiple // 여러 파일 선택 허용
+                            multiple
                         />
                         {imagePreviews.length > 0 && (
                             <div className="image-preview">
@@ -128,7 +146,7 @@ function WriteReview() {
                                             onClick={() => handleImageRemove(index)}
                                             style={{ background: 'none', border: 'none', color: 'red', cursor: 'pointer' }}
                                         >
-                                            &times; {/* 'X' 문자 */}
+                                            &times;
                                         </button>
                                     </div>
                                 ))}
@@ -141,7 +159,7 @@ function WriteReview() {
                     </div>
                 </div>
             </div>
-            <Footer/>
+            <Footer />
         </>
     );
 }

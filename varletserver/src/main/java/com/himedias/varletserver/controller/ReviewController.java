@@ -1,24 +1,33 @@
 package com.himedias.varletserver.controller;
 
+import com.himedias.varletserver.dao.ReviewRepository;
 import com.himedias.varletserver.dto.Paging;
 import com.himedias.varletserver.entity.Review;
+import com.himedias.varletserver.entity.Reviewimg;
 import com.himedias.varletserver.service.ReviewService;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/review")
@@ -26,6 +35,208 @@ public class ReviewController {
 
     @Autowired
     ReviewService rs;
+
+    @Value("${file.upload-dir}")
+    private String uploadDir; // 파일이 저장될 디렉토리
+
+    @Autowired
+    private ServletContext context;
+
+    @PostMapping("/fileupload")
+    public ResponseEntity<Map<String, Object>> fileupload(
+            @RequestParam("image") MultipartFile[] files) {
+        Map<String, Object> result = new HashMap<>();
+        Calendar today = Calendar.getInstance();
+        long timestamp = today.getTimeInMillis();
+
+        String uploadDirPath = context.getRealPath("/uploads" + uploadDir);
+        File uploadDirFile = new File(uploadDirPath);
+        if (!uploadDirFile.exists()) {
+            uploadDirFile.mkdirs();
+        }
+
+        List<String> savedFilenames = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            String originalFilename = file.getOriginalFilename();
+            if (originalFilename == null) {
+                continue;
+            }
+
+            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String filename = originalFilename.substring(0, originalFilename.lastIndexOf("."));
+            String saveFilename = filename + timestamp + extension;
+
+            Path filePath = Paths.get(uploadDirFile.getAbsolutePath(), saveFilename);
+
+            try {
+                file.transferTo(filePath.toFile());
+                savedFilenames.add(saveFilename);
+            } catch (IOException e) {
+                e.printStackTrace();
+                result.put("error", "File upload failed: " + e.getMessage());
+                return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        result.put("savefilenames", savedFilenames);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+
+    @PostMapping("/writeReview")
+    public ResponseEntity<Map<String, Object>> writeReview(
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("userid") String userid,
+            @RequestParam(value = "reviewimg", required = false) List<MultipartFile> reviewimgs) {
+
+        Map<String, Object> result = new HashMap<>();
+        try {
+            Review review = new Review();
+            review.setTitle(title);
+            review.setContent(content);
+            review.setUserid(userid);
+
+            if (reviewimgs != null && !reviewimgs.isEmpty()) {
+                // Call fileupload method
+                ResponseEntity<Map<String, Object>> uploadResult = fileupload(reviewimgs.toArray(new MultipartFile[0]));
+                if (uploadResult.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
+                    return uploadResult;
+                }
+
+                @SuppressWarnings("unchecked")
+                List<String> filenames = (List<String>) uploadResult.getBody().get("savefilenames");
+
+                List<Reviewimg> reviewImgList = filenames.stream().map(filename -> {
+                    Reviewimg reviewImg = new Reviewimg();
+                    reviewImg.setIpath("/" + uploadDir + "/uploads" + filename); // Update the path to match the upload directory
+                    reviewImg.setIname(filename);
+                    return reviewImg;
+                }).collect(Collectors.toList());
+
+                review.setReviewimg(reviewImgList);
+            }
+
+            rs.writeReview(review);
+
+            result.put("status", "success");
+            result.put("review", review);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            result.put("status", "error");
+            result.put("message", "Failed to write review: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
+    }
+
+    @PostMapping("/updateReview/{rseq}")
+    public ResponseEntity<Map<String, Object>> updateReview(@PathVariable int rseq,
+                                                            @RequestParam("title") String title,
+                                                            @RequestParam("content") String content,
+                                                            @RequestParam(value = "reviewimg", required = false) List<MultipartFile> reviewimgs) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            Review review = rs.findById(rseq).orElseThrow(() -> new RuntimeException("Review not found"));
+
+            review.setTitle(title);
+            review.setContent(content);
+
+            if (reviewimgs != null && !reviewimgs.isEmpty()) {
+                // 기존 이미지 삭제
+                if (review.getReviewimg() != null) {
+                    for (Reviewimg img : review.getReviewimg()) {
+                        File file = new File(context.getRealPath("/" + uploadDir) + "/" + img.getIname());
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                    }
+                    review.getReviewimg().clear();
+                }
+
+                ResponseEntity<Map<String, Object>> uploadResult = fileupload(reviewimgs.toArray(new MultipartFile[0]));
+                if (uploadResult.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
+                    result.put("status", "error");
+                    result.put("message", "File upload failed during review update.");
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+                }
+
+                @SuppressWarnings("unchecked")
+                List<String> filenames = (List<String>) uploadResult.getBody().get("savefilenames");
+
+                List<Reviewimg> reviewImgList = filenames.stream().map(filename -> {
+                    Reviewimg reviewImg = new Reviewimg();
+                    reviewImg.setIpath("/" + uploadDir + "/" + filename);
+                    reviewImg.setIname(filename);
+                    return reviewImg;
+                }).collect(Collectors.toList());
+
+                review.setReviewimg(reviewImgList);
+            }
+
+            rs.updateReview(rseq, review);
+
+            result.put("status", "success");
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            result.put("status", "error");
+            result.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
+    }
+
+    @GetMapping("/getReviewView/{rseq}")
+    public ResponseEntity<Map<String, Object>> getReviewView(@PathVariable Integer rseq) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            Review review = rs.findById(rseq).orElseThrow(() -> new RuntimeException("Review not found"));
+            rs.incrementReadcount(rseq); // 조회수 증가
+            result.put("status", "success");
+            result.put("review", review);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            result.put("status", "error");
+            result.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
+    }
+
+        @DeleteMapping("/reviewDelete/{rseq}")
+        public ResponseEntity<Map<String, Object>> deleteReview (@PathVariable Integer rseq){
+            Map<String, Object> result = new HashMap<>();
+            try {
+                // 리뷰를 삭제하고 연결된 이미지도 삭제
+                Review review = rs.findById(rseq).orElseThrow(() -> new RuntimeException("Review not found"));
+
+                // 이미지 파일 삭제
+                if (review.getReviewimg() != null) {
+                    for (Reviewimg img : review.getReviewimg()) {
+                        File file = new File(context.getRealPath("/" + uploadDir) + "/" + img.getIname());
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                    }
+                }
+
+                rs.deleteReview(rseq); // 리뷰 삭제
+                result.put("status", "success");
+                return ResponseEntity.ok(result);
+            } catch (Exception e) {
+                result.put("status", "error");
+                result.put("message", "Failed to delete review: " + e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+            }
+        }
+
+        @GetMapping("/api/review/reviewList")
+        public ResponseEntity<List<Review>> getReviewsByUser (@RequestParam String userid){
+            try {
+                List<Review> reviews = rs.getReviewsByUserId(userid);
+                return ResponseEntity.ok(reviews);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
+        }
 
     @GetMapping("/reviewList/{page}")
     public HashMap<String,Object> reviewList(@PathVariable("page") int page){
@@ -47,121 +258,5 @@ public class ReviewController {
         result.put("paging", paging);
 
         return result;
-    }
-
-
-    @PostMapping("/writeReview")
-    public HashMap<String, Object> writeReview(
-            @RequestParam("title") String title,
-            @RequestParam("content") String content,
-            @RequestParam("userid") String userid,
-            @RequestParam(value = "reviewimg", required = false) MultipartFile reviewimg) { // 수정됨
-
-        HashMap<String, Object> result = new HashMap<>();
-
-        try {
-            // Review 객체 생성 및 필드 설정
-            Review review = new Review();
-            review.setTitle(title);
-            review.setContent(content);
-            review.setUserid(userid);
-
-            if (reviewimg != null && !reviewimg.isEmpty()) {
-                String fileName = saveFile(reviewimg);
-                review.setReviewimg(fileName);
-            }
-
-            // 리뷰 저장
-            rs.writeReview(review);
-
-            // 성공 응답 반환
-            result.put("status", "success");
-            result.put("review", review);
-        } catch (Exception e) {
-            // 예외 처리 및 실패 응답 반환
-            result.put("status", "error");
-            result.put("message", e.getMessage());
-        }
-
-        return result;
-    }
-
-    @GetMapping("/getReviewView/{rseq}")
-    public HashMap<String, Object> getReviewView(@PathVariable Integer rseq) {
-        HashMap<String, Object> result = new HashMap<>();
-        try {
-            Review review = rs.findById(rseq).orElseThrow(() -> new RuntimeException("Review not found"));
-            rs.incrementReadcount(rseq); // 조회수 증가
-            result.put("status", "success");
-            result.put("review", review);
-        } catch (Exception e) {
-            result.put("status", "error");
-            result.put("message", e.getMessage());
-        }
-        return result;
-    }
-
-    @DeleteMapping("/reviewDelete/{rseq}")
-    public HashMap<String, Object> deleteReview(@PathVariable Integer rseq) {
-        HashMap<String, Object> result = new HashMap<>();
-        try {
-            rs.deleteReview(rseq); // This will now also delete the associated image
-            result.put("status", "success");
-        } catch (IOException e) {
-            result.put("status", "error");
-            result.put("message", "Failed to delete review image: " + e.getMessage());
-        } catch (Exception e) {
-            result.put("status", "error");
-            result.put("message", e.getMessage());
-        }
-        return result;
-    }
-
-    @PostMapping("/updateReview/{rseq}")
-    public HashMap<String, Object> updateReview(@PathVariable int rseq,
-                                                @RequestParam("title") String title,
-                                                @RequestParam("content") String content,
-                                                @RequestParam(value = "reviewimg", required = false) MultipartFile file,
-                                                HttpServletRequest request) {
-        HashMap<String, Object> result = new HashMap<>();
-        try {
-            Review review = rs.findById(rseq).orElseThrow(() -> new RuntimeException("Review not found"));
-
-            review.setTitle(title);
-            review.setContent(content);
-
-            if (file != null && !file.isEmpty()) {
-                // 새 파일을 저장하고 reviewimg 필드를 새로운 파일 이름으로 설정합니다.
-                String fileName = saveFile(file);
-                review.setReviewimg(fileName);
-            }
-
-            // 리뷰 업데이트 시 현재 날짜로 indate를 설정합니다.
-            review.setIndate(new Timestamp(System.currentTimeMillis()));
-
-            rs.updateReview(rseq, review);
-            HttpSession session = request.getSession();
-            session.setAttribute("userid", review.getUserid()); // 필요한 경우, 올바른 사용자 ID로 업데이트합니다.
-            result.put("msg", "ok");
-        } catch (Exception e) {
-            result.put("msg", "error");
-            result.put("message", e.getMessage());
-        }
-        return result;
-    }
-
-
-
-    private String saveFile(MultipartFile file) throws IOException {
-        // Save the file to the local file system or cloud storage and return the file name
-        String fileName = file.getOriginalFilename();
-        File targetFile = new File("/images" + fileName);
-        file.transferTo(targetFile);
-        return fileName;
-    }
-
-    @GetMapping("/api/review/reviewList")
-    public List<Review> getReviewsByUser(@RequestParam String userid) {
-        return rs.getReviewsByUserId(userid);
     }
 }
