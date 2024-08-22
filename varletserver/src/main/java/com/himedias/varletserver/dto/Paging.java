@@ -31,6 +31,7 @@ public class Paging {
         }else{
             next = true;
         }
+
         prev = (beginPage==1)?false:true;
         startNum = (page-1)*displayRow+1;
         endNum = page*displayRow;

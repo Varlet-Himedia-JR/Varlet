@@ -9,16 +9,15 @@ import jaxios from '../../util/jwtUtil';
 
 
 function ContentsList() {
-    const [contentsList, setContentsList] = useState([]);
+    const [contentsList, setContentsList] = useState([]); // 놀거리 목록
     const [page, setPage] = useState(1); // 현재 페이지
     const [hasMore, setHasMore] = useState(true); // 더 로드할 데이터가 있는지 여부
     const [searchTerm, setSearchTerm] = useState(''); // 검색어
     const [filteredContents, setFilteredContents] = useState([]); // 필터된 리뷰 목록
     const navigate = useNavigate();
 
+    // 놀거리 등록 (관리자만 가능)
     const writeContents = () => {
-        console.log('------');
-        console.log(getCookie('user'));
         if (!getCookie('user')) {
             navigate('/login');
         } else {
@@ -38,11 +37,18 @@ function ContentsList() {
         try {
             const result = await axios.get(`/api/contents/contentsList/${pageNumber}`);
             const { contentsList: newContents, paging } = result.data;
-
+    
             if (Array.isArray(newContents) && newContents.length > 0) {
-                setContentsList(prevReviews => [...prevReviews, ...newContents]);
+                setContentsList(prevContents => {
+                    // 기존에 있는 내용과 새로운 내용을 합쳐서 중복을 제거함
+                    const combinedContents = [...prevContents, ...newContents];
+                    const uniqueContents = Array.from(new Set(combinedContents.map(content => content.cseq)))
+                        .map(cseq => combinedContents.find(content => content.cseq === cseq)); // cseq로 구별하여 중복컨텐츠 제거
+                    return uniqueContents;
+                });
+    
                 setPage(pageNumber);
-                // 다음 페이지가 없으면 hasMore를 false로 설정
+                
                 if (!paging || (paging && paging.next === null)) {
                     setHasMore(false);
                 }
@@ -59,37 +65,19 @@ function ContentsList() {
         if (searchTerm.trim() === '') {
             setFilteredContents(contentsList);
         }  else {
-            axios.get('/api/contents/search', { params: { query: searchTerm } })
-                         .then(result => {
-                            const newContents = result.data.contentsList;
-                            setFilteredContents(newContents); // 서버에서 받은 필터링된 결과를 상태에 저장
-                        })
-            .catch(err => console.error(err));
-            setFilteredContents(contentsList);
+            const result = await axios.get('/api/contents/search', { params: { query: searchTerm } })
+            console.log(result);
+            console.log(result.data.contentsList);
+            const newContents = result.data.contentsList; // 서버 응답의 데이터 구조에 맞게 필드 수정
+            setFilteredContents(newContents); // 서버에서 받은 필터링된 결과를 상태에 저장
         }
     }, [searchTerm, contentsList]);
 
-    // // 검색어가 변경될 때마다 서버에서 검색 결과를 로드
-    // useEffect(() => {
-    //     if (searchTerm.trim() === '') {        setFilteredContents(contentsList);}
-    //     if (searchTerm.trim() !== '') {
-    //         // 검색어가 비어있지 않을 때만 검색 요청
-    //         axios.get('/api/contents/search', { params: { searchTerm } })
-    //             .then(result => {
-    //                 const newContents = result.data.contentsList;
-    //                 setFilteredContents(newContents); // 서버에서 받은 필터링된 결과를 상태에 저장
-    //             })
-    //             .catch(err => console.error(err));
-    //     } else {
-    //         setFilteredContents([]); // 검색어가 비어 있을 때는 필터링된 결과를 빈 배열로 설정
-    //     }
-    // }, [searchTerm]);
-
     // 스크롤 이벤트 핸들러
     const handleScroll = useCallback(() => {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const scrollHeight = document.documentElement.scrollHeight;
-        const clientHeight = document.documentElement.clientHeight;
+        const scrollTop = document.documentElement.scrollTop; // 현재위치
+        const scrollHeight = document.documentElement.scrollHeight; // 스크롤 가능한 크기
+        const clientHeight = document.documentElement.clientHeight; // 내용물의 크기
 
         // 스크롤이 페이지 하단에 도달했을 때
         if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore) {
@@ -120,11 +108,17 @@ function ContentsList() {
         filterContents();
     }, [searchTerm, filterContents]);
 
-    // 검색어 클리어 핸들러
+
+
+
+
+    // 검색창 초기화 
     function handleClearSearch() {
         setSearchTerm('');
     }
 
+
+    // 상세보기로 이동
     function getContentsView(cseq) {
         navigate(`/getContentsView/${cseq}`);
     }
@@ -144,9 +138,7 @@ function ContentsList() {
                             placeholder="축제명으로 검색"
                         />
                         {searchTerm && (
-                            <button className="clear-button" onClick={handleClearSearch}>
-                                &times; {/* 'X' 문자 */}
-                            </button>
+                           <button className="clear-button" onClick={handleClearSearch}>X</button>
                         )}
                         {/* <button className='writeButton' onClick={writeContents}>등록</button> */}
                         <div
