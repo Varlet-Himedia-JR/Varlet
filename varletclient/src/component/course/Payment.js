@@ -50,9 +50,11 @@ function Payment({ daySchedule }) {
     useEffect(() => {
         if (daySchedule && daySchedule.length > 0) {
             setDayschedule(daySchedule);
+            console.log(dayschedule);
             let tempPrice = 0;
             for(let i = 0;i<dayschedule.length;i++){
-                tempPrice=tempPrice+dayschedule[i].price;
+                tempPrice=(tempPrice+dayschedule[i].price);
+                console.log(i+'번째 결과:'+tempPrice);
             }
             setTotalPrice(tempPrice);
         } else {
