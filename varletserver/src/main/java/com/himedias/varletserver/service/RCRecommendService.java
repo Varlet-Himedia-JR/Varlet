@@ -4,12 +4,16 @@ import com.himedias.varletserver.dao.RcrecommendRepository;
 import com.himedias.varletserver.dao.RCommunityRepository;
 import com.himedias.varletserver.dao.MemberRepository;
 import com.himedias.varletserver.dao.ImageRepository;
+import com.himedias.varletserver.dto.Paging;
 import com.himedias.varletserver.dto.RCRcommend.RcrecommendInfo;
 import com.himedias.varletserver.entity.Image;
 import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.RCommunity;
 import com.himedias.varletserver.entity.Rcrecommend;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,11 +78,12 @@ public class RCRecommendService {
 
     /**
      * 주어진 게시글 ID로 답글 목록을 조회합니다.
-     * @param rnum 게시글 ID
+     * @param rcnum 게시글 ID
      * @return RcrecommendInfo 리스트
      */
-    public List<RcrecommendInfo> getRecommend(int rnum) {
-        return rcr.findAllByRnum(rnum); // 게시글 ID에 따른 답글 목록 반환
+    public Page<RcrecommendInfo> getRecommend(int rcnum, Paging paging) {
+        Pageable pageable = PageRequest.of(paging.getPage() - 1, paging.getDisplayRow(),paging.getSort());
+        return rcr.findAllByRnum(rcnum,pageable); // 게시글 ID에 따른 답글 목록 반환
     }
 
     /**
@@ -137,4 +142,5 @@ public class RCRecommendService {
         }
         return false; // 채택 실패
     }
+
 }

@@ -1,5 +1,6 @@
 package com.himedias.varletserver.controller;
 
+import com.himedias.varletserver.dto.Paging;
 import com.himedias.varletserver.dto.RCRcommend.RcrecommendInfo;
 import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.RCommunity;
@@ -8,6 +9,8 @@ import com.himedias.varletserver.service.RCRecommendService;
 import jakarta.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -116,11 +119,23 @@ public class RCRecommendController {
      * 게시글 ID를 받아 해당 게시글에 달린 모든 답글을 반환합니다.
      */
     @GetMapping("/getReplies/{rnum}")
-    public HashMap<String, Object> rcrommendView(@PathVariable("rnum") int rnum) {
+    public HashMap<String, Object> rcrommendView(@PathVariable("rnum") int rnum,
+                                                @RequestParam(defaultValue = "1") int page,
+                                                 @RequestParam(defaultValue = "5") int size) {
         HashMap<String, Object> result = new HashMap<>();
-        List<RcrecommendInfo> recommendList = rcs.getRecommend(rnum);
+        Paging paging  = new Paging();
+        paging.setPage(page);
+        paging.setDisplayRow(size);
+        paging.setSort(Sort.by(Sort.Direction.DESC,"rcnum"));
+        Page<RcrecommendInfo> recommendList = rcs.getRecommend(rnum, paging);
         System.out.println("호출됨?!-----------------------------------------"); // 디버깅용 메시지
-        result.put("recommend", recommendList); // 답글 목록을 응답으로 반환
+
+        paging.setTotalCount((int) recommendList.getTotalElements());
+        paging.calPaging();
+
+
+        result.put("recommend", recommendList.getContent()); // 답글 목록을 응답으로 반환
+        result.put("paging", paging);
         return result;
     }
 

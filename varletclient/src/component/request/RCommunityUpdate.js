@@ -106,14 +106,6 @@ function RCommunityUpdate() {
     }
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    // Date 객체 생성
-    const date = new Date(dateString);
-    // yyyy-mm-dd 형식으로 변환
-    return date.toISOString().split('T')[0];
-  };
-
   const today = new Date();
 
   moment(startDate).format('YYYY-MM-DD')
