@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
-import Heading from './../headerfooter/Heading';
-import Footer from './../headerfooter/Footer';
 import { getCookie } from '../../util/cookieUtil';
 import '../../style/paging.css';
 import '../../style/review.css';
@@ -14,7 +11,9 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
     const [contentsList, setContentsList] = useState([]);
     const [page, setPage] = useState(1); // 현재 페이지
     const [hasMore, setHasMore] = useState(true);
+    const [searchTerm, setSearchTerm] = useState(''); // 검색어
     const [selectedContents, setSelectedContents] = useState({});
+    const [filteredContents, setFilteredContents] = useState([]);// 필터된 리뷰 목록
     const [days, setDays] = useState([]);
     const [sdate, setSdate] = useState('');
     // const [edate, setEdate] = useState('');
@@ -27,15 +26,18 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
     const navigate = useNavigate();
     const [isAddContentsVisible, setIsAddContentsVisible] = useState(false);
     const [selectedCseq, setSelectedCseq] = useState('');
-
-    const onInputChange = (event) => {
-        const { name, value } = event.target;
-        if (name === 'sdate') {
-            setSdate(value);
-        } else if (name === 'edate') {
-            // setEdate(value);
-        }
-    };
+    // 상세보기로 이동
+    function getContentsView(cseq) {
+        navigate(`/getContentsView/${cseq}`);
+    }
+    // const onInputChange = (event) => {
+    //     const { name, value } = event.target;
+    //     if (name === 'sdate') {
+    //         setSdate(value);
+    //     } else if (name === 'edate') {
+    //         // setEdate(value);
+    //     }
+    // };
 
     // const handleStart_timeChange = (event) => {
     //     setStart_time(event.target.value);
@@ -79,10 +81,16 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
             const { contentsList: newContents, paging } = result.data;
 
             if (Array.isArray(newContents) && newContents.length > 0) {
-                setContentsList(preContents => [...preContents, ...newContents]);
+                setContentsList(prevContents => {
+                    // 기존에 있는 내용과 새로운 내용을 합쳐서 중복을 제거함
+                    const combinedContents = [...prevContents, ...newContents];
+                    const uniqueContents = Array.from(new Set(combinedContents.map(content => content.cseq)))
+                        .map(cseq => combinedContents.find(content => content.cseq === cseq)); // cseq로 구별하여 중복컨텐츠 제거
+                    return uniqueContents;
+                });
+
                 setPage(pageNumber);
 
-                // 다음 페이지가 없으면 hasMore를 false로 설정
                 if (!paging || (paging && paging.next === null)) {
                     setHasMore(false);
                 }
@@ -94,11 +102,24 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
         }
     }, []);
 
+    // 필터링 함수
+    const filterContents = useCallback(async () => {
+        if (searchTerm.trim() === '') {
+            setFilteredContents(contentsList);
+        } else {
+            const result = await axios.get('/api/contents/search', { params: { query: searchTerm } })
+            console.log(result);
+            console.log(result.data.contentsList);
+            const newContents = result.data.contentsList; // 서버 응답의 데이터 구조에 맞게 필드 수정
+            setFilteredContents(newContents); // 서버에서 받은 필터링된 결과를 상태에 저장
+        }
+    }, [searchTerm, contentsList]);
+
     // 스크롤 이벤트 핸들러
     const handleScroll = useCallback(() => {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const scrollHeight = document.documentElement.scrollHeight;
-        const clientHeight = document.documentElement.clientHeight;
+        const scrollTop = document.documentElement.scrollTop; // 현재위치
+        const scrollHeight = document.documentElement.scrollHeight; // 스크롤 가능한 크기
+        const clientHeight = document.documentElement.clientHeight; // 내용물의 크기
 
         // 스크롤이 페이지 하단에 도달했을 때
         if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore) {
@@ -119,9 +140,15 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
         loadContents(page);
     }, [loadContents, page]);
 
-    // function onContentsView(rseq) {
-    //     navigate(`/reviewView/${rseq}`);
-    // }
+    // 검색어 변경 핸들러
+    function handleSearchChange(event) {
+        setSearchTerm(event.target.value);
+    }
+
+    // 검색어가 변경될 때마다 필터링
+    useEffect(() => {
+        filterContents();
+    }, [searchTerm, filterContents]);
 
     //addcontents 창 호출 함수
     const onChangeAddContents = (contents) => {
@@ -134,19 +161,10 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
     };
 
 
-    // useEffect(() => {
-
-    //     axios.get(`/api/timetable/getTseq/${selectedCourse}`)
-    //         .then((result) => {
-    //             console.log(selectedContents)
-    //             console.log(selectedCourse);
-    //             console.log(result.data.tseq);
-    //             console.log(result.tseq);
-    //             setTseq(result.data.tseq);
-
-    //         })
-    //         .catch((err) => { console.error(err); });
-    // }, []);
+    // 검색창 초기화 
+    function handleClearSearch() {
+        setSearchTerm('');
+    }
 
     // 일정 등록 함수
     const addDayschedule = async () => {
@@ -200,6 +218,18 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
     return (
         <div className='mycourseContentsList' style={{ width: '100%' }}>
             <div className="contentstable" style={{ width: '100%', paddingTop: '40px', margin: '0' }}>
+                <div className="search-container" style={{ marginBottom: "20px", width: "100%" }}>
+                    <input
+                        className='search-bar'
+                        type="text"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        placeholder="축제명으로 검색"
+                    />
+                    {searchTerm && (
+                        <button className="clear-button" onClick={handleClearSearch}>X</button>
+                    )}
+                </div>
                 <div className='row'>
                     <div className="col">번호</div>
                     <div className="col">이름</div>
@@ -210,24 +240,29 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
                     <div className="col"></div>
                 </div>
                 {
-                    Array.isArray(contentsList) && contentsList.length > 0 ? (
-                        contentsList.map((contents, idx) => (
-                            <div className="row" key={idx} onClick={() => onChangeAddContents(contents)}>
+                    Array.isArray(filteredContents) && filteredContents.length > 0 ? (
+                        filteredContents.map((contents, idx) => (
+                            <div className="row" key={idx} onClick={() => getContentsView(contents.cseq)}>
                                 <div className="col">{contents.cseq}</div>
                                 <div className="col" style={{ textAlign: "left" }} >{contents.cname}</div>
                                 <div className="col">{contents.ctype}</div>
                                 <div className="col">{contents.location} {contents.location2}</div>
                                 <div className="col">{contents.cstartTime ? contents.cstartTime.toString().substring(0, 10) : ''}</div>
                                 <div className="col">{contents.cendTime ? contents.cendTime.toString().substring(0, 10) : ''}</div>
-                                <div className="col"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-plus" width="32" height="32" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M12.5 21h-6.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v5" />
-                                    <path d="M16 3v4" />
-                                    <path d="M8 3v4" />
-                                    <path d="M4 11h16" />
-                                    <path d="M16 19h6" />
-                                    <path d="M19 16v6" />
-                                </svg></div>
+                                <div
+                                    onClick={(event) => {
+                                        event.stopPropagation(); // 이벤트 전파 중지
+                                        onChangeAddContents(contents); // 함수 실행
+                                    }}
+                                    className="col"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-plus" width="32" height="32" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M12.5 21h-6.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v5" />
+                                        <path d="M16 3v4" />
+                                        <path d="M8 3v4" />
+                                        <path d="M4 11h16" />
+                                        <path d="M16 19h6" />
+                                        <path d="M19 16v6" />
+                                    </svg></div>
                             </div>
                         ))
                     ) : (

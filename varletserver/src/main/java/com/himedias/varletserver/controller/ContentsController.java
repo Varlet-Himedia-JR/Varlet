@@ -44,6 +44,16 @@ public class ContentsController {
 
     }
 
+    @GetMapping("/recentContentsList")
+    public HashMap<String, Object> recentContentsList() {
+        HashMap<String, Object> result = new HashMap<String, Object>();
+
+        result.put("recentContentsList", cs.getRecentContents());
+
+        return result;
+
+    }
+
     @GetMapping("/getContentsView/{cseq}")
     public HashMap<String, Object> getQnaView(@PathVariable("cseq") int cseq) {
         HashMap<String, Object> result = new HashMap<>();

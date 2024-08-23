@@ -44,4 +44,8 @@ public class ContentsService {
     public List<Contents> searchContents(String query) {
         return cr.searchByMultipleFields(query);
     }
+
+    public List<Contents> getRecentContents() {
+        return cr.getRecentContents();
+    }
 }
