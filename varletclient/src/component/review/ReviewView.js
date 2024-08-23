@@ -11,8 +11,8 @@ function ReviewView() {
     const [review, setReview] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState({ title: '', content: '', reviewimg: [] });
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [previewImage, setPreviewImage] = useState('');
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [previewImages, setPreviewImages] = useState([]);
     const [replies, setReplies] = useState([]);
     const [newReply, setNewReply] = useState('');
     const { rseq } = useParams();
@@ -20,7 +20,6 @@ function ReviewView() {
     const userId = getCookie('user').userid;
 
     useEffect(() => {
-        // 리뷰 데이터 로드
         jaxios.get(`/api/review/getReviewView/${rseq}`)
             .then((result) => {
                 const reviewData = result.data.review;
@@ -32,7 +31,7 @@ function ReviewView() {
                         reviewimg: reviewData.reviewimg
                     });
                     if (reviewData.reviewimg.length > 0) {
-                        setPreviewImage(`http://localhost:8070${reviewData.reviewimg[0].ipath}`);
+                        setPreviewImages(reviewData.reviewimg.map(img => `http://localhost:8070${img.ipath}`));
                     }
                 } else {
                     console.error('Review data is not available.');
@@ -44,7 +43,6 @@ function ReviewView() {
                 setReview(null);
             });
 
-        // 댓글 데이터 로드
         jaxios.get(`/api/reply/getReplies/${rseq}`)
             .then((result) => {
                 setReplies(result.data.replies || []);
@@ -73,20 +71,15 @@ function ReviewView() {
         formData.append('title', editForm.title);
         formData.append('content', editForm.content);
 
-        if (selectedFile) {
-            formData.append('reviewimg', selectedFile);
-        } else {
-            editForm.reviewimg.forEach(img => {
-                formData.append('reviewimg', img);
-            });
-        }
+        selectedFiles.forEach(file => {
+            formData.append('reviewimg', file);
+        });
 
         axios.post(`/api/review/updateReview/${rseq}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
             .then(() => {
                 setIsEditing(false);
-                // 리뷰 업데이트 후 댓글 데이터 다시 로드
                 jaxios.get(`/api/review/getReviewView/${rseq}`)
                     .then((result) => {
                         setReview(result.data.review);
@@ -96,10 +89,8 @@ function ReviewView() {
                             reviewimg: result.data.review.reviewimg
                         });
                         if (result.data.review.reviewimg.length > 0) {
-                            setPreviewImage(`http://localhost:8070${result.data.review.reviewimg[0].ipath}`);
+                            setPreviewImages(result.data.review.reviewimg.map(img => `http://localhost:8070${img.ipath}`));
                         }
-
-                        // 댓글 데이터 다시 로드
                         jaxios.get(`/api/reply/getReplies/${rseq}`)
                             .then((result) => {
                                 setReplies(result.data.replies || []);
@@ -127,16 +118,14 @@ function ReviewView() {
     }
 
     function handleFileChange(event) {
-        const file = event.target.files[0];
-        setSelectedFile(file);
-        if (file) {
-            setPreviewImage(URL.createObjectURL(file));
-        }
+        const files = Array.from(event.target.files);
+        setSelectedFiles(prevFiles => [...prevFiles, ...files]);
+        setPreviewImages(prevImages => [...prevImages, ...files.map(file => URL.createObjectURL(file))]);
     }
 
-    function handleImageRemove() {
-        setSelectedFile(null);
-        setPreviewImage('');
+    function handleImageRemove(index) {
+        setSelectedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
+        setPreviewImages(prevImages => prevImages.filter((_, i) => i !== index));
     }
 
     function handleNewReplyChange(event) {
@@ -191,7 +180,7 @@ function ReviewView() {
     return (
         <>
             <Heading />
-            <div className='subPage' style={{ paddingTop:'100px' }}>
+            <div className='subPage' style={{ paddingTop: '100px' }}>
                 <div className="review" style={{ flex: "4" }}>
                     {
                         review ? (
@@ -245,24 +234,25 @@ function ReviewView() {
                                         <>
                                             <input
                                                 type="file"
+                                                multiple
                                                 onChange={handleFileChange}
                                             />
-                                            {previewImage && (
-                                                <div className="image-preview">
+                                            {previewImages.map((image, index) => (
+                                                <div className="image-preview" key={index}>
                                                     <img
-                                                        src={previewImage}
-                                                        alt="Preview"
+                                                        src={image}
+                                                        alt={`Preview ${index}`}
                                                         style={{ maxWidth: '300px', maxHeight: '300px', marginRight: '10px' }}
                                                     />
                                                     <button
                                                         type="button"
-                                                        onClick={handleImageRemove}
+                                                        onClick={() => handleImageRemove(index)}
                                                         style={{ background: 'none', border: 'none', color: 'red', cursor: 'pointer', fontSize: '24px' }}
                                                     >
                                                         &times; {/* 'X' 문자 */}
                                                     </button>
                                                 </div>
-                                            )}
+                                            ))}
                                         </>
                                     ) : (
                                         review.reviewimg && review.reviewimg.length > 0 && (

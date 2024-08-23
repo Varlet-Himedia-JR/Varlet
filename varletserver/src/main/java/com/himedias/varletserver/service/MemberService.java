@@ -3,22 +3,15 @@ package com.himedias.varletserver.service;
 
 
 import com.himedias.varletserver.dao.MemberRepository;
-import com.himedias.varletserver.dto.Paging;
+import com.himedias.varletserver.dao.ReviewRepository;
 import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.Review;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @Transactional
@@ -98,14 +91,6 @@ public class MemberService {
             // 기존 사용자가 없으면 에러 처리
             throw new IllegalArgumentException("해당 회원이 존재하지 않습니다.");
         }
-    }
-
-    public Page<Review> getReviewsByUser(String userid, Paging paging) {
-        int pageNumber = paging.getPage() - 1; // PageRequest uses 0-based index
-        int pageSize = paging.getDisplayRow();
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, paging.getSort());
-
-        return mr.findByUserid(userid, pageRequest);
     }
 
     @Autowired

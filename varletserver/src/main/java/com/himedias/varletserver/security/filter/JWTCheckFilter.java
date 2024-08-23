@@ -135,7 +135,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/member/updateInfo"))
             return true;
-        if (path.startsWith("/member/userReviews"))
+        if (path.startsWith("/review/userReviews"))
             return true;
         if (path.startsWith("/member/checkEmail"))
             return true;
@@ -190,6 +190,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/review/writeReview"))
             return true;
         if (path.startsWith("/review/fileupload"))
+            return true;
+        if (path.startsWith("/review/reviewSearch"))
             return true;
 
         if (path.startsWith("/rcommunity/updatePicked"))
