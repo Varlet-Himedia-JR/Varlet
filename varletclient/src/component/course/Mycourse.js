@@ -69,7 +69,7 @@ function Mycourse() {
         try {
             let result = await jaxios.post('/api/dayschedule/insertDayschedule', {
                 dtitle: title,
-                cseq: contents.cseq,
+                cseq: 0,
                 userid: getCookie('user').userid,
                 tseq: selectedCourse,
                 day_date: dDateObject,
