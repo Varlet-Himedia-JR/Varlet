@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import jaxios from '../../util/jwtUtil';
 import { useNavigate } from 'react-router-dom';
 import { getCookie } from "../../util/cookieUtil";

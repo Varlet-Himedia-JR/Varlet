@@ -73,14 +73,6 @@ public class ContentsController {
         return result;
     }
 
-//    // 놀거리 검색
-//    @GetMapping("/search")
-//    public ResponseEntity<List<Contents>> searchContents(@RequestParam("query") String query) {
-//        System.out.println("query" + query);
-//        List<Contents> contentsList = cs.searchContents(query); // 검색된 결과를 가져옵니다.
-//        return ResponseEntity.ok(contentsList); // 리스트 형태로 응답을 보냅니다.
-//    }
-
     @GetMapping("/search")
     public ResponseEntity<Map<String, Object>> searchContents(@RequestParam("query") String query) {
         List<Contents> contentsList = cs.searchContents(query); // 검색된 결과를 가져옵니다.
