@@ -1,9 +1,8 @@
-import React ,{useState, useEffect} from 'react'
-import axios from 'axios'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
-import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
+import Heading from './../headerfooter/Heading';
 
 function Notice() {
   

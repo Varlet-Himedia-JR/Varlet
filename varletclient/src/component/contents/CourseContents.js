@@ -6,9 +6,11 @@ import '../../style/paging.css';
 import '../../style/review.css';
 import jaxios from '../../util/jwtUtil';
 
-function CourseContents({ courseDuration, selectedCourse, cseq }) {
+function CourseContents({ selectedCourse, cseq, mycourse }) {
 
     const [contentsList, setContentsList] = useState([]);
+    // const [scourse, setScourse] = useState('');
+    const [courseDuration, setCourseDuration] = useState([]);
     const [page, setPage] = useState(1); // 현재 페이지
     const [hasMore, setHasMore] = useState(true);
     const [searchTerm, setSearchTerm] = useState(''); // 검색어
@@ -54,6 +56,17 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
             // setEnd_time(days[days.length-1]);
         }
     }, [courseDuration]);
+
+    
+    useEffect(() => {
+        if (tseq) {
+            jaxios.get(`/api/course/getMycourse/${tseq}/${getCookie('user').userid}`)
+                .then((result) => {
+                    setCourseDuration(result.data.duration);
+                })
+                .catch((err) => { console.error(err); });
+        }
+    }, [tseq]);
 
     // 즐길거리에서 넘어왔을때 함수
     useEffect(
@@ -175,22 +188,7 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
         const eDateObject = new Date(eDateTimeString);
         const dDateString = `${sdate}T00:00:00`;
         const dDateObject = new Date(dDateString);
-        // setTemp(new Date(`${sdate}T${etime}:00`));
-        // setDayschedule({
-        //     dtitle: selectedContents.dname,
-        //     cseq: selectedContents.cseq,
-        //     userid: getCookie('user').userid,
-        //     tseq: tseq,
-        //     day_date: sDateObject,
-        //     start_time: sDateObject,
-        //     end_time: eDateObject,
-        //     price: price,
-        //     pcount: pcount
-        // }
-        // )
         try {
-            // console.log("stringggg : ", sDateTimeString)
-            // console.log("berfore insert : ", { dtitle: selectedContents.cname, cseq: selectedContents.cseq, userid: getCookie('user').userid, tseq: tseq, day_date: sDateObject, start_time: sDateObject, end_time: eDateObject, price: price, pcount: pcount });
             let result = await jaxios.post('/api/dayschedule/insertDayschedule', {
                 dtitle: selectedContents.cname,
                 cseq: selectedContents.cseq,
@@ -210,9 +208,11 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
         } catch (err) {
             console.error(err);
         }
-
-
     }
+    const handleCourseChange = (event) => {
+        setTseq(event.target.value);
+    };
+
 
 
     return (
@@ -311,6 +311,28 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
                                                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                                     htmlFor="date"
                                                 >
+                                                    나의 여행
+                                                </label>
+                                                {mycourse.length > 0 ? <div className="flex justify-between">
+                                                    <select
+                                                        id="mycourse"
+                                                        name="mycourse"
+                                                        value={tseq}
+                                                        onChange={handleCourseChange}
+                                                    >
+                                                        {mycourse.map((course, index) => (
+                                                            <option key={index} value={course.tseq}>
+                                                                {course.tname}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div> : <></>}
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label
+                                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                    htmlFor="date"
+                                                >
                                                     Date
                                                 </label>
                                                 <div>
@@ -320,7 +342,7 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
                                                         value={sdate}
                                                         onChange={(e) => { setSdate(e.currentTarget.value) }}
                                                     >
-                                                        {days.map((day, index) => (
+                                                        {courseDuration.map((day, index) => (
                                                             <option key={index} value={day}>
                                                                 {day}
                                                             </option>
@@ -335,7 +357,7 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
                                                     htmlFor="time"
                                                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                                                 >
-                                                    Start time
+                                                    시작 시간
                                                 </label>
                                                 <div className="relative">
                                                     <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
@@ -368,7 +390,7 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
                                                     htmlFor="time"
                                                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                                                 >
-                                                    End time
+                                                    종료 시간
                                                 </label>
                                                 <div className="relative">
                                                     <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
@@ -414,14 +436,13 @@ function CourseContents({ courseDuration, selectedCourse, cseq }) {
                                                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                                 htmlFor="title"
                                             >
-                                                Title
+                                                제목
                                             </label>
                                             <input
                                                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                                 id="title"
-                                                placeholder="Enter a title"
+                                                placeholder="제목을 입력하세요"
                                                 value={selectedContents.cname}
-                                            // onChange={(e) => setTitle(e.target.value)}
                                             />
                                         </div>
                                     </div>

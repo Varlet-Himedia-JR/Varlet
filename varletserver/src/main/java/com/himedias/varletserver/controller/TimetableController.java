@@ -30,7 +30,7 @@ public class TimetableController {
     }
 
     @PostMapping("/deleteTimetable/{tseq}")
-    public HashMap<String, Object> deteteTimetable(@RequestParam("tseq") String tseq){
+    public HashMap<String, Object> deleteTimetable(@PathVariable String tseq){
         HashMap<String, Object> result = new HashMap<String, Object>();
         ts.deleteTimetable(tseq);
         result.put("msg","ok");

@@ -30,6 +30,6 @@ public class TimetableService {
     }
 
     public void deleteTimetable(String tseq) {
-        tr.deleteById(tseq);
+        tr.deleteByTseq(tseq);
     }
 }

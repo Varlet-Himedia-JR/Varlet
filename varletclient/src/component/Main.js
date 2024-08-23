@@ -17,6 +17,7 @@ function Main() {
   const navigate = useNavigate();
   const userCookie = getCookie('user');
   const [recentContents, setRecentContents] = useState([]);
+  
 
   console.log('userCookie:', userCookie);
   // 슬라이더 설정
@@ -131,6 +132,14 @@ function Main() {
     navigate(`/getContentsView/${cseq}`);
   }
 
+  const logCheck = (src) => {
+    if (!userCookie) {
+        navigate('/login');
+    } else {
+        navigate(src);
+    }
+};
+
   return (
     <>
       <Heading />
@@ -224,7 +233,7 @@ function Main() {
               <h3 className="text-xl font-bold">Build Your Network</h3>
               <p className="text-[#808080]">Connect with fellow travelers, share your experiences, and make new friends.</p>
             </div>
-            <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg">
+            <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg" onClick={() => logCheck('/mycourse')}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -242,8 +251,8 @@ function Main() {
                 <rect width="18" height="18" x="3" y="4" rx="2"></rect>
                 <path d="M3 10h18"></path>
               </svg>
-              <h3 className="text-xl font-bold">Plan Your Trips</h3>
-              <p className="text-[#808080]">Easily plan and organize your upcoming trips with our intuitive tools.</p>
+              <h3 className="text-xl font-bold">여행 계획을 일정표로</h3>
+              <p className="text-[#808080]">수강신청 장바구니처럼 여행 콘텐츠를 담아 나만의 여행 계획을 만드세요</p>
             </div>
             <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg">
               <svg

@@ -8,9 +8,8 @@ import Timetable from './Timetable';
 import { getCookie } from "../../util/cookieUtil";
 import { useLocation } from 'react-router-dom';
 import Heading from '../headerfooter/Heading';
-import html2canvas from 'html2canvas';
 import Payment from './Payment';
-import SelectedCustomCourse from './CustomCourse';
+import SelectedCustomCourse from './SelectedCustomCourse';
 function Mycourse() {
     const [selectedCourse, setSelectedCourse] = useState('');
     const [mycourse, setMycourse] = useState([]);
@@ -21,7 +20,8 @@ function Mycourse() {
     const userCookie = getCookie('user');
     const [ttmaker, setTtmaker] = useState('');
     const location = useLocation();
-    const { contents } = location.state || {};
+    // const { contents } = location.state || {};
+    const [contents, setContents] = useState({});
     const [cellWidth, setCellWidth] = useState(0);
     const [isCourseContentsVisible, setIsCourseContentsVisible] = useState(false);
     const [isCourseCustom, setIsCourseCustom] = useState(false);
@@ -30,15 +30,62 @@ function Mycourse() {
         setSelectedCourse(event.target.value);
     };
 
-    useEffect(() => {
-        if (contents) {
-            console.log(contents);
-            setSelectedContents(contents);
-        }
-    }, [contents]);
+    //일정등록을 위한 변수
+    const [sdate, setSdate] = useState('');
+    const [stime, setStime] = useState('');
+    const [etime, setEtime] = useState('');
+    const [price, setPrice] = useState('');
+    const [title, setTitle] = useState('');
+    const [pcount, setPcount] = useState('1');
 
+    // useEffect(() => {
+    //     if (contents) {
+    //         console.log(contents);
+    //         setSelectedContents(contents);
+    //     }
+    // }, [contents]);
+
+    useEffect(() => {
+        if (location.state) {
+            setContents(location.state);
+        }
+    }, []);
+
+    // 일정 등록 함수
     const addDayschedule = async () => {
-        alert('일정등록');
+
+        const sDateTimeString = `${sdate}T${stime}:00`;
+        const sDateObject = new Date(sDateTimeString);
+        const eDateTimeString = `${sdate}T${etime}:00`;
+        const eDateObject = new Date(eDateTimeString);
+        const dDateString = `${sdate}T00:00:00`;
+        const dDateObject = new Date(dDateString);
+
+        if (eDateObject <= sDateObject) {
+            alert('종료시간은 시작시간보다 빠를 수 없습니다.');
+            return; // 이 조건이 성립하면 함수 실행을 중단합니다.
+        }
+        
+        try {
+            let result = await jaxios.post('/api/dayschedule/insertDayschedule', {
+                dtitle: title,
+                cseq: contents.cseq,
+                userid: getCookie('user').userid,
+                tseq: selectedCourse,
+                day_date: dDateObject,
+                start_time: sDateObject,
+                end_time: eDateObject,
+                price: price,
+                pcount: pcount
+            });
+            if (result.data.msg == 'ok') {
+                alert('등록완료');
+                setContents({});
+                window.location.reload();
+            }
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     useEffect(() => {
@@ -106,7 +153,6 @@ function Mycourse() {
         }
     };
 
-
     const getHeight = () => {
         if (isCourseCustom || isCourseContentsVisible) {
             return '50%';
@@ -119,20 +165,23 @@ function Mycourse() {
     };
 
     const onChangeSelectedCustomCourse = () => {
-        setSelectedContents({});
+        setContents({});
+        // setSelectedContents({});
     }
     const onChangeCourseCustom = () => {
         setIsCourseCustom(!isCourseCustom);
     };
     const deleteMycourse = () => {
+        console.log(selectedCourse);
+        const tseq = selectedCourse;
         if (window.confirm(`선택한 일정(${selectedCourse})을 삭제하시겠습니까?`)) {
-            const tseq = selectedCourse
-            const result = jaxios.post('/api/timetable/deleteTimetable', { tseq })
+
+            const result = jaxios.post(`/api/timetable/deleteTimetable/${tseq}`)
                 .then(() => {
-                    if (result.data.msg == 'ok') {
-                        alert('삭제했나,,?');
-                        window.location.reload();
-                    }
+                    // if (result.data.msg == 'ok') {
+                    // alert('삭제했나,,?');
+                    window.location.reload();
+                    // }
                 })
                 .catch((err) => { console.error(err) })
         }
@@ -196,10 +245,10 @@ function Mycourse() {
                         <div className='course' style={{ width: '100%' }}>
                             {getCookie('user') ? (
                                 (ttmaker == '' ?
-                                    // <button className='coursemenubtn' onClick={handleClickButton} name='ttmaker' >
-                                    //     여행코스 만들기
-                                    // </button>
-                                    <p onClick={handleClickButton} name='ttmaker' className='addttamker'>┼ 여행코스 만들기</p>
+                                    <button className='addttamker' onClick={handleClickButton} name='ttmaker' >
+                                        + 여행코스 만들기
+                                    </button>
+                                    // <p onClick={handleClickButton} name='ttmaker' className='addttamker'>┼ 여행코스 만들기</p>
                                     :
                                     // <svg style={{right:'0'}} xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-backspace" width="40" height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round" onClick={handleClickButton}>
                                     //     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -301,32 +350,29 @@ function Mycourse() {
                         </button> */}
                     </div>
                     <div style={{ zIndex: '5' }}>
-                        <CourseContents courseDuration={courseDuration} selectedCourse={selectedCourse} contents={contents} />
+                        <CourseContents mycourse={mycourse} selectedCourse={selectedCourse} contents={contents} />
                     </div>
                 </div>
             )}
-            {!selectedContents == {} ?
+            {mycourse.length > 0 && Object.keys(contents).length ?
                 <div className='add_contents'>
                     <div className="cchead" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <h2>course_custom</h2>
+                        <h2>SelectedCustomCourse</h2>
                         <button style={{ border: '1px solid black' }} onClick={onChangeSelectedCustomCourse}>
                             X
                         </button>
                     </div>
-                    <SelectedCustomCourse selectedContents={selectedContents} />
+                    <SelectedCustomCourse selectedContents={contents} mycourse={mycourse} />
                 </div>
                 : <></>}
 
             {isCourseCustom && (
                 <div className='add_contents'>
-                    <button style={{ border: '1px solid black' }} onClick={onChangeCourseCustom}>
-                        X
-                    </button>
                     <div className="rounded-lg border bg-card text-card-foreground">
                         <div className="p-6 space-y-6">
                             <div className="grid grid-cols-1 gap-4">
                                 <div className="space-x-2">
-                                    addcontents
+                                    직접 추가
                                     <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-backspace" width="40" height="40" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round" onClick={onChangeCourseCustom}>
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <path d="M20 6a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-11l-5 -5a1.5 1.5 0 0 1 0 -2l5 -5z" />
@@ -368,14 +414,14 @@ function Mycourse() {
                                             <select
                                                 id="sdate"
                                                 name="sdate"
-                                                value={1}
-                                            // onChange={(e) => { setSdate(e.currentTarget.value) }}
+                                                value={sdate}
+                                                onChange={(e) => { setSdate(e.currentTarget.value) }}
                                             >
-                                                {/* {days.map((day, index) => (
-                                                <option key={index} value={day}>
-                                                    {day}
-                                                </option>
-                                            ))} */}
+                                                {courseDuration.map((day, index) => (
+                                                    <option key={index} value={day}>
+                                                        {day}
+                                                    </option>
+                                                ))}
                                             </select>
                                         </div>
                                     </div>
@@ -410,7 +456,7 @@ function Mycourse() {
                                                 name="stime"
                                                 className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                 required
-                                            // onChange={(e) => { setStime(e.currentTarget.value) }}
+                                                onChange={(e) => { setStime(e.currentTarget.value) }}
                                             />
                                         </div>
                                     </div>
@@ -443,7 +489,7 @@ function Mycourse() {
                                                 name="etime"
                                                 className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                 required
-                                            // onChange={(e) => { setEtime(e.currentTarget.value) }}
+                                                onChange={(e) => { setEtime(e.currentTarget.value) }}
                                             />
                                         </div>
                                     </div>
@@ -462,8 +508,8 @@ function Mycourse() {
                                         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                         id="title"
                                         placeholder="Enter a title"
-                                        value={1}
-                                    // onChange={(e) => setTitle(e.target.value)}
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -480,8 +526,8 @@ function Mycourse() {
                                         id="price"
                                         placeholder="Enter a price"
                                         type="number"
-                                        value={1}
-                                    // onChange={(e) => setPrice(e.target.value)}
+                                        value={price}
+                                        onChange={(e) => setPrice(e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -498,9 +544,8 @@ function Mycourse() {
                                         id="people"
                                         placeholder="Enter the number of people"
                                         type="number"
-                                        value={1}
-                                    // onChange={(e) => { setPcount(e.currentTarget.value) }}
-
+                                        value={pcount}
+                                        onChange={(e) => { setPcount(e.currentTarget.value) }}
                                     />
                                     <button onClick={addDayschedule}>일정등록</button>
                                     {/* <input type="text" value={1} onChange={(e) => { setPcount(e.currentTarget.value) }} /> */}
@@ -508,14 +553,6 @@ function Mycourse() {
                             </div>
                         </div>
                     </div>
-                    {/* <div className="course_contents" >
-                     <div className="cchead" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                         <h2>course_custom</h2>
-                         <button style={{ border: '1px solid black' }} onClick={onChangeCourseCustom}>
-                             X
-                         </button>
-                     </div>
-                    </div> */}
                 </div>
             )}
 
