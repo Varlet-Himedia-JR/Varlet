@@ -1,3 +1,4 @@
+
 package com.himedias.varletserver.controller;
 
 import com.google.gson.Gson;
@@ -32,10 +33,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
 @RestController
 @RequestMapping("/member")
 public class MemberController {
@@ -381,34 +380,6 @@ public class MemberController {
         return result;
     }
 
-    @GetMapping("/userReviews/{userid}/{page}/{size}")
-    public HashMap<String, Object> userReviews(
-            @PathVariable("userid") String userid,
-            @PathVariable("page") int page,
-            @PathVariable("size") int size) {
-        HashMap<String, Object> result = new HashMap<>();
-        try {
-            Paging paging = new Paging();
-            paging.setPage(page);
-            paging.setDisplayRow(size);
-            paging.setSort(Sort.by(Sort.Order.desc("indate")));
-
-            Page<Review> reviewPage = ms.getReviewsByUser(userid, paging);
-
-            paging.setTotalCount((int) reviewPage.getTotalElements());
-            paging.calPaging();
-
-            result.put("reviewList", reviewPage.getContent());
-            result.put("paging", paging);
-            result.put("status", "success");
-
-        } catch (Exception e) {
-            result.put("status", "error");
-            result.put("message", e.getMessage());
-        }
-        return result;
-    }
-
     // 아이디 찾기
     @PostMapping("/findId/{email}")
     public HashMap<String, Object> findId(@PathVariable("email") String email) {
@@ -451,10 +422,10 @@ public class MemberController {
     @GetMapping("/getMyProfileImg/{userid}")
     public Map<String, Object> getMyProfileImg(@RequestParam("userid") String userid) {
         Map<String, Object> result = new HashMap<>();
-            String profileImgUrl = ms.getProfileImageUrl(userid);
-            result.put("profileImgUrl", profileImgUrl);
-            System.out.println("뭔데 그래서~~~~~~~~~~~~" + profileImgUrl);
-            return result;
+        String profileImgUrl = ms.getProfileImageUrl(userid);
+        result.put("profileImgUrl", profileImgUrl);
+        System.out.println("뭔데 그래서~~~~~~~~~~~~" + profileImgUrl);
+        return result;
     }
 
 

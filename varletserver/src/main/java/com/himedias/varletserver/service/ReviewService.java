@@ -3,6 +3,7 @@ package com.himedias.varletserver.service;
 import com.himedias.varletserver.dao.ReviewRepository;
 import com.himedias.varletserver.dto.Paging;
 import com.himedias.varletserver.entity.Review;
+import com.himedias.varletserver.entity.ReviewSummary;
 import com.himedias.varletserver.entity.Reviewimg;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -28,12 +27,13 @@ public class ReviewService {
 
     private static final String UPLOAD_DIR = "/uploads";
 
-    public Page<Review> getReviewList(Paging paging) {
+    public Page<ReviewSummary> getReviewList(Paging paging) {
         int pageNumber = paging.getPage() - 1; // PageRequest uses 0-based index
         int pageSize = paging.getDisplayRow();
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Order.asc("rseq")));
-        return rr.findAll(pageRequest);
+        return rr.findAllBy(pageRequest);
     }
+
 
     public Review writeReview(Review review) {
         rr.save(review);
@@ -86,9 +86,9 @@ public class ReviewService {
         }
     }
 
-    public List<Review> getReviewsByUserId(String userid) {
+    /*public List<Review> getReviewsByUser(String userid) {
         return rr.findByUserid(userid);
-    }
+    }*/
 
     public String saveFile(MultipartFile file) throws IOException {
         File uploadDir = new File(UPLOAD_DIR);
@@ -99,5 +99,18 @@ public class ReviewService {
         File targetFile = new File(uploadDir, fileName);
         file.transferTo(targetFile);
         return fileName;
+    }
+
+    public List<Review> getAllReviews() {
+        return rr.findAll();
+    }
+
+
+    public List<Review> reviewSearch(String query) {
+        return rr.searchByMultipleFields(query);
+    }
+
+    public List<ReviewSummary> getReviewsByUser(String userid) {
+        return rr.findByUserid(userid); // 작성자 ID로 모든 리뷰를 가져옴
     }
 }
