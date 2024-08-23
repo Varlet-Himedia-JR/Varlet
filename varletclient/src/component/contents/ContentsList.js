@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
 import '../../style/contents.css';
+import '../../style/login.css';
 import { getCookie } from "../../util/cookieUtil";
 import jaxios from '../../util/jwtUtil';
 
@@ -37,7 +38,7 @@ function ContentsList() {
         try {
             const result = await axios.get(`/api/contents/contentsList/${pageNumber}`);
             const { contentsList: newContents, paging } = result.data;
-    
+
             if (Array.isArray(newContents) && newContents.length > 0) {
                 setContentsList(prevContents => {
                     // 기존에 있는 내용과 새로운 내용을 합쳐서 중복을 제거함
@@ -46,9 +47,9 @@ function ContentsList() {
                         .map(cseq => combinedContents.find(content => content.cseq === cseq)); // cseq로 구별하여 중복컨텐츠 제거
                     return uniqueContents;
                 });
-    
+
                 setPage(pageNumber);
-                
+
                 if (!paging || (paging && paging.next === null)) {
                     setHasMore(false);
                 }
@@ -64,7 +65,7 @@ function ContentsList() {
     const filterContents = useCallback(async () => {
         if (searchTerm.trim() === '') {
             setFilteredContents(contentsList);
-        }  else {
+        } else {
             const result = await axios.get('/api/contents/search', { params: { query: searchTerm } })
             console.log(result);
             console.log(result.data.contentsList);
@@ -127,8 +128,12 @@ function ContentsList() {
     return (
         <>
             <Heading />
+            <div style={{ paddingTop: '100px' }}>
+                <div className='background'><img src="http://localhost:8070/images/oceans.jpg" /></div>
+            </div>
+
             <div className='mycourseContentsList' style={{ paddingTop: '100px', bottom: '100px' }}>
-                <div className="contents-container" style={{ paddingTop: '100px' }}>
+                <div className="contents-container flex flex-wrap justify-between" style={{ paddingTop: '100px' }}>
                     <div className="search-container" style={{ marginBottom: "20px", width: "100%" }}>
                         <input
                             className='search-bar'
@@ -138,9 +143,8 @@ function ContentsList() {
                             placeholder="축제명으로 검색"
                         />
                         {searchTerm && (
-                           <button className="clear-button" onClick={handleClearSearch}>X</button>
+                            <button className="clear-button" onClick={handleClearSearch}>X</button>
                         )}
-                        {/* <button className='writeButton' onClick={writeContents}>등록</button> */}
                         <div
                             className="bg-blue-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer w-32"
                             onClick={writeContents}
@@ -156,7 +160,7 @@ function ContentsList() {
                     {
                         Array.isArray(filteredContents) && filteredContents.length > 0 ? (
                             filteredContents.map((contents, idx) => (
-                                <div className="bg-white rounded-lg overflow-hidden shadow-lg transition-all hover:scale-105" key={idx} onClick={() => { getContentsView(contents.cseq) }}>
+                                <div className="bg-white w-1/5 p-4 rounded-lg overflow-hidden shadow-lg transition-all hover:scale-105" key={idx} onClick={() => { getContentsView(contents.cseq) }}>
                                     <img
                                         src={contents.contentsimg}
                                         alt="Product 1"
@@ -171,18 +175,15 @@ function ContentsList() {
                                         <p className="text-muted-foreground mb-4">{contents.cstartTime.substring(0, 10)} - {contents.cendTime.substring(0, 10)}</p>
                                         <div className="flex items-center justify-between">
                                             <span className="text-primary font-semibold">{contents.cost == 0 ? '무료' : contents.cost}</span>
-                                            {/* <button className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 rounded-md px-3">
-                                                Buy Now
-                                            </button> */}
                                         </div>
                                     </div>
                                 </div>
-
                             ))
                         ) : (<h2>list가 없습니다.</h2>)
                     }
                 </div>
             </div>
+
             <Footer />
         </>
     );
