@@ -283,6 +283,7 @@ const replyDelete = (rcnum) => {
               alert('채택이 완료되었습니다.');
               fetchReplies(); // 업데이트된 답글 목록을 가져옵니다.
               setPost(prevPost => ({ ...prevPost, picked: 'Y' })); // 로컬 상태 업데이트
+              console.log("userpoint", userCookie.point)
             })
             .catch((err) => {
               console.error('게시글 상태 업데이트 실패:', err);
