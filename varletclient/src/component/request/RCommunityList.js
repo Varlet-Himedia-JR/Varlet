@@ -112,7 +112,15 @@ function PostList() {
   return (
     <>
       <Heading />
-      <div className='w-full max-w-[1700px] mx-auto px-1 mt-28'>
+      <section className="w-full bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] mt-28" style={{
+          backgroundImage: 'url(http://localhost:8070/images/oceans.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          width: '100%',   // 원하는 너비 설정
+          zIndex: 0
+        }}>
+      <div className='w-full max-w-[1500px] mx-auto px-1 '>
+      <div className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg h-200 min-h-full">
         <div className='mt-14'>
           <div className='flex justify-between items-baseline'>
             <h1 className='text-3xl font-semibold pb-5'>의뢰 게시판</h1>
@@ -346,6 +354,8 @@ function PostList() {
 
         </div>
       </div>
+      </div>
+      </section>
       <Footer />
     </>
   );

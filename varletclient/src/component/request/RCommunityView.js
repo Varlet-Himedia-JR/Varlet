@@ -332,7 +332,15 @@ return (
         <>
         
               <Heading />
-  <div className='w-full max-w-[1200px] mx-auto px-1 mt-16'>
+              <section className="w-full bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] mt-10" style={{
+          backgroundImage: 'url(http://localhost:8070/images/oceans.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          width: '100%',   // 원하는 너비 설정
+          zIndex: 0
+        }}>
+  <div className='w-full max-w-[1200px] mx-auto px-1 '>
+  <div className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg h-200 min-h-full">
     <div className='mt-28 mb-5'>
       <div class="mr-4"> 
         <span className='text-left'>
@@ -426,7 +434,7 @@ return (
     </div>
 
   <div class="prose prose-lg">
-    <div className="bg-gray-100 p-8 rounded-lg mb-8">
+    <div className="bg-gray-200 p-8 rounded-lg mb-8 opacity-90">
       <div className="  justify-center items-center space-x-8">
       <div className="flex flex-col space-y-4">
   {/* 여행 예상지 */}
@@ -674,6 +682,8 @@ return (
       </div>
   </div>
 </div>
+</div>
+</section>
 <Footer/>
 
 </>
