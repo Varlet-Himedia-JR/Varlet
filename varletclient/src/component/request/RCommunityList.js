@@ -117,7 +117,8 @@ function PostList() {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           width: '100%',   // 원하는 너비 설정
-          zIndex: 0
+          zIndex: 0,
+          marginTop:'100px'
         }}>
       <div className='w-full max-w-[1500px] mx-auto px-1 '>
       <div className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg h-200 min-h-full">
