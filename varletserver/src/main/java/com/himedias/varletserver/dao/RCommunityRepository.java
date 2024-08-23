@@ -75,9 +75,8 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
     List<RCommunitySummary> findAllWithReplyCount();
 
     // 사용자가 작성한 게시글 목록 조회
-    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
-            "FROM RCommunity r WHERE r.userid = :userid")
     List<RCommunitySummary> findByUserid(@Param("userid") Member userid);
+
 
     // 게시글 ID로 RCommunityInfo 프로젝션을 반환합니다.
     @Query("SELECT r.rnum AS rnum, r.location AS location, r.location2 AS location2, r.views AS views, r.title AS title, " +

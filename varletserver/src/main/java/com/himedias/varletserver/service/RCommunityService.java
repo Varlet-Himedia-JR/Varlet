@@ -7,11 +7,9 @@ import com.himedias.varletserver.dto.Paging;
 import com.himedias.varletserver.dto.Rcommunity.*;
 import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.RCommunity;
-import com.himedias.varletserver.entity.Rcrecommend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -275,14 +273,24 @@ public class RCommunityService {
 
     /**
      * 사용자 ID로 게시물 목록을 조회합니다.
+     *
      * @param userid 사용자 객체
      * @return 사용자 ID에 따른 게시물 목록
      */
     // 사용자가 작성한 게시글 목록 조회
-    public List<RCommunitySummary> getAllPosts() {
-        return rcr.findAllBy(Sort.by(Sort.Direction.DESC, "rnum"));
-    }
+    public List<RCommunitySummary> getPostsByUserId(String userId) {
+        // userId를 사용하여 Member 객체를 조회
+        Optional<Member> optionalMember = mr.findByUserid(userId);
 
+        if (optionalMember.isPresent()) {
+            Member user = optionalMember.get();
+            // Member 객체를 사용하여 게시글 목록을 조회
+            return rcr.findByUserid(user);
+        } else {
+            // 사용자 ID가 유효하지 않은 경우 빈 리스트 반환
+            return List.of();
+        }
+    }
 
 
 

@@ -2,6 +2,8 @@ package com.himedias.varletserver.dao;
 
 import com.himedias.varletserver.dto.RCRcommend.RcrecommendInfo;
 import com.himedias.varletserver.entity.Rcrecommend;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +19,7 @@ public interface RcrecommendRepository extends JpaRepository<Rcrecommend, Intege
      * @return 답글 정보 리스트
      */
     @Query("SELECT r FROM Rcrecommend r WHERE r.rnum.rnum = :rnum ORDER BY r.writedate DESC")
-    List<RcrecommendInfo> findAllByRnum(@Param("rnum") Integer rnum);
+    Page<RcrecommendInfo> findAllByRnum(@Param("rnum") Integer rnum, Pageable pageable);
 
     /**
      * 특정 게시글 ID에 속하면서 주어진 답글 ID가 아닌 답글들을 조회합니다.

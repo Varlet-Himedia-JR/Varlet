@@ -1,5 +1,8 @@
 //package com.himedias.varletserver.controller;
 //
+//import com.himedias.varletserver.service.PaymentService;
+//import com.himedias.varletserver.service.RefundService;
+//import com.siot.IamportRestClient.IamportClient;
 //import jakarta.annotation.PostConstruct;
 //import lombok.RequiredArgsConstructor;
 //import lombok.extern.slf4j.Slf4j;
@@ -37,13 +40,13 @@
 //        String orderNumber = String.valueOf(orderSaveDtos.get(0).getOrderNumber());
 //        try {
 //            Long userId = sessionUser.getUserIdNo();
-//            paymentService.saveOrder(userId, orderSaveDtos);
+//            ps.saveOrder(userId, orderSaveDtos);
 //            log.info("결제 성공 : 주문 번호 {}", orderNumber);
 //            return ResponseEntity.ok().build();
 //        } catch (RuntimeException e) {
 //            log.info("주문 상품 환불 진행 : 주문 번호 {}", orderNumber);
-//            String token = refundService.getToken(apiKey, secretKey);
-//            refundService.refundWithToken(token, orderNumber, e.getMessage());
+//            String token = rs.getToken(apiKey, secretKey);
+//            rs.refundWithToken(token, orderNumber, e.getMessage());
 //            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 //        }
 //    }

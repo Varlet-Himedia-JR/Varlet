@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import jaxios from '../../util/jwtUtil';
-import { getCookie } from '../../util/cookieUtil';
 import moment from 'moment';
 
 
@@ -67,14 +66,6 @@ function RCommunityUpdate() {
     setLocation2(event.target.value !== '전체' ? event.target.value : '');
   };
 
-  const onInputChange = (event) => {
-    const { name, value } = event.target;
-    if (name === 'startDate') {
-      setStartDate(value);
-    } else if (name === 'endDate') {
-      setEndDate(value);
-    }
-  };
 
   const RewardChange = (event) => {
     const { value } = event.target;
@@ -113,14 +104,6 @@ function RCommunityUpdate() {
     if (window.confirm('수정을 취소하시겠습니까?')) {
       navigate('/rcommunity');
     }
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    // Date 객체 생성
-    const date = new Date(dateString);
-    // yyyy-mm-dd 형식으로 변환
-    return date.toISOString().split('T')[0];
   };
 
   const today = new Date();

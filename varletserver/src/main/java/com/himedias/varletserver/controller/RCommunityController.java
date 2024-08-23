@@ -71,20 +71,23 @@ public class RCommunityController {
      * @param userid 사용자 ID
      * @return 사용자의 게시물 목록이 포함된 맵
      */
-//    @GetMapping("/getMyList")
-//    public HashMap<String, Object> getMyPosts(@AuthenticationPrincipal Member user) {
-//        HashMap<String, Object> result = new HashMap<>();
-//        try {
-//            List<RCommunitySummary> posts = rcs.getPostsByUser(user);
-//            result.put("success", true);
-//            result.put("posts", posts);
-//        } catch (Exception e) {
-//            result.put("success", false);
-//            result.put("message", "게시글을 불러오는 데 실패했습니다.");
-//        }
-//        return result;
-//
-//    }
+    @GetMapping("/getMyList")
+    public ResponseEntity<HashMap<String, Object>> getMyList(@RequestParam("userId") String userId) {
+        HashMap<String, Object> result = new HashMap<>();
+
+        // 서비스 메소드 호출
+        List<RCommunitySummary> postList = rcs.getPostsByUserId(userId);
+
+        // 게시글이 없을 경우
+        if (postList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            // 게시글이 있는 경우
+            result.put("postlist", postList);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+    }
+
 
 
     /**

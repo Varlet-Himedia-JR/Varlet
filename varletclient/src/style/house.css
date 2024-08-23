@@ -13,4 +13,16 @@
     height: 100%;
     object-fit: cover; 
   }
+
+  .houseTitle{
+    position: relative;
+    text-align: left;
+
+    font-family: 'Mplus 1p Bold', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    margin-left: 20px;
+    font-size: 30px;
+
+  }
   

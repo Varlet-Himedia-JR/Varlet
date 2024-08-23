@@ -18,6 +18,7 @@ function ReviewList() {
             const result = await axios.get(`/api/review/reviewList/${pageNumber}`);
             const { reviewList: newReviews, paging } = result.data;
 
+
             if (Array.isArray(newReviews) && newReviews.length > 0) {
                 setReviewList(prevReviews => {
                     const combinedReviews = [...prevReviews, ...newReviews];
@@ -31,6 +32,8 @@ function ReviewList() {
                 
                 if (!paging || (paging && paging.next === null)) {
                     setHasMore(false);
+
+           
                 }
             } else {
                 setHasMore(false);

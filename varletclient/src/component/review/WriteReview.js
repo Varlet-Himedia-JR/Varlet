@@ -18,8 +18,10 @@ function WriteReview() {
 
     // 이미지 선택 핸들러
     const handleImageChange = (event) => {
-        const files = Array.from(event.target.files); // 파일 입력에서 선택한 파일들 가져오기
-        if (files.length + selectedImages.length > 5) { // 선택한 이미지 개수와 기존 이미지 개수 합산이 5개 초과 시 경고
+
+        const files = Array.from(event.target.files);
+        console.log("파일 확인", files);
+        if (files.length + selectedImages.length > 5) {
             alert('최대 5개의 이미지만 업로드할 수 있습니다.');
             return;
         }
@@ -76,12 +78,19 @@ function WriteReview() {
         formData.append('content', content); // 내용 추가
         formData.append('userid', userid); // 사용자 ID 추가
 
+
         // 선택한 이미지를 FormData에 추가
+
+        
+
+
         selectedImages.forEach((image) => {
             formData.append('reviewimg', image);
         });
 
+
         // jaxios를 사용하여 서버로 리뷰 데이터를 POST 요청
+
         jaxios.post('/api/review/writeReview', formData)
         .then(response => {
             // 서버에서 응답이 성공적으로 반환되면 페이지 이동

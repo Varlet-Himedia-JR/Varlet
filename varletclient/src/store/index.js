@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userSlice from './userSlice';
-import courseSlice from './courseSlice'; // courseSlice 추가
 
 // 저장소를 세션을 이용하여 저장
 // 세션 스토리지를 사용하여 Redux 상태를 저장합니다.
