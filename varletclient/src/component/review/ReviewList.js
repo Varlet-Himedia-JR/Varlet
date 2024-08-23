@@ -31,6 +31,8 @@ function ReviewList() {
             if (newReviews && newReviews.length > 0) {
                 setReviewList(prevReviews => [...prevReviews, ...newReviews]);
                 setPage(prevPage => prevPage + 1); // 페이지 증가
+
+                
                 if (!paging || paging.next === null) {
                     setHasMore(false); // 다음 페이지가 없으면 더 로드할 데이터 없음
                 }

@@ -31,7 +31,7 @@ const requestFail=(err)=>{ }
 
 const beforeRes=async (res)=>{ 
      // 응답 데이터에 'ERROR_ACCESS_TOKEN' 오류가 포함된 경우
-    if( res.data && res.data.error =='ERROR_ACCESS_TOKEN'){
+    if( res.data && res.data.error === 'ERROR_ACCESS_TOKEN'){
         // 쿠키에서 로그인한 사용자 정보를 가져옵니다.
         let loginUser = getCookie('user');
          // 액세스 토큰을 갱신하기 위해 서버에 요청을 보냅니다.

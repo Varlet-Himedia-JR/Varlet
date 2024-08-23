@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import jaxios from '../../util/jwtUtil';
-import { getCookie } from '../../util/cookieUtil';
 import moment from 'moment';
 
 
@@ -67,14 +66,6 @@ function RCommunityUpdate() {
     setLocation2(event.target.value !== '전체' ? event.target.value : '');
   };
 
-  const onInputChange = (event) => {
-    const { name, value } = event.target;
-    if (name === 'startDate') {
-      setStartDate(value);
-    } else if (name === 'endDate') {
-      setEndDate(value);
-    }
-  };
 
   const RewardChange = (event) => {
     const { value } = event.target;
