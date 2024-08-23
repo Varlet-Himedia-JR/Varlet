@@ -2,9 +2,8 @@
 .loginform {
   position: relative; 
   z-index: 1;
-  background: rgb(255, 255, 255, 0.7);
+  background: rgb(255, 255, 255);
   padding: 20px;
-  border-radius: 10px;
   width: 1400px; 
   height: 100vh;
   margin: 0 auto; 
