@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
+import { getCookie } from "../../util/cookieUtil";
+
 
 function Payment({ daySchedule }) {
-
     const [dayschedule, setDayschedule] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
 
@@ -87,6 +88,8 @@ function Payment({ daySchedule }) {
                     <div className="flex items-center justify-between">
                         <span className="text-sm font-medium">Total</span>
                         <span className="text-sm font-medium">{totalPrice}</span>
+                        <span className="text-sm font-medium">Point</span>
+                        <span className="text-sm font-medium">{getCookie('user').point}</span>
                     </div>
                 </div>
 

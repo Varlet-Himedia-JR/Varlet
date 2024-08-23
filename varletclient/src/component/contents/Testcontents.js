@@ -16,7 +16,7 @@ function TestContents() {
     return (
         <>
             <Heading />
-            <div className="flex min-h-[100dvh] flex-col">
+            {/* <div className="flex min-h-[100dvh] flex-col">
                 <section className="w-full bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] py-20 md:py-32" style={{
                             backgroundImage: 'url(http://localhost:8070/images/oceans.jpg)',
                             backgroundSize: 'cover',
@@ -214,6 +214,14 @@ function TestContents() {
                         </div>
                     </div>
                 </section>
+            </div> */}
+            <div style={{ width: '100%', height: '1500px', border: '1px solid #ccc', paddingTop:'100px'}}>
+                <iframe
+                    src="https://m.map.kakao.com/"
+                    style={{ width: '80%', height: '100%', border: 'none' }}
+                    title="Kakao Map"
+                    allowFullScreen
+                ></iframe>
             </div>
             <Footer />
         </>
