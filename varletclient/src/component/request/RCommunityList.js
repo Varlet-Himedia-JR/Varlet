@@ -121,8 +121,8 @@ function PostList() {
           marginTop:'100px'
         }}>
       <div className='w-full max-w-[1500px] mx-auto px-1 '>
-      <div className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg h-200 min-h-full">
-        <div className='mt-14'>
+      <div className="bg-white bg-opacity-90 p-8  shadow-lg h-200 min-h-full mt-100px">
+        <div className='mt-2'>
           <div className='flex justify-between items-baseline'>
             <h1 className='text-3xl font-semibold pb-5'>의뢰 게시판</h1>
           </div>

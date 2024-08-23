@@ -332,16 +332,17 @@ return (
         <>
         
               <Heading />
-              <section className="w-full bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] mt-10" style={{
+              <section className="w-full bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] mt-28" style={{
           backgroundImage: 'url(http://localhost:8070/images/oceans.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           width: '100%',   // 원하는 너비 설정
-          zIndex: 0
+          zIndex: 0,
+          marginTop:'100px'
         }}>
-  <div className='w-full max-w-[1200px] mx-auto px-1 '>
-  <div className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg h-200 min-h-full">
-    <div className='mt-28 mb-5'>
+      <div className='w-full max-w-[1500px] mx-auto px-1 '>
+      <div className="bg-white bg-opacity-90 p-8  shadow-lg h-200 min-h-full mt-100px">
+    <div className='mt-4 mb-5'>
       <div class="mr-4"> 
         <span className='text-left'>
           no.
@@ -537,7 +538,7 @@ return (
       </button>
     </div>
     <div 
-      className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-lg p-4 bg-blue-50 text-blue-800 dark:bg-gray-800 dark:text-blue-400 rounded-lg shadow-lg cursor-pointer flex items-center justify-center space-x-3 hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors duration-300 z-[101]"
+      className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-lg p-4 bg-blue-50 text-blue-800 dark:bg-gray-800 dark:text-blue-400 rounded-lg shadow-lg cursor-pointer flex items-center justify-center space-x-3 hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors duration-300 z-103"
       onClick={writerecommend}
     >
       <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-blue-800 dark:text-blue-400" viewBox="0 0 24 24" strokeWidth="1.5"    stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
