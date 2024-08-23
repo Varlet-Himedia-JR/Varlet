@@ -279,10 +279,9 @@ public class RCommunityService {
      * @return 사용자 ID에 따른 게시물 목록
      */
     // 사용자가 작성한 게시글 목록 조회
-    public List<RCommunitySummary> getPostsByUser(Member user) {
-        return rcr.findByUserid(user);
+    public List<RCommunitySummary> getAllPosts() {
+        return rcr.findAllBy(Sort.by(Sort.Direction.DESC, "rnum"));
     }
-
 
 
 
