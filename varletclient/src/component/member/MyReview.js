@@ -42,7 +42,9 @@ function MyReview() {
     return (
         <>
             <Heading />
-            <div className='subPage'>
+            <div >
+            <div className='background'><img src="http://localhost:8070/images/oceans.jpg"/></div>
+            </div>
                 <div className='reviewList' style={{ flex: "4" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
                         <div className='reviewcenter'>MY REVIEW</div>
@@ -75,7 +77,6 @@ function MyReview() {
                         }
                     </div>
                 </div>
-            </div>
             <Footer />
         </>
     );
