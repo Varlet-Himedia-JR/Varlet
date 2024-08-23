@@ -18,7 +18,6 @@ function ReviewList() {
             const result = await axios.get(`/api/review/reviewList/${pageNumber}`);
             const { reviewList: newReviews, paging } = result.data;
 
-
             if (Array.isArray(newReviews) && newReviews.length > 0) {
                 setReviewList(prevReviews => {
                     const combinedReviews = [...prevReviews, ...newReviews];
@@ -32,8 +31,6 @@ function ReviewList() {
                 
                 if (!paging || (paging && paging.next === null)) {
                     setHasMore(false);
-
-           
                 }
             } else {
                 setHasMore(false);
@@ -103,9 +100,12 @@ function ReviewList() {
     return (
         <>
             <Heading />
-            <div className='subPage' style={{ paddingTop: '100px' }}>
-                <div className='reviewList' style={{ flex: "4" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+            <div >
+            <div className='background'><img src="http://localhost:8070/images/oceans.jpg"/></div>
+            </div>
+            <div className='subPage'>
+                <div className='reviewList' style={{ flex: "4" , paddingTop: '100px'}} >
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                         <h2>Review List</h2>
                         <button onClick={handleAddReview}>리뷰 작성</button>
                     </div>
