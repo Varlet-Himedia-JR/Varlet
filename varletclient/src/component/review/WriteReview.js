@@ -20,6 +20,7 @@ function WriteReview() {
     // 이미지 선택 핸들러
     const handleImageChange = (event) => {
         const files = Array.from(event.target.files);
+        console.log("파일 확인", files);
         if (files.length + selectedImages.length > 5) {
             alert('최대 5개의 이미지만 업로드할 수 있습니다.');
             return;
@@ -75,9 +76,12 @@ function WriteReview() {
         formData.append('content', content);
         formData.append('userid', userid);
 
+        console.log("내용 확인", title,content,userid);
+
         selectedImages.forEach((image) => {
             formData.append('reviewimg', image);
         });
+
 
         jaxios.post('/api/review/writeReview', formData)
         .then(response => {

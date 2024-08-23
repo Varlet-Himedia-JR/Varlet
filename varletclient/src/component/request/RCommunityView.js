@@ -6,6 +6,10 @@ import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
 import Footer from '../headerfooter/Footer';
 import Heading from '../headerfooter/Heading';
 import { cookies } from 'next/headers';
+import { useInView } from "react-intersection-observer";
+
+
+
 function RCommunityView() {
   const { rnum } = useParams();
   const navigate = useNavigate();
@@ -21,6 +25,21 @@ function RCommunityView() {
   const replyFormRef = useRef(null);
   // 상태 변수 선언
   const [userCookie, setUserCookie] = useState(getCookie('user'));
+  const [totalCount, setTotalCount] = useState(0)
+  const [totalPages, setTotalPages]  = useState(0)
+  const [size, setSize] = useState(3); // 페이지 당 게시물 수 상태 추가
+  const [page, setPage] = useState(1); // 현재 페이지 상태 추가
+
+  const [ref, inView] = useInView({
+    threshold: 50  
+  });
+
+
+
+
+
+
+
 
   // 쿠키가 업데이트될 때마다 userCookie 상태를 갱신
   useEffect(() => {
@@ -43,17 +62,22 @@ function RCommunityView() {
               console.error(err);
           });
 
+
       // 답글 목록 가져오기
       jaxios.get(`/api/rcrecommend/getReplies/${rnum}`)
           .then((response) => {
               setReplies(response.data.recommend); // 답글 리스트 상태 업데이트
               console.log("댓글정보?", response.data.recommend);
-              console.log("댓글정보2", response.data.userCookie)
+              console.log("댓글정보2", response.data.paging.totalCount);
+              setTotalCount(response.data.paging.totalCount);
+              setTotalPages(Math.ceil(response.data.paging.totalCount )); 
+              console.log("데이터?1 ", setTotalCount);
           })
           .catch((err) => {
               console.error(err);
           });
   }, [rnum]);
+
 
   const handleFileChange = (event) => {
       const selectedFiles = Array.from(event.target.files);
@@ -91,6 +115,7 @@ function RCommunityView() {
   const handleSubmitRec = (e) => {
       e.preventDefault();
 
+
       const formData = new FormData();
       formData.append('userid', userCookie.userid);
       formData.append('content', content);
@@ -98,6 +123,7 @@ function RCommunityView() {
       saveimages.forEach((filename) => {
           formData.append('saveimages', filename);
       });
+
 
       removedFiles.forEach((filename) => {
           formData.append('removedimages', filename);
@@ -119,7 +145,7 @@ function RCommunityView() {
             setImgSrc([]);
             setRemovedFiles([]);
             fetchReplies();
-            
+            console.log(response.data);
           })
           .catch(error => {
               alert('답글 작성에 실패했습니다.');
@@ -161,11 +187,9 @@ function RCommunityView() {
     // user는 객체로 되어 있어야 함
     if (user && typeof user.userid === 'string') {
         const userid = user.userid;
-        // 앞 두 글자 + 별 3개
         if (userid.length > 2) {
             return userid.slice(0, 2) + '*'.repeat(3);
         }
-        // 아이디 길이가 2 이하일 경우 모든 문자를 별로 대체
         return '*'.repeat(userid.length);
     }
     return '정보 없음';
@@ -308,7 +332,7 @@ return (
         <>
         
               <Heading />
-  <div className='w-full max-w-[1200px] mx-auto px-1 mt-28'>
+  <div className='w-full max-w-[1200px] mx-auto px-1 mt-16'>
     <div className='mt-28 mb-5'>
       <div class="mr-4"> 
         <span className='text-left'>
@@ -317,47 +341,41 @@ return (
         </span>
       </div>
       <div class="flex justify-between items-center"> {/* 변경된 부분 */}
-        <h1 class="text-3xl font-bold mb-2">{post.title}</h1>
-        <div class="flex justify-between items-center"> {/* 변경된 부분 */}
-          {post.picked === "Y" ? (
-            <div class="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#1e90ff" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                <path d="M9 12l2 2l4 -4" />
-              </svg>
-              <div class="text-2xl font-bold ml-2">채택 완료</div>
-            </div>
-          ) : (
-            <div class="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moneybag" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                <path d="M9.5 3h5a1.5 1.5 0 0 1 1.5 1.5a3.5 3.5 0 0 1 -3.5 3.5h-1a3.5 3.5 0 0 1 -3.5 -3.5a1.5 1.5 0 0 1 1.5 -1.5z" />
-                <path d="M4 17v-1a8 8 0 1 1 16 0v1a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" />
-              </svg>
-              <div class="text-2xl font-bold ml-2">설정 포인트: {post.reward}</div>
-            </div>
-          )}
-        </div>
-       </div>
-       <div class="flex items-center text-muted-foreground text-sm mt-4">
-        <div class="mr-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-4 h-4 mr-1 inline-block"
-          >
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-          {maskeduser(post.userid)}
+          <h1 class="text-3xl font-bold mb-2">{post.title}</h1>
+          <div class="flex justify-between items-center"> {/* 변경된 부분 */}
+            {post.picked === "Y" ? (
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#1e90ff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                  <path d="M9 12l2 2l4 -4" />
+                </svg>
+                <div class="text-2xl font-bold ml-2">채택 완료</div>
+              </div>
+            ) : (
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moneybag" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M9.5 3h5a1.5 1.5 0 0 1 1.5 1.5a3.5 3.5 0 0 1 -3.5 3.5h-1a3.5 3.5 0 0 1 -3.5 -3.5a1.5 1.5 0 0 1 1.5 -1.5z" />
+                  <path d="M4 17v-1a8 8 0 1 1 16 0v1a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" />
+                </svg>
+                <div class="text-2xl font-bold ml-2">설정 포인트: {post.reward}</div>
+              </div>
+            )}
+          </div>
+      </div>
+      <div class="flex items-center text-muted-foreground text-sm mt-4">
+        <div className="mr-4 flex items-center space-x-2">
+          <span className="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
+              <img
+                className="aspect-square h-full w-full object-cover"
+                alt={`Profile of ${post.userid}`}
+                src={post?.userid?.profileimg || '/placeholder-user.jpg'} // profileImage가 유저 객체에 있어야 합니다.
+              />    
+          </span>
+          <div className="flex flex-col justify-center">
+              <p className="text-sm font-semibold">{maskeduser(post.userid)}</p>
+          </div>
         </div>
         <div class="mr-4">
           <svg
@@ -409,72 +427,77 @@ return (
 
   <div class="prose prose-lg">
     <div className="bg-gray-100 p-8 rounded-lg mb-8">
-    <div className="flex  justify-center items-center space-x-8">
-<div className="flex justify-center items-start space-x-8">
-  <div>
-    <div className="text-2xl font-bold mb-2">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="w-5 h-5 mr-1 inline-block"
-      >
-        <path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"></path>
-        <path d="M15 5.764v15"></path>
-        <path d="M9 3.236v15"></path>
-      </svg>
-      <span onClick={toggleShowLocation} style={{ cursor: 'pointer' }}>
-        여행 예상지:(클릭하여 확인)
-      </span>
-    </div>
-
-    {showLocation && (
-      <div className="text-xl mt-2">
-        {getLocationName(post.location, post.location2)}
+      <div className="  justify-center items-center space-x-8">
+      <div className="flex flex-col space-y-4">
+  {/* 여행 예상지 */}
+  <div className="flex items-start space-x-2">
+    <div className="flex-shrink-0">
+      <div className="text-2xl font-bold mb-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-5 h-5 mr-1 inline-block"
+        >
+          <path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"></path>
+          <path d="M15 5.764v15"></path>
+          <path d="M9 3.236v15"></path>
+        </svg>
+        <span onClick={toggleShowLocation} style={{ cursor: 'pointer' }}>
+          여행 예상지: (클릭하여 확인)
+        </span>
       </div>
-    )}
+      {showLocation && (
+        <div className="text-xl mt-2">
+          {getLocationName(post.location, post.location2)}
+        </div>
+      )}
+    </div>
   </div>
 
-  <div>
-    <div className="text-2xl font-bold mb-2">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="w-5 h-5 mr-1 inline-block"
-      >
-        <path d="M8 2v4"></path>
-        <path d="M16 2v4"></path>
-        <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-        <path d="M3 10h18"></path>
-      </svg>
-      <span onClick={toggleShowDates} style={{ cursor: 'pointer' }}>
-        상세 여행 일정:(클릭하여 확인)
-      </span>
-    </div>
-
-    {showDates && (
-      <div className="text-xl mt-2">
-        여행 시작일: {extractDate(post.startdate)} <br />
-        여행 종료일: {extractDate(post.enddate)} <br />
-        총 여행 일수: {getTravelDuration(post.startdate, post.enddate)}
+  {/* 상세 여행 일정 */}
+  <div className="flex items-start space-x-2">
+    <div className="flex-shrink-0">
+      <div className="text-2xl font-bold mb-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-5 h-5 mr-1 inline-block"
+        >
+          <path d="M8 2v4"></path>
+          <path d="M16 2v4"></path>
+          <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+          <path d="M3 10h18"></path>
+        </svg>
+        <span onClick={toggleShowDates} style={{ cursor: 'pointer' }}>
+          상세 여행 일정: (클릭하여 확인)
+        </span>
       </div>
-    )}
+      {showDates && (
+        <div className="text-xl mt-2">
+          여행 시작일: {extractDate(post.startdate)} <br />
+          여행 종료일: {extractDate(post.enddate)} <br />
+          총 여행 일수: {getTravelDuration(post.startdate, post.enddate)}
+        </div>
+      )}
+    </div>
   </div>
 </div>
-</div>
+
+      </div>
 
 
       <div className="text-lg leading-relaxed min-h-[20rem] w-full">
@@ -570,9 +593,9 @@ return (
             <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
             <img
               className="aspect-square h-full w-full object-cover"
-              alt="@user"
-              src={reply.profileimage || '/placeholder-user.jpg'} 
-            />           
+              alt={`Profile of ${reply.userid}`}
+              src={reply.userid.profileimg || '/placeholder-user.jpg'} // profileImage가 유저 객체에 있어야 합니다.
+              />    
            </span>
             <div class="grid gap-1.5">
               <div className="flex items-center gap-2 text-sm">
