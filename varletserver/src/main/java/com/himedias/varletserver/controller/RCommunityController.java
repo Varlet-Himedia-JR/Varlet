@@ -78,7 +78,7 @@ public class RCommunityController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "rnum"));
 
         // 서비스 메소드 호출
-        Page<RCommunitySummary> postListPage = rcs.getPostsByUserId(userId, pageable);
+        Page<RCommunityMyList> postListPage = rcs.getPostsByUserId(userId, pageable);
 
         // 게시글이 없을 경우
         if (postListPage.isEmpty()) {

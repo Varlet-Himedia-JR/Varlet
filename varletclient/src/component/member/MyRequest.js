@@ -79,7 +79,7 @@ const MyRequest = () => {
                     <div className="bg-white bg-opacity-90 p-8 shadow-lg h-[1250px] mt-100px">
                         <div className='mt-4 mb-5'>
                             <div className='flex justify-between items-baseline h-20'>
-                                <h1 className='text-3xl font-semibold pb-5'>의뢰 게시판</h1>
+                                <h1 className='text-3xl font-semibold pb-5'>내 작성글</h1>
                             </div>
                             <ul>
                                 <li className='flex font-bold justify-center items-center text-black border-b border-gray-300 pb-2 mb-2'>
@@ -96,7 +96,7 @@ const MyRequest = () => {
                                     <li className='text-center w-full py-4'>게시글이 없습니다.</li>
                                 ) : (
                                     posts.map(post => (
-                                        <li key={post.rnum} className='flex items-center justify-center border-b border-gray-300 py-2 h-20'>
+                                        <li key={post.rnum} className='flex items-center justify-center border-b border-gray-300 py-2 h-24'>
                                             <span className='w-1/12 text-center bg-blue-500 text-white rounded-full px-2 py-1 text-lg'>
                                                 {post.rnum}
                                             </span>

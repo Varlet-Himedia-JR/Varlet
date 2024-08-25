@@ -293,7 +293,7 @@ public class RCommunityService {
      * @return 사용자 ID에 따른 게시물 목록
      */
 // 사용자가 작성한 게시글 목록 조회 (페이지네이션 지원)
-    public Page<RCommunitySummary> getPostsByUserId(String userId, Pageable pageable) {
+    public Page<RCommunityMyList> getPostsByUserId(String userId, Pageable pageable) {
         Optional<Member> optionalMember = mr.findByUserid(userId);
 
         if (optionalMember.isPresent()) {

@@ -67,7 +67,7 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
 
 
     // Pageable를 이용하여 사용자 ID로 게시글 조회 (최신 순으로 정렬)
-    Page<RCommunitySummary> findByUserid(Member userid, Pageable pageable);
+    Page<RCommunityMyList> findByUserid(Member userid, Pageable pageable);
 
 
     // 게시글 ID로 RCommunityInfo 프로젝션을 반환합니다.
