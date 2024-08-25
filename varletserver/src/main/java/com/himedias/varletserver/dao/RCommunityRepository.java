@@ -47,15 +47,6 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
             "FROM RCommunity r ORDER BY r.rnum DESC")
     List<RCommunitySummary> findAllBy(Sort sort);
 
-    // 특정 위치에 대한 정렬된 게시물 목록을 반환합니다.
-    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
-            "FROM RCommunity r WHERE r.location = :location ORDER BY r.rnum DESC")
-    List<RCommunitySummary> findByLocation(int location, Sort sort);
-
-    // 특정 위치와 위치2에 대한 정렬된 게시물 목록을 반환합니다.
-    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
-            "FROM RCommunity r WHERE r.location = :location AND r.location2 = :location2 ORDER BY r.rnum DESC")
-    List<RCommunitySummary> findByLocationAndLocation2(int location, int location2, Sort sort);
 
     // 게시글 ID(rnum)로 게시글을 조회합니다.
     @Query("SELECT r FROM RCommunity r WHERE r.rnum = :rnum")
@@ -66,16 +57,9 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
     @Query("UPDATE RCommunity r SET r.picked = :picked WHERE r.rnum = :rnum")
     int updatePicked(@Param("rnum") String rnum, @Param("picked") char picked);
 
-    // 모든 게시물과 관련된 댓글 수를 반환합니다. 댓글이 없는 게시물은 0으로 표시됩니다.
-    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked, " +
-            "COALESCE(COUNT(rc), 0) AS replyCount " +
-            "FROM RCommunity r LEFT JOIN Rcrecommend rc ON r.rnum = rc.rcnum " +
-            "GROUP BY r.rnum " +
-            "ORDER BY r.rnum DESC")
-    List<RCommunitySummary> findAllWithReplyCount();
 
-    // 사용자가 작성한 게시글 목록 조회
-    List<RCommunitySummary> findByUserid(@Param("userid") Member userid);
+    // Pageable를 이용하여 사용자 ID로 게시글 조회 (최신 순으로 정렬)
+    Page<RCommunitySummary> findByUserid(Member userid, Pageable pageable);
 
 
     // 게시글 ID로 RCommunityInfo 프로젝션을 반환합니다.

@@ -121,17 +121,17 @@ function PostList() {
           marginTop:'100px'
         }}>
       <div className='w-full max-w-[1500px] mx-auto px-1 '>
-      <div className="bg-white bg-opacity-90 p-8  shadow-lg h-200 min-h-full mt-100px">
-        <div className='mt-2'>
-          <div className='flex justify-between items-baseline'>
+      <div className="bg-white bg-opacity-90 p-8  shadow-lg  h-[1250px] mt-100px">
+        <div className='mt-4 mb-5'>
+          <div className='flex justify-between items-baseline h-20'>
             <h1 className='text-3xl font-semibold pb-5'>의뢰 게시판</h1>
           </div>
-          <div className='w-full'>
+          <div className='w-full h-full'>
             <ul className='mb-4'>
-              <li className='flex items-center mb-8'>
-                <span className='mr-4 text-lg font-medium'>지역 선택</span>
+              <li className='flex items-center mb-8 h-25'>
+                <span className='mr-4 text-xl font-medium '>지역 선택</span>
                 <select
-                  className='border rounded px-2 py-1'
+                  className='border rounded px-2 py-1 h-10 font-bold font-lg'
                   value={location}
                   onChange={handleLocationChange}>
                   <option value="1">전체</option>
@@ -153,7 +153,7 @@ function PostList() {
                   <option value="17">경상남도</option>
                   <option value="18">제주도</option>
                 </select>
-                <div className="flex ml-auto space-x-4">
+                <div className="flex ml-auto space-x-4 ">
                   <div
                     className="bg-customblue text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer hover:bg-blue-200 dark:hover:bg-gray-700"
                     onClick={searchPosts}
@@ -195,10 +195,10 @@ function PostList() {
               </li>
 
               {isLocation2Visible && (
-                <li className='flex items-center mb-4'>
-                  <span className='mr-4 text-lg font-medium'>지역 상세</span>
+                <li className='flex items-center mb-4 font-bold font-lg'>
+                  <span className='mr-4 text-xl font-medium'>지역 상세</span>
                   <select
-                    className='border rounded px-2 py-1'
+                    className='border rounded px-2 py-1 h-10'
                     value={location2}
                     onChange={handleLocation2Change}
                   >
@@ -215,7 +215,7 @@ function PostList() {
                       <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
                       <path d="M21 21l-6 -6" />
                     </svg>
-                    <span className="text-xl font-bold">검색</span>
+                    <span className="text-xl font-bold"> 상세검색</span>
                   </div>
                 </li>
               )}
@@ -224,7 +224,7 @@ function PostList() {
         </div>
 
           <ul>
-            <li className='flex font-bold justify-center items-center text-black border-b border-gray-300 pb-2 mb-2'>
+            <li className='flex font-bold justify-center items-center text-black border-b border-gray-300 pb-2 mb-2 h-20 text-lg'>
               <span className='w-1/12 text-center'>번호</span>
               <span className='w-4/12 text-left'>제목</span>
               <span className='w-2/12 text-center'>지역</span>
@@ -278,7 +278,7 @@ function PostList() {
           </ul>
 
         <div className="mt-4 flex justify-center">
-        <ul className="flex items-center space-x-1 h-10 text-base">
+        <ul className="flex items-center space-x-1 h-20 text-base">
         <li>
           <a
             href="#"

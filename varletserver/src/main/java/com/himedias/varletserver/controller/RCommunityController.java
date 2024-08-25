@@ -9,6 +9,9 @@ import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.RCommunity;
 import com.himedias.varletserver.service.RCommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,21 +75,33 @@ public class RCommunityController {
      * @return 사용자의 게시물 목록이 포함된 맵
      */
     @GetMapping("/getMyList")
-    public ResponseEntity<HashMap<String, Object>> getMyList(@RequestParam("userId") String userId) {
+    public ResponseEntity<HashMap<String, Object>> getMyList(
+            @RequestParam("userId") String userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
         HashMap<String, Object> result = new HashMap<>();
 
+        // Pageable 객체 생성 - 작성 날짜를 기준으로 내림차순 정렬 (DESC)
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "rnum"));
+
         // 서비스 메소드 호출
-        List<RCommunitySummary> postList = rcs.getPostsByUserId(userId);
+        Page<RCommunitySummary> postListPage = rcs.getPostsByUserId(userId, pageable);
 
         // 게시글이 없을 경우
-        if (postList.isEmpty()) {
+        if (postListPage.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             // 게시글이 있는 경우
-            result.put("postlist", postList);
+            result.put("postlist", postListPage.getContent()); // 실제 게시글 목록
+            result.put("currentPage", postListPage.getNumber()); // 현재 페이지 번호
+            result.put("totalItems", postListPage.getTotalElements()); // 전체 게시글 수
+            result.put("totalPages", postListPage.getTotalPages()); // 전체 페이지 수
+
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
     }
+
 
 
 
