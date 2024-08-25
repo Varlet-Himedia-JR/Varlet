@@ -243,9 +243,10 @@
     margin-top: 10px;
 }
 
-.reviewWriteForm .btns {
+.reviewWriteForm .btn {
     margin-top: 20px;
     text-align: center;
+    justify-content: center;
 }
 
 .reviewWriteForm .btns button {
@@ -255,7 +256,9 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin: 0 5px;
+    margin: 10px 5px;
+    width: 100%;
+    max-width: 200px; /* 각 버튼의 최대 너비를 제한 */
 }
 
 .reviewWriteForm .btns button:hover {

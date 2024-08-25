@@ -167,7 +167,7 @@ function WriteReview() {
                             </div>
                         )}
                     </div>
-                    <div className="btns">
+                    <div className="btn">
                         <button onClick={onSubmit}>작성완료</button> {/* 리뷰 작성 버튼 */}
                         <button onClick={onCancel} style={{ marginLeft: '10px' }}>작성 취소</button> {/* 작성 취소 버튼 */}
                     </div>
