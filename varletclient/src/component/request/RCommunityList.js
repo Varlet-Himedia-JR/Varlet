@@ -241,7 +241,7 @@ function PostList() {
                     {post.rnum}
                   </span>                  
                   <span className='w-4/12 text-left cursor-pointer text-blue-500 text-lg' onClick={ ()=>{ logCheck(`/RcommunityView/${post.rnum}`) } }>
-                    {post.title}
+                    {post.title}[{post.replyCount}]
                   </span>
                   <span className='w-2/12 text-center text-lg'>{location1Data[post.location]}</span>
                   <span className='w-2/12 text-center text-lg'>

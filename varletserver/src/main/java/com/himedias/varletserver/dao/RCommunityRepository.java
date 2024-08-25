@@ -19,6 +19,14 @@ import java.util.List;
 @Repository
 public interface RCommunityRepository extends JpaRepository<RCommunity, Integer> {
 
+    // 게시글과 그에 달린 답글 수를 함께 가져오기 위한 쿼리
+    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, " +
+            "r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked, " +
+            "COUNT(rc) AS replyCount " +
+            "FROM RCommunity r LEFT JOIN Rcrecommend rc ON r.rnum = rc.rnum.rnum " +
+            "GROUP BY r.rnum, r.userid, r.location, r.location2, r.writedate, r.views, r.title, r.reward, r.picked")
+    Page<RCommunitySummary> findAllWithReplyCount(Pageable pageable);
+
     // 특정 위치와 위치2에 대한 게시물 수를 반환합니다.
     @Query("SELECT COUNT(r) FROM RCommunity r WHERE r.location = :location AND r.location2 = :location2")
     int countByLocationAndLocation2(@Param("location") int location, @Param("location2") int location2);

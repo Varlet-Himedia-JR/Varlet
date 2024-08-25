@@ -51,15 +51,7 @@ public class RCommunityController {
         paging.setDisplayRow(size);
         paging.setSort(Sort.by(Sort.Direction.DESC, "rnum"));
 
-        List<RCommunitySummary> postList;
-
-        if (location != null && location2 != null) {
-            postList = rcs.getPostListByLocationAndLocation2(location, location2, paging);
-        } else if (location != null) {
-            postList = rcs.getPostListByLocation(location, paging);
-        } else {
-            postList = rcs.getAllPosts(paging);
-        }
+        List<RCommunitySummary> postList = rcs.getPostList(location, location2, paging);
 
         paging.setTotalCount(rcs.getTotalPostCount(location, location2)); // 총 게시물 수 설정
         paging.calPaging(); // 페이징 계산

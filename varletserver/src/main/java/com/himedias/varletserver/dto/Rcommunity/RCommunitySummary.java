@@ -23,6 +23,8 @@ public interface RCommunitySummary {
 
     MemberInfo getUserid();
 
+    int getReplyCount();
+
     /**
      * Projection for {@link com.himedias.varletserver.entity.Member}
      */

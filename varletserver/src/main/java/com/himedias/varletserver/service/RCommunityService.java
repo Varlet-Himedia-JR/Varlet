@@ -70,6 +70,20 @@ public class RCommunityService {
      * @param location2 두 번째 위치 정보 (선택적)
      * @return 게시물 총 수
      */
+    public List<RCommunitySummary> getPostList(Integer location, Integer location2, Paging paging) {
+        Pageable pageable = PageRequest.of(paging.getPage() - 1, paging.getDisplayRow(), paging.getSort());
+
+        if (location != null && location2 != null) {
+            return rcr.findByLocationAndLocation2(location, location2, pageable).getContent();
+        } else if (location != null) {
+            return rcr.findByLocation(location, pageable).getContent();
+        } else {
+            return rcr.findAllWithReplyCount(pageable).getContent();
+        }
+    }
+
+    
+
     public int getTotalPostCount(Integer location, Integer location2) {
         if (location != null && location2 != null) {
             return rcr.countByLocationAndLocation2(location, location2);
