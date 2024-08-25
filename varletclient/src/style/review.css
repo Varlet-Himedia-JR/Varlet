@@ -5,7 +5,6 @@
     margin: 0 auto;
     background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
-
     box-sizing: border-box;
 }
 
@@ -153,7 +152,7 @@
     cursor: pointer;
 }
 
-.btns{
+/* .reviewview button .bts{
     padding: 10px ;
     margin: 0 auto;
     background-color: #fcf6d7;
@@ -161,7 +160,7 @@
     border: none;
     cursor: pointer;
     width: 40%;
-}
+} */
 
 .reviewview .new-reply button {
     padding: 10px 20px;
@@ -263,6 +262,7 @@
     width: 100%;
     max-width: 1200px; /* 최대 너비 설정 */
     margin-top: 100px;
+    height: 100%;
 }
 
 .reviewList .search-container {

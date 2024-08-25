@@ -66,7 +66,10 @@ function MyQna() {
 
   return (
     <>
-      <Heading />
+            <Heading />
+            <div >
+            <div className='background'><img src="http://localhost:8070/images/oceans.jpg"/></div>
+            </div>
       <div className='QnaPage' style={{ paddingTop: '120px' }}>
         <div className="qnalist" style={{ flex: "4" }}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
