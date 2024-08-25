@@ -310,7 +310,7 @@ function ReviewView() {
                             <div>Loading...</div>
                         )
                     }
-                    <div className='btns'>
+                    <div className='btn'>
                         {
                             isUserAuthorized ? (
                                 <>
