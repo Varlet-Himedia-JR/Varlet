@@ -4,7 +4,7 @@ import { getCookie } from "../../util/cookieUtil";
 
 
 function Payment({ daySchedule }) {
-    const [dayschedule, setDayschedule] = useState([]);
+    const [dayschedule, setDayschedule] = useState(daySchedule);
     const [totalPrice, setTotalPrice] = useState(0);
 
     // 결제 함수
@@ -61,7 +61,7 @@ function Payment({ daySchedule }) {
             setDayschedule([]);
             setTotalPrice(0);
         }
-    }, [daySchedule]);
+    }, [dayschedule]);
 
     return (
         <>
