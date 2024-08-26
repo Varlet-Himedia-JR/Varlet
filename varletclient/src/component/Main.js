@@ -216,7 +216,7 @@ function Main() {
         </section>
         <section className="w-full bg-[#F0F8FF] py-16 md:py-24">
           <div className="container mx-auto grid grid-cols-1 gap-8 px-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg">
+            <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg"  onClick={() => navigate('/contentsList')}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -233,12 +233,12 @@ function Main() {
                 <path d="M15 5.764v15"></path>
                 <path d="M9 3.236v15"></path>
               </svg>
-              <h3 className="text-xl font-bold">Explore the World</h3>
+              <h3 className="text-xl font-bold">놀거리 찾기</h3>
               <p className="text-[#808080]">
-                Discover new destinations, plan your trips, and connect with like-minded travelers.
+                무엇을 해야할지 모르겠다면 여기서 찾아보세여 전국의 축제들이 있습니다!
               </p>
             </div>
-            <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg">
+            <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg" onClick={() => navigate('/rcommunity')}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -256,8 +256,8 @@ function Main() {
                 <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
               </svg>
-              <h3 className="text-xl font-bold">Build Your Network</h3>
-              <p className="text-[#808080]">Connect with fellow travelers, share your experiences, and make new friends.</p>
+              <h3 className="text-xl font-bold">여행 계획을 의뢰해보세여</h3>
+              <p className="text-[#808080]">계획을 못짜겠다면 다른 사람에게 의뢰해보세여</p>
             </div>
             <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg" onClick={() => logCheck('/mycourse')}>
               <svg
@@ -280,7 +280,7 @@ function Main() {
               <h3 className="text-xl font-bold">여행 계획을 일정표로</h3>
               <p className="text-[#808080]">수강신청 장바구니처럼 여행 콘텐츠를 담아 나만의 여행 계획을 만드세요</p>
             </div>
-            <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg">
+            <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg"  onClick={() => navigate('/reviewList')}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -296,8 +296,8 @@ function Main() {
                 <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path>
                 <circle cx="12" cy="13" r="3"></circle>
               </svg>
-              <h3 className="text-xl font-bold">Share Your Memories</h3>
-              <p className="text-[#808080]">Capture and share your travel experiences with the community.</p>
+              <h3 className="text-xl font-bold">당신의 추억을 공유하세여</h3>
+              <p className="text-[#808080]">여행을 다녀온 추억을 다른 사람들과 나눠보세여</p>
             </div>
             <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg">
               <svg
