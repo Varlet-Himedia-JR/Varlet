@@ -10,6 +10,7 @@ import { useLocation } from 'react-router-dom';
 import Heading from '../headerfooter/Heading';
 import Payment from './Payment';
 import SelectedCustomCourse from './SelectedCustomCourse';
+
 function Mycourse() {
     const [selectedCourse, setSelectedCourse] = useState('');
     const [mycourse, setMycourse] = useState([]);
@@ -65,7 +66,7 @@ function Mycourse() {
             alert('종료시간은 시작시간보다 빠를 수 없습니다.');
             return; // 이 조건이 성립하면 함수 실행을 중단합니다.
         }
-        
+
         try {
             let result = await jaxios.post('/api/dayschedule/insertDayschedule', {
                 dtitle: title,
@@ -164,6 +165,10 @@ function Mycourse() {
         setIsCourseContentsVisible(!isCourseContentsVisible);
     };
 
+    const closeCourseContents = () => {
+        setIsCourseContentsVisible(false);
+    };
+
     const onChangeSelectedCustomCourse = () => {
         setContents({});
         // setSelectedContents({});
@@ -192,7 +197,7 @@ function Mycourse() {
         <div style={{ width: '100%' }}>
             <Heading />
             <div style={{ width: '100%' }}>
-                <div className='mycourse_container' style={{ position: 'relative', top: '100px', paddingBottom: '100px' }}>
+                <div className='mycourse_container' style={{ position: 'relative', top: '100px' }} onClick={closeCourseContents}>
                     <div className="coursemenu" style={{
                         paddingRight: '15px',
                         borderRight: '1px solid #d6d6d6'
@@ -333,11 +338,9 @@ function Mycourse() {
                     </ul>
                     : <></>
             }
-
-
             {isCourseContentsVisible && (
                 <div className="course_contents" >
-                    <div className="cchead" style={{ display: 'flex', justifyContent: 'space-between', paddingRight: '60px' }}>
+                    <div className="cchead" style={{ display: 'flex', justifyContent: 'space-between', paddingRight: '60px', zIndex: 5 }}>
                         course_contents
                         {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
                         <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-backspace" width="40" height="40" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round" onClick={onChangeCourseContents}>
@@ -354,7 +357,7 @@ function Mycourse() {
                     </div>
                 </div>
             )}
-            {mycourse.length > 0 && Object.keys(contents).length ?
+            {mycourse.length > 0 && Object.keys(contents).length > 0 ?
                 <div className='add_contents'>
                     <div className="cchead" style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <h2>SelectedCustomCourse</h2>
@@ -371,19 +374,25 @@ function Mycourse() {
                     <div className="rounded-lg border bg-card text-card-foreground">
                         <div className="p-6 space-y-6">
                             <div className="grid grid-cols-1 gap-4">
-                                <div className="space-x-2">
-                                    직접 추가
+                                <div className="space-x-2 flex justify-between items-center">
+                                    <label
+                                        className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                        htmlFor="date"
+                                    >
+                                        직접 추가
+                                    </label>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-backspace" width="40" height="40" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round" onClick={onChangeCourseCustom}>
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <path d="M20 6a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-11l-5 -5a1.5 1.5 0 0 1 0 -2l5 -5z" />
                                         <path d="M12 10l4 4m0 -4l-4 4" />
                                     </svg>
                                 </div>
+                                <hr></hr>
                                 <div className="flex space-x-4">
 
                                     <div className="space-y-2">
                                         <label
-                                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                            className=" font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                             htmlFor="date"
                                         >
                                             나의 여행
@@ -405,10 +414,10 @@ function Mycourse() {
                                     </div>
                                     <div className="space-y-2">
                                         <label
-                                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                            className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                             htmlFor="date"
                                         >
-                                            Date
+                                            날짜
                                         </label>
                                         <div>
                                             <select
@@ -430,9 +439,9 @@ function Mycourse() {
                                     <div className="space-y-2">
                                         <label
                                             htmlFor="time"
-                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                            className="block mb-2  font-medium text-gray-900 dark:text-white"
                                         >
-                                            Start time
+                                            일정 시작 시간
                                         </label>
                                         <div className="relative">
                                             <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
@@ -463,9 +472,9 @@ function Mycourse() {
                                     <div className="space-y-2">
                                         <label
                                             htmlFor="time"
-                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                            className="block mb-2  font-medium text-gray-900 dark:text-white"
                                         >
-                                            End time
+                                            일정 종료 시간
                                         </label>
                                         <div className="relative">
                                             <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
@@ -547,7 +556,8 @@ function Mycourse() {
                                         value={pcount}
                                         onChange={(e) => { setPcount(e.currentTarget.value) }}
                                     />
-                                    <button onClick={addDayschedule}>일정등록</button>
+                                    {/* <button onClick={addDayschedule}>일정등록</button> */}
+                                    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={addDayschedule}>일정등록</button>
                                     {/* <input type="text" value={1} onChange={(e) => { setPcount(e.currentTarget.value) }} /> */}
                                 </div>
                             </div>

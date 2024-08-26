@@ -17,7 +17,7 @@ function Main() {
   const navigate = useNavigate();
   const userCookie = getCookie('user');
   const [recentContents, setRecentContents] = useState([]);
-  
+
 
   console.log('userCookie:', userCookie);
   // 슬라이더 설정
@@ -90,12 +90,17 @@ function Main() {
             .map(review => `http://localhost:8070/images/${review.reviewimg}`); // 이미지 URL 설정
 
           setImages(filteredImages);
+
         }
       })
       .catch((err) => {
         console.error(err);
       });
   }, []);
+
+  useEffect(() => {
+    console.log(images);
+  }, [images]);
 
   // 스크롤 이벤트 핸들러
   const handleScroll = useCallback(() => {
@@ -134,58 +139,79 @@ function Main() {
 
   const logCheck = (src) => {
     if (!userCookie) {
-        navigate('/login');
+      navigate('/login');
     } else {
-        navigate(src);
+      navigate(src);
     }
-};
+  };
 
   return (
     <>
       <Heading />
       <div className="flex min-h-[100dvh] flex-col">
-        <section className="w-full bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] py-20 md:py-32" style={{
+        <section className="w-full bg-gradient-to-r from-[white] to-[white] py-20 md:py-32" style={{
           backgroundImage: 'url(http://localhost:8070/images/oceans.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           width: '100%',   // 원하는 너비 설정
-          zIndex: 0
         }}>
 
-          <div className="container  mx-auto flex flex-col items-center justify-center gap-8 px-4 md:flex-row md:gap-12"
-          >
-            <div className="max-w-xl space-y-4 text-center md:text-left bg-gradient-to-r from-[#1e90ff] to-[#1e90ff]" >
-              <h1 className="text-4xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl">
-                Welcome to the Trip Community
-              </h1>
-              <p className="text-lg text-white md:text-xl">
-                Connect with fellow travelers, share your experiences, and plan your next adventure.
-              </p>
-              <div className="flex justify-center md:justify-start">
-                <button className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">
-                  Join Now
-                </button>
+          <div className="container w-full flex flex-col items-center justify-center gap-8 px-4 md:flex-row md:gap-12 rounded">
+            <div className="flex w-full flex-col items-center justify-center opacity-80 bg-[white] rounded">
+              <div className="flex flex-col items-start justify-center w-full max-w-6xl p-8 space-y-4 md:flex-row md:space-y-0 md:space-x-8">
+                <div className="flex flex-col items-start justify-center space-y-4">
+                  <div className="inline-flex w-fit items-center whitespace-nowrap border text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-black text-white px-3 py-1 rounded-full">
+                    가볼래-터 8월호 도착❤️
+                  </div>
+                  <h1 className="text-4xl font-bold text-gray-800">
+                    여름의 추억
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block w-8 h-8">
+                      <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path>
+                      <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path>
+                      <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path>
+                    </svg>
+                    <br />
+                    고즈넉한 축제들을 즐겨보세요
+                  </h1>
+                  <a className="text-lg text-gray-600 underline cursor-pointer hover:text-blue-600"  onClick={() => navigate('/contentsList')}>
+                    자세히 보기
+                  </a>
+                </div>
+                <div className="relative w-full max-w-lg overflow-hidden rounded-lg shadow-lg">
+                  {/* <img src="/placeholder.svg" alt="Beach" className="object-cover w-full h-full" width="500" height="500" style={{ aspectRatio: '500 / 500', objectFit: 'cover' }} />
+                  <div className="absolute top-0 right-0 p-4 text-2xl font-bold text-white transform rotate-90 origin-top-right">
+                    가볼래-터
+                  </div> */}
+                  <Slider {...sliderSettings}>
+                    {recentContents.map((contents, index) => (
+                      <div key={index}>
+                        <img src={contents.contentsimg} alt={`Slide ${index + 1}`} style={{ width: '600px', height: '400px' }} onClick={() => { getContentsView(contents.cseq) }} />
+                      </div>
+                    ))}
+                  </Slider>
+                </div>
               </div>
-              <div>
-                <h2>Image Slider</h2>
-                <Slider {...sliderSettings}>
-                  {recentContents.map((contents, index) => (
-                    <div key={index}>
-                      <img src={contents.contentsimg} alt={`Slide ${index + 1}`} style={{ width: '600px', height: '400px' }} onClick={() => { getContentsView(contents.cseq) }} />
-                    </div>
-                  ))}
-                </Slider>
-              </div>
+              {/* <div className="flex items-center justify-center w-full py-4 space-x-4">
+                <span className="text-lg font-medium">05 / 11</span>
+                <div className="flex space-x-2">
+                  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                      <path d="m15 18-6-6 6-6"></path>
+                    </svg>
+                  </button>
+                  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                      <polygon points="6 3 20 12 6 21 6 3"></polygon>
+                    </svg>
+                  </button>
+                  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                      <path d="m9 18 6-6-6-6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div> */}
             </div>
-
-            {/* <img
-              src="https://via.placeholder.com/600x400?text=Slide+1"
-              width="600"
-              height="400"
-              alt="Trip Community"
-              style={{ aspectRatio: '600 / 400', objectFit: 'cover' }}
-              className="mx-auto w-full max-w-md rounded-xl object-cover md:mx-0"
-            /> */}
           </div>
         </section>
         <section className="w-full bg-[#F0F8FF] py-16 md:py-24">
