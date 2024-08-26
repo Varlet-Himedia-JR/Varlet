@@ -116,9 +116,12 @@ function WriteReview() {
     return (
         <>
             <Heading />
-            <h2>여행 후기 쓰기</h2>
-            <div className='subPage' style={{ paddingTop: '120px' }}>
-                <div className="reviewWriteForm" style={{ flex: "4" }}>
+            <div >
+            <div className='background'><img src="http://localhost:8070/images/oceans.jpg"/></div>
+            </div>
+            
+                <div className="reviewWriteForm">
+                <h2>WRITE FORM</h2>
                     <div className="field">
                         <label>제목</label>
                         <input 
@@ -146,16 +149,16 @@ function WriteReview() {
                         {imagePreviews.length > 0 && ( // 이미지 미리보기가 있을 경우에만 표시
                             <div className="image-preview">
                                 {imagePreviews.map((preview, index) => (
-                                    <div key={index} className="image-preview-item">
+                                    <div key={index}>
                                         <img
                                             src={preview}
                                             alt={`미리보기 ${index + 1}`}
-                                            style={{ maxWidth: '100px', maxHeight: '100px', marginRight: '10px' }}
+                                            
                                         />
                                         <button
                                             type="button"
                                             onClick={() => handleImageRemove(index)}
-                                            style={{ background: 'none', border: 'none', color: 'red', cursor: 'pointer' }}
+                                        
                                         >
                                             &times; {/* 이미지 제거 버튼 */}
                                         </button>
@@ -164,12 +167,11 @@ function WriteReview() {
                             </div>
                         )}
                     </div>
-                    <div className="btns">
+                    <div className="btn">
                         <button onClick={onSubmit}>작성완료</button> {/* 리뷰 작성 버튼 */}
                         <button onClick={onCancel} style={{ marginLeft: '10px' }}>작성 취소</button> {/* 작성 취소 버튼 */}
                     </div>
                 </div>
-            </div>
             <Footer />
         </>
     );

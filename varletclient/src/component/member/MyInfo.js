@@ -5,6 +5,9 @@ import { useDispatch } from 'react-redux';
 import jaxios from '../../util/jwtUtil';
 import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
 import { logoutAction } from '../../store/userSlice';
+import '../../style/join.css'
+import Heading from '../headerfooter/Heading';
+import Footer from '../headerfooter/Footer';
 
 function MyInfo() {
     const [userid, setUserid] = useState('');
@@ -205,13 +208,19 @@ function MyInfo() {
       };
 
     return (
-        <div className='loginform'>
-            <div className="logo" style={{ fontSize: "2.0rem" }}>MY INFO EDIT</div>
-            <div className='field'>
+        <>
+        <Heading/>
+        <div style={{ paddingTop: '100px' }}>
+            <div className='background'><img src="http://localhost:8070/images/oceans.jpg"/></div>
+        </div>
+        <div className='joinform'>
+        <div className='join_css'>
+        <div className="joinlabel" style={{fontSize:"2.0rem"}}>MY INFO EDIT</div>
+        <div className='join_field'>
                 <label>아이디</label>
                 <input type="text" value={userid} onChange={(e) => setUserid(e.target.value)} disabled />
             </div>
-            <div className='field'>
+            <div className='join_field'>
                 <label>비밀번호</label>
                 <input
                     type="password"
@@ -220,7 +229,7 @@ function MyInfo() {
                     placeholder="비밀번호 입력"
                 />
             </div>
-            <div className='field'>
+            <div className='join_field'>
                 <label>비밀번호 확인</label>
                 <input
                     type="password"
@@ -229,48 +238,51 @@ function MyInfo() {
                     placeholder="비밀번호 확인 입력"
                 />
             </div>
-            <div className='myinfo_name'>
+            <div className='join_field'>
                 <label>이름</label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
             </div>
-            <div className='myinfo_nickname'>
+            <div className='join_field'>
                 <label>닉네임</label>
                 <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
             </div>
-            <div className='myinfo_name'>
+            <div className='join_field'>
                 <label>이메일</label>
                 <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
-            <div className='myinfo_name'>
+            <div className='join_field'>
                 <label>전화번호</label>
                 <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
             </div>
-            <div className="myinfo_name">
+            <div className='join_field'>
                 <label>우편번호</label>
                 <input type="text" style={{ flex: "2" }} value={zip_code} onChange={(e) => { setZip_code(e.target.value); }} readOnly />
                 <button style={{ flex: "1" }} onClick={openPostcodePopup}>우편번호 찾기</button>
             </div>
-            <div className="myinfo_name">
+            <div className='join_field'>
                 <label>주소</label>
                 <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} readOnly />
             </div>
-            <div className="myinfo_name">
+            <div className='join_field'>
                 <label>상세주소</label>
                 <input type="text" value={d_address} onChange={(e) => setD_address(e.target.value)} placeholder='상세주소 입력' />
             </div>
-            <div className='myinfo_name'>
+            <div className='join_field'>
             <label>프로필 사진</label>
                 <img src={profileimg} style={{imgStyle}}/>
             </div>
-            <div className='myinfo_name'>
+            <div className='join_field'>
                 <label>프로필사진 변경</label>
                 <input type="file" onChange={fileupload} />
             </div>
-            <div className='btns'>
+            <div className='join_field'>
                 <button onClick={onSubmit}>수정완료</button>
                 <button onClick={() => navigate('/')}>돌아가기</button>
             </div>
         </div>
+        </div>
+        <Footer/>
+        </>
     );
 }
 
