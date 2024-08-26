@@ -40,32 +40,6 @@ public interface RCommunityMyList {
     interface MemberInfo {
         String getUserid();
 
-        String getPwd();
 
-        String getName();
-
-        String getNickname();
-
-        String getEmail();
-
-        String getPhone();
-
-        String getZipCode();
-
-        String getAddress();
-
-        String getD_address();
-
-        Timestamp getIndate();
-
-        Character getIs_login();
-
-        String getProvider();
-
-        String getSnsid();
-
-        String getProfileimg();
-
-        List<MemberRole> getMemberRoleList();
     }
 }

@@ -6,6 +6,10 @@ module.exports = {
       colors: {
         customYellow: '#ffed8c',
         customblue:'#1e90ff',
+      },
+      zindex:{
+        '105':'105',
+        '200':'200'
       }
     }
   },

@@ -129,17 +129,17 @@ function RPostWritePost() {
   
   return (
     <>
-    <Heading />
-    <section className="w-full bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] mt-20" style={{
-      backgroundImage: 'url(http://localhost:8070/images/oceans.jpg)',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      width: '100%',   // 원하는 너비 설정
-      zIndex: 0
-      }}>
-          <div className='w-full max-w-[700px] mx-auto px-1 '>
-
-<div className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg h-200 min-h-full">
+      <Heading />
+      <section className="w-full bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] mt-28" style={{
+          backgroundImage: 'url(http://localhost:8070/images/oceans.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          width: '100%',   // 원하는 너비 설정
+          zIndex: 0,
+          marginTop:'100px'
+        }}>
+      <div className='w-full max-w-[1200px] mx-auto px-1 '>
+      <div className="bg-white bg-opacity-90 p-8  shadow-lg  h-[1250px] mt-100px">
     <div className="flex justify-center">
       <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-4xl" data-v0-t="card">
         <form onSubmit={handleSubmit}>
@@ -214,7 +214,7 @@ function RPostWritePost() {
                 id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Enter a title for your post"
+                placeholder="제목"
                 required
               />
             </div>
@@ -225,7 +225,7 @@ function RPostWritePost() {
                 id="content"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                placeholder="Write the content of your post here..."
+                placeholder="내용"
                 required
               ></textarea>
             </div>
