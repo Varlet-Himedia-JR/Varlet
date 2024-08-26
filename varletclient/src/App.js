@@ -26,6 +26,8 @@ import MyQna from "./component/member/MyQna";
 import MyRequest from "./component/member/MyRequest";
 import Notice from "./component/notice/Notice";
 import FindId from "./component/member/FindId";
+import FindPwd from "./component/member/FindPwd";
+import RePwd from "./component/member/RePwd";
 import House from "./component/house/House";
 
 import PostCode from "./component/popup/PostCode";
@@ -53,6 +55,8 @@ function App() {
         <Route path="/kakaosaveinfo/:nickname" element={<Kakaosaveinfo />} />
         <Route path="/naversaveinfo/:nickname" element={<Naversaveinfo />} />
         <Route path="/findId" element={<FindId />} />
+        <Route path="/findPwd" element={<FindPwd />} />
+        <Route path="/rePwd" element={<RePwd />} />
 
         
         {/* 고객센터 */}

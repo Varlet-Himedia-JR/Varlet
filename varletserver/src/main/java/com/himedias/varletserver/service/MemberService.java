@@ -6,9 +6,11 @@ import com.himedias.varletserver.dao.MemberRepository;
 import com.himedias.varletserver.dao.ReviewRepository;
 import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.Review;
+import com.himedias.varletserver.security.CustomSecurityConfig;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -141,4 +143,19 @@ public class MemberService {
     public boolean isEmailUnique(String email) {
         return !mr.existsByEmail(email);
     }
+
+    public String verifyCodeAndFindPwd(String email, String code) {
+        String storedCode = verificationCodes.get(email);
+
+        if (storedCode != null && storedCode.equals(code)) {
+            verificationCodes.remove(email); // 검증 후 코드 삭제
+            return "ok";
+        } else {
+            return null;
+        }
+    }
+    @Autowired
+    CustomSecurityConfig cc;
+
+
 }

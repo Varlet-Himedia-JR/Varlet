@@ -389,6 +389,30 @@ public class MemberController {
         return result;
     }
 
+    // 비밀번호 찾기
+    @PostMapping("/findPwd/{email}")
+    public HashMap<String, Object> findPwd(@PathVariable("email") String email) {
+        HashMap<String, Object> result = new HashMap<>();
+        ms.sendVerificationCode(email);
+        result.put("msg", "ok");
+        return result;
+    }
+
+
+    // 인증 코드 검증 및 비밀번호 반환 API
+    @GetMapping("/verifyCodeAndFindPwd/{email}/{code}")
+    public HashMap<String, Object> verifyCodeAndFindPwd(@PathVariable("email") String email,@PathVariable("code") String code) {
+        HashMap<String, Object> result = new HashMap<>();
+        String ok = ms.verifyCodeAndFindPwd(email, code);
+
+        if (ok != null) {
+            result.put("msg", "yes");
+        } else {
+            result.put("msg", "no");
+        }
+        return result;
+    }
+
     // 인증 코드 검증 및 아이디 반환 API
     @GetMapping("/verifyCodeAndFindId/{email}/{code}")
     public HashMap<String, Object> verifyCodeAndFindId(@PathVariable("email") String email,@PathVariable("code") String code) {

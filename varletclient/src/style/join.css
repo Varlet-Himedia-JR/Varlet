@@ -5,7 +5,7 @@
   background: rgb(255, 255, 255, 0.7);
   padding: 20px;
   width: 1400px; 
-  height: 100vh;
+  height: 100%;
   margin: 0 auto; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
   text-align: center;
@@ -37,7 +37,7 @@
 
   }
   
-  .field label {
+  .join_field label {
     display: flex;
     font-family: 'Mplus 1p Bold', sans-serif;
     font-style: normal;
@@ -51,7 +51,7 @@
   }
 
 
-  .field input {
+  .join_field input {
     width: 200px;
     /* height: 30px;
     padding: 5px;

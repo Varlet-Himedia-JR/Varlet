@@ -56,7 +56,7 @@ function Login() {
             </div>
             <div  className='findbtn'>
             <button onClick={ ()=>{ navigate('/findId') } }>아이디 찾기</button>
-            <button onClick={ ()=>{ navigate('/join') } }>비밀번호 찾기</button>
+            <button onClick={ ()=>{ navigate('/findPwd') } }>비밀번호 찾기</button>
             </div>
             <div className='snslogin'>
                 <div className='chat'><img src="http://localhost:8070/images/chat.png"/></div>

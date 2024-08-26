@@ -50,7 +50,6 @@ public class MemberDTO extends User {
         this.provider = provider;
         this.snsid = snsid;
         this.profileimg = profileimg;
-        this.point = point;
         this.roleNames = roleNames;
         this.point = point; // 포인트 필드 초기화
 
