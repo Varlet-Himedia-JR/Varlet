@@ -256,8 +256,8 @@ function Main() {
                 <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
               </svg>
-              <h3 className="text-xl font-bold">여행 계획을 의뢰해보세여</h3>
-              <p className="text-[#808080]">계획을 못짜겠다면 다른 사람에게 의뢰해보세여</p>
+              <h3 className="text-xl font-bold">여행 계획을 의뢰해보세요</h3>
+              <p className="text-[#808080]">계획을 못짜겠다면 다른 사람에게 의뢰해보세요</p>
             </div>
             <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg" onClick={() => logCheck('/mycourse')}>
               <svg
@@ -296,8 +296,8 @@ function Main() {
                 <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path>
                 <circle cx="12" cy="13" r="3"></circle>
               </svg>
-              <h3 className="text-xl font-bold">당신의 추억을 공유하세여</h3>
-              <p className="text-[#808080]">여행을 다녀온 추억을 다른 사람들과 나눠보세여</p>
+              <h3 className="text-xl font-bold">당신의 추억을 공유하세요</h3>
+              <p className="text-[#808080]">여행을 다녀온 추억을 다른 사람들과 나눠보세요</p>
             </div>
             <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg">
               <svg
@@ -315,9 +315,9 @@ function Main() {
                 <path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path>
                 <circle cx="12" cy="12" r="10"></circle>
               </svg>
-              <h3 className="text-xl font-bold">Get Travel Advice</h3>
+              <h3 className="text-xl font-bold">숙소를 검색하세요</h3>
               <p className="text-[#808080]">
-                Tap into the collective wisdom of the community and get personalized travel tips.
+               여행에서 묵을 숙소들을 찾아보세요
               </p>
             </div>
             <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg">
@@ -336,8 +336,8 @@ function Main() {
                 <path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
                 <rect width="20" height="14" x="2" y="6" rx="2"></rect>
               </svg>
-              <h3 className="text-xl font-bold">Discover Travel Deals</h3>
-              <p className="text-[#808080]">Find exclusive travel deals and discounts curated by the community.</p>
+              <h3 className="text-xl font-bold">여행 예약을 한번에</h3>
+              <p className="text-[#808080]">축제 입장권, 숙소 등 예약 요소를 한번에 결제할 수 있어요</p>
             </div>
           </div>
         </section>
@@ -352,14 +352,12 @@ function Main() {
                       <span className="flex h-full w-full items-center justify-center rounded-full bg-muted">JD</span>
                     </span>
                     <div>
-                      <h4 className="text-lg font-semibold">John Doe</h4>
-                      <p className="text-[#808080]">Frequent Traveler</p>
+                      <h4 className="text-lg font-semibold">김스콧</h4>
+                      <p className="text-[#808080]">리뷰어 후기</p>
                     </div>
                   </div>
                   <p className="mt-4 text-[#808080]">
-                    "The Trip Community has been a game-changer for me. I've connected with so many
-                    like-minded travelers and discovered amazing destinations I never would have
-                    found on my own."
+                    "대학생때 수강신청 시간표 담던 생각이나서 추억돋네요ㅎㅎ"
                   </p>
                 </blockquote>
                 <blockquote className="rounded-lg bg-white p-6 shadow-md">
@@ -368,11 +366,11 @@ function Main() {
                       <span className="flex h-full w-full items-center justify-center rounded-full bg-muted">JS</span>
                     </span>
                     <div>
-                      <h4 className="text-lg font-semibold">Jane Smith</h4>
-                      <p className="text-[#808080]">Adventure Seeker</p>
+                      <h4 className="text-lg font-semibold">홍길동</h4>
+                      <p className="text-[#808080]">여행 일정 의뢰자</p>
                     </div>
                   </div>
-                  <p className="mt-4 text-[#808080]">"I've been a member of the Trip Community for years and it continues to inspire me."</p>
+                  <p className="mt-4 text-[#808080]">"J이고 싶은 P들을 위한 웹사이트."</p>
                 </blockquote>
               </div>
             </div>
@@ -380,22 +378,9 @@ function Main() {
         </section>
       </div>
 
-      <div className='review-section'>
+      {/* <div className='review-section'>
         <h2>HOT REVIEW</h2>
         <div className="review-list">
-          {/* <Slider {...sliderSettings}>
-            {reviews.length > 0 ? (
-              reviews.map((review, idx) => (
-                <div className="review-card" key={idx}>
-                  <div className="review-title">제목: {review.title}</div>
-                  <div className="review-date">작성날짜: {review.indate ? review.indate.toString().substring(0, 10) : ''}</div>
-                  <div className="review-readcount">조회수: {review.readcount}</div>
-                </div>
-              ))
-            ) : (
-              <div>리뷰가 없습니다.</div>
-            )}
-          </Slider> */}
           {reviews.length > 0 ? (
             reviews.map((review, idx) => (
               <div className="review-card" key={idx}>
@@ -413,15 +398,6 @@ function Main() {
           ) : (
             <div>리뷰가 없습니다.</div>
           )}
-        </div>
-      </div>
-      {/* <div style={{ paddingTop: '100px' }}>
-        <div className='background'>
-          <img src="http://localhost:8070/images/oceans.jpg" alt="Background" />
-        </div>
-        <div className='main'>
-          
-          
         </div>
       </div> */}
       <Footer />

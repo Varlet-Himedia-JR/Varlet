@@ -49,11 +49,7 @@ function Pay() {
             if (rsp.success) {
                 alert(`결제가 성공적으로 완료되었습니다. 주문번호: ${rsp.merchant_uid}`);
                 console.log('결제 성공:', rsp);
-<<<<<<< Updated upstream
                 navigate('/mycourse')
-=======
-                savePaymentHistory(rsp);
->>>>>>> Stashed changes
             } else {
                 alert('결제에 실패하였습니다. 에러 내용: ' + rsp.error_msg);
                 console.error('결제 실패:', rsp);

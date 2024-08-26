@@ -78,10 +78,7 @@ function Heading() {
                 <div className='rcommunity' onClick={() => navigate('/rcommunity')}>여행 코스 의뢰</div>
                 <div className='reviewBoard' onClick={() => navigate('/reviewList')}>여행 후기</div>
                 <div className='mycourse' onClick={() => logCheck('/mycourse')}>여행 코스 만들기</div>
-<<<<<<< Updated upstream
                 <div className='mycourse' onClick={() => alert('준비중입니다.')}>숙소</div>
-=======
->>>>>>> Stashed changes
                 
                 <div className='auth-buttons'>
                     {!userCookie && <div className='login' onClick={LoginWindow}>로그인</div>}
@@ -99,11 +96,7 @@ function Heading() {
                         </div>
                         <div className='line'></div>
                         <div className='logout' onClick={logout}>로그아웃</div>
-<<<<<<< Updated upstream
                         <div className='mypoint' > 보유 포인트 : {userCookie.point}</div>
-=======
-                        <div className='mypoint'>보유 포인트:{userCookie.point}</div>
->>>>>>> Stashed changes
                     </>
                 )}
                 </div>
