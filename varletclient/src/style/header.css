@@ -32,7 +32,8 @@
 .login,
 .join,
 .myinfo,
-.logout {
+.logout,
+.mypoint {
     font-family: 'Mplus 1p Bold';
     font-style: normal;
     font-weight: 700;
@@ -76,7 +77,15 @@
 }
 
 .myinfo {
-    width: 60px;
+    width: 100px;
+<<<<<<< Updated upstream
+=======
+    height: 27px;
+}
+
+.mypoint{
+    width: 180px;
+>>>>>>> Stashed changes
     height: 27px;
 }
 
@@ -84,6 +93,11 @@
     width: 80px;
     height: 27px;
     margin-right: 20px;;
+}
+
+.mypoint{
+    width: 240px;
+    height: 27px;
 }
 
 .profileimg {

@@ -25,8 +25,8 @@ function Join() {
 
     async function onSubmit(){
         if(userid==''){ return alert('아이디를 입력하세요');}
-        if(pwd==''){ return alert('패스워드를 입력하세요');}
-        if(pwd!==pwdChk){ return alert('패스워드 확인이 일치하지 않습니다');}
+        if(pwd==''){ return alert('비밀번호를 입력하세요');}
+        if(pwd!==pwdChk){ return alert('비밀번호 확인이 일치하지 않습니다');}
         if(name==''){ return alert('이름을 입력하세요');}
         if(nickname==''){ return alert('닉네임을 입력하세요');}
         if(email==''){ return alert('이메일을 입력하세요');}
@@ -61,10 +61,13 @@ function Join() {
         const formData = new FormData();
         formData.append('image', e.target.files[0]);
         const result = await axios.post('/api/member/fileupload', formData);
-        
+        try{
         setProfileimg(`http://localhost:8070/uploads/${result.data.filename}`);
         console.log(result.data.filename);
         setImgStyle({display:"block", width:"200px"});
+        }catch{
+            return;
+        }
     }
 
     const openPostcodePopup = () => {
@@ -94,7 +97,7 @@ function Join() {
             <div className='background'><img src="http://localhost:8070/images/oceans.jpg" alt="Background" /></div>
             <div className='joinform'>
                 <div className='join_css'>
-                    <div className="joinlabel" style={{fontSize:"2.0rem"}}>회원가입</div>
+                    <div className="loginlabel" style={{fontSize:"2.0rem"}}>회원가입</div>
                     <div className='join_field'>
                         <label>아이디</label>
                         <input type="text" value={userid} onChange={

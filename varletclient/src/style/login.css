@@ -2,7 +2,7 @@
 .loginform {
   position: relative; 
   z-index: 1;
-  background: rgb(255, 255, 255);
+  background: rgb(255, 255, 255,0.8);
   padding: 20px;
   width: 1400px; 
   height: 100vh;
@@ -10,7 +10,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
   text-align: center;
   padding-top: 100px;
-  
+
   }
   
   /* 로그인 제목 */
@@ -27,9 +27,13 @@
   }
   
   /* 입력 필드 스타일 */
-  .field {
-    /* display: flex; */
-    margin-bottom: 15px;
+  .login_field {
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 22px;
+    color: #000000;
+    display: flex;
+    margin-bottom: 20px;
     align-items: center;
     text-align: center;
     margin-left: 550px;
@@ -49,8 +53,8 @@
   }
 
 
-  .field input {
-    /* width: 200px;
+  .login_field input {
+    width: 200px;
     height: 30px;
     padding: 5px;
     font-size: 15px;
@@ -58,10 +62,10 @@
     border: 1px solid #000000;
     border-radius: 5px;
     box-sizing: border-box;
-    background-color: white; */
+    background-color: white;
   }
 
-  .field input[type="text"]{
+  .login_field input[type="text"]{
     width: 200px;
     height: 30px;
     padding: 5px;

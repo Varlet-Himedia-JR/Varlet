@@ -10,6 +10,7 @@ function Pay() {
     const [daySchedule, setDaySchedule] = useState([]);
     const userCookie = getCookie('user');
 
+    const navigate = useNavigate();
     useEffect(() => {
         if (window.IMP) {
             window.IMP.init('imp17261207');
@@ -48,10 +49,38 @@ function Pay() {
             if (rsp.success) {
                 alert(`결제가 성공적으로 완료되었습니다. 주문번호: ${rsp.merchant_uid}`);
                 console.log('결제 성공:', rsp);
+<<<<<<< Updated upstream
+                navigate('/mycourse')
+=======
+                savePaymentHistory(rsp);
+>>>>>>> Stashed changes
             } else {
                 alert('결제에 실패하였습니다. 에러 내용: ' + rsp.error_msg);
                 console.error('결제 실패:', rsp);
             }
+        });
+    }
+    function savePaymentHistory(paymentData) {
+        fetch('/api/payments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                merchant_uid: paymentData.merchant_uid,  // 주문번호
+                buyer_email: userCookie.email,  // 사용자 이메일
+                buyer_name: userCookie.name,    // 사용자 이름
+                amount: paymentData.paid_amount, // 결제 금액
+                status: paymentData.status,     // 결제 상태
+                imp_uid: paymentData.imp_uid,   // 아임포트 거래 고유번호
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('결제 내역 저장 성공:', data);
+        })
+        .catch(error => {
+            console.error('결제 내역 저장 실패:', error);
         });
     }
 
