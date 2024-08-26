@@ -221,10 +221,6 @@ const MyRequest = () => {
                                     </li>
                                 </ul>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
             <Footer />
         </>
     );
