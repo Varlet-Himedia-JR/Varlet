@@ -19,7 +19,7 @@ import java.util.List;
 @Repository
 public interface RCommunityRepository extends JpaRepository<RCommunity, Integer> {
 
-    // 게시글과 그에 달린 답글 수를 함께 가져오기 위한 쿼리
+    // 레포지토리 레이어에서 댓글 수를 포함한 모든 게시물 목록을 페이징 처리하여 가져오는 쿼리
     @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, " +
             "r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked, " +
             "COUNT(rc) AS replyCount " +
@@ -27,44 +27,35 @@ public interface RCommunityRepository extends JpaRepository<RCommunity, Integer>
             "GROUP BY r.rnum, r.userid, r.location, r.location2, r.writedate, r.views, r.title, r.reward, r.picked")
     Page<RCommunitySummary> findAllWithReplyCount(Pageable pageable);
 
-    // 특정 위치와 위치2에 대한 게시물 수를 반환합니다.
+    // location과 location2가 주어진 경우 해당 위치에 맞는 게시물 수를 반환하는 쿼리
     @Query("SELECT COUNT(r) FROM RCommunity r WHERE r.location = :location AND r.location2 = :location2")
     int countByLocationAndLocation2(@Param("location") int location, @Param("location2") int location2);
 
-    // 특정 위치에 대한 게시물 수를 반환합니다.
+    // location이 주어진 경우 해당 위치에 맞는 게시물 수를 반환하는 쿼리
     @Query("SELECT COUNT(r) FROM RCommunity r WHERE r.location = :location")
     int countByLocation(@Param("location") int location);
 
-    // 페이징 처리된 모든 게시물 목록을 반환합니다.
-    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
-            "FROM RCommunity r ")
-    Page<RCommunitySummary> findAllBy(Pageable pageable);
-
-    // 특정 위치에 대한 페이징 처리된 게시물 목록을 반환합니다.
+    // 특정 location에 해당하는 페이징 처리된 게시물 목록을 반환하는 쿼리
     @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
             "FROM RCommunity r WHERE r.location = :location")
     Page<RCommunitySummary> findByLocation(@Param("location") int location, Pageable pageable);
 
-    // 특정 위치와 위치2에 대한 페이징 처리된 게시물 목록을 반환합니다.
+    // 특정 location과 location2에 해당하는 페이징 처리된 게시물 목록을 반환하는 쿼리
     @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
             "FROM RCommunity r WHERE r.location = :location AND r.location2 = :location2")
     Page<RCommunitySummary> findByLocationAndLocation2(@Param("location") int location, @Param("location2") int location2, Pageable pageable);
-
-    // 정렬된 모든 게시물 목록을 반환합니다. (정렬 기준: 게시물 번호)
-    @Query("SELECT r.rnum AS rnum, r.userid AS userid, r.location AS location, r.location2 AS location2, r.writedate AS writedate, r.views AS views, r.title AS title, r.reward AS reward, r.picked AS picked " +
-            "FROM RCommunity r ORDER BY r.rnum DESC")
-    List<RCommunitySummary> findAllBy(Sort sort);
-
 
     // 게시글 ID(rnum)로 게시글을 조회합니다.
     @Query("SELECT r FROM RCommunity r WHERE r.rnum = :rnum")
     RCommunity findPostById(@Param("rnum") int rnum);
 
-    // 게시글의 picked 상태를 업데이트합니다.
+    // 데이터베이스에서 게시글의 picked 상태를 업데이트하는 쿼리 메소드
     @Modifying
     @Query("UPDATE RCommunity r SET r.picked = :picked WHERE r.rnum = :rnum")
-    int updatePicked(@Param("rnum") String rnum, @Param("picked") char picked);
-
+    int updatePicked(
+            // 게시글 ID와 새로운 picked 상태를 파라미터로 받아 쿼리에 사용
+            @Param("rnum") String rnum,
+            @Param("picked") char picked);
 
     // Pageable를 이용하여 사용자 ID로 게시글 조회 (최신 순으로 정렬)
     Page<RCommunityMyList> findByUserid(Member userid, Pageable pageable);

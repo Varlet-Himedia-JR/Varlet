@@ -25,8 +25,6 @@ function RCommunityView() {
   const replyFormRef = useRef(null);
   // 상태 변수 선언
   const [userCookie, setUserCookie] = useState(getCookie('user'));
-  const [totalCount, setTotalCount] = useState(0)
-  const [totalPages, setTotalPages]  = useState(0)
   const [size] = useState(5); // 한 번에 가져올 답글 수
   const [page, setPage] = useState(1); // 현재 페이지 상태 추가
   const [loading, setLoading] = useState(false);
@@ -262,11 +260,7 @@ const replyDelete = (rcnum) => {
           navigate('/rcommunity');
       }
   };
-  const myrequestList = () => {
-    if (window.confirm('내 REQUEST로 돌아가시겠습니까?')) {
-      navigate('/myRequest'); 
-    }
-  };
+
 
   const test = () =>{
     navigate('/rCommunityDetail/:rnum/rcCommunityWrite')
