@@ -198,7 +198,8 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
             {daySchedule.length > 0 ?
                 dayschedule.map((contents, index) => (
                     <div key={index} className="datacell" style={{ right: `${cellposition[index].x * cellwidth}px`, top: `${cellposition[index].y * 40}px`, height: `${cellposition[index].l * 40}px`, backgroundColor: `${cellposition[index].c}`, color: 'black', width: `${getCourseCellWidthInPixels()}px` }} onClick={() => scheduleDetail(contents.dseq, index, isScheduledetailVisible)} >
-                        {contents.dtitle}/{contents.price > 0 ? '₩' + contents.price : '무료'}
+                        {contents.dtitle}
+                        {/* /{contents.price > 0 ? '₩' + contents.price : '무료'} */}
                         {/* {contents.start_time}/{contents.day_date} */}
                         <button style={{ position: 'absolute', top: '5px', right: '5px', backgroundColor: 'transparent', border: 'none', color: 'black', fontSize: '16px', cursor: 'pointer', padding: 0 }}
                             onClick={(e) => {
