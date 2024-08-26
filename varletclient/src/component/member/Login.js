@@ -3,9 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector, useDispatch } from 'react-redux';
 import { loginAction } from '../../store/userSlice';
-
 import { setCookie, getCookie} from "../../util/cookieUtil";
-
 import Heading from '../headerfooter/Heading';
 import Footer from '../headerfooter/Footer';
 import '../../style/login.css';

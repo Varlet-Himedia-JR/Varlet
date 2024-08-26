@@ -191,18 +191,17 @@ function ReviewView() {
     return (
         <>
             <Heading />
-            <div className='subPage' style={{ paddingTop:'100px' }}>
-                <div className="review" style={{ flex: "4" }}>
+            <div className='background'><img src="http://localhost:8070/images/oceans.jpg"/></div>
                     {
                         review ? (
-                            <div className='reviewview'>
+                            <div className='reviewview' style={{flex:4}}>
                                 <h2>Review View</h2>
                                 <div className='field'>
-                                    <label>Number</label>
+                                    <label>번호</label>
                                     <div>{review.rseq}</div>
                                 </div>
                                 <div className='field'>
-                                    <label>Title</label>
+                                    <label>제목</label>
                                     {isEditing ? (
                                         <input
                                             type="text"
@@ -215,11 +214,11 @@ function ReviewView() {
                                     )}
                                 </div>
                                 <div className='field'>
-                                    <label>Writer</label>
+                                    <label>작성자</label>
                                     <div>{review.userid || 'Unknown'}</div>
                                 </div>
                                 <div className='field'>
-                                    <label>Content</label>
+                                    <label>내용</label>
                                     {isEditing ? (
                                         <textarea
                                             name="content"
@@ -231,16 +230,16 @@ function ReviewView() {
                                     )}
                                 </div>
                                 <div className='field'>
-                                    <label>Date</label>
+                                    <label>날짜</label>
                                     <div>{formattedDate}</div>
                                 </div>
                                 <div className='field'>
-                                    <label>Readcount</label>
+                                    <label>조회수</label>
                                     <div>{review.readcount}</div>
                                 </div>
 
                                 <div className='field'>
-                                    <label>Image</label>
+                                    <label>이미지</label>
                                     {isEditing ? (
                                         <>
                                             <input
@@ -252,7 +251,6 @@ function ReviewView() {
                                                     <img
                                                         src={previewImage}
                                                         alt="Preview"
-                                                        style={{ maxWidth: '300px', maxHeight: '300px', marginRight: '10px' }}
                                                     />
                                                     <button
                                                         type="button"
@@ -272,7 +270,7 @@ function ReviewView() {
                                                         key={index}
                                                         src={`http://localhost:8070${img.ipath}`}
                                                         alt={`Review ${index}`}
-                                                        style={{ maxWidth: '300px', maxHeight: '300px', marginRight: '10px' }}
+                                                
                                                     />
                                                 ))}
                                             </div>
@@ -295,9 +293,7 @@ function ReviewView() {
                                                         )}
                                                     </div>
                                                 ))
-                                            ) : (
-                                                <div>댓글이 없습니다.</div>
-                                            )}
+                                            ) : (null)}
                                         </div>
                                         <div className='new-reply'>
                                             <textarea
@@ -314,29 +310,28 @@ function ReviewView() {
                             <div>Loading...</div>
                         )
                     }
-                    <div className='btns'>
+                    <div className='btn'>
                         {
                             isUserAuthorized ? (
                                 <>
                                     {isEditing ? (
                                         <>
-                                            <button onClick={reviewEdit}>Save</button>
-                                            <button onClick={() => setIsEditing(false)}>Cancel</button>
+                                            <button onClick={reviewEdit}>저장</button>
+                                            <button onClick={() => setIsEditing(false)}>취소</button>
                                         </>
                                     ) : (
                                         <>
-                                            <button onClick={reviewDelete}>Delete</button>
-                                            <button onClick={() => setIsEditing(true)}>Edit</button>
+                                            <button onClick={reviewDelete}>삭제</button>
+                                            <button onClick={() => setIsEditing(true)}>편집</button>
                                         </>
                                     )}
-                                    <button onClick={handleBackToList}>To My List</button>
+                                    <button onClick={handleBackToList}>내 REVIEW</button>
                                 </>
                             ) : null
                         }
-                        <button onClick={() => { navigate('/reviewList') }}>Back to List</button>
+                        <button onClick={() => { navigate('/reviewList') }}>전체</button>
                     </div>
-                </div>
-            </div>
+
             <Footer />
         </>
     );

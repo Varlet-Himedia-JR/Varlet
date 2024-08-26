@@ -23,7 +23,7 @@ function CheckPwd() {
             if (result.data.msg == 'no') {
                 return alert("패스워드 오류입니다");
             }else if(result.data.msg == 'yes'){
-                alert('ㅎㅇ');
+                alert('정보 수정 페이지로 이동합니다');
                 navigate('/myINFO');
             }
         } catch (err) { console.error(err) }
@@ -37,15 +37,15 @@ function CheckPwd() {
             <div style={{ paddingTop: '100px' }}>
                 <div className='background'><img src="http://localhost:8070/images/oceans.jpg" /></div>
             </div>
-            <div className="loginform" style={{ paddingTop: '100px' }}>
-                <div className='loginlabel'>{getCookie('user').userid}의 비번찾기</div>
+            <div className="joinform" style={{ paddingTop: '100px' }}>
+                <div className='loginlabel'>{getCookie('user').userid}의 비밀번호</div>
                 
-                <div className='field'>
+                <div className='join_field'>
                     <label>비밀번호</label>
                     <input type="password" value={pwd} onChange={(e) => { setPwd(e.currentTarget.value) }} />
                 </div>
                 <div className='btns'>
-                    <button onClick={() => { pwdCheck() }}>찾자~</button>
+                    <button onClick={() => { pwdCheck() }}>확인</button>
                     <button onClick={() => { navigate('/') }}>목록으로</button>
                 </div>
                 <div className='findbtn'>

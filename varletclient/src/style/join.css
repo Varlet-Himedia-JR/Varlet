@@ -4,7 +4,6 @@
   z-index: 1;
   background: rgb(255, 255, 255, 0.7);
   padding: 20px;
-  border-radius: 10px;
   width: 1400px; 
   height: 100vh;
   margin: 0 auto; 
@@ -54,14 +53,14 @@
 
   .field input {
     width: 200px;
-    height: 30px;
+    /* height: 30px;
     padding: 5px;
     font-size: 15px;
     margin-left: 5px;
     border: 1px solid #000000;
     border-radius: 5px;
     box-sizing: border-box;
-    background-color: white;
+    background-color: white; */
   }
 
   .join_field input[type="text"]{
