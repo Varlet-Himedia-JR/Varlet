@@ -59,9 +59,11 @@ public class RCRecommendService {
      * @param fileNames 이미지 파일명 목록
      * @return 저장된 Rcrecommend 객체
      */
+// 답글과 관련된 파일을 저장하는 서비스 메소드
     @Transactional
     public Rcrecommend saveRcrecommend(Rcrecommend rcrecommend, List<String> fileNames) {
-        Rcrecommend savedRcrecommend = rcr.save(rcrecommend); // 답글 저장
+        // 답글을 데이터베이스에 저장
+        Rcrecommend savedRcrecommend = rcr.save(rcrecommend);
 
         // 각 이미지 파일을 데이터베이스에 저장
         for (String fileName : fileNames) {
@@ -75,7 +77,6 @@ public class RCRecommendService {
 
         return savedRcrecommend;
     }
-
     /**
      * 주어진 게시글 ID로 답글 목록을 조회합니다.
      * @param rcnum 게시글 ID

@@ -279,18 +279,34 @@ const replyDelete = (rcnum) => {
       return `${location1Name} - ${location2Name}`;
   };
 
-  const getTravelDuration = (startDate, endDate) => {
-      if (!startDate || !endDate) return '정보 없음';
+/**
+ * 주어진 시작일과 종료일 사이의 여행 기간을 계산하는 함수
+ * @param {string} startDate - 여행 시작일을 나타내는 문자열 (예: '2024-08-01')
+ * @param {string} endDate - 여행 종료일을 나타내는 문자열 (예: '2024-08-05')
+ * @returns {string} - 여행 기간 (예: '2박 3일')
+ */
+const getTravelDuration = (startDate, endDate) => {
+  // 시작일 또는 종료일이 제공되지 않은 경우 '정보 없음' 반환
+  if (!startDate || !endDate) return '정보 없음';
 
-      const start = new Date(startDate);
-      const end = new Date(endDate);
+  // Date 객체로 변환
+  const start = new Date(startDate);
+  const end = new Date(endDate);
 
-      const diffTime = end - start;
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      const diffNights = diffDays - 1;
+  // 종료일이 시작일보다 이전일 경우 잘못된 입력으로 간주
+  if (end < start) return '잘못된 날짜 범위';
 
-      return `${diffNights}박 ${diffDays}일`;
-  };
+  // 두 날짜 사이의 시간 차이 계산
+  const diffTime = end - start;
+  // 밀리초를 일로 변환
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  // 'n박 n일' 형식으로 변환
+  const diffNights = diffDays - 1;
+
+  // 여행 기간 문자열 반환
+  return `${diffNights + 1}박 ${diffDays + 1}일`;
+};
 
   const extractDate = (dateString) => {
       if (!dateString) return '';

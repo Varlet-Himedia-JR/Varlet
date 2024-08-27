@@ -99,5 +99,8 @@ public class Member {
         if (indate == null) {
             indate = Timestamp.from(Instant.now());
         }
+        if (point == null) {
+            point = 0;
+        }
     }
 }

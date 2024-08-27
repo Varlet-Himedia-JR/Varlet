@@ -37,25 +37,29 @@ public class RCRecommendController {
      * 게시글 ID와 사용자 ID, 내용을 받아 해당 게시글에 답글을 추가합니다.
      * 선택적으로 이미지 파일 경로도 받을 수 있습니다.
      */
+// 게시글에 대한 추천 답글을 작성하는 메소드
     @PostMapping("/writeRecommend/{rnum}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.CREATED) // 성공적으로 생성된 경우 HTTP 201 Created 응답 상태 설정
     public Map<String, Integer> writeRecommend(
+            // 게시글 ID를 경로 변수로 받음
             @PathVariable("rnum") int rnum,
+            // 사용자 ID와 답글 내용을 요청 파라미터로 받음
             @RequestParam("userid") String userid,
             @RequestParam("content") String content,
+            // 선택적으로 파일 경로 리스트를 요청 파라미터로 받음
             @RequestParam(value = "saveimages", required = false) List<String> files) {
 
-        // 게시글 정보 및 사용자 정보 조회
+        // 게시글 및 사용자 정보를 조회
         RCommunity rc = rcs.findRCommunityById(rnum);
         Member member = rcs.findMemberById(userid);
 
-        // 새로운 답글 엔티티 생성 및 필드 설정
+        // 새로운 답글 엔티티를 생성하고 필드 설정
         Rcrecommend rcrecommend = new Rcrecommend();
         rcrecommend.setContent(content);
         rcrecommend.setRnum(rc);
         rcrecommend.setUserid(member);
 
-        // 답글을 저장하고, 파일이 있을 경우 파일 경로도 함께 저장
+        // 답글을 저장하고 파일이 있을 경우 파일 경로도 함께 저장
         Rcrecommend savedRcrecommend = rcs.saveRcrecommend(rcrecommend, files);
 
         // 저장된 답글의 ID를 반환

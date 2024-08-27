@@ -8,6 +8,7 @@ import '../../style/customer.css';
 import { getCookie } from "../../util/cookieUtil";
 
 function MyQna() {
+
   const [myqnaList, setMyqnaList] = useState([]);
   const [paging, setPaging] = useState({});
   const [beginend, setBeginend] = useState([]);

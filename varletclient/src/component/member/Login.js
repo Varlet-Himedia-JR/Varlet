@@ -42,11 +42,11 @@ function Login() {
         </div>
         <div className="loginform" style={{paddingTop: '100px'}}>
             <div className='loginlabel'>로그인</div>
-            <div className='field'>
+            <div className='login_field'>
                 <label>아이디</label>
                 <input type="text" className='text'value={userid} onChange={(e)=>{ setUserid(e.currentTarget.value) }}/>
             </div>
-            <div className='field'>
+            <div className='login_field'>
                 <label>비밀번호</label>
                 <input type="password" value={pwd} onChange={(e)=>{ setPwd(e.currentTarget.value) }}/>
             </div>
@@ -56,7 +56,7 @@ function Login() {
             </div>
             <div  className='findbtn'>
             <button onClick={ ()=>{ navigate('/findId') } }>아이디 찾기</button>
-            <button onClick={ ()=>{ navigate('/join') } }>비밀번호 찾기</button>
+            <button onClick={ ()=>{ navigate('/findPwd') } }>비밀번호 찾기</button>
             </div>
             <div className='snslogin'>
                 <div className='chat'><img src="http://localhost:8070/images/chat.png"/></div>

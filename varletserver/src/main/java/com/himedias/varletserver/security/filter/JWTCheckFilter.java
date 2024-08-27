@@ -93,10 +93,19 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/main/"))
             return true;
+
+
+        // 아이디, 비밀번호 찾기
+
         if (path.startsWith("/member/findId"))
             return true;
+        if (path.startsWith("/member/findPwd"))
+            return true;
 
+        // 이메일 전송
         if (path.startsWith("/member/verifyCodeAndFindId"))
+            return true;
+        if (path.startsWith("/member/verifyCodeAndFindPwd"))
             return true;
 
 
