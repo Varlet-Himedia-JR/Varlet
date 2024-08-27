@@ -359,13 +359,18 @@ function Mycourse() {
             )}
             {mycourse.length > 0 && Object.keys(contents).length > 0 ?
                 <div className='add_contents'>
-                    <div className="cchead" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <div className="cchead" style={{width:'100%', display: 'flex', justifyContent: 'space-between', paddingRight:'100px'}}>
                         <h2>SelectedCustomCourse</h2>
-                        <button style={{ border: '1px solid black' }} onClick={onChangeSelectedCustomCourse}>
+                        {/* <button style={{ border: '1px solid black' }} onClick={onChangeSelectedCustomCourse}>
                             X
-                        </button>
+                        </button> */}
+                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-backspace" width="40" height="40" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round" onClick={onChangeSelectedCustomCourse}>
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M20 6a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-11l-5 -5a1.5 1.5 0 0 1 0 -2l5 -5z" />
+                            <path d="M12 10l4 4m0 -4l-4 4" />
+                        </svg>
                     </div>
-                    <SelectedCustomCourse selectedContents={contents} mycourse={mycourse} />
+                    <SelectedCustomCourse selectedContents={contents} mycourse={mycourse} style={{width:'100%'}}/>
                 </div>
                 : <></>}
 

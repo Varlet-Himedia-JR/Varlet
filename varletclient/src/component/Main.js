@@ -148,7 +148,7 @@ function Main() {
   return (
     <>
       <Heading />
-      <div className="flex min-h-[100dvh] flex-col">
+      <div className="flex min-h-[100dvh] flex-col w-full">
         <section className="w-full bg-gradient-to-r from-[white] to-[white] py-20 md:py-32" style={{
           backgroundImage: 'url(http://localhost:8070/images/oceans.jpg)',
           backgroundSize: 'cover',
@@ -157,7 +157,7 @@ function Main() {
         }}>
 
           <div className="container w-full flex flex-col items-center justify-center gap-8 px-4 md:flex-row md:gap-12 rounded">
-            <div className="flex w-full flex-col items-center justify-center opacity-80 bg-[white] rounded">
+            <div className="flex w-full flex-col items-center justify-center opacity-90 bg-[white] rounded">
               <div className="flex flex-col items-start justify-center w-full max-w-6xl p-8 space-y-4 md:flex-row md:space-y-0 md:space-x-8">
                 <div className="flex flex-col items-start justify-center space-y-4">
                   <div className="inline-flex w-fit items-center whitespace-nowrap border text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-black text-white px-3 py-1 rounded-full">
