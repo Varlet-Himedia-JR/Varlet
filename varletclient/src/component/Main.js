@@ -7,10 +7,10 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import '../style/main.css';
-import { setCookie, getCookie, removeCookie } from "../util/cookieUtil";
+import { getCookie } from "../util/cookieUtil";
 
 function Main() {
-  const [reviews, setReviews] = useState([]); // 리뷰 목록
+  const [setReviews] = useState([]); // 리뷰 목록
   const [images, setImages] = useState([]); // 슬라이더에 사용할 이미지 목록
   const [page, setPage] = useState(1); // 페이지 번호
   const [hasMore, setHasMore] = useState(true); // 더 로드할 데이터가 있는지 여부
@@ -72,7 +72,6 @@ function Main() {
       .then((result) => {
         setRecentContents(result.data.recentContentsList)
         console.log(recentContents);
-
       })
       .catch((err) => { console.error(err); });
   }, []);
