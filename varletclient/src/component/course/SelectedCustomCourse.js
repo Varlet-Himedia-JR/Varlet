@@ -8,6 +8,7 @@ function SelectedCustomCourse({ selectedContents, mycourse }) {
     const [contents, setContents] = useState({});
     const [selectedCourse, setSelectedCourse] = useState('');
     const [courseDuration, setCourseDuration] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);  // 로딩 상태 관리
 
     const [sdate, setSdate] = useState('');
 
@@ -23,6 +24,34 @@ function SelectedCustomCourse({ selectedContents, mycourse }) {
             // setSelectedCourse(mycourse[0].tseq);
         }
     }, [selectedContents]);
+
+    // useEffect(() => {
+    //     if (selectedCourse) {
+    //         jaxios.get(`/api/course/getMycourse/${selectedCourse}/${getCookie('user').userid}`)
+    //             .then((result) => {
+    //                 setCourseDuration(result.data.duration);
+    //             })
+    //             .catch((err) => { console.error(err); });
+    //     }
+    // }, [selectedCourse]);
+
+    useEffect(() => {
+        if (selectedCourse) {
+            setIsLoading(true);  // 데이터 로드 시작 시 로딩 상태로 설정
+            jaxios.get(`/api/course/getMycourse/${selectedCourse}/${getCookie('user').userid}`)
+                .then((result) => {
+                    const duration = result.data.duration;
+                    setCourseDuration(duration);
+                    if (duration.length > 0) {
+                        setSdate(duration[0]);  // sdate의 초기값 설정
+                    }
+                })
+                .catch((err) => { console.error(err); })
+                .finally(() => {
+                    setIsLoading(false);  // 데이터 로드 완료 시 로딩 상태 해제
+                });
+        }
+    }, [selectedCourse]);
 
     // 일정 등록 함수
     const addDayschedule = async () => {
@@ -60,15 +89,7 @@ function SelectedCustomCourse({ selectedContents, mycourse }) {
         setSelectedCourse(event.target.value);
     };
 
-    useEffect(() => {
-        if (selectedCourse) {
-            jaxios.get(`/api/course/getMycourse/${selectedCourse}/${getCookie('user').userid}`)
-                .then((result) => {
-                    setCourseDuration(result.data.duration);
-                })
-                .catch((err) => { console.error(err); });
-        }
-    }, [selectedCourse]);
+
 
 
     return (
@@ -109,7 +130,8 @@ function SelectedCustomCourse({ selectedContents, mycourse }) {
                                     id="sdate"
                                     name="sdate"
                                     value={sdate}
-                                    onChange={(e) => { setSdate(e.currentTarget.value) }}
+                                    onChange={(e) => setSdate(e.currentTarget.value)}
+                                    disabled={isLoading}  // 로딩 중일 때 비활성화
                                 >
                                     {courseDuration.map((day, index) => (
                                         <option key={index} value={day}>

@@ -161,7 +161,7 @@ function Main() {
               <div className="flex flex-col items-start justify-center w-full max-w-6xl p-8 space-y-4 md:flex-row md:space-y-0 md:space-x-8">
                 <div className="flex flex-col items-start justify-center space-y-4">
                   <div className="inline-flex w-fit items-center whitespace-nowrap border text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-black text-white px-3 py-1 rounded-full">
-                    가볼래-터 8월호 도착❤️
+                    설렘 가득 놀거리✨
                   </div>
                   <h1 className="text-4xl font-bold text-gray-800">
                     여름의 추억
@@ -171,10 +171,10 @@ function Main() {
                       <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path>
                     </svg>
                     <br />
-                    고즈넉한 축제들을 즐겨보세요
+                    국내 다양한 축제들을 즐겨보세요
                   </h1>
                   <a className="text-lg text-gray-600 underline cursor-pointer hover:text-blue-600"  onClick={() => navigate('/contentsList')}>
-                    자세히 보기
+                    목록으로
                   </a>
                 </div>
                 <div className="relative w-full max-w-lg overflow-hidden rounded-lg shadow-lg">
@@ -235,7 +235,7 @@ function Main() {
               </svg>
               <h3 className="text-xl font-bold">놀거리 찾기</h3>
               <p className="text-[#808080]">
-                무엇을 해야할지 모르겠다면 여기서 찾아보세여 전국의 축제들이 있습니다!
+                무엇을 해야할지 모르겠다면 여기서 찾아보세요 전국의 축제들이 있습니다!
               </p>
             </div>
             <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg" onClick={() => navigate('/rcommunity')}>

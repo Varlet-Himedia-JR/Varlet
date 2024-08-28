@@ -17,11 +17,12 @@ function ReviewView() {
     const [newReply, setNewReply] = useState('');
     const { rseq } = useParams();
     const navigate = useNavigate();
-    const userId = getCookie('user').userid;
+    const userId = getCookie('user') ? getCookie('user').userid : '';
+
 
     useEffect(() => {
         // 리뷰 데이터 로드
-        jaxios.get(`/api/review/getReviewView/${rseq}`)
+        axios.get(`/api/review/getReviewView/${rseq}`)
             .then((result) => {
                 const reviewData = result.data.review;
                 if (reviewData) {
@@ -45,7 +46,7 @@ function ReviewView() {
             });
 
         // 댓글 데이터 로드
-        jaxios.get(`/api/reply/getReplies/${rseq}`)
+        axios.get(`/api/reply/getReplies/${rseq}`)
             .then((result) => {
                 setReplies(result.data.replies || []);
             })
@@ -325,7 +326,7 @@ function ReviewView() {
                                             <button onClick={() => setIsEditing(true)}>편집</button>
                                         </>
                                     )}
-                                    <button onClick={handleBackToList}>내 REVIEW</button>
+                                    <button onClick={handleBackToList}>나의 후기</button>
                                 </>
                             ) : null
                         }

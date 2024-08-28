@@ -47,21 +47,36 @@ function Payment({ daySchedule }) {
     }
     //---------------------------------
 
+    // useEffect(() => {
+    //     if (daySchedule && daySchedule.length > 0) {
+    //         setDayschedule(daySchedule);
+    //         console.log(dayschedule);
+    //         let tempPrice = 0;
+    //         for(let i = 0;i<dayschedule.length;i++){
+    //             tempPrice=(tempPrice+dayschedule[i].price);
+    //             console.log(i+'번째 결과:'+tempPrice);
+    //         }
+    //         setTotalPrice(tempPrice);
+    //     } else {
+    //         setDayschedule([]);
+    //         setTotalPrice(0);
+    //     }
+    // }, [dayschedule]);
+
     useEffect(() => {
         if (daySchedule && daySchedule.length > 0) {
-            setDayschedule(daySchedule);
-            console.log(dayschedule);
+            setDayschedule(daySchedule); // daySchedule prop이 변경될 때 dayschedule 상태를 업데이트
             let tempPrice = 0;
-            for(let i = 0;i<dayschedule.length;i++){
-                tempPrice=(tempPrice+dayschedule[i].price);
-                console.log(i+'번째 결과:'+tempPrice);
+            for(let i = 0;i<daySchedule.length;i++){  // dayschedule 대신 daySchedule을 사용
+                tempPrice = tempPrice + daySchedule[i].price;
+                // console.log(i+'번째 결과:'+tempPrice);
             }
             setTotalPrice(tempPrice);
         } else {
             setDayschedule([]);
             setTotalPrice(0);
         }
-    }, [dayschedule]);
+    }, [daySchedule]);
 
     return (
         <>
@@ -78,7 +93,6 @@ function Payment({ daySchedule }) {
                                 <span className="text-sm text-muted-foreground">{contents.dtitle}</span>
                                 <span className="text-sm font-medium">{contents.price}</span>
                             </div>
-
                         </div>
                     ))
                         : <div className="grid gap-1">
@@ -88,9 +102,9 @@ function Payment({ daySchedule }) {
                     <div data-orientation="horizontal" role="none" className="shrink-0 bg-border h-[1px] w-full"></div>
                     <hr></hr>
                     <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium">Total</span>
+                        <span className="text-sm font-medium">합계</span>
                         <span className="text-sm font-medium">{totalPrice}</span>
-                        <span className="text-sm font-medium">Point</span>
+                        <span className="text-sm font-medium">보유 포인트</span>
                         <span className="text-sm font-medium">{getCookie('user').point}</span>
                     </div>
                 </div>
