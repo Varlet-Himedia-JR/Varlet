@@ -51,43 +51,12 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
         }
     }
 
-    // 일정 등록 함수
-    // const updateDayschedule = async () => {
-
-    //     const sDateTimeString = `${sdate}T${stime}:00`;
-    //     const sDateObject = new Date(sDateTimeString);
-    //     const eDateTimeString = `${sdate}T${etime}:00`;
-    //     const eDateObject = new Date(eDateTimeString);
-    //     const dDateString = `${sdate}T00:00:00`;
-    //     const dDateObject = new Date(dDateString);
-
-    //     try {
-    //         let result = await jaxios.post('/api/dayschedule/updateDayschedule', {
-    //             dtitle: scheduleDetail.dtitle,
-    //             cseq: scheduleDetail.cseq,
-    //             userid: scheduleDetail.userid,
-    //             tseq: scheduleDetail.tseq,
-    //             day_date: dDateObject,
-    //             start_time: sDateObject,
-    //             end_time: eDateObject,
-    //             price: price,
-    //             pcount: pcount
-    //         });
-    //         if (result.data.msg == 'ok') {
-    //             alert('등록완료');
-    //             setIsScheduledetailVisible(false);
-    //         }
-    //     } catch (err) {
-    //         console.error(err);
-    //     }
-    // }
 
     const updatePositions = () => {
         if (daySchedule && daySchedule.length > 0) {
             const position = [];
             for (let i = 0; i < daySchedule.length; i++) {
-                // console.log(i, '번째 레츠기릿');
-                // console.log(daySchedule[i].day_date);
+               
 
                 // Date 객체로 변환
                 let date = new Date(daySchedule[i].day_date);
@@ -97,7 +66,6 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
 
                 // 다시 문자열로 변환
                 let daydate = date.toISOString();
-                // console.log('조정된 날짜:', daydate);
 
                 date = new Date(daySchedule[i].start_time);
                 date.setTime(date.getTime() + (9 * 60 * 60 * 1000));
@@ -110,8 +78,6 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
                 let c = 'black';
 
                 for (let j = days.length - 1; j >= 0; j--) {
-                    // console.log('day 비교:', days[j].substring(5, 10));
-                    // console.log('스케쥴 비교:', daydate.substring(5, 10));
 
                     if (days[j].substring(5, 10) === daydate.substring(5, 10)) {
                         x = days.length - 1 - j;
@@ -157,7 +123,7 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
     }, [daySchedule, days, cellwidth]);
 
     useEffect(() => {
-        updateCellWidth(); // Initial calculation
+        updateCellWidth(); 
         window.addEventListener('resize', updateCellWidth);
         return () => window.removeEventListener('resize', updateCellWidth);
     }, [days]);
@@ -173,9 +139,7 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
         return 0;
     };
 
-    function pay() {
-        navigate('/pay', { state: { dayschedule } });
-    }
+   
 
     return (
         <div className="timetable">
@@ -199,8 +163,7 @@ const Timetable = ({ courseDuration, daySchedule, cellWidth }) => {
                 dayschedule.map((contents, index) => (
                     <div key={index} className="datacell" style={{ right: `${cellposition[index].x * cellwidth}px`, top: `${cellposition[index].y * 40}px`, height: `${cellposition[index].l * 40}px`, backgroundColor: `${cellposition[index].c}`, color: 'black', width: `${getCourseCellWidthInPixels()}px` }} onClick={() => scheduleDetail(contents.dseq, index, isScheduledetailVisible)} >
                         {contents.dtitle}
-                        {/* /{contents.price > 0 ? '₩' + contents.price : '무료'} */}
-                        {/* {contents.start_time}/{contents.day_date} */}
+                       
                         <button style={{ position: 'absolute', top: '5px', right: '5px', backgroundColor: 'transparent', border: 'none', color: 'black', fontSize: '16px', cursor: 'pointer', padding: 0 }}
                             onClick={(e) => {
                                 e.stopPropagation(); // 부모 div의 onClick 이벤트를 막음

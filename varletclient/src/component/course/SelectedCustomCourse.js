@@ -1,40 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import jaxios from '../../util/jwtUtil';
 import { getCookie } from '../../util/cookieUtil';
-import { useNavigate } from "react-router-dom";
 
 function SelectedCustomCourse({ selectedContents, mycourse }) {
-
     const [contents, setContents] = useState({});
     const [selectedCourse, setSelectedCourse] = useState('');
     const [courseDuration, setCourseDuration] = useState([]);
     const [isLoading, setIsLoading] = useState(true);  // 로딩 상태 관리
-
     const [sdate, setSdate] = useState('');
-
     const [stime, setStime] = useState('');
     const [etime, setEtime] = useState('');
     const [price, setPrice] = useState('');
     const [pcount, setPcount] = useState('1');
 
+    // selectedContents가 변경될 때 contents를 설정
     useEffect(() => {
         if (selectedContents) {
             setContents(selectedContents.contents);
-            console.log(mycourse);
-            // setSelectedCourse(mycourse[0].tseq);
         }
     }, [selectedContents]);
 
-    // useEffect(() => {
-    //     if (selectedCourse) {
-    //         jaxios.get(`/api/course/getMycourse/${selectedCourse}/${getCookie('user').userid}`)
-    //             .then((result) => {
-    //                 setCourseDuration(result.data.duration);
-    //             })
-    //             .catch((err) => { console.error(err); });
-    //     }
-    // }, [selectedCourse]);
+    // mycourse가 변경될 때 초기 selectedCourse 설정
+    useEffect(() => {
+        if (mycourse.length > 0) {
+            setSelectedCourse(mycourse[0].tseq);
+        }
+    }, [mycourse]);
 
+    // selectedCourse가 변경될 때 courseDuration 로드
     useEffect(() => {
         if (selectedCourse) {
             setIsLoading(true);  // 데이터 로드 시작 시 로딩 상태로 설정
@@ -55,7 +48,6 @@ function SelectedCustomCourse({ selectedContents, mycourse }) {
 
     // 일정 등록 함수
     const addDayschedule = async () => {
-
         const sDateTimeString = `${sdate}T${stime}:00`;
         const sDateObject = new Date(sDateTimeString);
         const eDateTimeString = `${sdate}T${etime}:00`;
@@ -74,23 +66,19 @@ function SelectedCustomCourse({ selectedContents, mycourse }) {
                 price: price,
                 pcount: pcount
             });
-            if (result.data.msg == 'ok') {
+            if (result.data.msg === 'ok') {
                 alert('등록완료');
-                // setIsAddContentsVisible(false);
                 window.location.reload();
             }
         } catch (err) {
             console.error(err);
         }
-    }
+    };
 
-
+    // 코스 변경 핸들러
     const handleCourseChange = (event) => {
         setSelectedCourse(event.target.value);
     };
-
-
-
 
     return (
         <div className="rounded-lg border bg-card text-card-foreground">
@@ -99,29 +87,34 @@ function SelectedCustomCourse({ selectedContents, mycourse }) {
                     <div className="flex space-x-4">
                         <div className="space-y-2">
                             <label
-                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                className="text-lg text-muted-foreground font-bold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                 htmlFor="date"
                             >
                                 나의 여행
                             </label>
-                            {mycourse.length > 0 ? <div className="flex justify-between">
-                                <select
-                                    id="mycourse"
-                                    name="mycourse"
-                                    value={selectedCourse}
-                                    onChange={handleCourseChange}
-                                >
-                                    {mycourse.map((course, index) => (
-                                        <option key={index} value={course.tseq}>
-                                            {course.tname}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div> : <></>}
+                            {mycourse.length > 0 ? (
+                                <div className="flex justify-between">
+                                    <select
+                                        id="mycourse"
+                                        name="mycourse"
+                                        value={selectedCourse}
+                                        onChange={handleCourseChange}
+                                    >
+                                        {mycourse.map((course, index) => (
+                                            <option key={index} value={course.tseq}>
+                                                {course.tname}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            ) : (
+                                <p>여행 코스를 선택할 수 없습니다.</p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <label
-                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                className="text-lg text-muted-foreground font-bold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                htmlFor="date"
                             >
                                 날짜
                             </label>
@@ -133,18 +126,27 @@ function SelectedCustomCourse({ selectedContents, mycourse }) {
                                     onChange={(e) => setSdate(e.currentTarget.value)}
                                     disabled={isLoading}  // 로딩 중일 때 비활성화
                                 >
-                                    {courseDuration.map((day, index) => (
-                                        <option key={index} value={day}>
-                                            {day}
-                                        </option>
-                                    ))}
+                                    {isLoading ? (
+                                        <option>로딩 중...</option>
+                                    ) : courseDuration.length > 0 ? (
+                                        courseDuration.map((day, index) => (
+                                            <option key={index} value={day}>
+                                                {day}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option>날짜를 선택할 수 없습니다.</option>
+                                    )}
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            <label
+                                className="text-lg text-muted-foreground font-bold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                htmlFor="stime"
+                            >
                                 시작 시간
                             </label>
                             <div className="relative">
@@ -174,7 +176,10 @@ function SelectedCustomCourse({ selectedContents, mycourse }) {
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            <label
+                                className="text-lg text-muted-foreground font-bold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                htmlFor="etime"
+                            >
                                 종료 시간
                             </label>
                             <div className="relative">
@@ -207,7 +212,10 @@ function SelectedCustomCourse({ selectedContents, mycourse }) {
                 </div>
                 <div className="grid grid-cols-1 gap-4">
                     <div className="space-y-2">
-                        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        <label
+                            className="text-lg text-muted-foreground font-bold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            htmlFor="title"
+                        >
                             제목
                         </label>
                         <input
@@ -215,12 +223,16 @@ function SelectedCustomCourse({ selectedContents, mycourse }) {
                             id="title"
                             placeholder="Enter a title"
                             value={contents.cname}
+                            readOnly
                         />
                     </div>
                 </div>
                 <div className="grid grid-cols-1 gap-4">
                     <div className="space-y-2">
-                        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        <label
+                            className="text-lg text-muted-foreground font-bold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            htmlFor="price"
+                        >
                             가격
                         </label>
                         <input
@@ -235,7 +247,10 @@ function SelectedCustomCourse({ selectedContents, mycourse }) {
                 </div>
                 <div className="grid grid-cols-1 gap-4">
                     <div className="space-y-2">
-                        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        <label
+                            className="text-lg text-muted-foreground font-bold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            htmlFor="people"
+                        >
                             인원수
                         </label>
                         <input
@@ -246,9 +261,14 @@ function SelectedCustomCourse({ selectedContents, mycourse }) {
                             value={pcount}
                             onChange={(e) => { setPcount(e.currentTarget.value) }}
                         />
-                        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={addDayschedule}>일정등록</button>
-                        {/* <button onClick={addDayschedule}>일정등록</button> */}
-                        {/* <input type="text" value={1} onChange={(e) => { setPcount(e.currentTarget.value) }} /> */}
+                        <br/>
+                        <button 
+                            type="button" 
+                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" 
+                            onClick={addDayschedule}
+                        >
+                            일정등록
+                        </button>
                     </div>
                 </div>
             </div>

@@ -36,8 +36,8 @@
 
 .add_contents {
     position: fixed;
-    top: 20%;
-    left: 25%;
+    top: 10%;
+    left: 33%;
     width: 50%;
     height: 80%;
     background-color: white;
@@ -46,7 +46,7 @@
     /* display:flex; */
     /* justify-content: center; */
     /* align-items: flex-start; */
-    border-radius:15px;
+    border-radius: 15px;
 
 }
 
@@ -71,12 +71,12 @@
 
 }
 
-.addttamker{
+.addttamker {
     font-family: 'Mplus 1p Bold';
     font-style: normal;
     font-weight: 700;
     font-size: 18.5px;
-    color:#1e90ff
+    color: #1e90ff
 }
 
 .add_contents .contents-item:hover {
@@ -132,7 +132,7 @@ ul.floating li.button.search {
     z-index: 4;
     display: flex;
     justify-content: center;
-    width:220px;
+    width: 220px;
 }
 
 ul.floating li.button.custom {
@@ -143,7 +143,7 @@ ul.floating li.button.custom {
     z-index: 4;
     display: flex;
     /* justify-content: center; */
-    width:200px;
+    width: 200px;
 }
 
 .coursemenubtn {
@@ -166,12 +166,19 @@ ul.floating li.button.custom {
     color: #000000;
     cursor: pointer;
     margin: 0 10px;
-    border:1px solid #d6d6d6;
+    border: 1px solid #d6d6d6;
 }
 
 .mycourse_container {
     display: flex;
     justify-content: column;
+}
+
+@media screen and (max-width: 768px) {
+    .mycourse_container {
+        flex-direction: row;
+        /* 화면이 작아지면 세로 배치 */
+    }
 }
 
 .coursemenu {
@@ -245,4 +252,8 @@ ul.floating li.button.custom {
     justify-content: center;
     border-radius: 5px;
     border: none;
+    font-family: 'Mplus 1p Bold';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18.5px;
 }
