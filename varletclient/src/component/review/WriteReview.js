@@ -121,7 +121,7 @@ function WriteReview() {
             </div>
             
                 <div className="reviewWriteForm">
-                <h2>WRITE FORM</h2>
+                <h2>여행 후기 작성</h2>
                     <div className="field">
                         <label>제목</label>
                         <input 

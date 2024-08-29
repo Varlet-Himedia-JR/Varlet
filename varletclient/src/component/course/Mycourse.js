@@ -14,19 +14,19 @@ import SelectedCustomCourse from './SelectedCustomCourse';
 function Mycourse() {
     const [selectedCourse, setSelectedCourse] = useState('');
     const [mycourse, setMycourse] = useState([]);
-    const [selectedContents, setSelectedContents] = useState({});
-    const [mycoursename, setMycoursename] = useState([]);
     const [courseDuration, setCourseDuration] = useState([]);
     const [daySchedule, setDaySchedule] = useState([]);
     const userCookie = getCookie('user');
     const [ttmaker, setTtmaker] = useState('');
     const location = useLocation();
-    // const { contents } = location.state || {};
     const [contents, setContents] = useState({});
     const [cellWidth, setCellWidth] = useState(0);
     const [isCourseContentsVisible, setIsCourseContentsVisible] = useState(false);
     const [isCourseCustom, setIsCourseCustom] = useState(false);
     const timetableRef = useRef();
+
+
+
     const handleCourseChange = (event) => {
         setSelectedCourse(event.target.value);
     };
@@ -39,12 +39,6 @@ function Mycourse() {
     const [title, setTitle] = useState('');
     const [pcount, setPcount] = useState('1');
 
-    // useEffect(() => {
-    //     if (contents) {
-    //         console.log(contents);
-    //         setSelectedContents(contents);
-    //     }
-    // }, [contents]);
 
     useEffect(() => {
         if (location.state) {
@@ -90,16 +84,12 @@ function Mycourse() {
     }
 
     useEffect(() => {
-        // jaxios.get(`/api/course/getTnames/${userCookie.userid}`)
         jaxios.get(`/api/timetable/getAllMyCourse/${userCookie.userid}`)
             .then((result) => {
                 const course = result.data.mycourse;
                 const tnames = course.map(c => c.tname);
-                setMycoursename(tnames);
                 setMycourse(result.data.mycourse)
-                // setMycourse(result.data.mycourse.tname);
                 if (result.data.mycourse.length > 0) {
-                    // console.log(result.data.mycourse);
                     setSelectedCourse(course[0].tseq);
                     setCellWidth(tnames.length);
                 }
@@ -126,18 +116,6 @@ function Mycourse() {
         }
     }, [selectedCourse]);
 
-    // const captureTimetable = () => {
-    //     const timetableElement = timetableRef.current;
-    //     html2canvas(timetableElement).then(canvas => {
-    //         const imgData = canvas.toDataURL('image/png');
-    //         const link = document.createElement('a');
-    //         link.href = imgData;
-    //         link.download = 'timetable.png';
-    //         link.click();
-    //     }).catch(error => {
-    //         console.error('캡쳐 중 오류 발생:', error);
-    //     });
-    // };
 
 
 
@@ -183,10 +161,7 @@ function Mycourse() {
 
             const result = jaxios.post(`/api/timetable/deleteTimetable/${tseq}`)
                 .then(() => {
-                    // if (result.data.msg == 'ok') {
-                    // alert('삭제했나,,?');
                     window.location.reload();
-                    // }
                 })
                 .catch((err) => { console.error(err) })
         }
@@ -202,7 +177,6 @@ function Mycourse() {
                         paddingRight: '15px',
                         borderRight: '1px solid #d6d6d6'
                     }}>
-                        {/* <div className='background'><img src="http://localhost:8070/images/oceans.jpg" alt="Background" /></div> */}
 
                         <div className='course' style={{ width: '100%' }}>
                             <div className="space-y-2">
@@ -228,23 +202,6 @@ function Mycourse() {
                                     <path d="M12 10l4 4m0 -4l-4 4" />
                                 </svg>
                             </div> : <></>}
-
-                            {/*
-                            <label htmlFor="mycourse">여행 코스를 고르세요</label>
-                            <select
-                                id="mycourse"
-                                name="mycourse"
-                                value={selectedCourse}
-                                onChange={handleCourseChange}
-                            >
-                                {mycourse.map((course, index) => (
-                                    <option key={index} value={course.tseq}>
-                                        {course.tname}
-                                    </option>
-                                ))}
-                            </select>
-                            */}
-                            {/* <p>Selected Course: {selectedCourse}</p> */}
                         </div>
                         <br></br>
                         <div className='course' style={{ width: '100%' }}>
@@ -253,13 +210,7 @@ function Mycourse() {
                                     <button className='addttamker' onClick={handleClickButton} name='ttmaker' >
                                         + 여행코스 만들기
                                     </button>
-                                    // <p onClick={handleClickButton} name='ttmaker' className='addttamker'>┼ 여행코스 만들기</p>
                                     :
-                                    // <svg style={{right:'0'}} xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-backspace" width="40" height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round" onClick={handleClickButton}>
-                                    //     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    //     <path d="M20 6a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-11l-5 -5a1.5 1.5 0 0 1 0 -2l5 -5z" />
-                                    //     <path d="M12 10l4 4m0 -4l-4 4" />
-                                    // </svg>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-logout" width="40" height="40" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round" onClick={handleClickButton}>
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
@@ -273,18 +224,9 @@ function Mycourse() {
                         <div className='course' style={{ width: '100%' }}>
                             {selectedCourse ?
                                 <Payment daySchedule={daySchedule} />
-
                                 : <></>}
                         </div>
-                        {/* <div ref={timetableRef}></div> */}
-                        {/* <button className='coursemenubtn' onClick={captureTimetable} style={{ marginTop: '20px', padding: '10px' }}>
-                            시간표 캡쳐하기
-                        </button> */}
                     </div>
-
-                    {/* -------------시간표------------- */}
-
-                    {/* {cellWidth==0?<Timetable courseDuration={courseDuration} daySchedule={daySchedule} cellWidth={cellWidth} />:<></>} */}
                     {selectedCourse ? <Timetable courseDuration={courseDuration} daySchedule={daySchedule} cellWidth={cellWidth} />
                         : <div className='tempTable'>
                             <br></br>
@@ -339,9 +281,10 @@ function Mycourse() {
                     : <></>
             }
             {isCourseContentsVisible && (
+                
                 <div className="course_contents" >
                     <div className="cchead" style={{ display: 'flex', justifyContent: 'space-between', paddingRight: '60px', zIndex: 5 }}>
-                        course_contents
+                        놀거리에서 선택 추가
                         {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
                         <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-backspace" width="40" height="40" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round" onClick={onChangeCourseContents}>
                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -359,13 +302,18 @@ function Mycourse() {
             )}
             {mycourse.length > 0 && Object.keys(contents).length > 0 ?
                 <div className='add_contents'>
-                    <div className="cchead" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <div className="cchead" style={{ width: '100%', display: 'flex', justifyContent: 'space-between', paddingRight: '100px' }}>
                         <h2>SelectedCustomCourse</h2>
-                        <button style={{ border: '1px solid black' }} onClick={onChangeSelectedCustomCourse}>
+                        {/* <button style={{ border: '1px solid black' }} onClick={onChangeSelectedCustomCourse}>
                             X
-                        </button>
+                        </button> */}
+                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-backspace" width="40" height="40" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round" onClick={onChangeSelectedCustomCourse}>
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M20 6a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-11l-5 -5a1.5 1.5 0 0 1 0 -2l5 -5z" />
+                            <path d="M12 10l4 4m0 -4l-4 4" />
+                        </svg>
                     </div>
-                    <SelectedCustomCourse selectedContents={contents} mycourse={mycourse} />
+                    <SelectedCustomCourse selectedContents={contents} mycourse={mycourse} style={{ width: '100%' }} />
                 </div>
                 : <></>}
 
@@ -511,7 +459,7 @@ function Mycourse() {
                                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                         htmlFor="title"
                                     >
-                                        Title
+                                        제목
                                     </label>
                                     <input
                                         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -556,9 +504,7 @@ function Mycourse() {
                                         value={pcount}
                                         onChange={(e) => { setPcount(e.currentTarget.value) }}
                                     />
-                                    {/* <button onClick={addDayschedule}>일정등록</button> */}
                                     <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={addDayschedule}>일정등록</button>
-                                    {/* <input type="text" value={1} onChange={(e) => { setPcount(e.currentTarget.value) }} /> */}
                                 </div>
                             </div>
                         </div>

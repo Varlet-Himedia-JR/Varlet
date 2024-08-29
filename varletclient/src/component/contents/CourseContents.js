@@ -32,21 +32,7 @@ function CourseContents({ selectedCourse, cseq, mycourse }) {
     function getContentsView(cseq) {
         navigate(`/getContentsView/${cseq}`);
     }
-    // const onInputChange = (event) => {
-    //     const { name, value } = event.target;
-    //     if (name === 'sdate') {
-    //         setSdate(value);
-    //     } else if (name === 'edate') {
-    //         // setEdate(value);
-    //     }
-    // };
-
-    // const handleStart_timeChange = (event) => {
-    //     setStart_time(event.target.value);
-    // };
-    // const handleEnd_timeChange = (event) => {
-    //     setEnd_time(event.target.value);
-    // };
+    
 
     useEffect(() => {
         if (courseDuration && courseDuration.length > 0) {
@@ -419,16 +405,7 @@ function CourseContents({ selectedCourse, cseq, mycourse }) {
                                                 </div>
                                             </div>
                                         </div>
-                                        {/* <div className="space-y-2">
-                                            <label
-                                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                htmlFor="time-end"
-                                            >
-                                                End Time
-                                            </label>
-                                            <input className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" type="time" id="etime" name="etime" required onChange={(e) => { setEtime(e.currentTarget.value) }} />
-
-                                        </div> */}
+                                        
                                     </div>
                                     <div className="grid grid-cols-1 gap-4">
                                         <div className="space-y-2">
@@ -481,9 +458,7 @@ function CourseContents({ selectedCourse, cseq, mycourse }) {
                                                 onChange={(e) => { setPcount(e.currentTarget.value) }}
 
                                             />
-                                            {/* <button onClick={addDayschedule}>일정등록</button> */}
                                             <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={addDayschedule}>일정등록</button>
-                                            {/* <input type="text" value={1} onChange={(e) => { setPcount(e.currentTarget.value) }} /> */}
                                         </div>
                                     </div>
                                 </div>

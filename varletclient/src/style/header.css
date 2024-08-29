@@ -17,11 +17,13 @@
 }
 
 .logo img {
+
     width: 380px;
     height: 55px;
     mix-blend-mode: normal;
     cursor: pointer;
 }
+
 
 .head_contents,.rcommunity,.reviewBoard, .mycourse, .home, .house {
     font-style: normal;
@@ -33,6 +35,7 @@
 }
 
 .login, .join, .line,.myinfo, .logout, .mypoint{
+
     font-style: normal;
     font-weight: 700;
     font-size: 15.5px;
@@ -76,6 +79,7 @@
 }
 /* 회원가입 */
 .join {
+
     margin-bottom: 5px;
     width: 62px;
     height: 14px;
@@ -88,6 +92,7 @@
 }
 
 .mypoint{
+
     width: 180px;
     height: 14px;
 }
@@ -97,6 +102,7 @@
     height: 17px;
     margin-right: 20px;
 }
+
 
 .house{
     width: 100px;
@@ -115,14 +121,26 @@
     border-radius: 20%;
 }
 
+
 .loginUserInfo {
     display: flex;
     align-items: center;
     margin-right: 80px;
 }
 
-.auth-buttons {
+/* 사이드 메뉴 */
+.side-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+    padding-top: 60px;
+    z-index: 1000;
     display: flex;
+
     align-items: center;
     width: 170px;
     height: 25px;

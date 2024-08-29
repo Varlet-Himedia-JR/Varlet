@@ -128,8 +128,13 @@ function ContentsList() {
                 <div className='background'><img src="http://localhost:8070/images/oceans.jpg" /></div>
             </div>
 
-            <div className='mycourseContentsList' style={{ paddingTop: '100px', bottom: '100px' }}>
-                <div className="contents-container flex flex-wrap justify-between" style={{ paddingTop: '100px' }}>
+            <div className='mycourseContentsList' style={{ paddingTop: '50px', bottom: '100px' }}>
+                <div className="contents-container flex flex-wrap justify-between" >
+                <h1 className="text-4xl font-bold text-gray-800">
+                    
+                    <br />
+                    국내 다양한 놀거리들을 즐겨보세요
+                  </h1>
                     <div className="search-container" style={{ marginBottom: "20px", width: "100%" }}>
                         <input
                             className='search-bar'

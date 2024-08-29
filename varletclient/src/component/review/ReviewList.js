@@ -106,7 +106,7 @@ function ReviewList() {
 
             <div className='reviewList' style={{ flex: "4" }} >
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-                        <h2>Review List</h2>
+                        <h2>여행 후기</h2>
                         <button className="add-review-button" onClick={handleAddReview}>리뷰 작성</button>
                     </div>
                     <div className="search-container" style={{ marginBottom: "20px" }}>
