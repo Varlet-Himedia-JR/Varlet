@@ -191,7 +191,7 @@ function ReviewView() {
     return (
         <>
             <Heading />
-            <div className='background'><img src="http://localhost:8070/images/oceans.jpg"/></div>
+            <div className='background'><img alt=''src="http://localhost:8070/images/oceans.jpg"/></div>
                     {
                         review ? (
                             <div className='reviewview' style={{flex:4}}>

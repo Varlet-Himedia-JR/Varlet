@@ -17,7 +17,6 @@ import Mycourse from "./component/course/Mycourse";
 import Kakaosaveinfo from "./component/member/Kakaosaveinfo";
 import Naversaveinfo from "./component/member/Naversaveinfo";
 import ContentsList from "./component/contents/ContentsList";
-import Testcontents from "./component/contents/Testcontents";
 import ContentsView from "./component/contents/ContentsView";
 import MyPage from "./component/member/MyPage";
 import MyInfo from "./component/member/MyInfo";
@@ -82,7 +81,6 @@ function App() {
         
         {/* 여행 콘텐츠 */}
         <Route path="/contentsList" element={<ContentsList />} />
-        <Route path="/testlist" element={<Testcontents />} />
         <Route path="/getContentsView/:cseq" element={<ContentsView />} />
 
         {/* 마이페이지 */}

@@ -2,10 +2,10 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import jaxios from '../../util/jwtUtil';
 import { location1Data, location2Data } from '../request/LocaionData';
-import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
+import { setCookie, getCookie } from "../../util/cookieUtil";
 import Footer from '../headerfooter/Footer';
 import Heading from '../headerfooter/Heading';
-import { cookies } from 'next/headers';
+
 import { useInView } from "react-intersection-observer";
 
 
@@ -17,9 +17,9 @@ function RCommunityView() {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [files, setFiles] = useState([]);
   const [content, setContent] = useState('');
-  const [image, setImage] = useState([]);
+  const [ setImage] = useState([]);
   const [saveimages, setSaveImages] = useState([]);
-  const [imgSrc, setImgSrc] = useState([]);
+  const [setImgSrc] = useState([]);
   const [removedFiles, setRemovedFiles] = useState([]);
   const [replies, setReplies] = useState([]); 
   const replyFormRef = useRef(null);
@@ -29,12 +29,12 @@ function RCommunityView() {
   const [page, setPage] = useState(1); // 현재 페이지 상태 추가
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [totalReplies, setTotalReplies] = useState(0); // 전체 답글 수
+  const [setTotalReplies] = useState(0); // 전체 답글 수
 
 
-  const [ref, inView] = useInView({
-    threshold: 50  
-  });
+  // const [ref, inView] = useInView({
+  //   threshold: 50  
+  // });
 
 
 

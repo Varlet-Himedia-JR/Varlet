@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from '../../util/jwtUtil';
 import { useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
 import Footer from './../headerfooter/Footer';
 import '../../style/customer.css';
-import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
+import { setCookie, getCookie } from "../../util/cookieUtil";
 import jaxios from '../../util/jwtUtil';
 import moment from 'moment';
-import { location1Data, location2Data } from '../request/LocaionData';
+import { location2Data } from '../request/LocaionData';
 import Heading from '../headerfooter/Heading';
 
 function RPostWritePost() {
@@ -88,14 +86,14 @@ function RPostWritePost() {
     }
   }, [location]);
 
-  const onInputChange = (event) => {
-    const { name, value } = event.target;
-    if (name === 'startDate') {
-      setStartDate(value);
-    } else if (name === 'endDate') {
-      setEndDate(value);
-    }
-  };
+  // const onInputChange = (event) => {
+  //   const { name, value } = event.target;
+  //   if (name === 'startDate') {
+  //     setStartDate(value);
+  //   } else if (name === 'endDate') {
+  //     setEndDate(value);
+  //   }
+  // };
 
   const RewardChange = (event) => {
     const { value } = event.target;

@@ -6,8 +6,6 @@ import Footer from './../headerfooter/Footer';
 import '../../style/contents.css';
 import '../../style/login.css';
 import { getCookie } from "../../util/cookieUtil";
-import jaxios from '../../util/jwtUtil';
-
 
 function ContentsList() {
     const [contentsList, setContentsList] = useState([]); // 놀거리 목록
@@ -67,8 +65,6 @@ function ContentsList() {
             setFilteredContents(contentsList);
         } else {
             const result = await axios.get('/api/contents/search', { params: { query: searchTerm } })
-            console.log(result);
-            console.log(result.data.contentsList);
             const newContents = result.data.contentsList; // 서버 응답의 데이터 구조에 맞게 필드 수정
             setFilteredContents(newContents); // 서버에서 받은 필터링된 결과를 상태에 저장
         }
