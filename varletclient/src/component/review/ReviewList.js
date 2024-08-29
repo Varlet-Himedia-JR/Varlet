@@ -101,7 +101,7 @@ function ReviewList() {
         <>
             <Heading />
             <div >
-            <div className='background'><img src="http://localhost:8070/images/oceans.jpg"/></div>
+            <div className='background'><img alt='' src="http://localhost:8070/images/oceans.jpg"/></div>
             </div>
 
             <div className='reviewList' style={{ flex: "4" }} >
@@ -149,7 +149,6 @@ function ReviewList() {
                         }
                     </div>
                 </div>
-            <Footer />
         </>
     );
 }

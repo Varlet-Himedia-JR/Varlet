@@ -1,128 +1,131 @@
 .header {
     position: absolute;
     width: 100%;
-    height: 100px;
-    mix-blend-mode: normal;
-    margin-bottom: 5px;
+    height: 70px;
 }
 
 .category_menu {
     position: absolute;
     display: flex;
     align-items: center;
+    text-align: center;
     justify-content: space-between;
     width: 100%;
     height: 100%;
     background: rgb(255, 255, 255);
     z-index: 1000;
-    box-shadow:0 4px 8px rgba(0,0,0,0.1);
 }
 
 .logo img {
-    width: 200px;
-    height: 70px;
+
+    width: 380px;
+    height: 55px;
     mix-blend-mode: normal;
     cursor: pointer;
 }
 
-.menu-items, .auth-buttons, .loginUserInfo {
-    display: flex;
-    align-items: center;
-}
 
-.contents,
-.rcommunity,
-.reviewBoard,
-.mycourse,
-.login,
-.join,
-.myinfo,
-.logout,
-.mypoint {
-    font-family: 'Mplus 1p Bold';
+.head_contents,.rcommunity,.reviewBoard, .mycourse, .home, .house {
     font-style: normal;
-    font-weight: 700;
-    font-size: 18.5px;
+    font-weight: 900;
+    font-size: 15.5px;
     line-height: 22px;
     color: #000000;
     cursor: pointer;
-    margin: 0 10px;
+}
+
+.login, .join, .line,.myinfo, .logout, .mypoint{
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 15.5px;
+    line-height: 22px;
+    color: #000000;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.line{
+    width: 2px;
+    margin-bottom: 2px;
 }
 
 .rcommunity {
-    width: 140px;
-    height: 27px;
+    width: 120px;
+    height: 14px;
 }
 
-.contents {
-    width: 60px;
-    height: 27px;
+.head_contents {
+    width: 80px;
+    height: 14px;
 }
 
 .reviewBoard {
-    width: 100px;
-    height: 27px;
+    width: 78px;
+    height: 14px;
 }
 
 .mycourse {
-    width: 160px;
-    height: 27px;
+    width: 135px;
+    height: 14px;
 }
 
+/* 로그인 */
 .login {
-    width: 60px;
-    height: 27px;
+    margin-left: 20px;
+    margin-bottom: 5px;
+    width: 47px;
+    height: 14px;
 }
-
+/* 회원가입 */
 .join {
-    width: 80px;
-    height: 27px;
-    margin-right: 20px;;
+
+    margin-bottom: 5px;
+    width: 62px;
+    height: 14px;
 }
 
 .myinfo {
     width: 100px;
-    height: 27px;
+    height: 14px;
+    margin-left: 20px;
 }
 
 .mypoint{
-    width: 240px;
-    height: 27px;
+
+    width: 180px;
+    height: 14px;
 }
 
 .logout {
     width: 80px;
-    height: 27px;
-    margin-right: 20px;;
+    height: 17px;
+    margin-right: 20px;
 }
 
-.profileimg {
-    width:70px;
-    height:70px;
-    border: 1px solid black;
-    border-radius: 50%;
+
+.house{
+    width: 100px;
+    height: 14px;
+}
+
+.home{
+    width: 15px;
+    height: 14px;
 }
 
 .profileimg img {
-    width:69px;
-    height:68px;
+    width:64px;
+    height:64px;
     z-index: 4;
-    border-radius: 50%;
+    border-radius: 20%;
 }
 
-/* 햄버거 메뉴 아이콘 */
-.hamburger-menu {
-    display: none;
-    flex-direction: column;
-    cursor: pointer;
-}
 
-.hamburger-menu .bar {
-    width: 25px;
-    height: 3px;
-    background-color: #000;
-    margin: 4px 0;
-    transition: 0.4s;
+.loginUserInfo {
+    display: flex;
+    align-items: center;
+    margin-right: 80px;
 }
 
 /* 사이드 메뉴 */
@@ -137,30 +140,10 @@
     padding-top: 60px;
     z-index: 1000;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding-left: 20px;
-    transition: transform 0.3s ease;
-}
 
-/* 닫기 버튼 스타일링 */
-.close-button {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-}
-
-/* 반응형 스타일링 */
-@media screen and (max-width: 768px) {
-    .menu-items, .auth-buttons, .loginUserInfo {
-        display: none;
-    }
-
-    .hamburger-menu {
-        display: flex;
-    }
+    align-items: center;
+    width: 170px;
+    height: 25px;
+    border-radius: 20px;
+    background-color: rgb(105, 177, 249);
 }
