@@ -51,4 +51,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
 
     boolean existsByEmail(String email);
 
+    @Modifying //DB 수정하는 어노테이션
+    @Query("UPDATE Member m SET m.pwd = :pwd WHERE m.userid = :userid")
+    void updatePwd(String pwd);
 }

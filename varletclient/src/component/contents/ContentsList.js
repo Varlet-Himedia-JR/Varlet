@@ -6,7 +6,6 @@ import Footer from './../headerfooter/Footer';
 import '../../style/contents.css';
 import '../../style/login.css';
 import { getCookie } from "../../util/cookieUtil";
-import jaxios from '../../util/jwtUtil';
 
 
 function ContentsList() {

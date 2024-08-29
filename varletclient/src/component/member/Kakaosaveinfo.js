@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { loginAction, setFollowers, setFollowings } from '../../store/userSlice';
 
 import { setCookie } from '../../util/cookieUtil';
-import jaxios from '../../util/jwtUtil';
 
 function Kakaosaveinfo() {
     const dispatch = useDispatch();
