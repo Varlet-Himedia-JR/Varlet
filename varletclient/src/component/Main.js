@@ -210,7 +210,7 @@ function Main() {
         </section>
         <div className="flex flex-col items-center w-full p-8 space-y-8">
       <h1 className="text-2xl font-bold">현재 인기 많은 여행지</h1>
-      <div className="flex justify-center space-x-8">
+      <div className="flex justify-center space-x-8 ">
         <a href="#" className="text-muted-foreground">
           자연이 아름다운 섬, 울릉도
         </a>
@@ -239,7 +239,7 @@ function Main() {
           </svg>
         </button>
         <div className="grid grid-cols-3 gap-4">
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px]" data-v0-t="card">
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
             <img
               src="http://localhost:8070/images/ulleungdo.jpg"
               alt="Forest"
@@ -248,13 +248,13 @@ function Main() {
               height="200"
               style={{ aspectRatio: '300 / 200', objectFit: 'cover' }}
             />
-            <div className="p-6 space-y-2">
+            <div className="p-6 space-y-2 ">
               <p className="text-sm">♧여름이 가기 전에 떠나는 울릉도 여행...</p>
               <p className="text-xs text-muted-foreground">#울릉도 #여름바다 #전망대 #...</p>
               <p className="text-lg font-bold">울릉도 리뷰 보러가기</p>
             </div>
           </div>
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px]" data-v0-t="card">
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
             <img
               src="http://localhost:8070/images/jeju2.jpg"
               alt="Beach"
@@ -269,7 +269,7 @@ function Main() {
               <p className="text-lg font-bold">제주도 리뷰 보러가기</p>
             </div>
           </div>
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px]" data-v0-t="card">
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
             <img
               src="http://localhost:8070/images/gujedo.jpg"
               alt="Field"
@@ -284,7 +284,7 @@ function Main() {
               <p className="text-lg font-bold">거제도 리뷰 보러가기</p>
             </div>
           </div>
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px]" data-v0-t="card">
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
             <img
               src="http://localhost:8070/images/gujedo.jpg"
               alt="Field"
@@ -299,7 +299,7 @@ function Main() {
               <p className="text-lg font-bold">거제도 리뷰 보러가기</p>
             </div>
           </div>
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px]" data-v0-t="card">
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
             <img
               src="http://localhost:8070/images/gujedo.jpg"
               alt="Field"
@@ -314,7 +314,7 @@ function Main() {
               <p className="text-lg font-bold">거제도 리뷰 보러가기</p>
             </div>
           </div>
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px]" data-v0-t="card">
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
             <img
               src="http://localhost:8070/images/gujedo.jpg"
               alt="Field"
