@@ -398,6 +398,14 @@ public class MemberController {
         return result;
     }
 
+    @PostMapping("/RePwd/{pwd}")
+    public HashMap<String, Object> RePwd(@PathVariable("pwd") String pwd) {
+        HashMap<String, Object> result = new HashMap<>();
+        ms.updatePwd(pwd);
+        result.put("msg", "ok");
+        return result;
+    }
+
 
     // 인증 코드 검증 및 비밀번호 반환 API
     @GetMapping("/verifyCodeAndFindPwd/{email}/{code}")
@@ -451,6 +459,7 @@ public class MemberController {
         System.out.println("뭔데 그래서~~~~~~~~~~~~" + profileImgUrl);
         return result;
     }
+
 
 
     // 이메일 중복처리

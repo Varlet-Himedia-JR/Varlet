@@ -148,6 +148,10 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/member/checkEmail"))
             return true;
+        if (path.startsWith("/member/RePwd/"))
+            return true;
+
+
 
 
         // 이미지 관련
@@ -202,6 +206,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/review/reviewSearch"))
             return true;
+        if (path.startsWith("/findPwd/"))
+            return true;
+
 
         if (path.startsWith("/rcommunity/updatePicked"))
             return true;
@@ -256,7 +263,6 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/contents/writeContents"))
             return true;
-
         if (path.startsWith("/contents/getContentsView/"))
             return true;
 

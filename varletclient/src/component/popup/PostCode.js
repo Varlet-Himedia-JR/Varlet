@@ -1,6 +1,6 @@
 import React from 'react';
 import DaumPostcode from 'react-daum-postcode';
-
+// 우편번호 찾기 팝업
 function PostcodePopup() {
   const handleComplete = (data) => {
     if (data && data.zonecode && data.address) {
@@ -13,7 +13,6 @@ function PostcodePopup() {
       console.error('올바른 데이터를 받지 못했습니다:', data);
     }
   };
-
   return (
     <DaumPostcode onComplete={handleComplete} />
   );

@@ -7,6 +7,7 @@ import '../../style/contents.css';
 import '../../style/login.css';
 import { getCookie } from "../../util/cookieUtil";
 
+
 function ContentsList() {
     const [contentsList, setContentsList] = useState([]); // 놀거리 목록
     const [page, setPage] = useState(1); // 현재 페이지

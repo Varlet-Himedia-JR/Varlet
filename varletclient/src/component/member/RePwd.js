@@ -31,6 +31,8 @@ function RePwd() {
     <>
     <div className='RePwd'>
       <div className='RePwd_field'>
+      </div>
+      <div className='RePwd_field'>
             <label>새 비밀번호</label>
             <input type="password" value={pwd} onChange={
                 (e)=>{ setPwd( e.currentTarget.value ) }

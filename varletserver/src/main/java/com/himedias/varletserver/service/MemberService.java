@@ -158,4 +158,7 @@ public class MemberService {
     CustomSecurityConfig cc;
 
 
+    public void updatePwd(String pwd) {
+        mr.updatePwd(pwd);
+    }
 }

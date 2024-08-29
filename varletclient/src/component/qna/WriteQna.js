@@ -17,7 +17,7 @@ function WriteQna() {
     const navigate = useNavigate();
     const userCookie = getCookie('user');
     const userid = userCookie.userid;
-    
+        
     function onSubmit(){
         if(!subject){ return alert("제목을 입력해주세요")};
         if(!pass){ return alert("비밀번호를 입력해주세요")};

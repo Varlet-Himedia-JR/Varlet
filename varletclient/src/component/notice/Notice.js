@@ -24,7 +24,7 @@ function Notice() {
                 }
                 setBeginend(pageArr);
                 console.log('Paging:', paging);
-                  console.log('Beginend:', beginend);
+                console.log('Beginend:', beginend);
             })
             .catch((err)=>{console.error(err);})
         },[]
@@ -49,7 +49,7 @@ function Notice() {
    
   
     async function onNoticeView(nseq){
-        let result = await axios.get(`/api/notice/getNoticeView/${nseq}`);
+            await axios.get(`/api/notice/getNoticeView/${nseq}`);
             navigate(`/noticeView/${nseq}`);
         }
       
