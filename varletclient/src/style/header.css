@@ -1,11 +1,13 @@
+/* 헤더 */
 .header {
     position: absolute;
     width: 100%;
     height: 70px;
 }
 
+/* 카테고리 메뉴 */
 .category_menu {
-    position: absolute;
+    position: relative;
     display: flex;
     align-items: center;
     text-align: center;
@@ -17,116 +19,53 @@
     box-shadow:0 4px 8px rgba(0,0,0,0.3);
 }
 
+/* 카테고리 div */
+.category_menu div{
+    font-style: normal;
+    font-weight: 800;
+    font-size: 15.5px;
+    line-height: 22px;
+    cursor: pointer;
+}
+
+/* 로고 */
+.logo{
+    width: 350px;
+}
+
+/* 로그인/회원가입 */
+.login-buttons{
+    margin-left: 50px;
+    display: flex;
+    width: 140px;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+/* 로고 이미지*/
 .logo img {
-    width: 380px;
+    width: 350px;
     height: 55px;
     mix-blend-mode: normal;
     cursor: pointer;
+    margin-right: 200px;
+    overflow: hidden;
 }
 
-.head_contents,.rcommunity,.reviewBoard, .mycourse, .home, .house {
-    font-style: normal;
-    font-weight: 900;
-    font-size: 15.5px;
-    line-height: 22px;
-    color: #000000;
-    cursor: pointer;
-}
-
-.login, .join, .line,.myinfo, .logout, .mypoint{
-    font-style: normal;
-    font-weight: 700;
-    font-size: 15.5px;
-    line-height: 22px;
-    color: #000000;
-    cursor: pointer;
-    margin: 0 5px;
-}
-
-.line{
-    width: 2px;
-    margin-bottom: 2px;
-}
-
-.rcommunity {
-    width: 120px;
-    height: 14px;
-}
-
-.head_contents {
-    width: 80px;
-    height: 14px;
-}
-
-.reviewBoard {
-    width: 78px;
-    height: 14px;
-}
-
-.mycourse {
-    width: 135px;
-    height: 14px;
-}
-
-/* 로그인 */
-.login {
-    margin-left: 20px;
-    margin-bottom: 5px;
-    width: 47px;
-    height: 14px;
-}
-/* 회원가입 */
-.join {
-    margin-bottom: 5px;
-    width: 62px;
-    height: 14px;
-}
-
-.myinfo {
-    width: 100px;
-    height: 14px;
-    margin-left: 20px;
-}
-
-.mypoint{
-    width: 180px;
-    height: 14px;
-}
-
-.logout {
-    width: 80px;
-    height: 17px;
-    margin-right: 20px;
-}
-
-.house{
-    width: 100px;
-    height: 14px;
-}
-
-.home{
-    width: 15px;
-    height: 14px;
-}
-
-.profileimg img {
-    width:64px;
-    height:64px;
-    z-index: 4;
-    border-radius: 20%;
-}
-
+/* 로그인 유저 정보 */
 .loginUserInfo {
     display: flex;
+    width: 220px;
     align-items: center;
-    margin-right: 80px;
+    justify-content: space-between;
+    margin-right: 180px;
 }
 
-.auth-buttons {
-    display: flex;
-    align-items: center;
-    width: 170px;
-    height: 25px;
-    border-radius: 20px;
-    background-color: rgb(105, 177, 249);
+/* 프로필 사진 */
+.profileimg img{
+    width: 68px;
+    height: 68px;
+    border: 2px solid black;
+    border-radius: 15%;
 }
+

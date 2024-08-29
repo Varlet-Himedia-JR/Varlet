@@ -1,79 +1,41 @@
 .footer {
     position: relative;
     width: 100%;
-    height: 80px;
-    background-color: rgb(186, 186, 186);
-    display: flex;
-    justify-content: space-between;
+    height: 90px;
+    color: #666666;
+    background: #F7F7F7;
     align-items: center;
+    text-align: center;
     bottom: 0px;
-    overflow: hidden; 
-    ;
+    border-top:1px solid #66666650;
   }
   
-  .footer_menu, .footer_menu2 {
+  .footer_menu{
+    position: relative;
     display: flex;
-    flex-direction: column;
     cursor: pointer;
+    justify-content: space-between;
+    width: 400px;
+    align-items: center;
+    margin-top: 15px;
+    text-align: center;
+    margin-left: 750px;
   }
   
-  .footer_menu div, .footer_menu2 div, .customer {
-    font-family: 'Inter', sans-serif;
+  .footer_menu div {
+    height: 10px;
     font-style: normal;
     font-weight: 800;
-    font-size: 15px;
+    font-size: 12px;
     line-height: 22px;
-    color: #000000;
+    color: #666666;
     margin-bottom: 10px;
   }
   
-  .customer {
-    cursor: pointer;
-    position: absolute;
-    right: 30px;
-    bottom: 0px;
+  .Copyright{
+    position: relative;
+    margin-top: 15px;
+    font-weight: 400;
+    font-size: 14px;
+  }
 
-  }
-  
-
-  .beautiful img {
-    width: 100px;
-    top: 20px;
-    left: 20px;
-  }
-  
-  .varlet img {
-    /* width: 500px; */
-    height: 100%;
-    top: 10px;
-    left: 70%;
-    mix-blend-mode: multiply;
-  }
-  
-  .starfish img {
-    width: 50px;
-    top: 20px;
-    left: 20px;
-  }
-  
-  .treasure-chest img {
-    position: absolute;
-    width: 70px;
-    bottom: 15px;
-    right: 10px;
-
-  }
-  
-  .seashell img {
-    width: 40px;
-    bottom: 30px;
-    left: 150px;
-  }
-  
-  .clam img {
-    position: absolute;
-    width: 50px;
-    top: 30px;
-    right: 150px;
-
-  }

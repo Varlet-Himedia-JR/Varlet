@@ -74,7 +74,7 @@ function Heading() {
                 <div className='mycourse' onClick={() => logCheck('/mycourse')}>여행 코스 만들기</div>
                 <div className='house' onClick={() => alert('준비중입니다.')}>숙소</div>
                 {!userCookie &&
-                <div className='auth-buttons'>
+                <div className='login-buttons'>
                     {!userCookie && <div className='login' onClick={LoginWindow}>로그인</div>}
                     {!userCookie && <div className='line'>|</div>}
                     {!userCookie && <div className='join' onClick={JoinWindow}>회원가입</div>}
@@ -85,9 +85,8 @@ function Heading() {
                         <div className='profileimg'  onClick={handleNicknameClick} >
                             <img src={profileImg}  />
                         </div>
-                        <div  onClick={logout} >로그아웃</div>
                         <div className='myinfo'>{userCookie.nickname}</div>
-                        <div className='mypoint' >point :{userCookie.point}</div>
+                        <div  onClick={logout} >로그아웃</div>
                     </>
                 )}
                 </div>
