@@ -32,7 +32,7 @@ function CourseContents({ selectedCourse, cseq, mycourse }) {
     function getContentsView(cseq) {
         navigate(`/getContentsView/${cseq}`);
     }
-    
+
 
     useEffect(() => {
         if (courseDuration && courseDuration.length > 0) {
@@ -43,7 +43,7 @@ function CourseContents({ selectedCourse, cseq, mycourse }) {
         }
     }, [courseDuration]);
 
-    
+
     useEffect(() => {
         if (tseq) {
             jaxios.get(`/api/course/getMycourse/${tseq}/${getCookie('user').userid}`)
@@ -259,206 +259,232 @@ function CourseContents({ selectedCourse, cseq, mycourse }) {
             {/* 로딩 중 표시 */}
             {hasMore && <div className="loading">Loading more reviews...</div>}
             {isAddContentsVisible && (
-                <div className="add_contents" >
-                    {/* -------------------- */}
+                <div
+                    className="modal-overlay"
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        zIndex: 1000,
+                    }}
+                >
+                    <div
+                        className="modal-content add_contents"
+                        style={{
+                            backgroundColor: '#fff',
+                            padding: '20px',
+                            borderRadius: '8px',
+                            width: '90%',
+                            maxWidth: '600px',
+                            maxHeight: '80%',
+                            overflowY: 'auto',
+                        }}
+                    >
+                        <div className="max-w-2xl mx-auto p-6 sm:p-8 md:p-10 z-1000">
+                            <div className="space-y-6">
+                                <div className="flex items-center justify-between">
+                                    <span className="mx-auto">일정 등록</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-backspace" width="40" height="40" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round" onClick={onChangeAddContents}>
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M20 6a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-11l-5 -5a1.5 1.5 0 0 1 0 -2l5 -5z" />
+                                        <path d="M12 10l4 4m0 -4l-4 4" />
+                                    </svg>
+                                </div>
 
-                    {/* -------------------- */}
-                    <div className="max-w-2xl mx-auto p-6 sm:p-8 md:p-10 z-1000">
-                        <div className="space-y-6">
-                            <div className="flex items-center justify-between">
-                                <span className="mx-auto">일정 등록</span>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="icon icon-tabler icon-tabler-logout"
-                                    width="40"
-                                    height="40"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth="1.5"
-                                    stroke="#000000"
-                                    fill="none"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    onClick={onChangeAddContents}
-                                >
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
-                                    <path d="M9 12h12l-3 -3" />
-                                    <path d="M18 15l3 -3" />
-                                </svg>
-                            </div>
-
-
-                            <div className="rounded-lg border bg-card text-card-foreground">
-                                <div className="p-6 space-y-6">
-                                    <div className="grid grid-cols-1 gap-4">
-                                        <div className="flex space-x-4">
+                                <div className="rounded-lg border bg-card text-card-foreground">
+                                    <div className="p-6 space-y-6">
+                                        <div className="grid grid-cols-1 gap-4">
+                                            <div className="flex space-x-4">
+                                                <div className="space-y-2">
+                                                    <label
+                                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                        htmlFor="date"
+                                                    >
+                                                        나의 여행
+                                                    </label>
+                                                    {mycourse.length > 0 ? (
+                                                        <div className="flex justify-between">
+                                                            <select
+                                                                id="mycourse"
+                                                                name="mycourse"
+                                                                value={tseq}
+                                                                onChange={handleCourseChange}
+                                                            >
+                                                                {mycourse.map((course, index) => (
+                                                                    <option key={index} value={course.tseq}>
+                                                                        {course.tname}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
+                                                        </div>
+                                                    ) : (
+                                                        <></>
+                                                    )}
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label
+                                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                        htmlFor="date"
+                                                    >
+                                                        날짜
+                                                    </label>
+                                                    <div>
+                                                        <select
+                                                            id="sdate"
+                                                            name="sdate"
+                                                            value={sdate}
+                                                            onChange={(e) => {
+                                                                setSdate(e.currentTarget.value);
+                                                            }}
+                                                        >
+                                                            {courseDuration.map((day, index) => (
+                                                                <option key={index} value={day}>
+                                                                    {day}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="space-y-2">
+                                                    <label
+                                                        htmlFor="time"
+                                                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                                    >
+                                                        시작 시간
+                                                    </label>
+                                                    <div className="relative">
+                                                        <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
+                                                            <svg
+                                                                className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                                                                aria-hidden="true"
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                fill="currentColor"
+                                                                viewBox="0 0 24 24"
+                                                            >
+                                                                <path
+                                                                    fillRule="evenodd"
+                                                                    d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
+                                                                    clipRule="evenodd"
+                                                                />
+                                                            </svg>
+                                                        </div>
+                                                        <input
+                                                            type="time"
+                                                            id="stime"
+                                                            name="stime"
+                                                            className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                            required
+                                                            onChange={(e) => {
+                                                                setStime(e.currentTarget.value);
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label
+                                                        htmlFor="time"
+                                                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                                    >
+                                                        종료 시간
+                                                    </label>
+                                                    <div className="relative">
+                                                        <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
+                                                            <svg
+                                                                className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                                                                aria-hidden="true"
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                fill="currentColor"
+                                                                viewBox="0 0 24 24"
+                                                            >
+                                                                <path
+                                                                    fillRule="evenodd"
+                                                                    d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
+                                                                    clipRule="evenodd"
+                                                                />
+                                                            </svg>
+                                                        </div>
+                                                        <input
+                                                            type="time"
+                                                            id="etime"
+                                                            name="etime"
+                                                            className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                            required
+                                                            onChange={(e) => {
+                                                                setEtime(e.currentTarget.value);
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-1 gap-4">
                                             <div className="space-y-2">
                                                 <label
                                                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                    htmlFor="date"
+                                                    htmlFor="title"
                                                 >
-                                                    나의 여행
+                                                    제목
                                                 </label>
-                                                {mycourse.length > 0 ? <div className="flex justify-between">
-                                                    <select
-                                                        id="mycourse"
-                                                        name="mycourse"
-                                                        value={tseq}
-                                                        onChange={handleCourseChange}
-                                                    >
-                                                        {mycourse.map((course, index) => (
-                                                            <option key={index} value={course.tseq}>
-                                                                {course.tname}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </div> : <></>}
+                                                <input
+                                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                                    id="title"
+                                                    placeholder="제목을 입력하세요"
+                                                    value={selectedContents.cname}
+                                                />
                                             </div>
+                                        </div>
+                                        <div className="grid grid-cols-1 gap-4">
                                             <div className="space-y-2">
                                                 <label
                                                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                    htmlFor="date"
+                                                    htmlFor="price"
                                                 >
-                                                    Date
+                                                    가격
                                                 </label>
-                                                <div>
-                                                    <select
-                                                        id="sdate"
-                                                        name="sdate"
-                                                        value={sdate}
-                                                        onChange={(e) => { setSdate(e.currentTarget.value) }}
-                                                    >
-                                                        {courseDuration.map((day, index) => (
-                                                            <option key={index} value={day}>
-                                                                {day}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </div>
+                                                <input
+                                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                                    id="price"
+                                                    placeholder="Enter a price"
+                                                    type="number"
+                                                    value={price}
+                                                    onChange={(e) => setPrice(e.target.value)}
+                                                />
                                             </div>
                                         </div>
-                                        <div className="grid grid-cols-2 gap-4">
+                                        <div className="grid grid-cols-1 gap-4">
                                             <div className="space-y-2">
                                                 <label
-                                                    htmlFor="time"
-                                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                    htmlFor="people"
                                                 >
-                                                    시작 시간
+                                                    인원수
                                                 </label>
-                                                <div className="relative">
-                                                    <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
-                                                        <svg
-                                                            className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                                                            aria-hidden="true"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            fill="currentColor"
-                                                            viewBox="0 0 24 24"
-                                                        >
-                                                            <path
-                                                                fillRule="evenodd"
-                                                                d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
-                                                                clipRule="evenodd"
-                                                            />
-                                                        </svg>
-                                                    </div>
-                                                    <input
-                                                        type="time"
-                                                        id="stime"
-                                                        name="stime"
-                                                        className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                        required
-                                                        onChange={(e) => { setStime(e.currentTarget.value) }}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="space-y-2">
-                                                <label
-                                                    htmlFor="time"
-                                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                                <input
+                                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                                    id="people"
+                                                    placeholder="Enter the number of people"
+                                                    type="number"
+                                                    value={pcount}
+                                                    onChange={(e) => {
+                                                        setPcount(e.currentTarget.value);
+                                                    }}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                                    onClick={addDayschedule}
                                                 >
-                                                    종료 시간
-                                                </label>
-                                                <div className="relative">
-                                                    <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
-                                                        <svg
-                                                            className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                                                            aria-hidden="true"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            fill="currentColor"
-                                                            viewBox="0 0 24 24"
-                                                        >
-                                                            <path
-                                                                fillRule="evenodd"
-                                                                d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
-                                                                clipRule="evenodd"
-                                                            />
-                                                        </svg>
-                                                    </div>
-                                                    <input
-                                                        type="time"
-                                                        id="etime"
-                                                        name="etime"
-                                                        className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                        required
-                                                        onChange={(e) => { setEtime(e.currentTarget.value) }}
-                                                    />
-                                                </div>
+                                                    일정등록
+                                                </button>
                                             </div>
-                                        </div>
-                                        
-                                    </div>
-                                    <div className="grid grid-cols-1 gap-4">
-                                        <div className="space-y-2">
-                                            <label
-                                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                htmlFor="title"
-                                            >
-                                                제목
-                                            </label>
-                                            <input
-                                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                                id="title"
-                                                placeholder="제목을 입력하세요"
-                                                value={selectedContents.cname}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-1 gap-4">
-                                        <div className="space-y-2">
-                                            <label
-                                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                htmlFor="price"
-                                            >
-                                                Price
-                                            </label>
-                                            <input
-                                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                                id="price"
-                                                placeholder="Enter a price"
-                                                type="number"
-                                                value={price}
-                                                onChange={(e) => setPrice(e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-1 gap-4">
-                                        <div className="space-y-2">
-                                            <label
-                                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                htmlFor="people"
-                                            >
-                                                Number of People
-                                            </label>
-                                            <input
-                                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                                id="people"
-                                                placeholder="Enter the number of people"
-                                                type="number"
-                                                value={pcount}
-                                                onChange={(e) => { setPcount(e.currentTarget.value) }}
-
-                                            />
-                                            <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={addDayschedule}>일정등록</button>
                                         </div>
                                     </div>
                                 </div>
@@ -466,6 +492,7 @@ function CourseContents({ selectedCourse, cseq, mycourse }) {
                         </div>
                     </div>
                 </div>
+
             )
             }
         </div >

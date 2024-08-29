@@ -230,26 +230,26 @@ function ContentsWrite() {
                         </div> */}
                             <div class="grid gap-4">
                                 <label class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg" for="title">
-                                    Contents Name
+                                    이름
                                 </label>
                                 <input
                                     class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-base"
                                     id="title"
                                     value={cname}
                                     onChange={(e) => setCname(e.target.value)}
-                                    placeholder="Enter a title for your post"
+                                    placeholder="이름을 입력하세요"
                                 />
                             </div>
                             <div class="grid gap-4">
-                                <label class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg" for="cost">
-                                    Cost
+                                <label class="font-medium text-muted-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg" for="cost">
+                                    비용
                                 </label>
                                 <input
                                     class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-base"
                                     id="title"
                                     value={cost}
                                     onChange={(e) => setCost(e.target.value)}
-                                    placeholder="Enter a title for your post"
+                                    placeholder="비용을 입력하세요"
                                 />
                             </div>
                             <div class="grid gap-4">
@@ -257,7 +257,7 @@ function ContentsWrite() {
                                     class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg"
                                     for="ctype"
                                 >
-                                    Type
+                                    종류
                                 </label>
                                 <select
                                     className='border rounded px-2 py-1'
@@ -274,7 +274,7 @@ function ContentsWrite() {
 
 
                             <label class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg" for="title">
-                                Img
+                                이미지
                             </label>
                             <input type="file" onChange={(e) => { fileupload(e) }} />
 
