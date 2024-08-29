@@ -69,3 +69,65 @@
     border-radius: 15%;
 }
 
+
+/* 햄버거 메뉴 아이콘 */
+.hamburger-menu {
+    cursor: pointer;
+    font-size: 24px;
+    display: block; /* 기본적으로 숨김 */
+}
+
+/* @media screen and (max-width: 768px) {
+    .hamburger-menu {
+        display: block; 
+    }
+    .category_menu {
+        display: none; 
+    }
+} */
+
+/* 모달 오버레이 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* 모달 콘텐츠 */
+.modal-content {
+    background: white;
+    padding: 20px;
+    width: 300px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* 모달 헤더 */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 닫기 버튼 */
+.close-button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* 모달 바디 */
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
