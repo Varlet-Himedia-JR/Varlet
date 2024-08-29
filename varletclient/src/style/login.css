@@ -21,7 +21,8 @@
     line-height: 30px;
     color: #000000;
     text-align: center;
-    margin-top: -60px; /* 이 값을 조정하여 라벨을 위로 이동 */
+    margin-top: 60px; 
+    /* 이 값을 조정하여 라벨을 위로 이동 */
     margin-bottom: 100px; /* 하단 여백도 필요에 따라 조정 */
   }
   

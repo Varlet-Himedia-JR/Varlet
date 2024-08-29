@@ -35,10 +35,10 @@ function Login() {
     return (
         <>
         <Heading/>
-        <div style={{ paddingTop: '100px' }}>
+        {/* <div style={{ paddingTop: '100px' }}>
             <div className='background'><img src="http://localhost:8070/images/oceans.jpg"/></div>
-        </div>
-        <div className="loginform" style={{paddingTop: '100px'}}>
+        </div> */}
+        <div className="loginform" style={{marginTop: '80px'}}>
             <div className='loginlabel'>로그인</div>
             <div className='login_field'>
                 <label>아이디</label>
