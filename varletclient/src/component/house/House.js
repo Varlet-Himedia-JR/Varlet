@@ -1,307 +1,191 @@
-// import React, { useEffect, useRef,useState } from 'react';
-// import Heading from '../headerfooter/Heading';
-// import Footer from '../headerfooter/Footer';
-// import '../../style/house.css';
-
-// function House() {
-//   const mapRef = useRef(null);
-//   const searchInputRef = useRef(null); // 검색 입력 필드에 대한 ref
-//   const [mapLoaded, setMapLoaded] = useState(false); // 상태 추가
-//   const markers = useRef([]); // 마커를 담을 배열을 useRef로 설정
-//   const infowindow = useRef(null); // 인포윈도우를 useRef로 설정
-  
-//     useEffect(() => {
-//       const { kakao } = window;
-//       const defaultLat = 37.5665; // 서울 시청의 위도
-//       const defaultLon = 126.9780; // 서울 시청의 경도
-  
-//       // 사용자의 위치를 사용하거나 기본 위치로 지도를 생성하는 함수
-//       const loadMap = (lat, lon, addMarker = false) => {
-//         const container = mapRef.current; // 지도를 표시할 div
-//         const options = {
-//           center: new window.kakao.maps.LatLng(lat, lon), // 중심 좌표 설정
-//           level: 13, // 확대 레벨
-//         };
-  
-//         // 지도 생성
-//         const map = new window.kakao.maps.Map(container, options);
-
-//         // 지도를 클릭한 위치에 표출할 마커입니다
-//         var marker = new kakao.maps.Marker({}); 
-//         // 지도에 마커를 표시합니다
-//         marker.setMap(map);
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import Heading from './../headerfooter/Heading';
+import Footer from './../headerfooter/Footer';
+import '../../style/contents.css';
+import { getCookie } from "../../util/cookieUtil";
 
 
-//         // 지도에 클릭 이벤트를 등록합니다
-//         // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
-//         kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
-          
-//           // 클릭한 위도, 경도 정보를 가져옵니다 
-//           var latlng = mouseEvent.latLng; 
-          
-//           // 마커 위치를 클릭한 위치로 옮깁니다
-//           marker.setPosition(latlng);
-          
-//         });
-//       };
+function House() {
+    const [house, setHouse] = useState([]); // 숙소 목록
+    const [page, setPage] = useState(1); // 현재 페이지
+    const [hasMore, setHasMore] = useState(true); // 더 로드할 데이터가 있는지 여부
+    const [searchTerm, setSearchTerm] = useState(''); // 검색어
+    const [filteredHouse, setFilteredHouse] = useState([]); // 필터된 리뷰 목록
+    const navigate = useNavigate();
 
-// const container = mapRef.current; // 지도를 표시할 div
-// const options = {
-//   center: new window.kakao.maps.LatLng(37.5665, 126.9780), // 중심 좌표 설정
-//   level: 13, // 확대 레벨
-// };
 
-// // 지도를 생성합니다    
-// var map = new kakao.maps.Map(container, options); 
+    // 놀거리 등록 (관리자만 가능)
+    const writeContents = () => {
+        if (!getCookie('user')) {
+            navigate('/login');
+        } else {
+            for (let i = 0; i < getCookie('user').roleNames.length; i++) {
+                if (getCookie('user').roleNames[i] == 'ADMIN') {
+                    return navigate('/contentsWrite');
+                }
+            }
+            alert('권한이 없습니다');
+        }
+    }
 
-//       // 장소 검색 객체를 생성합니다
-// var ps = new kakao.maps.services.Places();  
 
-// // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
-// var infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
-// // 키워드로 장소를 검색합니다
-// searchPlaces(map);
+    // 데이터 로드 함수
+    const loadHouse = useCallback(async (pageNumber) => {
+        try {
+            const result = await axios.get(`/api/house/getHouse/${pageNumber}`);
+            const { house: newHouses, paging } = result.data;
+            
+            if (Array.isArray(newHouses) && newHouses.length > 0) {
+                setHouse(prevHouse => {
+                    // 기존에 있는 내용과 새로운 내용을 합쳐서 중복을 제거함
+                    const combinedHouse = [...prevHouse, ...newHouses];
+                    const uniqueContents = Array.from(new Set(combinedHouse.map(house => house.hseq)))
+                        .map(hseq => combinedHouse.find(house => house.hseq === hseq)); // cseq로 구별하여 중복컨텐츠 제거
+                    return uniqueContents;
+                });
 
-// // 키워드 검색을 요청하는 함수입니다
-// function searchPlaces(map) {
-//   const { kakao } = window;
-//   const ps = new kakao.maps.services.Places();
-//   const keyword = searchInputRef.current.value;
+                setPage(pageNumber);
 
-//     if (!keyword.trim()) {
-//         alert('키워드를 입력해주세요!');
-//         return;
-//     }
-// }
+                if (!paging || (paging && paging.next === null)) {
+                    setHasMore(false);
+                }
+            } else {
+                setHasMore(false);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }, []);
 
-// // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
-// function placesSearchCB(data, status, pagination) {
-//     if (status === kakao.maps.services.Status.OK) {
+    // 필터링 함수
+    const filterContents = useCallback(async () => {
+        if (searchTerm.trim() === '') {
+            setFilteredHouse(house);
+        } else {
+            const result = await axios.get('/api/house/search', { params: { query: searchTerm } })
+            const newHouse = result.data.house; // 서버 응답의 데이터 구조에 맞게 필드 수정
+            setFilteredHouse(newHouse); // 서버에서 받은 필터링된 결과를 상태에 저장
+        }
+    }, [searchTerm, house]);
 
-//         // 정상적으로 검색이 완료됐으면
-//         // 검색 목록과 마커를 표출합니다
-//         displayPlaces(data);
+    // 스크롤 이벤트 핸들러
+    const handleScroll = useCallback(() => {
+        const scrollTop = document.documentElement.scrollTop; // 현재위치
+        const scrollHeight = document.documentElement.scrollHeight; // 스크롤 가능한 크기
+        const clientHeight = document.documentElement.clientHeight; // 내용물의 크기
 
-//         // 페이지 번호를 표출합니다
-//         displayPagination(pagination);
+        // 스크롤이 페이지 하단에 도달했을 때
+        if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore) {
+            loadHouse(page + 1);
+        }
+    }, [page, hasMore, loadHouse]);
 
-//     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-//         alert('검색 결과가 존재하지 않습니다.');
-//         return;
-//     } else if (status === kakao.maps.services.Status.ERROR) {
-//         alert('검색 결과 중 오류가 발생했습니다.');
-//         return;
+    // 컴포넌트 마운트 시 스크롤 이벤트 리스너 추가
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [handleScroll]);
 
-//     }
-// }
+    // 초기 데이터 로드
+    useEffect(() => {
+        loadHouse(page);
+    }, [loadHouse, page]);
 
-// // 검색 결과 목록과 마커를 표출하는 함수입니다
-// function displayPlaces(places) {
+    // 검색어 변경 핸들러
+    function handleSearchChange(event) {
+        setSearchTerm(event.target.value);
+    }
 
-//     var listEl = document.getElementById('placesList'), 
-//     menuEl = document.getElementById('menu_wrap'),
-//     fragment = document.createDocumentFragment(), 
-//     bounds = new kakao.maps.LatLngBounds(), 
-//     listStr = '';
-    
-//     // 검색 결과 목록에 추가된 항목들을 제거합니다
-//     removeAllChildNods(listEl);
+    // 검색어가 변경될 때마다 필터링
+    useEffect(() => {
+        filterContents();
+    }, [searchTerm, filterContents]);
 
-//     // 지도에 표시되고 있는 마커를 제거합니다
-//     removeMarker();
-    
-//     for ( var i=0; i<places.length; i++ ) {
 
-//         // 마커를 생성하고 지도에 표시합니다
-//         var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
-//             marker = addMarker(placePosition, i), 
-//             itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
 
-//         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-//         // LatLngBounds 객체에 좌표를 추가합니다
-//         bounds.extend(placePosition);
 
-//         // 마커와 검색결과 항목에 mouseover 했을때
-//         // 해당 장소에 인포윈도우에 장소명을 표시합니다
-//         // mouseout 했을 때는 인포윈도우를 닫습니다
-//         (function(marker, title) {
-//             kakao.maps.event.addListener(marker, 'mouseover', function() {
-//                 displayInfowindow(marker, title);
-//             });
 
-//             kakao.maps.event.addListener(marker, 'mouseout', function() {
-//                 infowindow.close();
-//             });
+    // 검색창 초기화 
+    function handleClearSearch() {
+        setSearchTerm('');
+    }
 
-//             itemEl.onmouseover =  function () {
-//                 displayInfowindow(marker, title);
-//             };
 
-//             itemEl.onmouseout =  function () {
-//                 infowindow.close();
-//             };
-//         })(marker, places[i].place_name);
+    // 상세보기로 이동
+    function getContentsView(hseq) {
+        navigate(`/getHouseView/${hseq}`);
+    }
 
-//         fragment.appendChild(itemEl);
-//     }
 
-//     // 검색결과 항목들을 검색결과 목록 Element에 추가합니다
-//     listEl.appendChild(fragment);
-//     menuEl.scrollTop = 0;
+    return (
+        <>
+            <Heading />
+            <div className='House' style={{ paddingTop: '50px', bottom: '100px' }}>
+                <div className="contents-container flex flex-wrap justify-between" >
+                <h1 className="text-4xl font-bold text-gray-800">
+                    
+                    <br />
+                    국내 숙소 찾아보기~
+                  </h1>
+                    <div className="search-container" style={{ marginBottom: "20px", width: "100%" }}>
+                        <input
+                            className='search-bar'
+                            type="text"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            placeholder="숙소명 검색"
+                        />
+                        {searchTerm && (
+                            <button className="clear-button" onClick={handleClearSearch}>X</button>
+                        )}
+                        <div
+                            className="bg-blue-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer w-32"
+                            onClick={writeContents}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                                <path d="M13.5 6.5l4 4" />
+                            </svg>
+                            <span className="text-xl font-bold">등록</span>
+                        </div>
+                    </div>
+                    {
+                        Array.isArray(filteredHouse) && filteredHouse.length > 0 ? (
+                            filteredHouse.map((house, idx) => (
+                                <div className="bg-white w-1/5 p-4 rounded-lg overflow-hidden shadow-lg transition-all hover:scale-105" key={idx} onClick={() => { getContentsView(house.hseq) }}>
+                                    <img
+                                        src={house.houseimg}
+                                        alt="Product 1"
+                                        width="600"
+                                        height="450"
+                                        className="w-full h-60 object-cover"
+                                        style={{ aspectRatio: '400 / 300', objectFit: 'cover' }}
+                                    />
+                                    <div className="p-4">
+                                        <h3 className="text-lg font-semibold mb-2">{house.hseq}</h3>
+                                        <p className="text-muted-foreground mb-4">{house.hname}</p>
+                                        <p className="text-muted-foreground mb-4">{house.content}</p>
+                                        <p className="text-muted-foreground mb-4">{house.indate.substring(0, 10)}</p>
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-primary font-semibold">{house.cost == 0 ? '무료' : house.cost}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (<h2>list가 없습니다.</h2>)
+                    }
+                </div>
+            </div>
 
-//     // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
-//     map.setBounds(bounds);
-// }
+            <Footer />
+        </>
+    );
+}
 
-// // 검색결과 항목을 Element로 반환하는 함수입니다
-// function getListItem(index, places) {
-
-//     var el = document.createElement('li'),
-//     itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
-//                 '<div class="info">' +
-//                 '   <h5>' + places.place_name + '</h5>';
-
-//     if (places.road_address_name) {
-//         itemStr += '    <span>' + places.road_address_name + '</span>' +
-//                     '   <span class="jibun gray">' +  places.address_name  + '</span>';
-//     } else {
-//         itemStr += '    <span>' +  places.address_name  + '</span>'; 
-//     }
-                 
-//       itemStr += '  <span class="tel">' + places.phone  + '</span>' +
-//                 '</div>';           
-
-//     el.innerHTML = itemStr;
-//     el.className = 'item';
-
-//     return el;
-// }
-
-// // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
-// function addMarker(position, idx, title) {
-//     var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
-//         imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
-//         imgOptions =  {
-//             spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
-//             spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
-//             offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
-//         },
-//         markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
-//             marker = new kakao.maps.Marker({
-//             position: position, // 마커의 위치
-//             image: markerImage 
-//         });
-
-//     marker.setMap(map); // 지도 위에 마커를 표출합니다
-//     markers.push(marker);  // 배열에 생성된 마커를 추가합니다
-
-//     return marker;
-// }
-
-// // 지도 위에 표시되고 있는 마커를 모두 제거합니다
-// function removeMarker() {
-//     for ( var i = 0; i < markers.length; i++ ) {
-//         markers[i].setMap(null);
-//     }   
-//     markers = [];
-// }
-
-// // 검색결과 목록 하단에 페이지번호를 표시는 함수입니다
-// function displayPagination(pagination) {
-//     var paginationEl = document.getElementById('pagination'),
-//         fragment = document.createDocumentFragment(),
-//         i; 
-
-//     // 기존에 추가된 페이지번호를 삭제합니다
-//     while (paginationEl.hasChildNodes()) {
-//         paginationEl.removeChild (paginationEl.lastChild);
-//     }
-
-//     for (i=1; i<=pagination.last; i++) {
-//         var el = document.createElement('a');
-//         el.href = "#";
-//         el.innerHTML = i;
-
-//         if (i===pagination.current) {
-//             el.className = 'on';
-//         } else {
-//             el.onclick = (function(i) {
-//                 return function() {
-//                     pagination.gotoPage(i);
-//                 }
-//             })(i);
-//         }
-
-//         fragment.appendChild(el);
-//     }
-//     paginationEl.appendChild(fragment);
-// }
-
-// // 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
-// // 인포윈도우에 장소명을 표시합니다
-// function displayInfowindow(marker, title) {
-//     var content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
-
-//     infowindow.setContent(content);
-//     infowindow.open(map, marker);
-// }
-
-//  // 검색결과 목록의 자식 Element를 제거하는 함수입니다
-// function removeAllChildNods(el) {   
-//     while (el.hasChildNodes()) {
-//         el.removeChild (el.lastChild);
-//     }
-// }
-      
-
-      
-//       // Geolocation API를 통해 사용자의 현재 위치를 가져옴
-//       if (navigator.geolocation) {
-//         navigator.geolocation.getCurrentPosition(
-//           (position) => {
-//             const lat = position.coords.latitude;  // 위도
-//             const lon = position.coords.longitude; // 경도
-//             loadMap(lat, lon); // 현재 위치로 지도 로드
-//             setMapLoaded(true); // 지도 로드 완료 상태 설정
-//           },
-//           (error) => {
-//             console.error("지도위치 오류 ", error);
-//             loadMap(defaultLat, defaultLon); // 오류 발생 시 기본 위치로 지도 로드
-//             setMapLoaded(true); // 지도 로드 완료 상태 설정
-//           }
-//         );
-//       } else {
-//         // Geolocation을 지원하지 않는 경우 기본 위치로 지도 로드
-//         alert("Geolocation을 사용할 수 없습니다. 기본 위치로 지도를 표시합니다.");
-//         loadMap(defaultLat, defaultLon); // 기본 위치로 지도 로드
-//         setMapLoaded(true); // 지도 로드 완료 상태 설정
-//       }
-
-      
-//     }, []);
-  
-
-//   return (
-//     <>
-//     <Heading />
-//     <div style={{ paddingTop: '100px' }}>
-//       <div className='background'>
-//         <img src="http://localhost:8070/images/oceans.jpg" alt="Background" />
-//       </div>
-//       <div className='main'>
-//         <div className='houseTitle'>숙소 찾아보기</div>
-//         <input ref={searchInputRef} type="text" id="keyword" placeholder="검색어를 입력하세요" />
-//         <button onClick={() => searchPlaces(mapRef.current)}>검색</button>
-//         <div id="map" ref={mapRef} style={{ width: '1350px', height: '700px' }} />
-//         <div id="menu_wrap" className="menu_wrap">
-//           <ul id="placesList"></ul>
-//           <div id="pagination"></div>
-//         </div>
-//       </div>
-//     </div>
-//     <Footer />
-//   </>
-// );
-// }
-// export default House;
+export default House;
