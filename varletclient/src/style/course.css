@@ -107,7 +107,7 @@
 ul.floating {
     position: fixed;
     z-index: 80;
-    bottom: 15%;
+    bottom: 30px;
     left: 45%;
 }
 
