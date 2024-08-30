@@ -1,0 +1,31 @@
+.NoticePage{
+    width: 1000px;
+    align-items: center
+}
+.notice{
+   font-size: 50px; 
+   font-weight: 900;
+}
+.notice_row{
+    width: 1000px;
+    border-bottom: 1px solid black;
+    align-items: center;
+    display:flex;
+    justify-content:space-between;
+    font-weight: 900;
+}
+.notice_col{
+    margin-left: 80px;
+}
+
+.notice_row2{
+    padding: 10px 0 10px 0;
+    width: 1000px;
+    border-bottom: 1px solid rgb(196, 196, 196);
+    align-items: center;
+    display:flex;
+    justify-content:space-between;
+}
+.notice_coll{
+    margin-left: 80px;
+}

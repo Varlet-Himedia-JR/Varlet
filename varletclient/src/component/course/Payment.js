@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getCookie } from "../../util/cookieUtil";
 
@@ -7,6 +8,7 @@ function Payment({ daySchedule }) {
     const [dayschedule, setDayschedule] = useState(daySchedule);
     const [totalPrice, setTotalPrice] = useState(0);
     const [usePoint, setUsePoint] = useState(0);
+    const navigate = useNavigate('');
 
     // 결제 함수
     useEffect(() => {
@@ -40,19 +42,46 @@ function Payment({ daySchedule }) {
             pay_method: "card",
             merchant_uid: 'merchant_' + new Date().getTime(),
             name: '결제테스트',
-            amount: (totalPrice - usePoint),  // 오류 방지를 위해 기본값 0 설정
-            buyer_email: 'user@example.com',
-            buyer_name: '홍길동',
-            buyer_tel: '010-1234-5678',
-            buyer_addr: '서울특별시 강남구 삼성동',
-            buyer_postcode: '123-456'
+            amount: totalPrice, 
+            buyer_name: getCookie('user').name,
+            buyer_email: getCookie('user').email,
+            buyer_tel: getCookie('user').phone,
+            buyer_addr: getCookie('user').address,
+            buyer_postcode: getCookie('user').zip_code,
+            status: "paid",
+            impUid: "imp_12345"
         }, function (rsp) {
+            let user = getCookie('user');
             if (rsp.success) {
-                alert('결제가 성공적으로 완료되었습니다.');
+                try {
+                    // 결제 성공 시 서버에 결제 정보를 전송
+                    axios.post(`/api/pay/payment/${user.userid}`, {
+                        merchantUid: rsp.merchant_uid,
+                        buyerEmail: rsp.buyer_email,
+                        buyerName: rsp.buyer_name,
+                        amount: rsp.amount,
+                        status: rsp.status,
+                        impUid: rsp.imp_uid,
+                        userid: user.userid 
+                    })
+                    .then(res => {
+                        alert('결제 완료');
+                        navigate('/myPayment');
+                        console.log('Total Price:', totalPrice);
+                        console.log('Use Point:', usePoint);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        alert("결제 처리 중 오류가 발생했습니다.");
+                    });
+                } catch (err) {
+                    console.log(err);
+                    console.log("결제검증 실패");
+                }
                 console.log('결제 성공:', rsp);
             } else {
-                alert('결제에 실패하였습니다. 에러 내용: ' + rsp.error_msg);
                 console.error('결제 실패:', rsp);
+                alert('결제 실패: ' + rsp.error_msg);
             }
         });
     }
@@ -109,10 +138,9 @@ function Payment({ daySchedule }) {
                         <span className="text-sm text-muted-foreground">사용할 포인트</span>
                         <input
                             className="h-8 w-1/2 rounded-md border border-input bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-m file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-sm font-medium text-right"
+                            type="number" // 숫자 입력만 받도록 설정
                             value={usePoint}
-                            onChange={(e) => (
-                                setUsePoint(e.target.value)
-                            )}
+                            onChange={(e) => setUsePoint(Number(e.target.value))} // 문자열을 숫자로 변환
                             placeholder={`최대 ${getCookie('user').point}`}
                         />
                     </div>

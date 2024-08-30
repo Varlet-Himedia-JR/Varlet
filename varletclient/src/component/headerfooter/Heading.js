@@ -97,10 +97,6 @@ function Heading() {
                                 <img src={profileImg} />
                             </div>
                             <div className='myinfo'>{userCookie.nickname}</div>
-                            <div onClick={logout}>로그아웃</div>
-                            <div className='hamburger-menu' onClick={toggleMenu}>
-                                &#9776; {/* 햄버거 아이콘 */}
-                            </div>
                         </>
                     )}
                 </div>
@@ -117,6 +113,7 @@ function Heading() {
                                 <img src={profileImg} />
                             </div>
                             <span className="ml-2 text-xl font-bold">{userCookie.nickname}님</span>
+                            <div onClick={logout}>로그아웃</div>
                             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-backspace cursor-pointer" width="40" height="40" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round" onClick={closeModal} >
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M20 6a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-11l-5 -5a1.5 1.5 0 0 1 0 -2l5 -5z" />
@@ -154,6 +151,9 @@ function Heading() {
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
                                     </svg>
                                     <span className="ml-2 text-sm font-medium">내 의뢰목록</span>
+                                </a>
+                                <a onClick={() => navigate('/myPayment')} className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="#">
+                                    <span className="ml-2 text-sm font-medium">내 결제목록</span>
                                 </a>
                             </div>
                         </div>

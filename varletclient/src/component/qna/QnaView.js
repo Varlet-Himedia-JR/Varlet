@@ -9,7 +9,7 @@ function QnaView() {
     const [qna, setQna] = useState({});
     const { qseq } = useParams();
     const navigate = useNavigate();
-
+    
     useEffect(() => {   
         axios.get(`/api/qna/getQnaView/${qseq}`)
             .then((result) => { setQna(result.data.qna); })

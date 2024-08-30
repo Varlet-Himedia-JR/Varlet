@@ -69,22 +69,12 @@
     border-radius: 15%;
 }
 
-
-/* 햄버거 메뉴 아이콘 */
-.hamburger-menu {
-    cursor: pointer;
-    font-size: 24px;
-    display: block; /* 기본적으로 숨김 */
+.myinfo{
+    width: 70px;
+    margin-right: 75px;
 }
 
-/* @media screen and (max-width: 768px) {
-    .hamburger-menu {
-        display: block; 
-    }
-    .category_menu {
-        display: none; 
-    }
-} */
+
 
 /* 모달 오버레이 */
 .modal-overlay {

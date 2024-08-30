@@ -208,19 +208,149 @@ function Main() {
             </div>
           </div>
         </section>
-        <div className="flex flex-col items-center w-full p-8 space-y-8">
-      <h1 className="text-2xl font-bold">현재 인기 많은 여행지</h1>
-      <div className="flex justify-center space-x-8 ">
-        <a href="#" className="text-muted-foreground">
-          자연이 아름다운 섬, 울릉도
-        </a>
-        <a href="#" className="text-muted-foreground">
-          살랑살랑 은빛 가을, 제주도
-        </a>
-        <a href="#" className="text-muted-foreground">
-          해안 풍경과 맑은 바닷물, 아름다운 거제도
-        </a>
+          <div className="flex flex-col items-center w-full p-8 space-y-8">
+        <h1 className="text-2xl font-bold">현재 인기 많은 여행지</h1>
+        <div className="flex justify-center space-x-8 ">
+          <a href="#" className="text-muted-foreground">
+            자연이 아름다운 섬, 울릉도
+          </a>
+          <a href="#" className="text-muted-foreground">
+            살랑살랑 은빛 가을, 제주도
+          </a>
+          <a href="#" className="text-muted-foreground">
+            해안 풍경과 맑은 바닷물, 아름다운 거제도
+          </a>
+        </div>
+        <div className="flex space-x-4 items-center">
+          <button className="flex items-center justify-center w-8 h-8 bg-white rounded-full shadow">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-4 h-4 text-muted-foreground"
+            >
+              <path d="m15 18-6-6 6-6"></path>
+            </svg>
+          </button>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
+              <img
+                src="http://localhost:8070/images/ulleungdo.jpg"
+                alt="Forest"
+                className="w-full h-[200px] object-cover rounded-t-md"
+                width="300"
+                height="200"
+                style={{ aspectRatio: '300 / 200', objectFit: 'cover' }}
+              />
+              <div className="p-6 space-y-2 ">
+                <p className="text-sm">♧여름이 가기 전에 떠나는 울릉도 여행...</p>
+                <p className="text-xs text-muted-foreground">#울릉도 #여름바다 #전망대 #...</p>
+                <p className="text-lg font-bold">울릉도 리뷰 보러가기</p>
+              </div>
+            </div>
+            <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
+              <img
+                src="http://localhost:8070/images/jeju2.jpg"
+                alt="Beach"
+                className="w-full h-[200px] object-cover rounded-t-md"
+                width="300"
+                height="200"
+                style={{ aspectRatio: '300 / 200', objectFit: 'cover' }}
+              />
+              <div className="p-6 space-y-2">
+                <p className="text-sm">♫여름에는 제주도!...</p>
+                <p className="text-xs text-muted-foreground">#제주도 #우도 #돌하르방</p>
+                <p className="text-lg font-bold">제주도 리뷰 보러가기</p>
+              </div>
+            </div>
+            <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
+              <img
+                src="http://localhost:8070/images/gujedo.jpg"
+                alt="Field"
+                className="w-full h-[200px] object-cover rounded-t-md"
+                width="300"
+                height="200"
+                style={{ aspectRatio: '300 / 200', objectFit: 'cover' }}
+              />
+              <div className="p-6 space-y-2">
+                <p className="text-sm">■거제도■ [노팁/노옵션/요 트/특식UP] 제주도 낭만여행 ...</p>
+                <p className="text-xs text-muted-foreground">#안전여행상품 #럭셔리요트 #감귤따...</p>
+                <p className="text-lg font-bold">거제도 리뷰 보러가기</p>
+              </div>
+            </div>
+            <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
+              <img
+                src="http://localhost:8070/images/gujedo.jpg"
+                alt="Field"
+                className="w-full h-[200px] object-cover rounded-t-md"
+                width="300"
+                height="200"
+                style={{ aspectRatio: '300 / 200', objectFit: 'cover' }}
+              />
+              <div className="p-6 space-y-2">
+                <p className="text-sm">■거제도■ [노팁/노옵션/요 트/특식UP] 제주도 낭만여행 ...</p>
+                <p className="text-xs text-muted-foreground">#안전여행상품 #럭셔리요트 #감귤따...</p>
+                <p className="text-lg font-bold">거제도 리뷰 보러가기</p>
+              </div>
+            </div>
+            <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
+              <img
+                src="http://localhost:8070/images/gujedo.jpg"
+                alt="Field"
+                className="w-full h-[200px] object-cover rounded-t-md"
+                width="300"
+                height="200"
+                style={{ aspectRatio: '300 / 200', objectFit: 'cover' }}
+              />
+              <div className="p-6 space-y-2">
+                <p className="text-sm">■거제도■ [노팁/노옵션/요 트/특식UP] 제주도 낭만여행 ...</p>
+                <p className="text-xs text-muted-foreground">#안전여행상품 #럭셔리요트 #감귤따...</p>
+                <p className="text-lg font-bold">거제도 리뷰 보러가기</p>
+              </div>
+            </div>
+            <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
+              <img
+                src="http://localhost:8070/images/gujedo.jpg"
+                alt="Field"
+                className="w-full h-[200px] object-cover rounded-t-md"
+                width="300"
+                height="200"
+                style={{ aspectRatio: '300 / 200', objectFit: 'cover' }}
+              />
+              <div className="p-6 space-y-2">
+                <p className="text-sm">■거제도■ [노팁/노옵션/요 트/특식UP] 제주도 낭만여행 ...</p>
+                <p className="text-xs text-muted-foreground">#안전여행상품 #럭셔리요트 #감귤따...</p>
+                <p className="text-lg font-bold">거제도 리뷰 보러가기</p>
+              </div>
+            </div>
+          </div>
+          <button className="flex items-center justify-center w-8 h-8 bg-white rounded-full shadow">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-4 h-4 text-muted-foreground"
+            >
+              <path d="M9 6l6 6l-6 6" />
+            </svg>
+            </button>
+        </div>
       </div>
+        </div>
+        <div className="flex flex-col items-center w-full p-8 space-y-8">
+      <h1 className="text-2xl font-bold">국내 숙소</h1>
       <div className="flex space-x-4 items-center">
         <button className="flex items-center justify-center w-8 h-8 bg-white rounded-full shadow">
           <svg
@@ -249,9 +379,9 @@ function Main() {
               style={{ aspectRatio: '300 / 200', objectFit: 'cover' }}
             />
             <div className="p-6 space-y-2 ">
-              <p className="text-sm">♧여름이 가기 전에 떠나는 울릉도 여행...</p>
+              <p className="text-sm">부산 숙소</p>
               <p className="text-xs text-muted-foreground">#울릉도 #여름바다 #전망대 #...</p>
-              <p className="text-lg font-bold">울릉도 리뷰 보러가기</p>
+              <p className="text-lg font-bold">부산숙소 보러가기</p>
             </div>
           </div>
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
@@ -267,51 +397,6 @@ function Main() {
               <p className="text-sm">♫여름에는 제주도!...</p>
               <p className="text-xs text-muted-foreground">#제주도 #우도 #돌하르방</p>
               <p className="text-lg font-bold">제주도 리뷰 보러가기</p>
-            </div>
-          </div>
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
-            <img
-              src="http://localhost:8070/images/gujedo.jpg"
-              alt="Field"
-              className="w-full h-[200px] object-cover rounded-t-md"
-              width="300"
-              height="200"
-              style={{ aspectRatio: '300 / 200', objectFit: 'cover' }}
-            />
-            <div className="p-6 space-y-2">
-              <p className="text-sm">■거제도■ [노팁/노옵션/요 트/특식UP] 제주도 낭만여행 ...</p>
-              <p className="text-xs text-muted-foreground">#안전여행상품 #럭셔리요트 #감귤따...</p>
-              <p className="text-lg font-bold">거제도 리뷰 보러가기</p>
-            </div>
-          </div>
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
-            <img
-              src="http://localhost:8070/images/gujedo.jpg"
-              alt="Field"
-              className="w-full h-[200px] object-cover rounded-t-md"
-              width="300"
-              height="200"
-              style={{ aspectRatio: '300 / 200', objectFit: 'cover' }}
-            />
-            <div className="p-6 space-y-2">
-              <p className="text-sm">■거제도■ [노팁/노옵션/요 트/특식UP] 제주도 낭만여행 ...</p>
-              <p className="text-xs text-muted-foreground">#안전여행상품 #럭셔리요트 #감귤따...</p>
-              <p className="text-lg font-bold">거제도 리뷰 보러가기</p>
-            </div>
-          </div>
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
-            <img
-              src="http://localhost:8070/images/gujedo.jpg"
-              alt="Field"
-              className="w-full h-[200px] object-cover rounded-t-md"
-              width="300"
-              height="200"
-              style={{ aspectRatio: '300 / 200', objectFit: 'cover' }}
-            />
-            <div className="p-6 space-y-2">
-              <p className="text-sm">■거제도■ [노팁/노옵션/요 트/특식UP] 제주도 낭만여행 ...</p>
-              <p className="text-xs text-muted-foreground">#안전여행상품 #럭셔리요트 #감귤따...</p>
-              <p className="text-lg font-bold">거제도 리뷰 보러가기</p>
             </div>
           </div>
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px] hover:scale-105" data-v0-t="card">
@@ -348,169 +433,7 @@ function Main() {
           </button>
       </div>
     </div>
-        <section className="w-full bg-[#F0F8FF] py-16 md:py-24">
-          <div className="container mx-auto grid grid-cols-1 gap-8 px-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg"  onClick={() => navigate('/contentsList')}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-12 w-12 text-[#1e90ff]"
-              >
-                <path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"></path>
-                <path d="M15 5.764v15"></path>
-                <path d="M9 3.236v15"></path>
-              </svg>
-              <h3 className="text-xl font-bold">놀거리 찾기</h3>
-              <p className="text-[#808080]">
-                무엇을 해야할지 모르겠다면 여기서 찾아보세요 전국의 축제들이 있습니다!
-              </p>
-            </div>
-            <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg" onClick={() => navigate('/rcommunity')}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-12 w-12 text-[#1e90ff]"
-              >
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-              </svg>
-              <h3 className="text-xl font-bold">여행 계획을 의뢰해보세요</h3>
-              <p className="text-[#808080]">계획을 못짜겠다면 다른 사람에게 의뢰해보세요</p>
-            </div>
-            <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg" onClick={() => logCheck('/mycourse')}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-12 w-12 text-[#1e90ff]"
-              >
-                <path d="M8 2v4"></path>
-                <path d="M16 2v4"></path>
-                <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-                <path d="M3 10h18"></path>
-              </svg>
-              <h3 className="text-xl font-bold">여행 계획을 일정표로</h3>
-              <p className="text-[#808080]">수강신청 장바구니처럼 여행 콘텐츠를 담아 나만의 여행 계획을 만드세요</p>
-            </div>
-            <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg"  onClick={() => navigate('/reviewList')}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-12 w-12 text-[#1e90ff]"
-              >
-                <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path>
-                <circle cx="12" cy="13" r="3"></circle>
-              </svg>
-              <h3 className="text-xl font-bold">당신의 추억을 공유하세요</h3>
-              <p className="text-[#808080]">여행을 다녀온 추억을 다른 사람들과 나눠보세요</p>
-            </div>
-            <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-12 w-12 text-[#1e90ff]"
-              >
-                <path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path>
-                <circle cx="12" cy="12" r="10"></circle>
-              </svg>
-              <h3 className="text-xl font-bold">숙소를 검색하세요</h3>
-              <p className="text-[#808080]">
-               여행에서 묵을 숙소들을 찾아보세요
-              </p>
-            </div>
-            <div className="flex flex-col items-center gap-4 rounded-lg bg-white p-6 shadow-md transition-all hover:scale-105 hover:shadow-lg">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-12 w-12 text-[#1e90ff]"
-              >
-                <path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                <rect width="20" height="14" x="2" y="6" rx="2"></rect>
-              </svg>
-              <h3 className="text-xl font-bold">여행 예약을 한번에</h3>
-              <p className="text-[#808080]">축제 입장권, 숙소 등 예약 요소를 한번에 결제할 수 있어요</p>
-            </div>
-          </div>
-        </section>
-        <section className="w-full bg-[#F0F8FF] py-16 md:py-24">
-          <div className="container mx-auto px-4">
-            <div className="mx-auto max-w-3xl space-y-6 text-center">
-              <h2 className="text-3xl font-bold tracking-tighter text-[#333333] sm:text-4xl">What Our Members Say</h2>
-              <div className="grid gap-6 md:grid-cols-2">
-                <blockquote className="rounded-lg bg-white p-6 shadow-md">
-                  <div className="flex items-center gap-4">
-                    <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
-                      <span className="flex h-full w-full items-center justify-center rounded-full bg-muted">JD</span>
-                    </span>
-                    <div>
-                      <h4 className="text-lg font-semibold">김스콧</h4>
-                      <p className="text-[#808080]">리뷰어 후기</p>
-                    </div>
-                  </div>
-                  <p className="mt-4 text-[#808080]">
-                    "대학생때 수강신청 시간표 담던 생각이나서 추억돋네요ㅎㅎ"
-                  </p>
-                </blockquote>
-                <blockquote className="rounded-lg bg-white p-6 shadow-md">
-                  <div className="flex items-center gap-4">
-                    <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
-                      <span className="flex h-full w-full items-center justify-center rounded-full bg-muted">JS</span>
-                    </span>
-                    <div>
-                      <h4 className="text-lg font-semibold">홍길동</h4>
-                      <p className="text-[#808080]">여행 일정 의뢰자</p>
-                    </div>
-                  </div>
-                  <p className="mt-4 text-[#808080]">"J이고 싶은 P들을 위한 웹사이트."</p>
-                </blockquote>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
+
       <div className="flex flex-col items-center w-full">
       <div className="w-full bg-[#1e90ff] py-8 text-center text-white">
         <h1 className="text-2xl font-bold">MODETOUR PLAY LIST</h1>

@@ -29,6 +29,7 @@ import FindId from "./component/member/FindId";
 import FindPwd from "./component/member/FindPwd";
 import RePwd from "./component/member/RePwd";
 import House from "./component/house/House";
+import MyPayment from "./component/member/MyPayment";
 
 import PostCode from "./component/popup/PostCode";
 
@@ -79,7 +80,7 @@ function App() {
         
         
         <Route path="/mycourse" element={<Mycourse />} />
-        {/* <Route path="/house" element={<House />} /> */}
+        <Route path="/house" element={<House />} />
         
         {/* 여행 콘텐츠 */}
         <Route path="/contentsList" element={<ContentsList />} />
@@ -92,10 +93,11 @@ function App() {
         <Route path="/myReview" element={<MyReview />} />
         <Route path="/myQna" element={<MyQna />} />
         <Route path="/myRequest" element={<MyRequest />} />
-
+        <Route path="/myPayment" element={<MyPayment />} />
         {/* 공지사항 */}
         <Route path="/notice" element={<Notice />} />
         <Route path="/contentsWrite" element={<ContentsWrite />} />
+
         {/* 결제 */}
         <Route path="/pay" element={<Pay />} />
 

@@ -150,6 +150,11 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         if (path.startsWith("/member/RePwd/"))
             return true;
+        if (path.startsWith("/pay/payment/"))
+            return true;
+        if (path.startsWith("/pay/payments/"))
+            return true;
+
 
 
 

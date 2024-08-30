@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Footer from './../headerfooter/Footer';
 import Heading from './../headerfooter/Heading';
+import '../../style/notice.css';
 
 function Notice() {
   
@@ -62,27 +63,26 @@ return (
                   <div className='notice'>공지사항</div>
               </div>
                   <div className="noticeTable">
-                      <div className="row1">
-                          <div className="col" style={{flex:"2"}}>번호</div>
-                          <div className="col" style={{flex:"4"}}>제목</div>
-                          <div className="col" style={{flex:"2"}}>등록일</div>
+                      <div className="notice_row">
+                          <div className="notice_col" style={{flex:"2.6"}}>번호</div>
+                          <div className="notice_col" style={{flex:"4"}}>제목</div>
+                          <div className="notice_col" style={{flex:"2"}}>등록일</div>
                       </div>
                   </div>
                {
                   (noticeList)?(
                     noticeList.map((notice,idx)=>{
                           return(
-                              <div className="row2" key={idx}>
-                                  <div className="coll"  style={{flex:"2"}}>{notice.nseq}</div>
-                                  <div className="coll"  style={{flex:"3.7"}} onClick={()=>{(onNoticeView(notice.nseq))}}> {notice.subject}</div>
-                                  <div className="coll"  style={{flex:"2"}} >{notice.indate.substring(0,10)}</div>
-
+                              <div className="notice_row2" key={idx}>
+                                  <div className="notice_coll"  style={{flex:"2"}}>{notice.nseq}</div>
+                                  <div className="notice_coll"  style={{flex:"4"}} onClick={()=>{(onNoticeView(notice.nseq))}}> {notice.subject}</div>
+                                  <div className="notice_coll"  style={{flex:"2"}} >{notice.indate.substring(0,10)}</div>
                               </div>
                             )
                       })
                   ):(null)
                }
-               <div id="paging" style={{textAlign:"center", padding:"10px"}}>
+               <div id="paging" style={{textAlign:"center", padding:"10px",marginRight:"20px"}}>
               {
                   paging.prev ? (
                       <span style={{cursor:"pointer"}} onClick={() => { onPageMove(paging.beginPage - 1) }}>

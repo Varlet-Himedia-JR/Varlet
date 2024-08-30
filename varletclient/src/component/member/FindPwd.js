@@ -27,7 +27,8 @@ function FindPwd() {
         try {
             let result = await axios.get(`/api/member/verifyCodeAndFindPwd/${email}/${storedCode}` );
             if (result.data.msg === 'yes') {
-                return navigate('/rePwd'); 
+                // 인증 성공 후 서버에서 userid를 반환받아 비밀번호 변경 페이지로 전달합니다
+                return navigate(`/rePwd?userid=${result.data.userid}`);
             } else {
                 return alert('인증 실패 또는 다른 오류가 발생했습니다.');
             }
@@ -41,34 +42,7 @@ function FindPwd() {
 
   return (
     <>
-    {/* <div className='findIdform'>
-        <div>비밀번호 찾기</div>
-        <div className='field'>
-            <label>이름</label>
-            <input type="text"  value={name} onChange={
-                (e)=>{ setName( e.currentTarget.value ) }
-            }/>
-        </div>
-        <div className='field'>
-            <label>이메일</label>
-            <input type="text"  value={email} onChange={
-                (e)=>{ setEmail( e.currentTarget.value ) }
-            }/>
-        </div>
-        <div className='field'>
-            <label>인증번호</label>
-            <input type="text"  value={storedCode} onChange={
-                (e)=>{ setStoredCode( e.currentTarget.value ) }
-            }/>
-            <button onClick={ ()=>{   onCode()    }  }>인증번호 받기</button>
-        </div>
-        
-        <div className='btns'>
-                <button onClick={ ()=>{   onSubmit()    }  }>인증하기</button>
-                <button onClick={ ()=>{ navigate('/')   }  }>돌아가기</button>
-            </div>
-    </div> */}
-{/*  */}
+
 <div className="loginform" style={{ marginTop: '80px' }}>
                 <div className="flex items-center justify-center">
                     <div

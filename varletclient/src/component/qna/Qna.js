@@ -1,11 +1,10 @@
 import React ,{useState, useEffect} from 'react'
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
 import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
 import '../../style/customer.css';
-import { setCookie, getCookie} from "../../util/cookieUtil";
+import {  getCookie} from "../../util/cookieUtil";
 function Qna() {
 
   const [qnaList, setQnaList] = useState([]);
@@ -85,10 +84,7 @@ function Qna() {
   return (
     <>
         <Heading/>
-        <div style={{ paddingTop: '100px' }}>
-            <div className='background'><img src="http://localhost:8070/images/oceans.jpg"/></div>
-        </div>
-        <div className='main'>  
+        <div className='main' style={{marginTop:'80px'}}>  
             <div className='QnaPage'>
                 <div className="qnalist">
                     <div style={{display:"flex",justifyContent:"space-between"}}>

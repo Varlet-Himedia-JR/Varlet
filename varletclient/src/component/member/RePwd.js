@@ -1,19 +1,22 @@
 import React, { useState } from 'react'
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 function RePwd() {
-
     const [pwd, setPwd] = useState('');
     const [pwdChk, setPwdChk] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const userId = queryParams.get('userid');
 
 
     async function onSubmit() {
         if (pwd == '') { return alert('비밀번호를 입력하세요'); }
         if (pwd !== pwdChk) { return alert('비밀번호 확인이 일치하지 않습니다'); }
         try {
-            let result = await axios.post(`/api/member/RePwd/${pwd}`);
+            let result = await axios.post(`/api/member/RePwd/`,{userId,pwd});
             if (result.data.msg === 'yes') {
                 alert('비밀번호 변경이 완료되었습니다');
                 return navigate('/');
