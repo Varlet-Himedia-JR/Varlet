@@ -1,8 +1,6 @@
 package com.himedias.varletserver.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CurrentTimestamp;
@@ -42,16 +40,30 @@ public class Image {
     @Column(name = "upload_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp uploadDate;
 
+    // 새로 추가된 필드
+    @Enumerated(EnumType.STRING)
+    @Column(name = "image_type", columnDefinition = "ENUM('숙소','여행지','기타') DEFAULT '기타'")
+    private ImageType imageType = ImageType.기타;
+
+    @Column(name = "berth", length = 255)
+    private String berth;
+
+    @Column(name = "tour", length = 255)
+    private String tour;
+
     // 기본 생성자
     public Image() {
     }
 
     // 필요한 필드를 받는 생성자
-    public Image(Member member, Rcrecommend rcRecommend, String imageName, String filePath) {
+    public Image(Member member, Rcrecommend rcRecommend, String imageName, String filePath, ImageType imageType, String berth, String tour) {
         this.member = member;
         this.rcRecommend = rcRecommend;
         this.imageName = imageName;
         this.filePath = filePath;
+        this.imageType = imageType;
+        this.berth = berth;
+        this.tour = tour;
         this.uploadDate = new Timestamp(System.currentTimeMillis());
     }
 
@@ -63,5 +75,10 @@ public class Image {
         if (!rcRecommend.getImages().contains(this)) {
             rcRecommend.getImages().add(this);
         }
+    }
+
+    // ImageType 열거형(Enum)
+    public enum ImageType {
+        숙소, 여행지, 기타
     }
 }

@@ -37,6 +37,17 @@ function RcRecommend() {
         formData.append('userid', userCookie.userid);
         formData.append('content', content);
     
+        // 숙소 파일 추가
+        accommodationFiles.forEach(fileObj => {
+            formData.append('accommodationFiles', fileObj.file);
+        });
+    
+        // 관광지 파일 추가
+        touristSpotFiles.forEach(fileObj => {
+            formData.append('touristSpotFiles', fileObj.file);
+        });
+    
+        // 기존의 일반 파일 추가
         saveimages.forEach((filename) => {
             formData.append('saveimages', filename);
         });
@@ -50,15 +61,14 @@ function RcRecommend() {
         })
         .then(response => {
             alert("답글 작성에 성공했습니다.");
-            setShowReplyForm(false); // 답글 작성란을 숨김
+            setShowReplyForm(false);
             setContent('');
             setFiles([]);
             setImage([]);
             setSaveImages([]);
             setImgSrc([]);
             setRemovedFiles([]);
-            
-            // 페이지를 새로 고칩니다.
+    
             window.location.reload();
         })
         .catch(error => {
@@ -66,6 +76,7 @@ function RcRecommend() {
             console.error(error);
         });
     };
+    
 
     
   const handleFileChange = (event) => {
@@ -134,7 +145,7 @@ return (
                     <div className="p-4">
                         <div className="grid gap-6 mb-6 md:grid-cols-1">
                             <div>
-                                <label htmlFor="accommodation" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">숙소</label>
+                                <label htmlFor="accommodation" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">숙소 이름</label>
                                 <input
                                     type="text"
                                     id="accommodation"
