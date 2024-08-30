@@ -155,7 +155,9 @@ function RCommunityView() {
 
   }
 
-
+  const writerecommend = (rnum) => {
+    navigate(`/rCommunityView/${rnum}/rcRecommend`);
+};
 
   const handleSubmitRec = (e) => {
     e.preventDefault();
@@ -314,17 +316,17 @@ const getTravelDuration = (startDate, endDate) => {
       return dateString.slice(0, 10);
   };
 
-  const writerecommend = () => {
-    setShowReplyForm(prev => !prev);
-    if (!showReplyForm) {
-        // 답글 작성 폼이 열릴 때 스크롤 이동
-        setTimeout(() => {
-            if (replyFormRef.current) {
-                replyFormRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-            }
-        }, 0);
-    } 
-};
+//   const writerecommend = () => {
+//     setShowReplyForm(prev => !prev);
+//     if (!showReplyForm) {
+//         // 답글 작성 폼이 열릴 때 스크롤 이동
+//         setTimeout(() => {
+//             if (replyFormRef.current) {
+//                 replyFormRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+//             }
+//         }, 0);
+//     } 
+// };
 
   const [showDates, setShowDates] = useState(false);
   const toggleShowDates = () => {
@@ -375,16 +377,9 @@ const getTravelDuration = (startDate, endDate) => {
 return (
   <>
     <Heading />
-      <section className="w-full bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] mt-28" style={{
-          backgroundImage: 'url(http://localhost:8070/images/oceans.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          width: '100%',   // 원하는 너비 설정
-          zIndex: 0,
-          marginTop:'100px'
-      }}>
+
         <div className='w-full max-w-[1500px] mx-auto px-1  min-h-screen'>
-        <div className="bg-white bg-opacity-90 p-8  shadow-lg  min-h-screen mt-100px">
+        <div className="bg-white bg-opacity-90 p-8  shadow-lg  min-h-screen mt-[80px]">
     <div className='mt-4 mb-5'>
       <div class="mr-4"> 
         <span className='text-left'>
@@ -594,50 +589,6 @@ return (
       </span>
     </div>
 
-     {showReplyForm && (
-                  <form onSubmit={handleSubmitRec} className="mt-6" ref={replyFormRef}>
-                      <textarea
-                          rows="4"
-                          placeholder="답글 내용을 입력하세요"
-                          value={content}
-                          onChange={(e) => setContent(e.target.value)}
-                          className="w-full p-2 border border-gray-300 rounded"
-                      ></textarea>
-
-                      <input
-                      id="multiple_files"
-                      type="file"
-                      multiple
-                      onChange={handleFileChange}
-                      className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                      />
-
-                      <label>파일 미리보기</label>
-
-                      <div className="flex flex-wrap mt-4">
-                          {files.map((fileObj, index) => (
-                              <div key={index} className="relative">
-                                  <img src={fileObj.src} alt="preview"                   
-                                  style={{ width: '300px', height: '300px', objectFit: 'cover', border: '1px solid #ddd' }}
-                                  />
-                                  <button
-                                      type="button"
-                                      onClick={() => handleRemoveFile(fileObj.file)}
-                                      className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded"
-                                  >
-                                      X
-                                  </button>
-                              </div>
-                          ))}
-                      </div>
-        <button
-          type="submit"
-          className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-        >
-          답글 작성
-        </button>
-      </form>
-    )}
          <div className="space-y-4">
            <div>
                 {replies && replies.length > 0 ? (
@@ -729,7 +680,6 @@ return (
         </div>
 </div>
 </div>
-</section>
 <Footer/>
 
 </>
