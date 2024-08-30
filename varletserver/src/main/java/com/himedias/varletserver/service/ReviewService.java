@@ -1,8 +1,10 @@
 package com.himedias.varletserver.service;
 
+import com.himedias.varletserver.dao.ReviewPreviewRepository;
 import com.himedias.varletserver.dao.ReviewRepository;
 import com.himedias.varletserver.dto.Paging;
 import com.himedias.varletserver.entity.Review;
+import com.himedias.varletserver.entity.Reviewpreview;
 import com.himedias.varletserver.entity.ReviewSummary;
 import com.himedias.varletserver.entity.Reviewimg;
 import jakarta.transaction.Transactional;
@@ -25,6 +27,9 @@ public class ReviewService {
     @Autowired
     ReviewRepository rr;
 
+    @Autowired
+    ReviewPreviewRepository rpr;
+
     private static final String UPLOAD_DIR = "/uploads";
 
     public Page<ReviewSummary> getReviewList(Paging paging) {
@@ -32,6 +37,13 @@ public class ReviewService {
         int pageSize = paging.getDisplayRow();
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Order.asc("rseq")));
         return rr.findAllBy(pageRequest);
+    }
+
+    public Page<Reviewpreview> getReviewPreviewList(Paging paging) {
+        int pageNumber = paging.getPage() - 1; // PageRequest uses 0-based index
+        int pageSize = paging.getDisplayRow();
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Order.asc("rseq")));
+        return rpr.findAllBy(pageRequest);
     }
 
 
@@ -110,7 +122,12 @@ public class ReviewService {
         return rr.searchByMultipleFields(query);
     }
 
+    public List<Reviewpreview> reviewPreviewSearch(String query) {  return rpr.searchByMultipleFields(query);  }
+
     public List<ReviewSummary> getReviewsByUser(String userid) {
         return rr.findByUserid(userid); // 작성자 ID로 모든 리뷰를 가져옴
     }
+
+
+
 }

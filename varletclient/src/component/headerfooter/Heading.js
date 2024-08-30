@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { logoutAction } from '../../store/userSlice';
 import axios from 'axios';
 import { getCookie, removeCookie } from "../../util/cookieUtil";
@@ -94,7 +94,7 @@ function Heading() {
                     {(userCookie && !isModalOpen) && (
                         <>
                             <div className='profileimg' onClick={handleNicknameClick}>
-                                <img src={profileImg} />
+                                <img src={profileImg} alt='profileimg'/>
                             </div>
                             <div className='myinfo'>{userCookie.nickname}</div>
                         </>
@@ -124,7 +124,6 @@ function Heading() {
                             <div className="flex flex-col items-center w-full mt-3 border-t border-gray-300">
                                 <a onClick={() => navigate('/checkPwd')} className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="#">
                                     <svg className="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        {/* <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /> */}
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <path d="M12 2a5 5 0 1 1 -5 5l.005 -.217a5 5 0 0 1 4.995 -4.783z" stroke-width="0" fill="currentColor" />
                                         <path d="M14 14a5 5 0 0 1 5 5v1a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-1a5 5 0 0 1 5 -5h4z" stroke-width="0" fill="currentColor" />
