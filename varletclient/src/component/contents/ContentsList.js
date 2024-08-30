@@ -125,11 +125,11 @@ function ContentsList() {
     return (
         <>
             <Heading />
-            <div style={{ paddingTop: '100px' }}>
+            {/* <div style={{ paddingTop: '100px' }}>
                 <div className='background'><img src="http://localhost:8070/images/oceans.jpg" /></div>
-            </div>
+            </div> */}
 
-            <div className='mycourseContentsList' style={{ paddingTop: '50px', bottom: '100px' }}>
+            <div className='mycourseContentsList' style={{ marginTop: '80px', bottom: '100px' }}>
                 <div className="contents-container flex flex-wrap justify-between" >
                 <h1 className="text-4xl font-bold text-gray-800">
                     

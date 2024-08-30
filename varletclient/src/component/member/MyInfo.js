@@ -44,7 +44,7 @@ function MyInfo() {
             setOriginalPwd(userCookie.pwd || '');
         }
     }, []);
-    
+
 
     async function checkPassword() {
         try {
@@ -74,7 +74,7 @@ function MyInfo() {
             if (pwd !== pwdChk) {
                 return alert('비밀번호 확인이 일치하지 않습니다');
             }
-    
+
             // 비밀번호가 입력된 경우에만 비밀번호 확인
             if (pwd === originalPwd) {
                 const isNewPassword = await checkPassword();
@@ -85,13 +85,13 @@ function MyInfo() {
             alert('비밀번호를 입력하세요');
             return; // 비밀번호 입력이 없으면 이후 로직을 실행하지 않음
         }
-    
+
         // 이메일 중복 검사
         if (email !== originalEmail) {
             const isEmailUnique = await checkEmail();
             if (!isEmailUnique) return; // 이메일이 중복될 경우, 이후 로직을 실행하지 않음
         }
-    
+
         // 비밀번호가 입력되었고 이메일 중복 검사가 통과된 경우에만 나머지 필드 검사 수행
         if (!name) {
             return alert('이름을 입력하세요');
@@ -108,7 +108,7 @@ function MyInfo() {
         if (!d_address) {
             return alert('상세주소를 입력하세요');
         }
-    
+
         try {
             // 정보 업데이트 요청
             let updateResult = await jaxios.post('/api/member/updateInfo', {
@@ -123,34 +123,34 @@ function MyInfo() {
                 d_address,
                 profileimg
             });
-    
+
             if (updateResult.data.msg === 'ok') {
                 // 업데이트된 정보를 React 상태에 바로 반영
-                    setName(updateResult.data.name);
-                    setNickname(updateResult.data.nickname);
-                    setEmail(updateResult.data.email);
-                    setPhone(updateResult.data.phone);
-                    setZip_code(updateResult.data.zip_code);
-                    setAddress(updateResult.data.address);
-                    setD_address(updateResult.data.d_address);
-                    setProfileimg(updateResult.data.profileimg);
+                setName(updateResult.data.name);
+                setNickname(updateResult.data.nickname);
+                setEmail(updateResult.data.email);
+                setPhone(updateResult.data.phone);
+                setZip_code(updateResult.data.zip_code);
+                setAddress(updateResult.data.address);
+                setD_address(updateResult.data.d_address);
+                setProfileimg(updateResult.data.profileimg);
 
                 // 쿠키 업데이트
-                    const updatedUser = {
-                        ...getCookie('user'),
-                        name: updateResult.data.name,
-                        nickname: updateResult.data.nickname,
-                        email: updateResult.data.email,
-                        phone: updateResult.data.phone,
-                        zip_code: updateResult.data.zip_code,
-                        address: updateResult.data.address,
-                        d_address: updateResult.data.d_address,
-                        profileimg: updateResult.data.profileimg
-                    };
+                const updatedUser = {
+                    ...getCookie('user'),
+                    name: updateResult.data.name,
+                    nickname: updateResult.data.nickname,
+                    email: updateResult.data.email,
+                    phone: updateResult.data.phone,
+                    zip_code: updateResult.data.zip_code,
+                    address: updateResult.data.address,
+                    d_address: updateResult.data.d_address,
+                    profileimg: updateResult.data.profileimg
+                };
                 setCookie('user', updatedUser);
                 alert('정보수정이 완료되었습니다.');
                 navigate('/');
-                    } else {
+            } else {
                 alert('정보 수정 실패 다시 시도해주세요');
             }
         } catch (err) {
@@ -158,8 +158,8 @@ function MyInfo() {
             alert('서버 오류');
         }
     }
-    
-    
+
+
     async function checkEmail() {
         try {
             const response = await jaxios.get('/api/member/checkEmail', { params: { email } });
@@ -174,7 +174,7 @@ function MyInfo() {
             return false;
         }
     }
-    
+
     async function fileupload(e) {
         const formData = new FormData();
         formData.append('image', e.target.files[0]);
@@ -195,93 +195,195 @@ function MyInfo() {
         const left = (window.screen.width / 2) - (width / 2);
         const top = (window.screen.height / 2) - (height / 2);
 
-    window.open('/popup/postcode', '주소 찾기', `width=${width},height=${height},left=${left},top=${top}`);
+        window.open('/popup/postcode', '주소 찾기', `width=${width},height=${height},left=${left},top=${top}`);
         window.addEventListener('message', function (event) {
-          if (event.origin === window.location.origin) {
-            const { zip_code, address } = event.data;
-            console.log(zip_code);
-            console.log(address);
-            setZip_code(zip_code);
-            setAddress(address);
-          }
+            if (event.origin === window.location.origin) {
+                const { zip_code, address } = event.data;
+                console.log(zip_code);
+                console.log(address);
+                setZip_code(zip_code);
+                setAddress(address);
+            }
         });
-      };
+    };
 
     return (
         <>
-        <Heading/>
-        <div style={{ paddingTop: '100px' }}>
-            <div className='background'><img src="http://localhost:8070/images/oceans.jpg"/></div>
-        </div>
-        <div className='joinform'>
-        <div className='join_css'>
-        <div className="joinlabel" style={{fontSize:"2.0rem"}}>MY INFO EDIT</div>
-        <div className='join_field'>
-                <label>아이디</label>
-                <input type="text" value={userid} onChange={(e) => setUserid(e.target.value)} disabled />
+            <Heading />
+            <div className="joinform" style={{ marginTop: '80px' }}>
+                <div className="flex items-center justify-center">
+                    <div
+                        className="border text-card-foreground w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md"
+                    >
+                        <div className="text-center">
+                            <h2 className="text-2xl font-bold text-[#1e90ff]">내 정보수정</h2>
+                        </div>
+                        <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); }}>
+                            <div className="flex items-center space-x-2 justify-between">
+                                <label
+                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                                >
+                                    아이디
+                                </label>
+                                <input
+                                    className="flex h-10 w-4/5 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    value={userid} onChange={(e) => setUserid(e.target.value)} disabled
+                                />
+                            </div>
+                            <div className="flex items-center space-x-2 justify-between">
+                                <label
+                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                                >
+                                    비밀번호
+                                </label>
+                                <input
+                                    className="flex h-10 w-3/5 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    type="password"
+                                    value={pwd}
+                                    onChange={(e) => setPwd(e.target.value)}
+                                    placeholder="비밀번호 입력"
+                                />
+                            </div>
+                            <div className="flex items-center space-x-2 justify-between">
+                                <label
+                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                                >
+                                    비밀번호 확인
+                                </label>
+                                <input
+                                    className="flex h-10 w-3/5 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    placeholder="비밀번호 입력"
+                                    type="password"
+                                    value={pwdChk} onChange={
+                                        (e) => { setPwdChk(e.currentTarget.value) }
+                                    }
+                                />
+                            </div>
+                            <div className="flex items-center space-x-2 justify-between">
+                                <label
+                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                                >
+                                    이름
+                                </label>
+                                <input
+                                    className="flex h-10 w-4/5 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    placeholder="이름 입력"
+                                    value={name} onChange={
+                                        (e) => { setName(e.currentTarget.value) }
+                                    }
+                                />
+                            </div>
+                            <div className="flex items-center space-x-2 justify-between">
+                                <label
+                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                                >
+                                    닉네임
+                                </label>
+                                <input
+                                    className="flex h-10 w-4/5 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    placeholder="닉네임 입력"
+                                    value={nickname} onChange={
+                                        (e) => { setNickname(e.currentTarget.value) }
+                                    }
+                                />
+                            </div>
+                            <div className="flex items-center space-x-2 justify-between">
+                                <label
+                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                                >
+                                    이메일
+                                </label>
+                                <input
+                                    className="flex h-10 w-4/5 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    placeholder="이메일 입력"
+                                    value={email} onChange={
+                                        (e) => { setEmail(e.currentTarget.value) }
+                                    }
+                                />
+                            </div>
+                            <div className="flex items-center space-x-2 justify-between">
+                                <label
+                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                                >
+                                    전화번호
+                                </label>
+                                <input
+                                    className="flex h-10 w-4/5 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    placeholder="전화번호 입력"
+                                    value={phone} onChange={
+                                        (e) => { setPhone(e.currentTarget.value) }
+                                    }
+                                />
+                            </div>
+                            <div className="flex items-center space-x-2 justify-between">
+                                <label
+                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                                >
+                                    우편번호
+                                </label>
+                                <input
+                                    className="flex h-10 w-2/5 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    placeholder="우편번호 입력"
+                                    value={zip_code} onChange={(e) => { setZip_code(e.currentTarget.value); }} readOnly
+                                />
+                                <button onClick={openPostcodePopup} className="w-2/5 h-10 text-white bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] rounded-lg">우편번호 찾기</button>
+                            </div>
+                            <div className="flex items-center space-x-2 justify-between">
+                                <label
+                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                                >
+                                    주소
+                                </label>
+                                <input
+                                    className="flex h-10 w-4/5 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50flex items-center space-x-2flex items-center space-x-2flex items-center space-x-2flex items-center space-x-2"
+                                    placeholder="주소 입력"
+                                    value={address} onChange={
+                                        (e) => { setAddress(e.currentTarget.value); }
+                                    } readOnly
+                                />
+                            </div>
+                            <div className="flex items-center space-x-2 justify-between">
+                                <label
+                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                                >
+                                    상세주소
+                                </label>
+                                <input
+                                    className="flex h-10 w-4/5 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    placeholder="상세주소 입력"
+                                    value={d_address} onChange={
+                                        (e) => { setD_address(e.currentTarget.value); }
+                                    }
+                                />
+                            </div>
+                            <div className="flex items-center space-x-2 justify-between">
+                                <label
+                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                                >
+                                    프로필사진
+                                </label>
+                                <input type="file" onChange={(e) => { fileupload(e) }} />
+                            </div>
+                            <div className='w-full'>
+                                <div>
+                                    <img
+                                        src={profileimg}
+                                        style={{ imgStyle }}
+                                        onError={() => console.error('Failed to load image:', profileimg)}
+                                    />
+                                </div>
+                            </div>
+                            <button className="w-full py-3 mt-4 text-white bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] rounded-lg" onClick={() => { onSubmit() }}>
+                                회원가입
+                            </button>
+                            <button className="w-full py-3 mt-4 text-white bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] rounded-lg" onClick={() => { navigate('/') }}>
+                                돌아가기
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div className='join_field'>
-                <label>비밀번호</label>
-                <input
-                    type="password"
-                    value={pwd}
-                    onChange={(e) => setPwd(e.target.value)}
-                    placeholder="비밀번호 입력"
-                />
-            </div>
-            <div className='join_field'>
-                <label>비밀번호 확인</label>
-                <input
-                    type="password"
-                    value={pwdChk}
-                    onChange={(e) => setPwdChk(e.target.value)}
-                    placeholder="비밀번호 확인 입력"
-                />
-            </div>
-            <div className='join_field'>
-                <label>이름</label>
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-            </div>
-            <div className='join_field'>
-                <label>닉네임</label>
-                <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
-            </div>
-            <div className='join_field'>
-                <label>이메일</label>
-                <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
-            </div>
-            <div className='join_field'>
-                <label>전화번호</label>
-                <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
-            </div>
-            <div className='join_field'>
-                <label>우편번호</label>
-                <input type="text" style={{ flex: "2" }} value={zip_code} onChange={(e) => { setZip_code(e.target.value); }} readOnly />
-                <button style={{ flex: "1" }} onClick={openPostcodePopup}>우편번호 찾기</button>
-            </div>
-            <div className='join_field'>
-                <label>주소</label>
-                <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} readOnly />
-            </div>
-            <div className='join_field'>
-                <label>상세주소</label>
-                <input type="text" value={d_address} onChange={(e) => setD_address(e.target.value)} placeholder='상세주소 입력' />
-            </div>
-            <div className='join_field'>
-            <label>프로필 사진</label>
-                <img src={profileimg} style={{imgStyle}}/>
-            </div>
-            <div className='join_field'>
-                <label>프로필사진 변경</label>
-                <input type="file" onChange={fileupload} />
-            </div>
-            <div className='join_field'>
-                <button onClick={onSubmit}>수정완료</button>
-                <button onClick={() => navigate('/')}>돌아가기</button>
-            </div>
-        </div>
-        </div>
-        <Footer/>
+            <Footer />
         </>
     );
 }

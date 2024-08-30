@@ -154,9 +154,11 @@ function Login() {
                                     />
                                 </div>
                             </div>
-                            <button className="w-full py-3 mt-4 text-white bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] rounded-lg" onClick={() => { onLoginLocal() }}>
+                            <button className="w-full py-3 mt-4 text-white bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] rounded-lg"
+                                onClick={(e) => { e.preventDefault(); onLoginLocal(); }}>
                                 로그인
                             </button>
+
                             <button className="w-full py-3 mt-4 text-white bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] rounded-lg" onClick={() => { navigate('/join') }}>
                                 회원가입
                             </button>

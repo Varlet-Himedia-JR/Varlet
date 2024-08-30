@@ -77,7 +77,7 @@ function App() {
         
         
         <Route path="/mycourse" element={<Mycourse />} />
-        <Route path="/house" element={<House />} />
+        {/* <Route path="/house" element={<House />} /> */}
         
         {/* 여행 콘텐츠 */}
         <Route path="/contentsList" element={<ContentsList />} />
