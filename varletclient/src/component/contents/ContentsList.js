@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
 import '../../style/contents.css';
-import '../../style/login.css';
 import { getCookie } from "../../util/cookieUtil";
 
 

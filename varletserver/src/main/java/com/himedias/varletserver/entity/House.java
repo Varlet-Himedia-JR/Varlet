@@ -14,9 +14,13 @@ public class House {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int hseq;
-        private String type;
         private String hname;
-        private String content;
+        private String hcontent;
+        private String phone;
         private String cost;
+        @CreationTimestamp
+        private Timestamp indate;
         private Character like;
+        private String house_image;
+        private int review_count;
 }

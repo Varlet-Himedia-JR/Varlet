@@ -83,7 +83,7 @@ function Heading() {
                 <div className='rcommunity' onClick={() => navigate('/rcommunity')}>여행 코스 의뢰</div>
                 <div className='reviewBoard' onClick={() => navigate('/reviewList')}>여행 후기</div>
                 <div className='mycourse' onClick={() => logCheck('/mycourse')}>여행 코스 만들기</div>
-                <div className='house' onClick={() => alert('준비중입니다.')}>숙소</div>
+                <div className='house' onClick={() => navigate('/house')}>숙소</div>
                 {!userCookie &&
                     <div className='login-buttons'>
                         {!userCookie && <div className='login' onClick={LoginWindow}>로그인</div>}

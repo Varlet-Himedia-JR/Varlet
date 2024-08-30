@@ -456,7 +456,6 @@ public class MemberController {
         Map<String, Object> result = new HashMap<>();
         String profileImgUrl = ms.getProfileImageUrl(userid);
         result.put("profileImgUrl", profileImgUrl);
-        System.out.println("뭔데 그래서~~~~~~~~~~~~" + profileImgUrl);
         return result;
     }
 
