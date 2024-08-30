@@ -1,35 +1,37 @@
-import React, {useState } from 'react'
+import React, { useState } from 'react'
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import Heading from '../headerfooter/Heading';
 import Footer from '../headerfooter/Footer';
 function FindId() {
-    
-    const [name , setName] = useState('');
-    const [email , setEmail] = useState('');
-    const [storedCode , setStoredCode] = useState('');
-    const navigate = useNavigate();
 
-    
-    async function onCode(){
-        if(!name){return alert("이름을 입력하세요");}
-        if(!email){return alert("이메일을 입력하세요");}
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [storedCode, setStoredCode] = useState('');
+    const navigate = useNavigate();
+    const [isCode, setIsCode] = useState(false);
+
+
+    async function onCode() {
+        if (!name) { return alert("이름을 입력하세요"); }
+        if (!email) { return alert("이메일을 입력하세요"); }
         try {
-         await axios.post(`/api/member/findId/${email}` );
-         return alert('인증번호가 전송되었습니다.');
+            await axios.post(`/api/member/findId/${email}`);
+            setIsCode(true);
+            return alert('인증번호가 전송되었습니다.');
         } catch (error) {
             console.error();
         }
     }
 
-    async function onSubmit(){
-        if(!storedCode){return alert("인증번호를 입력하세요");}
+    async function onSubmit() {
+        if (!storedCode) { return alert("인증번호를 입력하세요"); }
         try {
-            let result = await axios.get(`/api/member/verifyCodeAndFindId/${email}/${storedCode}` );
+            let result = await axios.get(`/api/member/verifyCodeAndFindId/${email}/${storedCode}`);
             if (result.data.msg === 'yes') {
-                 alert('회원님의 아이디는 ' + result.data.userid + '입니다.');
+                alert('회원님의 아이디는 ' + result.data.userid + '입니다.');
                 return navigate('/login');
-     
+
             } else {
                 return alert('인증 실패 또는 다른 오류가 발생했습니다.');
             }
@@ -41,42 +43,81 @@ function FindId() {
     }
 
 
-  return (
-    <>
-    <Heading/>
-    <div style={{ paddingTop: '100px' }}>
-            <div className='background'><img src="http://localhost:8070/images/oceans.jpg"/></div>
-        </div>
-    <div className='loginform' >
-        <div className='loginlabel'>아이디 찾기</div>
-        <div className='login_field'>
-            <label>이름</label>
-            <input type="text"  value={name} onChange={
-                (e)=>{ setName( e.currentTarget.value ) }
-            }/>
-        </div>
-        <div className='login_field'>
-            <label>이메일</label>
-            <input type="text"  value={email} onChange={
-                (e)=>{ setEmail( e.currentTarget.value ) }
-            }/>
-        </div>
-        <div className='login_field'>
-            <label>인증번호</label>
-            <input type="text"  value={storedCode} onChange={
-                (e)=>{ setStoredCode( e.currentTarget.value ) }
-            }/>
-            <button onClick={ ()=>{   onCode()    }  }>인증번호 받기</button>
-        </div>
-        
-        <div className='btns'>
-                <button onClick={ ()=>{   onSubmit()    }  }>인증하기</button>
-                <button onClick={ ()=>{ navigate('/')   }  }>돌아가기</button>
+    return (
+        <>
+            <Heading />
+            <div className="loginform" style={{ marginTop: '80px' }}>
+                <div className="flex items-center justify-center">
+                    <div
+                        className="border text-card-foreground w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md"
+                    >
+                        <div className="text-center">
+                            <h2 className="text-2xl font-bold text-[#1e90ff]">아이디 찾기</h2>
+                        </div>
+                        <form className="space-y-4">
+                            <div className="space-y-2 text-left">
+                                <label
+                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                                >
+                                    이름
+                                </label>
+                                <input
+                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    placeholder="이름 입력"
+                                    value={name} onChange={
+                                        (e) => { setName(e.currentTarget.value) }
+                                    }
+                                />
+                            </div>
+                            <div className="space-y-2 text-left">
+                                <label
+                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                                >
+                                    이메일
+                                </label>
+                                <input
+                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    placeholder="이메일 입력"
+                                    value={email} onChange={
+                                        (e) => { setEmail(e.currentTarget.value) }
+                                    }
+                                />
+                            </div>
+                            <div className="flex items-end justify-center">
+                                <div className="flex items-center space-x-2">
+                                    <a className="text-blue-500 cursor-pointer" onClick={() => { onCode() }}>
+                                        인증번호 전송
+                                    </a>
+                                </div>
+                            </div>
+                            {isCode &&(<div className="space-y-2 text-left">
+                                <label
+                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                                >
+                                    인증번호
+                                </label>
+                                <input
+                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    placeholder="전송된 인증번호 입력"
+                                    value={storedCode} onChange={
+                                        (e) => { setStoredCode(e.currentTarget.value) }
+                                    }
+                                />
+                            </div>)}
+
+                            <button className="w-full py-3 mt-4 text-white bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] rounded-lg" onClick={() => { onSubmit() }}>
+                                인증하기
+                            </button>
+                            <button className="w-full py-3 mt-4 text-white bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] rounded-lg" onClick={() => { navigate('/login') }}>
+                                돌아가기
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
-    </div>
-    <Footer/>
-    </>
-  )
+            <Footer />
+        </>
+    )
 }
 
 export default FindId
