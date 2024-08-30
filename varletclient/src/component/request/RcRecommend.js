@@ -30,15 +30,15 @@ function RcRecommend() {
         formData.append('tour', tour);
     
         // Append accommodation files and their types
-        accommodationFiles.forEach(fileObj => {
+        accommodationFiles.forEach((fileObj, index) => {
             formData.append('files', fileObj.file);
-            formData.append("image_type", "숙소"); // Accommodation type
+            formData.append(`image_type_${index}`, '숙소'); // Accommodation type with unique key
         });
-    
+        
         // Append tourist spot files and their types
-        touristSpotFiles.forEach(fileObj => {
+        touristSpotFiles.forEach((fileObj, index) => {
             formData.append('files', fileObj.file);
-            formData.append("image_type", "관광지"); // Tourist spot type
+            formData.append(`image_type_${accommodationFiles.length + index}`, '여행지'); // Tourist spot type with unique key
         });
     
         // Append removed files
@@ -46,10 +46,21 @@ function RcRecommend() {
             formData.append('removedimages', filename);
         });
     
+        // Debug output
+        console.log("FormData content:");
+        for (let [key, value] of formData.entries()) {
+            if (value instanceof File) {
+                console.log(`${key}: ${value.name}`);
+            } else {
+                console.log(`${key}: ${value}`);
+            }
+        }
+    
         jaxios.post(`/api/rcrecommend/writeRecommend/${rnum}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
         .then(response => {
+            console.log("response:", response); // 응답 로그 추가
             alert("답글 작성에 성공했습니다.");
             setContent('');
             setAccommodationFiles([]);
@@ -58,7 +69,6 @@ function RcRecommend() {
             setTour('');
             setRemovedFiles([]);
             navigate('/rCommunity');
-            console.log("response.",response)
         })
         .catch(error => {
             alert('답글 작성에 실패했습니다.');

@@ -1,16 +1,19 @@
 package com.himedias.varletserver.controller;
 
+import com.himedias.varletserver.dao.RcrecommendRepository;
 import com.himedias.varletserver.dto.Paging;
 import com.himedias.varletserver.dto.RCRcommend.RcrecommendInfo;
-import com.himedias.varletserver.entity.Image;
 import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.RCommunity;
 import com.himedias.varletserver.entity.Rcrecommend;
 import com.himedias.varletserver.service.RCRecommendService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 @RestController
@@ -31,8 +30,13 @@ public class RCRecommendController {
     @Autowired
     private RCRecommendService rcs;
 
-    @Value("${file.upload-dir}")
-    private String uploadDir; // 파일이 저장될 디렉토리 경로를 프로퍼티 파일에서 가져옴
+    @Autowired
+    private RcrecommendRepository rcr;
+
+
+    @Autowired
+    private ServletContext servletContext;
+
 
     /**
      * 새로운 답글을 작성하는 엔드포인트입니다.
@@ -46,8 +50,8 @@ public class RCRecommendController {
             @RequestParam("content") String content,
             @RequestParam(value = "berth", required = false) String berth,
             @RequestParam(value = "tour", required = false) String tour,
-            @RequestParam(value = "image_type") String imageTypeStr,
-            @RequestParam(value = "files", required = false) MultipartFile[] files) {
+            @RequestParam(value = "files", required = false) MultipartFile[] files,
+            @RequestParam Map<String, String> allParams) {
 
         try {
             // 게시글 및 사용자 정보를 조회
@@ -59,19 +63,11 @@ public class RCRecommendController {
             rcrecommend.setContent(content);
             rcrecommend.setRnum(rc);
             rcrecommend.setUserid(member);
-            rcrecommend.setBerth(berth);  // 숙소 이름 설정
-            rcrecommend.setTour(tour);    // 관광지 이름 설정
-
-            // 이미지 타입 변환
-            Image.ImageType imageType;
-            try {
-                imageType = Image.ImageType.valueOf(imageTypeStr);
-            } catch (IllegalArgumentException e) {
-                imageType = Image.ImageType.기타; // 기본값 설정
-            }
+            rcrecommend.setBerth(berth);
+            rcrecommend.setTour(tour);
 
             // 답글을 저장하고 파일이 있을 경우 파일 경로도 함께 저장
-            Rcrecommend savedRcrecommend = rcs.saveRcrecommend(rcrecommend, files, imageType, berth, tour, member);
+            Rcrecommend savedRcrecommend = rcs.saveRcrecommend(rcrecommend, files, (HashMap<String, String>) allParams, member);
 
             // HashMap으로 응답 구성
             HashMap<String, Object> response = new HashMap<>();
@@ -85,30 +81,41 @@ public class RCRecommendController {
     }
 
 
+
+
     /**
      * 특정 게시글에 대한 답글 목록을 조회하는 엔드포인트입니다.
      * 게시글 ID를 받아 해당 게시글에 달린 모든 답글을 반환합니다.
      */
+// 서버의 컨트롤러에서 예외를 로깅합니다.
     @GetMapping("/getReplies/{rnum}")
     public HashMap<String, Object> rcrommendView(@PathVariable("rnum") int rnum,
-                                                @RequestParam(defaultValue = "1") int page,
+                                                 @RequestParam(defaultValue = "1") int page,
                                                  @RequestParam(defaultValue = "5") int size) {
         HashMap<String, Object> result = new HashMap<>();
-        Paging paging  = new Paging();
+        Paging paging = new Paging();
         paging.setPage(page);
         paging.setDisplayRow(size);
-        paging.setSort(Sort.by(Sort.Direction.DESC,"rcnum"));
+        paging.setSort(Sort.by(Sort.Direction.DESC, "rcnum"));
+
         Page<RcrecommendInfo> recommendList = rcs.getRecommend(rnum, paging);
-        System.out.println("호출됨?!-----------------------------------------"); // 디버깅용 메시지
 
         paging.setTotalCount((int) recommendList.getTotalElements());
         paging.calPaging();
 
+        // 모든 이미지 URL을 절대 경로로 변환합니다.
+        for (RcrecommendInfo recommend : recommendList.getContent()) {
+            for (RcrecommendInfo.ImageInfo imageInfo : recommend.getImages()) {
+                String filePath = imageInfo.getFilePath();
+                String absolutePath = servletContext.getContextPath() + filePath;
+            }
+        }
 
-        result.put("recommend", recommendList.getContent()); // 답글 목록을 응답으로 반환
+        result.put("recommend", recommendList.getContent());
         result.put("paging", paging);
         return result;
     }
+
 
     /**
      * 특정 답글을 삭제하는 엔드포인트입니다.

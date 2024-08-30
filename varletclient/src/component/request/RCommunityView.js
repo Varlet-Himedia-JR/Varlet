@@ -25,11 +25,12 @@ function RCommunityView() {
   const replyFormRef = useRef(null);
   // 상태 변수 선언
   const [userCookie, setUserCookie] = useState(getCookie('user'));
-  const [size] = useState(5); // 한 번에 가져올 답글 수
-  const [page, setPage] = useState(1); // 현재 페이지 상태 추가
-  const [loading, setLoading] = useState(false);
+  const [totalReplies, setTotalReplies] = useState(0);  // 총 답글 수 상태
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(5);
   const [hasMore, setHasMore] = useState(true);
-  const [setTotalReplies] = useState(0); // 전체 답글 수
+  const [loading, setLoading] = useState(false);
+
 
 
   // const [ref, inView] = useInView({
@@ -66,7 +67,7 @@ function RCommunityView() {
 
   }, [rnum]);
 
-  const fetchReplies = useCallback(() => {
+  const fetchReplies = () => {
     if (loading || !hasMore) return;
 
     setLoading(true);
@@ -75,21 +76,24 @@ function RCommunityView() {
         params: { page, size },
     })
     .then(response => {
-        const newReplies = response.data.recommend;
+        const newReplies = response.data.recommend.map(reply => ({
+            ...reply,
+            images: reply.images.map(image => ({
+                ...image,
+                filePath: `${window.location.origin}${image.filePath}`, // 절대 경로로 변환
+            }))
+        }));
+
         const totalReplyCount = response.data.paging.totalCount;
 
-        // 총 답글 수를 설정합니다.
         setTotalReplies(totalReplyCount);
 
-        // 답글 목록에 새 답글을 추가합니다.
         setReplies(prevReplies => {
             const updatedReplies = [...prevReplies, ...newReplies];
-            // 이미 불러온 답글 수가 총 답글 수와 같거나 많으면 더 이상 호출하지 않음.
             setHasMore(updatedReplies.length < totalReplyCount);
             return updatedReplies;
         });
 
-        // 페이지 수를 증가시킵니다.
         setPage(prevPage => prevPage + 1);
     })
     .catch(err => {
@@ -98,16 +102,19 @@ function RCommunityView() {
     .finally(() => {
         setLoading(false);
     });
-}, [page, size, hasMore, rnum, loading]);
+};
+
+
+
 
 
     // 초기 데이터 로드 및 페이지 증가 처리
     useEffect(() => {
-        setPage(1);  // rnum 변경 시 페이지 초기화
-        setReplies([]);  // rnum 변경 시 기존 답글 초기화
-        setHasMore(true); // rnum 변경 시 hasMore 초기화
-        fetchReplies();
-    }, [rnum]);
+      setPage(1);  // rnum 변경 시 페이지 초기화
+      setReplies([]);  // rnum 변경 시 기존 답글 초기화
+      setHasMore(true); // rnum 변경 시 hasMore 초기화
+      fetchReplies();
+  }, [rnum]);
 
 
     // 무한 스크롤 이벤트 핸들러
@@ -128,80 +135,12 @@ function RCommunityView() {
   }, [loading, hasMore]);
 
 
-  const handleFileChange = (event) => {
-      const selectedFiles = Array.from(event.target.files);
-      const filePreviews = selectedFiles.map(file => ({
-          file,
-          src: URL.createObjectURL(file)
-      }));
-      setFiles(filePreviews);
-
-      const formData = new FormData();
-      selectedFiles.forEach(file => formData.append('image', file));
-
-      jaxios.post('/api/rcrecommend/fileup', formData)
-          .then((result) => {
-              const { image, savefilenames } = result.data;
-              setImage(result.data.image);
-              setSaveImages(result.data.savefilenames);
-              setImgSrc(savefilenames.map(filename => `http://localhost:8070/uploads/${filename}`));
-          })
-          .catch((err) => {
-              console.error(err);
-          });
-  };
-
-  const replyUpdate = ()=>{
-
-  }
 
   const writerecommend = (rnum) => {
     navigate(`/rCommunityView/${rnum}/rcRecommend`);
 };
 
-  const handleSubmitRec = (e) => {
-    e.preventDefault();
 
-    const formData = new FormData();
-    formData.append('userid', userCookie.userid);
-    formData.append('content', content);
-
-    saveimages.forEach((filename) => {
-        formData.append('saveimages', filename);
-    });
-
-    removedFiles.forEach((filename) => {
-        formData.append('removedimages', filename);
-    });
-
-    jaxios.post(`/api/rcrecommend/writeRecommend/${rnum}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    })
-    .then(response => {
-        alert("답글 작성에 성공했습니다.");
-        setShowReplyForm(false); // 답글 작성란을 숨김
-        setContent('');
-        setFiles([]);
-        setImage([]);
-        setSaveImages([]);
-        setImgSrc([]);
-        setRemovedFiles([]);
-        
-        // 페이지를 새로 고칩니다.
-        window.location.reload();
-    })
-    .catch(error => {
-        alert('답글 작성에 실패했습니다.');
-        console.error(error);
-    });
-};
-
-
-
-  const handleRemoveFile = (fileToRemove) => {
-      setFiles(prevFiles => prevFiles.filter(file => file.file !== fileToRemove));
-      setRemovedFiles(prevRemoved => [...prevRemoved, fileToRemove.name]); // 삭제된 파일 이름을 추가
-  };
 
 
 
@@ -589,94 +528,85 @@ return (
       </span>
     </div>
 
-         <div className="space-y-4">
-           <div>
-                {replies && replies.length > 0 ? (
-                    replies.map((reply, index) => (
-                        <div key={index} className="flex items-start gap-4">
-                            <span className="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
-                                <img
-                                    className="aspect-square h-full w-full object-cover"
-                                    alt={`Profile of ${reply.userid}`}
-                                    src={reply.userid.profileimg || '/placeholder-user.jpg'}
-                                />
-                            </span>
-                            <div className="grid gap-1.5">
-                                <div className="flex items-center gap-2 text-sm">
-                                    <div className="font-medium">{maskeduser(reply.userid)}</div>
-                                    <div className="text-muted-foreground">{new Date(reply.writedate).toLocaleDateString('ko-KR')}</div>
-                                    <div className="flex items-center gap-2">
-                                        {(post?.userid?.userid === userCookie.userid && post.picked === 'N') && (
-                                            <>
-                                                <button 
-                                                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"                   
-                                                    onClick={() => handlepicked(reply.rcnum)}>
-                                                    채택하기
-                                                </button>
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-                                <span className="w-2/12 text-center text-nowrap flex items-center justify-center gap-2">
-                                    {post.picked === "Y" ? (
-                                        reply.rpicked === "Y" ? (
-                                            <>
-                                                채택
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-circle-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#1e90ff" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                                                    <path d="M9 12l2 2l4 -4" />
-                                                </svg>
-                                            </>
-                                        ) : (
-                                            "미채택"
-                                        )
-                                    ) : (
-                                        reply.rpicked === "N" ? "채택 진행중" : "미정"
-                                    )}
-                                </span>
-                                <p>{reply.content}</p>
-                                <div className="flex flex-wrap mt-4">
-                                    {reply.images && reply.images.length > 0 && (
-                                        <div className="flex flex-wrap gap-4">
-                                            {reply.images.map((image) => (
-                                                <div key={image.id} className="w-64 h-64 overflow-hidden">
-                                                    <img
-                                                        src={`/api/${image.filePath}`} 
-                                                        alt={image.imag_name}
-                                                        className="object-cover w-full h-full"
-                                                    />
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>  
-                                <div className="flex justify-end gap-2 mb-4">
-                                    <div className="flex items-center gap-2">
-                                        {(reply.user === getCookie('user')?.user) && (
-                                            <>
-                                                <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"                   
-                                                    onClick={replyUpdate}>
-                                                    수정
-                                                </button>
-                                                <button
-                                                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"
-                                                    onClick={() => replyDelete(reply.rcnum)}>
-                                                    삭제
-                                                </button>
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
+    <div>
+    <h2>Replies</h2>
+    {replies.length > 0 ? (
+        <ul>
+            {replies.map(reply => (
+                <li key={reply.rcnum} style={{ marginBottom: '20px' }}>
+                    {/* 숙소 이름 및 사진 */}
+                    <div>
+                        <h3>숙소 이름:</h3>
+                        <p>{reply.berth}</p>
+                        {reply.images && reply.images.filter(img => img.imageType === '숙소').length > 0 && (
+                            <div>
+                                {reply.images.filter(img => img.imageType === '숙소').map(image => (
+                                    <img
+                                        key={image.id}
+                                        src={image.filePath} // 절대 URL이 포함된 filePath
+                                        alt={image.imageName}
+                                        style={{ width: '200px', height: '150px', objectFit: 'cover', marginRight: '10px' }}
+                                    />
+                                ))}
                             </div>
+                        )}
+                    </div>
+
+                    {/* 여행지 이름 및 사진 */}
+                    <div>
+                        <h3>여행지 이름:</h3>
+                        <p>{reply.tour}</p>
+                        {reply.images && reply.images.filter(img => img.imageType === '여행지').length > 0 && (
+                            <div>
+                                {reply.images.filter(img => img.imageType === '여행지').map(image => (
+                                    <img
+                                        key={image.id}
+                                        src={`${window.location.origin}${image.filePath}`} // 절대 URL
+                                        alt={image.imageName}
+                                        style={{ width: '200px', height: '150px', objectFit: 'cover', marginRight: '10px' }}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* 콘텐츠 */}
+                    <div>
+                        <h3>콘텐츠:</h3>
+                        <p>{reply.content}</p>
+                    </div>
+
+                    {/* 기타 사진 */}
+                    {reply.images && reply.images.filter(img => img.imageType === '기타').length > 0 && (
+                        <div>
+                            <h3>기타 사진:</h3>
+                            {reply.images.filter(img => img.imageType === '기타').map(image => (
+                                <img
+                                    key={image.id}
+                                    src={`${window.location.origin}${image.filePath}`} // 절대 URL
+                                    alt={image.imageName}
+                                    style={{ width: '200px', height: '150px', objectFit: 'cover', marginRight: '10px' }}
+                                />
+                            ))}
                         </div>
-                    ))
-                ) : (
-                    <p>답글이 없습니다.</p>
-                )}
-                {loading && <p>Loading...</p>}
-            </div>
-        </div>
+                    )}
+
+                    {/* 작성일 */}
+                    <p>작성일: {new Date(reply.writedate).toLocaleDateString()}</p>
+                </li>
+            ))}
+        </ul>
+    ) : (
+        <p>No replies found.</p>
+    )}
+    {hasMore && (
+        <button onClick={fetchReplies} disabled={loading}>
+            {loading ? 'Loading...' : 'Load More'}
+        </button>
+    )}
+</div>
+
+         
         </div>
 </div>
 </div>
