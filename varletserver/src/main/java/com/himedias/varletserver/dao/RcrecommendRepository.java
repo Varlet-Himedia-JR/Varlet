@@ -27,6 +27,7 @@ public interface RcrecommendRepository extends JpaRepository<Rcrecommend, Intege
      * @param rcnum 제외할 답글 ID
      * @return 답글 리스트
      */
+    Page<RcrecommendInfo> findAllByRnum(@Param("rnum") Integer rnum, Pageable pageable);
 
     /**
      * 특정 답글의 채택 상태를 업데이트합니다.

@@ -87,7 +87,6 @@ public class RCRecommendController {
      * 특정 게시글에 대한 답글 목록을 조회하는 엔드포인트입니다.
      * 게시글 ID를 받아 해당 게시글에 달린 모든 답글을 반환합니다.
      */
-// 서버의 컨트롤러에서 예외를 로깅합니다.
     @GetMapping("/getReplies/{rnum}")
     public HashMap<String, Object> rcrommendView(@PathVariable("rnum") int rnum,
                                                  @RequestParam(defaultValue = "1") int page,
@@ -103,18 +102,12 @@ public class RCRecommendController {
         paging.setTotalCount((int) recommendList.getTotalElements());
         paging.calPaging();
 
-        // 모든 이미지 URL을 절대 경로로 변환합니다.
-        for (RcrecommendInfo recommend : recommendList.getContent()) {
-            for (RcrecommendInfo.ImageInfo imageInfo : recommend.getImages()) {
-                String filePath = imageInfo.getFilePath();
-                String absolutePath = servletContext.getContextPath() + filePath;
-            }
-        }
-
+        // 절대 경로 변환 제거
         result.put("recommend", recommendList.getContent());
         result.put("paging", paging);
         return result;
     }
+
 
 
     /**
