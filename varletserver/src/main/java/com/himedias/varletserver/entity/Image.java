@@ -45,25 +45,17 @@ public class Image {
     @Column(name = "image_type", columnDefinition = "ENUM('숙소','여행지','기타') DEFAULT '기타'")
     private ImageType imageType = ImageType.기타;
 
-    @Column(name = "berth", length = 255)
-    private String berth;
-
-    @Column(name = "tour", length = 255)
-    private String tour;
-
     // 기본 생성자
     public Image() {
     }
 
     // 필요한 필드를 받는 생성자
-    public Image(Member member, Rcrecommend rcRecommend, String imageName, String filePath, ImageType imageType, String berth, String tour) {
+    public Image(Member member, Rcrecommend rcRecommend, String imageName, String filePath, ImageType imageType) {
         this.member = member;
         this.rcRecommend = rcRecommend;
         this.imageName = imageName;
         this.filePath = filePath;
         this.imageType = imageType;
-        this.berth = berth;
-        this.tour = tour;
         this.uploadDate = new Timestamp(System.currentTimeMillis());
     }
 
