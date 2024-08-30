@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import jaxios from '../../util/jwtUtil';
 import { useNavigate } from 'react-router-dom';
-import { getCookie } from "../../util/cookieUtil";
+import { getCookie } from '../../util/cookieUtil';
 import Heading from '../headerfooter/Heading';
 import Footer from '../headerfooter/Footer';
 import '../../style/review.css';
@@ -18,9 +18,8 @@ function WriteReview() {
 
     // 이미지 선택 핸들러
     const handleImageChange = (event) => {
-
         const files = Array.from(event.target.files);
-        console.log("파일 확인", files);
+
         if (files.length + selectedImages.length > 5) {
             alert('최대 5개의 이미지만 업로드할 수 있습니다.');
             return;
@@ -51,7 +50,7 @@ function WriteReview() {
     };
 
     // 리뷰 제출 핸들러
-    const onSubmit = () => {
+    const handleSubmit = async () => {
         if (!userid) { // 로그인이 안 되어 있을 경우 경고 후 로그인 페이지로 이동
             alert('로그인이 필요합니다');
             navigate('/login');
@@ -69,8 +68,8 @@ function WriteReview() {
         }
 
         if (selectedImages.length === 0) { // 이미지가 없을 경우 경고
-             alert('이미지를 1개 이상 삽입해 주세요');
-             return;
+            alert('이미지를 1개 이상 삽입해 주세요');
+            return;
         }
 
         const formData = new FormData(); // FormData 객체 생성
@@ -78,100 +77,111 @@ function WriteReview() {
         formData.append('content', content); // 내용 추가
         formData.append('userid', userid); // 사용자 ID 추가
 
-
         // 선택한 이미지를 FormData에 추가
-
-        
-
-
         selectedImages.forEach((image) => {
             formData.append('reviewimg', image);
         });
 
-
-        // jaxios를 사용하여 서버로 리뷰 데이터를 POST 요청
-
-        jaxios.post('/api/review/writeReview', formData)
-        .then(response => {
-            // 서버에서 응답이 성공적으로 반환되면 페이지 이동
+        try {
+            const response = await jaxios.post('/api/review/writeReview', formData);
             if (response.status === 200) {
-                // 페이지 새로 고침 후 리뷰 목록으로 이동
-                window.location.href = '/reviewList';
-                console.log(response.data);
+                alert('리뷰가 성공적으로 작성되었습니다.');
+                navigate('/reviewList');
             } else {
-                alert('서버 오류: 리뷰 작성에 실패했습니다.'); // 서버 오류 경고
+                alert('서버 오류: 리뷰 작성에 실패했습니다.');
             }
-        })
-        .catch((err) => {
+        } catch (err) {
             console.error(err);
-            alert('서버 오류: 리뷰 작성에 실패했습니다.'); // 서버 오류 경고
-        });
+            alert('서버 오류: 리뷰 작성에 실패했습니다.');
+        }
     };
 
     // 작성 취소 핸들러
-    const onCancel = () => {
-        navigate('/reviewList'); // 작성 취소 시 리뷰 목록 페이지로 이동
+    const handleCancel = () => {
+        if (window.confirm('작성을 취소하시겠습니까?')) {
+            navigate('/reviewList');
+        }
     };
 
     return (
         <>
             <Heading />
-            <div >
-            <div className='background'><img alt=''src="http://localhost:8070/images/oceans.jpg"/></div>
-            </div>
-            
-                <div className="reviewWriteForm">
-                <h2>여행 후기 작성</h2>
-                    <div className="field">
-                        <label>제목</label>
-                        <input 
-                            type="text" 
-                            value={title} 
-                            onChange={(e) => setTitle(e.currentTarget.value)} 
+            <div className="flex justify-center" style={{marginTop:'80px'}}>
+                <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-4xl p-6">
+                    <h1 className="whitespace-nowrap font-semibold tracking-tight text-4xl mb-6">여행 후기 작성</h1>
+                    <div className="grid gap-4 mb-6">
+                        <label className="font-medium text-lg" htmlFor="title">
+                            제목
+                        </label>
+                        <input
+                            className="border rounded px-2 py-1 w-full"
+                            id="title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder="제목을 입력하세요"
                         />
                     </div>
-                    <div className="field">
-                        <label>내용</label>
-                        <textarea 
-                            rows="7" 
-                            value={content} 
-                            onChange={(e) => setContent(e.currentTarget.value)} 
+                    <div className="grid gap-4 mb-6">
+                        <label className="font-medium text-lg" htmlFor="content">
+                            내용
+                        </label>
+                        <textarea
+                            className="border rounded px-2 py-1 w-full"
+                            id="content"
+                            rows="7"
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            placeholder="내용을 입력하세요"
                         ></textarea>
                     </div>
-                    <div className="field">
-                        <label>사진 (최대 5개)</label>
-                        <input 
-                            type="file" 
-                            accept="image/*" 
-                            onChange={handleImageChange} 
+                    <div className="grid gap-4 mb-6">
+                        <label className="font-medium text-lg" htmlFor="images">
+                            사진 (최대 5개)
+                        </label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
                             multiple
+                            className="border rounded px-2 py-1 w-full"
                         />
-                        {imagePreviews.length > 0 && ( // 이미지 미리보기가 있을 경우에만 표시
-                            <div className="image-preview">
+                        {imagePreviews.length > 0 && (
+                            <div className="image-preview grid gap-4">
                                 {imagePreviews.map((preview, index) => (
-                                    <div key={index}>
+                                    <div key={index} className="relative">
                                         <img
                                             src={preview}
                                             alt={`미리보기 ${index + 1}`}
-                                            
+                                            className="w-full h-auto rounded"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => handleImageRemove(index)}
-                                        
+                                            className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
                                         >
-                                            &times; {/* 이미지 제거 버튼 */}
+                                            &times;
                                         </button>
                                     </div>
                                 ))}
                             </div>
                         )}
                     </div>
-                    <div className="btn">
-                        <button onClick={onSubmit}>작성완료</button> {/* 리뷰 작성 버튼 */}
-                        <button onClick={onCancel} style={{ marginLeft: '10px' }}>작성 취소</button> {/* 작성 취소 버튼 */}
+                    <div className="flex justify-end gap-4">
+                        <button
+                            className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+                            onClick={handleCancel}
+                        >
+                            작성 취소
+                        </button>
+                        <button
+                            className="bg-blue-500 text-white px-4 py-2 rounded"
+                            onClick={handleSubmit}
+                        >
+                            작성 완료
+                        </button>
                     </div>
                 </div>
+            </div>
             <Footer />
         </>
     );

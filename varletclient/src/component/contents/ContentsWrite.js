@@ -34,7 +34,7 @@ function ContentsWrite() {
     async function fileupload(e) {
         const formData = new FormData();
         formData.append('image', e.target.files[0]);
-        const result = await axios.post('/api/member/fileupload', formData);
+        const result = await jaxios.post('/api/member/fileupload', formData);
         setContentsimg(`http://localhost:8070/uploads/${result.data.filename}`);
         console.log(result.data.filename);
 
@@ -72,15 +72,7 @@ function ContentsWrite() {
         }
     }, [lnum]);
 
-    // const onInputChange = (event) => {
-    //     const { name, value } = event.target;
-    //     if (name === 'startDate') {
-    //         setCstart_time(value);
-    //     } else if (name === 'endDate') {
-    //         setCend_time(value);
-    //     }
-    // };
-
+    
     const today = new Date();
 
     moment(cstart_time).format('YYYY-MM-DD')
@@ -215,19 +207,6 @@ function ContentsWrite() {
                                     />
                                 </div>
                             </div>
-                            {/* 상시기간 설정을 위한 코드 */}
-                            {/* <div class="grid gap-4">
-                            <div class="flex items-center">
-                                <input
-                                    id="custom-checkbox"
-                                    type="checkbox"
-                                    class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                />
-                                <label for="custom-checkbox" class="ml-2 text-gray-700">
-                                    선택하세요
-                                </label>
-                            </div>
-                        </div> */}
                             <div class="grid gap-4">
                                 <label class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg" for="title">
                                     이름
@@ -267,6 +246,7 @@ function ContentsWrite() {
                                     <option value="축제">축제</option>
                                     <option value="맛집">맛집</option>
                                     <option value="카페">카페</option>
+                                    <option value="명소">명소</option>
                                     <option value="기타">기타</option>
 
                                 </select>

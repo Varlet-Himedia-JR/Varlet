@@ -182,17 +182,17 @@ function Main() {
               <div className="flex flex-col items-start justify-center w-full max-w-6xl p-8 space-y-4 md:flex-row md:space-y-0 md:space-x-8">
                 <div className="flex flex-col items-start justify-center space-y-4">
                   <div className="inline-flex w-fit items-center whitespace-nowrap border text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-black text-white px-3 py-1 rounded-full">
-                    설렘 가득 놀거리✨
+                    설렘 가득 컨텐츠✨
                   </div>
                   <h1 className="text-4xl font-bold text-black-1000">
-                    여름의 추억
+                    뜨거운 여름
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block w-8 h-8">
                       <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path>
                       <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path>
                       <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path>
                     </svg>
                     <br />
-                    국내 다양한 축제들을 즐겨보세요
+                    국내 여행으로 추억을 만드세요
                   </h1>
                 </div>
                 <div className="relative w-full max-w-lg overflow-hidden rounded-lg shadow-lg">

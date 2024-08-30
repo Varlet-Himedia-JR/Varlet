@@ -66,9 +66,17 @@ public class ContentsController {
     @PostMapping("/writeContents")
     public HashMap<String, Object> writeContents(@RequestBody Contents contents) {
         HashMap<String, Object> result = new HashMap<>();
-        System.out.println("-----writeContents-----");
         System.out.println(contents.toString());
         cs.writeContents(contents);
+        result.put("msg", "ok");
+        return result;
+    }
+
+    @PostMapping("/updateContents")
+    public HashMap<String, Object> updateContents(@RequestBody Contents contents) {
+        HashMap<String, Object> result = new HashMap<>();
+        System.out.println(contents.toString());
+        cs.updateContents(contents);
         result.put("msg", "ok");
         return result;
     }
@@ -79,5 +87,13 @@ public class ContentsController {
         Map<String, Object> result = new HashMap<>();
         result.put("contentsList", contentsList); // 리스트를 'contentsList' 필드로 래핑합니다.
         return ResponseEntity.ok(result); // 객체 형태로 응답을 보냅니다.
+    }
+
+    @PostMapping("/deleteContents/{cseq}")
+    public HashMap<String, Object> deleteDayschedule(@PathVariable("cseq") int cseq){
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        cs.deleteContents(cseq);
+        result.put("msg","ok");
+        return result;
     }
 }

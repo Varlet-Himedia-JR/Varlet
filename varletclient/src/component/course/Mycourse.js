@@ -281,7 +281,7 @@ function Mycourse() {
             {isCourseContentsVisible && (
                 <div className="course_contents">
                     <div className="cchead" style={{ display: 'flex', justifyContent: 'space-between', paddingRight: '60px', zIndex: 5 }}>
-                        놀거리에서 선택 추가
+                        컨텐츠에서 선택 추가
                         <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-backspace" width="40" height="40" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round" onClick={onChangeCourseContents}>
                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                             <path d="M20 6a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-11l-5 -5a1.5 1.5 0 0 1 0 -2l5 -5z" />
@@ -328,7 +328,7 @@ function Mycourse() {
                                 paddingRight: '20px',
                             }}
                         >
-                            <h2>선택한 놀거리를 추가</h2>
+                            <h2>선택한 컨텐츠를 추가</h2>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="icon icon-tabler icon-tabler-backspace"
