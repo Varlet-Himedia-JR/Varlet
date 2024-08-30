@@ -10,6 +10,7 @@ import RCommunityList from "./component/request/RCommunityList";
 import RPostWrite from "./component/request/RPostWrite";
 import RCommunityView from "./component/request/RCommunityView";
 import RCommunityUpdate from "./component/request/RCommunityUpdate";
+import RcRecommend from "./component/request/RcRecommend";
 import Join from './component/member/Join';
 import WriteQna from './component/qna/WriteQna';
 import QnaView from './component/qna/QnaView';
@@ -71,6 +72,7 @@ function App() {
         {/* 여행코스 의뢰 */}
         <Route path="/rcommunity" element={<RCommunityList />} /> 
         <Route path="/rpostwrite" element={<RPostWrite />} /> 
+        <Route path="/rCommunityView/:rnum/rcRecommend" element={<RcRecommend />} /> 
         <Route path="/rCommunityView/:rnum" element={<RCommunityView />} />
         <Route path="/rCommunityUpdate/:rnum" element={<RCommunityUpdate />} />
         
