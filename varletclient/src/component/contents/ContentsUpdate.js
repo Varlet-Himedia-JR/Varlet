@@ -64,7 +64,7 @@ function ContentsUpdate() {
         setLnum2(location2Index);
         setLocation2(contents.location2);
         // cstart_time을 YYYY-MM-DD 형식으로 변환하여 상태 설정
-        if (contents.cstartTime) {
+        if (contents.cstart_time) {
             
             const formatDate = (timestamp) => {
                 const date = new Date(timestamp);
@@ -72,11 +72,11 @@ function ContentsUpdate() {
                 return dateString.substring(0, 10); // YYYY-MM-DD 부분 추출
             };
 
-            const formattedDate = formatDate(contents.cstartTime);
+            const formattedDate = formatDate(contents.cstart_time);
             setCstart_time(formattedDate);
         }
 
-        if (contents.cendTime) {
+        if (contents.cend_time) {
             
             const formatDate = (timestamp) => {
                 const date = new Date(timestamp);
@@ -84,7 +84,7 @@ function ContentsUpdate() {
                 return dateString.substring(0, 10); // YYYY-MM-DD 부분 추출
             };
 
-            const formattedDate = formatDate(contents.cendTime);
+            const formattedDate = formatDate(contents.cend_time);
             setCend_time(formattedDate);
         }
         setCost(contents.cost);
@@ -130,7 +130,7 @@ function ContentsUpdate() {
             let result = await jaxios.post('/api/contents/updateContents', { cseq,ctype, cname, location, location2, cstart_time, cend_time, cost, contentsimg });
             if (result.data.msg == 'ok') {
                 alert('수정');
-                navigate('/contents');
+                navigate('/contentsList');
             }
         } catch (err) {
             console.error(err);

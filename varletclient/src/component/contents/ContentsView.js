@@ -90,7 +90,7 @@ function ContentsView() {
                                                     </tr>
                                                     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                                                         <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">기간</td>
-                                                        <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">{contents.cstartTime ? contents.cstartTime.substring(0, 10) + '~' + contents.cendTime.substring(0, 10) : ''}</td>
+                                                        <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">{contents.cstart_time ? contents.cstart_time.substring(0, 10) + '~' + contents.cend_time.substring(0, 10) : ''}</td>
                                                     </tr>
                                                     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                                                         <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">가격</td>
