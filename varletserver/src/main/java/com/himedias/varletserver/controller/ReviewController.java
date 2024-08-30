@@ -2,6 +2,7 @@ package com.himedias.varletserver.controller;
 
 import com.himedias.varletserver.dto.Paging;
 import com.himedias.varletserver.entity.Review;
+import com.himedias.varletserver.entity.Reviewpreview;
 import com.himedias.varletserver.entity.ReviewSummary;
 import com.himedias.varletserver.entity.Reviewimg;
 import com.himedias.varletserver.service.ReviewService;
@@ -281,6 +282,14 @@ public class ReviewController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/reviewPreviewSearch")
+    public ResponseEntity<Map<String, Object>> reviewPreviewSearch(@RequestParam("query") String query) {
+        List<Reviewpreview> reviewpreviewList = rs.reviewPreviewSearch(query);
+        Map<String, Object> result = new HashMap<>();
+        result.put("reviewList", reviewpreviewList);
+        return ResponseEntity.ok(result);
+    }
+
     @GetMapping("/userReviews/{userid}")
     public HashMap<String, Object> userReviews(@PathVariable("userid") String userid) {
         HashMap<String, Object> result = new HashMap<>();
@@ -292,6 +301,26 @@ public class ReviewController {
             result.put("status", "error");
             result.put("message", e.getMessage());
         }
+        return result;
+    }
+
+    @GetMapping("/reviewPreviewList/{page}")
+    public HashMap<String, Object> reviewPreviewList(@PathVariable("page") int page) {
+        HashMap<String, Object> result = new HashMap<>();
+        Paging paging = new Paging();
+        paging.setPage(page);
+        paging.setDisplayRow(10);
+        paging.setSort(Sort.by(Sort.Order.desc("rseq")));
+
+        Page<Reviewpreview> reviewPreviewPage = rs.getReviewPreviewList(paging);
+
+        paging.setTotalCount((int) reviewPreviewPage.getTotalElements());
+
+        paging.calPaging();
+
+        result.put("reviewList", reviewPreviewPage.getContent());
+        result.put("paging", paging);
+
         return result;
     }
 }

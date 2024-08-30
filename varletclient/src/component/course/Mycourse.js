@@ -222,11 +222,13 @@ function Mycourse() {
                             {selectedCourse ? <Payment daySchedule={daySchedule} /> : <></>}
                         </div>
                     </div>
-                    {selectedCourse ? <Timetable courseDuration={courseDuration} daySchedule={daySchedule} cellWidth={cellWidth} />
+                    {selectedCourse && cellWidth !== 0
+                        ? <Timetable courseDuration={courseDuration} daySchedule={daySchedule} cellWidth={cellWidth} />
                         : <div className='tempTable'>
                             <br />
                             등록된 일정표가 없습니다. 일정을 등록하세요
                         </div>}
+
 
                 </div>
 
@@ -285,7 +287,7 @@ function Mycourse() {
                             <path d="M20 6a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-11l-5 -5a1.5 1.5 0 0 1 0 -2l5 -5z" />
                             <path d="M12 10l4 4m0 -4l-4 4" />
                         </svg>
-                        
+
                     </div>
                     <div style={{ zIndex: '5' }}>
                         <CourseContents mycourse={mycourse} selectedCourse={selectedCourse} contents={contents} />

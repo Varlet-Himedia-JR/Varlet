@@ -211,6 +211,11 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/findPwd/"))
             return true;
 
+        if (path.startsWith("/review/reviewPreviewSearch"))
+            return true;
+        if (path.startsWith("/review/reviewPreviewList"))
+            return true;
+
 
         if (path.startsWith("/rcommunity/updatePicked"))
             return true;
