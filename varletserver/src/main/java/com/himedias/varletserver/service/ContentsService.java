@@ -48,4 +48,10 @@ public class ContentsService {
     public List<Contents> getRecentContents() {
         return cr.getRecentContents();
     }
+
+    public void updateContents(Contents contents) {cr.save(contents); }
+
+    public void deleteContents(int cseq) {
+        cr.deleteByTseq(cseq);
+    }
 }

@@ -233,8 +233,8 @@ function CourseContents({ selectedCourse, cseq, mycourse }) {
                                 <div className="col" style={{ textAlign: "left" }} >{contents.cname}</div>
                                 <div className="col">{contents.ctype}</div>
                                 <div className="col">{contents.location} {contents.location2}</div>
-                                <div className="col">{contents.cstartTime ? contents.cstartTime.toString().substring(0, 10) : ''}</div>
-                                <div className="col">{contents.cendTime ? contents.cendTime.toString().substring(0, 10) : ''}</div>
+                                <div className="col">{contents.cstart_time ? contents.cstart_time.toString().substring(0, 10) : ''}</div>
+                                <div className="col">{contents.cend_time ? contents.cend_time.toString().substring(0, 10) : ''}</div>
                                 <div
                                     onClick={(event) => {
                                         event.stopPropagation(); // 이벤트 전파 중지

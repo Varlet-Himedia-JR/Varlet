@@ -20,9 +20,9 @@ public class Contents {
     private String location;
     private String location2;
     @CreationTimestamp
-    private Timestamp cstartTime;
+    private Timestamp cstart_time;
     @CreationTimestamp
-    private Timestamp cendTime;
+    private Timestamp cend_time;
     private int cost;
     private String contentsimg;
 
