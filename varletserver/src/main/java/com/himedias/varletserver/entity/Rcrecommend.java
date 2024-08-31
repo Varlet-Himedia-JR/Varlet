@@ -52,6 +52,12 @@ public class Rcrecommend {
     @OneToMany(mappedBy = "rcRecommend", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 
+    @Column
+    private String berth;  // 숙소 이름 추가
+
+    @Column
+    private String tour;   // 관광지 이름 추가
+
     // 이미지 추가 메서드
     public void addImage(Image image) {
         this.images.add(image);
