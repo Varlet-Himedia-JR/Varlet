@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
 import '../../style/review.css';
+import { getCookie } from "../../util/cookieUtil";
 
 function ReviewList() {
     const [reviewList, setReviewList] = useState([]);
@@ -12,6 +13,7 @@ function ReviewList() {
     const [searchTerm, setSearchTerm] = useState(''); // 검색어
     const [filteredReviews, setFilteredReviews] = useState([]);
     const navigate = useNavigate();
+    
 
     const loadReviews = useCallback(async (pageNumber) => {
         try {
@@ -94,7 +96,12 @@ function ReviewList() {
     }
 
     function handleAddReview() {
-        navigate('/writeReview'); // 리뷰 작성 페이지로 이동
+        if(getCookie('user')){
+            navigate('/writeReview'); // 리뷰 작성 페이지로 이동
+        }else{
+            navigate('/login'); // 리뷰 작성 페이지로 이동
+        }
+        
     }
 
     return (
