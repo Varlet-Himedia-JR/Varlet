@@ -68,7 +68,7 @@ function RcRecommend() {
             setBerth('');
             setTour('');
             setRemovedFiles([]);
-            navigate('/rCommunity');
+            navigate(`/RcommunityView/${rnum}`);
         })
         .catch(error => {
             alert('답글 작성에 실패했습니다.');
