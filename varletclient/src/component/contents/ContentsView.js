@@ -88,10 +88,10 @@ function ContentsView() {
                                                         <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">지역</td>
                                                         <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">{contents.location} {contents.location2}</td>
                                                     </tr>
-                                                    <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                                    {contents.ctype === '축제' && <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                                                         <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">기간</td>
                                                         <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">{contents.cstart_time ? contents.cstart_time.substring(0, 10) + '~' + contents.cend_time.substring(0, 10) : ''}</td>
-                                                    </tr>
+                                                    </tr>}
                                                     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                                                         <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">가격</td>
                                                         <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0"> {contents.cost}</td>
