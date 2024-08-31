@@ -190,7 +190,7 @@ function ContentsList() {
                                     <div className="p-4">
                                         <h3 className="text-lg font-semibold mb-2">{contents.cname}</h3>
                                         <p className="text-muted-foreground mb-4">{contents.location} {contents.location2}</p>
-                                        <p className="text-muted-foreground mb-4">{contents.cstart_time.substring(0, 10)} - {contents.cend_time.substring(0, 10)}</p>
+                                        {contents.ctype==='축제' && <p className="text-muted-foreground mb-4">{contents.cstart_time.substring(0, 10)} - {contents.cend_time.substring(0, 10)}</p>}
                                         <div className="flex items-center justify-between">
                                             <span className="text-primary font-semibold">
                                                 &#8361; : {contents.cost === 0
