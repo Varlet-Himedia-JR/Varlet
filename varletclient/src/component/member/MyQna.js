@@ -68,13 +68,11 @@ function MyQna() {
   return (
     <>
             <Heading />
-            <div >
-            <div className='background'><img src="http://localhost:8070/images/oceans.jpg"/></div>
-            </div>
+            
       <div className='QnaPage' style={{ paddingTop: '120px' }}>
         <div className="qnalist" style={{ flex: "4" }}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div className='qnacenter'>MY QNA</div>
+            <div className='qnacenter'>내 Q&A</div>
             <button className='button1' onClick={() => { navigate('/writeQna') }}>1:1 문의 작성</button>
           </div>
           <div className="qnatable">

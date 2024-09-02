@@ -278,12 +278,12 @@ function ReviewView() {
                                         </div>
 
                                         <div className="mt-6 flex gap-2">
-                                            {getCookie('user') ? (
+                                            {/* {getCookie('user') ? (
                                                 <div onClick={handleNewReplySubmit}
                                                     className="bg-blue-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer w-32">
                                                     <span className="text-xl font-bold">댓글 작성</span>
                                                 </div>
-                                            ) : null}
+                                            ) : null} */}
 
                                             {getCookie('user') && <div onClick={handleBackToList}
                                                 className="bg-blue-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer w-32">
