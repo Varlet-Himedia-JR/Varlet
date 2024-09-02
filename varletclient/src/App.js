@@ -37,6 +37,7 @@ import 'ckeditor5/ckeditor5.css';
 import ContentsWrite from "./component/contents/ContentsWrite";
 import Pay from "./component/pay/Pay";
 import CheckPwd from "./component/member/CheckPwd";
+import ContentsUpdate from "./component/contents/ContentsUpdate";
 
 // import WritePost from './component/post/WritePost';
 // import MyPage from './component/member/MyPage';
@@ -85,7 +86,8 @@ function App() {
         {/* 여행 콘텐츠 */}
         <Route path="/contentsList" element={<ContentsList />} />
         <Route path="/getContentsView/:cseq" element={<ContentsView />} />
-
+        <Route path="/contentsWrite" element={<ContentsWrite />} />
+        <Route path="/contentsUpdate/:cseq" element={<ContentsUpdate />} />
         {/* 마이페이지 */}
         <Route path="/myPage" element={<MyPage />} />
         <Route path="/checkPwd" element={<CheckPwd />} />
@@ -96,7 +98,7 @@ function App() {
         <Route path="/myPayment" element={<MyPayment />} />
         {/* 공지사항 */}
         <Route path="/notice" element={<Notice />} />
-        <Route path="/contentsWrite" element={<ContentsWrite />} />
+        
 
         {/* 결제 */}
         <Route path="/pay" element={<Pay />} />

@@ -16,7 +16,7 @@ function House() {
     const navigate = useNavigate();
 
 
-    // 놀거리 등록 (관리자만 가능)
+    // 컨텐츠 등록 (관리자만 가능)
     const writeContents = () => {
         if (!getCookie('user')) {
             navigate('/login');

@@ -18,8 +18,8 @@ public interface RcrecommendRepository extends JpaRepository<Rcrecommend, Intege
      * @param rnum 게시글 ID
      * @return 답글 정보 리스트
      */
-    @Query("SELECT r FROM Rcrecommend r WHERE r.rnum.rnum = :rnum ORDER BY r.writedate DESC")
-    Page<RcrecommendInfo> findAllByRnum(@Param("rnum") Integer rnum, Pageable pageable);
+    @Query("SELECT r FROM Rcrecommend r LEFT JOIN FETCH r.images WHERE r.rnum.rnum = :rnum")
+    Page<RcrecommendInfo> findByRnum(@Param("rnum") int rnum, Pageable pageable);
 
     /**
      * 특정 게시글 ID에 속하면서 주어진 답글 ID가 아닌 답글들을 조회합니다.
@@ -27,8 +27,7 @@ public interface RcrecommendRepository extends JpaRepository<Rcrecommend, Intege
      * @param rcnum 제외할 답글 ID
      * @return 답글 리스트
      */
-    @Query("SELECT r FROM Rcrecommend r WHERE r.rnum = :rnum AND r.rcnum <> :rcnum")
-    List<Rcrecommend> findByRnumAndNotRcnum(@Param("rnum") int rnum, @Param("rcnum") int rcnum);
+    Page<RcrecommendInfo> findAllByRnum(@Param("rnum") Integer rnum, Pageable pageable);
 
     /**
      * 특정 답글의 채택 상태를 업데이트합니다.

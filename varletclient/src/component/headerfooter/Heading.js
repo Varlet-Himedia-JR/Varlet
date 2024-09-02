@@ -79,7 +79,7 @@ function Heading() {
                     <img src="http://localhost:8070/images/varlet.png" onClick={() => navigate('/')} alt="Logo" />
                 </div>
                 <div className='home' onClick={() => navigate('/')}>홈</div>
-                <div className='head_contents' onClick={() => navigate('/contentsList')}>놀거리</div>
+                <div className='head_contents' onClick={() => navigate('/contentsList')}>컨텐츠</div>
                 <div className='rcommunity' onClick={() => navigate('/rcommunity')}>여행 코스 의뢰</div>
                 <div className='reviewBoard' onClick={() => navigate('/reviewList')}>여행 후기</div>
                 <div className='mycourse' onClick={() => logCheck('/mycourse')}>여행 코스 만들기</div>

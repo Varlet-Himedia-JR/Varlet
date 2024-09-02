@@ -1,25 +1,26 @@
 package com.himedias.varletserver.controller;
 
+import com.himedias.varletserver.dao.RcrecommendRepository;
 import com.himedias.varletserver.dto.Paging;
 import com.himedias.varletserver.dto.RCRcommend.RcrecommendInfo;
 import com.himedias.varletserver.entity.Member;
 import com.himedias.varletserver.entity.RCommunity;
 import com.himedias.varletserver.entity.Rcrecommend;
 import com.himedias.varletserver.service.RCRecommendService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 @RestController
@@ -29,94 +30,58 @@ public class RCRecommendController {
     @Autowired
     private RCRecommendService rcs;
 
-    @Value("${file.upload-dir}")
-    private String uploadDir; // 파일이 저장될 디렉토리 경로를 프로퍼티 파일에서 가져옴
+    @Autowired
+    private RcrecommendRepository rcr;
+
+
+    @Autowired
+    private ServletContext servletContext;
+
 
     /**
      * 새로운 답글을 작성하는 엔드포인트입니다.
      * 게시글 ID와 사용자 ID, 내용을 받아 해당 게시글에 답글을 추가합니다.
      * 선택적으로 이미지 파일 경로도 받을 수 있습니다.
      */
-// 게시글에 대한 추천 답글을 작성하는 메소드
     @PostMapping("/writeRecommend/{rnum}")
-    @ResponseStatus(HttpStatus.CREATED) // 성공적으로 생성된 경우 HTTP 201 Created 응답 상태 설정
-    public Map<String, Integer> writeRecommend(
-            // 게시글 ID를 경로 변수로 받음
+    public HashMap<String, Object> writeRecommend(
             @PathVariable("rnum") int rnum,
-            // 사용자 ID와 답글 내용을 요청 파라미터로 받음
             @RequestParam("userid") String userid,
             @RequestParam("content") String content,
-            // 선택적으로 파일 경로 리스트를 요청 파라미터로 받음
-            @RequestParam(value = "saveimages", required = false) List<String> files) {
+            @RequestParam(value = "berth", required = false) String berth,
+            @RequestParam(value = "tour", required = false) String tour,
+            @RequestParam(value = "files", required = false) MultipartFile[] files,
+            @RequestParam Map<String, String> allParams) {
 
-        // 게시글 및 사용자 정보를 조회
-        RCommunity rc = rcs.findRCommunityById(rnum);
-        Member member = rcs.findMemberById(userid);
+        try {
+            // 게시글 및 사용자 정보를 조회
+            RCommunity rc = rcs.findRCommunityById(rnum);
+            Member member = rcs.findMemberById(userid);
 
-        // 새로운 답글 엔티티를 생성하고 필드 설정
-        Rcrecommend rcrecommend = new Rcrecommend();
-        rcrecommend.setContent(content);
-        rcrecommend.setRnum(rc);
-        rcrecommend.setUserid(member);
+            // 새로운 답글 엔티티를 생성하고 필드 설정
+            Rcrecommend rcrecommend = new Rcrecommend();
+            rcrecommend.setContent(content);
+            rcrecommend.setRnum(rc);
+            rcrecommend.setUserid(member);
+            rcrecommend.setBerth(berth);
+            rcrecommend.setTour(tour);
 
-        // 답글을 저장하고 파일이 있을 경우 파일 경로도 함께 저장
-        Rcrecommend savedRcrecommend = rcs.saveRcrecommend(rcrecommend, files);
+            // 답글을 저장하고 파일이 있을 경우 파일 경로도 함께 저장
+            Rcrecommend savedRcrecommend = rcs.saveRcrecommend(rcrecommend, files, (HashMap<String, String>) allParams, member);
 
-        // 저장된 답글의 ID를 반환
-        return Map.of("rcum", savedRcrecommend.getRcnum());
+            // HashMap으로 응답 구성
+            HashMap<String, Object> response = new HashMap<>();
+            response.put("rcnum", savedRcrecommend.getRcnum());
+            return response;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server Error", e);
+        }
     }
 
-    @Autowired
-    private ServletContext context;
 
-    /**
-     * 이미지 파일을 업로드하는 엔드포인트입니다.
-     * 업로드된 파일을 지정된 디렉토리에 저장하고, 저장된 파일명을 반환합니다.
-     */
-    @PostMapping("/fileup")
-    public ResponseEntity<Map<String, Object>> imgup(
-            @RequestParam("image") MultipartFile[] files) {
-        Map<String, Object> result = new HashMap<>();
-        Calendar today = Calendar.getInstance();
-        long timestamp = today.getTimeInMillis();
 
-        // 실제 파일 저장 경로를 얻음
-        String uploadDirPath = context.getRealPath("/uploads");
-        File uploadDirFile = new File(uploadDirPath);
-        if (!uploadDirFile.exists()) {
-            uploadDirFile.mkdirs(); // 디렉토리가 존재하지 않으면 생성
-        }
-
-        List<String> savedFilenames = new ArrayList<>();
-
-        for (MultipartFile file : files) {
-            String originalFilename = file.getOriginalFilename();
-            if (originalFilename == null) {
-                continue; // 파일명이 없는 경우 건너뜀
-            }
-
-            // 파일 확장자 및 파일명을 이용해 고유한 파일명 생성
-            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-            String filename = originalFilename.substring(0, originalFilename.lastIndexOf("."));
-            String saveFilename = filename + timestamp + extension;
-
-            // 파일을 저장할 경로 설정
-            Path filePath = Paths.get(uploadDirFile.getAbsolutePath(), saveFilename);
-
-            try {
-                file.transferTo(filePath.toFile()); // 파일을 지정된 경로에 저장
-                savedFilenames.add(saveFilename);
-            } catch (IOException e) {
-                e.printStackTrace();
-                result.put("error", "File upload failed: " + e.getMessage());
-                return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        // 저장된 파일명을 응답으로 반환
-        result.put("savefilenames", savedFilenames);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
 
     /**
      * 특정 게시글에 대한 답글 목록을 조회하는 엔드포인트입니다.
@@ -124,24 +89,26 @@ public class RCRecommendController {
      */
     @GetMapping("/getReplies/{rnum}")
     public HashMap<String, Object> rcrommendView(@PathVariable("rnum") int rnum,
-                                                @RequestParam(defaultValue = "1") int page,
+                                                 @RequestParam(defaultValue = "1") int page,
                                                  @RequestParam(defaultValue = "5") int size) {
         HashMap<String, Object> result = new HashMap<>();
-        Paging paging  = new Paging();
+        Paging paging = new Paging();
         paging.setPage(page);
         paging.setDisplayRow(size);
-        paging.setSort(Sort.by(Sort.Direction.DESC,"rcnum"));
+        paging.setSort(Sort.by(Sort.Direction.DESC, "rcnum"));
+
         Page<RcrecommendInfo> recommendList = rcs.getRecommend(rnum, paging);
-        System.out.println("호출됨?!-----------------------------------------"); // 디버깅용 메시지
 
         paging.setTotalCount((int) recommendList.getTotalElements());
         paging.calPaging();
 
-
-        result.put("recommend", recommendList.getContent()); // 답글 목록을 응답으로 반환
+        // 절대 경로 변환 제거
+        result.put("recommend", recommendList.getContent());
         result.put("paging", paging);
         return result;
     }
+
+
 
     /**
      * 특정 답글을 삭제하는 엔드포인트입니다.

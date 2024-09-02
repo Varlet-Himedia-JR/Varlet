@@ -16,7 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -30,6 +32,9 @@ public class RCRecommendService {
     private MemberRepository mr; // 사용자 관련 데이터베이스 작업을 위한 레포지토리
     @Autowired
     private ImageRepository ir; // 이미지 관련 데이터베이스 작업을 위한 레포지토리
+
+    @Autowired
+    private ImageService is;
 
     /**
      * 주어진 게시글 ID로 게시글을 조회합니다.
@@ -61,30 +66,31 @@ public class RCRecommendService {
      */
 // 답글과 관련된 파일을 저장하는 서비스 메소드
     @Transactional
-    public Rcrecommend saveRcrecommend(Rcrecommend rcrecommend, List<String> fileNames) {
+    public Rcrecommend saveRcrecommend(Rcrecommend rcrecommend, MultipartFile[] files, HashMap<String, String> allParams, Member member) {
         // 답글을 데이터베이스에 저장
         Rcrecommend savedRcrecommend = rcr.save(rcrecommend);
 
-        // 각 이미지 파일을 데이터베이스에 저장
-        for (String fileName : fileNames) {
-            Image image = new Image();
-            image.setRcRecommend(savedRcrecommend); // 답글과 이미지 연관 설정
-            image.setImageName(fileName);
-            image.setFilePath("/uploads/" + fileName); // 파일 경로 설정
-            image.setMember(savedRcrecommend.getUserid()); // 이미지 업로드한 사용자 설정
-            ir.save(image); // 이미지 저장
+        // 파일이 있을 경우 파일 저장 및 이미지 정보 저장
+        if (files != null && files.length > 0) {
+            is.saveFiles(files, member, rcrecommend, allParams); // 모든 매개변수 전달
         }
 
         return savedRcrecommend;
     }
+
+
     /**
      * 주어진 게시글 ID로 답글 목록을 조회합니다.
      * @param rcnum 게시글 ID
      * @return RcrecommendInfo 리스트
      */
-    public Page<RcrecommendInfo> getRecommend(int rcnum, Paging paging) {
-        Pageable pageable = PageRequest.of(paging.getPage() - 1, paging.getDisplayRow(),paging.getSort());
-        return rcr.findAllByRnum(rcnum,pageable); // 게시글 ID에 따른 답글 목록 반환
+//    public Page<RcrecommendInfo> getReplies(int rnum, Pageable pageable) {
+//        return rcr.findRepliesByRnum(rnum, pageable);
+//    }
+
+    public Page<RcrecommendInfo> getRecommend(int rnum, Paging paging) {
+        Pageable pageable = PageRequest.of(paging.getPage() - 1, paging.getDisplayRow(), paging.getSort());
+        return rcr.findByRnum(rnum, pageable);
     }
 
     /**

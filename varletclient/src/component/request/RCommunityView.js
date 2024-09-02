@@ -25,12 +25,15 @@ function RCommunityView() {
   const replyFormRef = useRef(null);
   // 상태 변수 선언
   const [userCookie, setUserCookie] = useState(getCookie('user'));
-  const [size] = useState(5); // 한 번에 가져올 답글 수
-  const [page, setPage] = useState(1); // 현재 페이지 상태 추가
-  const [loading, setLoading] = useState(false);
+  const [totalReplies, setTotalReplies] = useState(0);  // 총 답글 수 상태
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(5);
   const [hasMore, setHasMore] = useState(true);
-  const [setTotalReplies] = useState(0); // 전체 답글 수
-
+  const [loading, setLoading] = useState(false);
+  const BACKEND_URL = 'http://localhost:8070'; // 백엔드 서버의 주소
+  const [totalPages, setTotalPages] = useState(1);
+  const [startPage, setStartPage] = useState(1);
+  const [endPage, setEndPage] = useState(5);
 
   // const [ref, inView] = useInView({
   //   threshold: 50  
@@ -66,31 +69,29 @@ function RCommunityView() {
 
   }, [rnum]);
 
-  const fetchReplies = useCallback(() => {
-    if (loading || !hasMore) return;
-
+  const fetchReplies = (pageNumber) => {
     setLoading(true);
 
     jaxios.get(`/api/rcrecommend/getReplies/${rnum}`, {
-        params: { page, size },
+        params: { page: pageNumber, size }
     })
     .then(response => {
-        const newReplies = response.data.recommend;
-        const totalReplyCount = response.data.paging.totalCount;
+        const newReplies = response.data.recommend.map(reply => ({
+            ...reply,
+            images: reply.images.map(image => ({
+                ...image,
+                filePath: `${BACKEND_URL}${image.filePath}`
+            }))
+        }));
+        const totalCount = response.data.paging.totalCount;
+        const totalPages = Math.ceil(totalCount / size);
 
-        // 총 답글 수를 설정합니다.
-        setTotalReplies(totalReplyCount);
+        setReplies(newReplies);
+        setTotalPages(totalPages);
 
-        // 답글 목록에 새 답글을 추가합니다.
-        setReplies(prevReplies => {
-            const updatedReplies = [...prevReplies, ...newReplies];
-            // 이미 불러온 답글 수가 총 답글 수와 같거나 많으면 더 이상 호출하지 않음.
-            setHasMore(updatedReplies.length < totalReplyCount);
-            return updatedReplies;
-        });
-
-        // 페이지 수를 증가시킵니다.
-        setPage(prevPage => prevPage + 1);
+        // Update the page range
+        setStartPage(Math.max(1, pageNumber - 5));
+        setEndPage(Math.min(totalPages, pageNumber + 5));
     })
     .catch(err => {
         console.error('Error fetching replies:', err);
@@ -98,110 +99,22 @@ function RCommunityView() {
     .finally(() => {
         setLoading(false);
     });
-}, [page, size, hasMore, rnum, loading]);
+};
+useEffect(() => {
+  fetchReplies(page);
+}, [page]);
 
-
-    // 초기 데이터 로드 및 페이지 증가 처리
-    useEffect(() => {
-        setPage(1);  // rnum 변경 시 페이지 초기화
-        setReplies([]);  // rnum 변경 시 기존 답글 초기화
-        setHasMore(true); // rnum 변경 시 hasMore 초기화
-        fetchReplies();
-    }, [rnum]);
-
-
-    // 무한 스크롤 이벤트 핸들러
-    useEffect(() => {
-      const handleScroll = () => {
-          if (
-              window.innerHeight + document.documentElement.scrollTop
-              >= document.documentElement.offsetHeight - 200
-              && hasMore
-              && !loading
-          ) {
-              fetchReplies();
-          }
-      };
-
-      window.addEventListener('scroll', handleScroll);
-      return () => window.removeEventListener('scroll', handleScroll);
-  }, [loading, hasMore]);
-
-
-  const handleFileChange = (event) => {
-      const selectedFiles = Array.from(event.target.files);
-      const filePreviews = selectedFiles.map(file => ({
-          file,
-          src: URL.createObjectURL(file)
-      }));
-      setFiles(filePreviews);
-
-      const formData = new FormData();
-      selectedFiles.forEach(file => formData.append('image', file));
-
-      jaxios.post('/api/rcrecommend/fileup', formData)
-          .then((result) => {
-              const { image, savefilenames } = result.data;
-              setImage(result.data.image);
-              setSaveImages(result.data.savefilenames);
-              setImgSrc(savefilenames.map(filename => `http://localhost:8070/uploads/${filename}`));
-          })
-          .catch((err) => {
-              console.error(err);
-          });
-  };
-
-  const replyUpdate = ()=>{
-
+const handlePageChange = (newPage) => {
+  if (newPage >= 1 && newPage <= totalPages) {
+      setPage(newPage);
   }
+};
 
   const writerecommend = (rnum) => {
     navigate(`/rCommunityView/${rnum}/rcRecommend`);
 };
 
-  const handleSubmitRec = (e) => {
-    e.preventDefault();
 
-    const formData = new FormData();
-    formData.append('userid', userCookie.userid);
-    formData.append('content', content);
-
-    saveimages.forEach((filename) => {
-        formData.append('saveimages', filename);
-    });
-
-    removedFiles.forEach((filename) => {
-        formData.append('removedimages', filename);
-    });
-
-    jaxios.post(`/api/rcrecommend/writeRecommend/${rnum}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    })
-    .then(response => {
-        alert("답글 작성에 성공했습니다.");
-        setShowReplyForm(false); // 답글 작성란을 숨김
-        setContent('');
-        setFiles([]);
-        setImage([]);
-        setSaveImages([]);
-        setImgSrc([]);
-        setRemovedFiles([]);
-        
-        // 페이지를 새로 고칩니다.
-        window.location.reload();
-    })
-    .catch(error => {
-        alert('답글 작성에 실패했습니다.');
-        console.error(error);
-    });
-};
-
-
-
-  const handleRemoveFile = (fileToRemove) => {
-      setFiles(prevFiles => prevFiles.filter(file => file.file !== fileToRemove));
-      setRemovedFiles(prevRemoved => [...prevRemoved, fileToRemove.name]); // 삭제된 파일 이름을 추가
-  };
 
 
 
@@ -576,9 +489,9 @@ return (
       </button>
     </div>
     <div 
-      className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-[101][] w-full max-w-lg p-4 bg-blue-50 text-blue-800 dark:bg-gray-800 dark:text-blue-400 rounded-lg shadow-lg cursor-pointer flex items-center justify-center space-x-3 hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors duration-300 z-[200]"
-      onClick={writerecommend}
-    >
+    className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-[101][] w-full max-w-lg p-4 bg-blue-50 text-blue-800 dark:bg-gray-800 dark:text-blue-400 rounded-lg shadow-lg cursor-pointer flex items-center justify-center space-x-3 hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors duration-300 z-[200]"
+    onClick={() => writerecommend(rnum)}  // `rnum`을 적절히 전달
+>
       <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-blue-800 dark:text-blue-400" viewBox="0 0 24 24" strokeWidth="1.5"    stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
         <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
@@ -589,94 +502,197 @@ return (
       </span>
     </div>
 
-         <div className="space-y-4">
-           <div>
-                {replies && replies.length > 0 ? (
-                    replies.map((reply, index) => (
-                        <div key={index} className="flex items-start gap-4">
-                            <span className="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
+    <div>
+            <h1 className='mb-10 font-bold text-xl'>답글</h1>
+            {replies.length > 0 ? (
+    <ul>
+        {replies.map(reply => (
+          
+            <li key={reply.rcnum} style={{ marginBottom: '20px' }}>
+                <div>
+                <div className="flex items-center gap-4 text-sm">
+    {/* 작성자 이름과 작성일 */}
+    <div className="flex items-center gap-2">
+        <div className="font-medium">{maskeduser(reply.userid)}</div>
+        <div className="text-muted-foreground">{new Date(reply.writedate).toLocaleDateString('ko-KR')}</div>
+    </div>
+    
+    {/* 채택하기 버튼 */}
+    {(post?.userid?.userid === userCookie.userid && post.picked === 'N') && (
+        <button 
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"                   
+            onClick={() => handlepicked(reply.rcnum)}
+        >
+            채택하기
+        </button>
+    )}
+    
+    {/* 채택 상태 */}
+    <span className="flex items-center gap-2">
+        {post.picked === "Y" ? (
+            reply.rpicked === "Y" ? (
+                <>
+                    채택
+                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-circle-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#1e90ff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                        <path d="M9 12l2 2l4 -4" />
+                    </svg>
+                </>
+            ) : (
+                "미채택"
+            )
+        ) : (
+            reply.rpicked === "N" ? "채택 진행중" : "미정"
+        )}
+    </span>
+</div>
+
+
+
+
+                    <h2 className="text-2xl md:text-3xl font-bold">숙소 이름: {reply.berth}</h2>
+
+                    {/* 숙소 이름 및 사진 */}
+                    {reply.images && reply.images.filter(img => img.imageType === '숙소').length > 0 && (
+                        <div style={{ display: 'flex', overflowX: 'auto', marginBottom: '10px' }}>
+                            {reply.images.filter(img => img.imageType === '숙소').map(image => (
                                 <img
-                                    className="aspect-square h-full w-full object-cover"
-                                    alt={`Profile of ${reply.userid}`}
-                                    src={reply.userid.profileimg || '/placeholder-user.jpg'}
+                                    key={image.id}
+                                    src={image.filePath} // 절대 URL
+                                    alt={image.imageName}
+                                    style={{ width: '800px', height: '550px', objectFit: 'cover', marginRight: '10px' }}
                                 />
-                            </span>
-                            <div className="grid gap-1.5">
-                                <div className="flex items-center gap-2 text-sm">
-                                    <div className="font-medium">{maskeduser(reply.userid)}</div>
-                                    <div className="text-muted-foreground">{new Date(reply.writedate).toLocaleDateString('ko-KR')}</div>
-                                    <div className="flex items-center gap-2">
-                                        {(post?.userid?.userid === userCookie.userid && post.picked === 'N') && (
-                                            <>
-                                                <button 
-                                                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"                   
-                                                    onClick={() => handlepicked(reply.rcnum)}>
-                                                    채택하기
-                                                </button>
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-                                <span className="w-2/12 text-center text-nowrap flex items-center justify-center gap-2">
-                                    {post.picked === "Y" ? (
-                                        reply.rpicked === "Y" ? (
-                                            <>
-                                                채택
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-circle-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#1e90ff" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                                                    <path d="M9 12l2 2l4 -4" />
-                                                </svg>
-                                            </>
-                                        ) : (
-                                            "미채택"
-                                        )
-                                    ) : (
-                                        reply.rpicked === "N" ? "채택 진행중" : "미정"
-                                    )}
-                                </span>
-                                <p>{reply.content}</p>
-                                <div className="flex flex-wrap mt-4">
-                                    {reply.images && reply.images.length > 0 && (
-                                        <div className="flex flex-wrap gap-4">
-                                            {reply.images.map((image) => (
-                                                <div key={image.id} className="w-64 h-64 overflow-hidden">
-                                                    <img
-                                                        src={`/api/${image.filePath}`} 
-                                                        alt={image.imag_name}
-                                                        className="object-cover w-full h-full"
-                                                    />
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>  
-                                <div className="flex justify-end gap-2 mb-4">
-                                    <div className="flex items-center gap-2">
-                                        {(reply.user === getCookie('user')?.user) && (
-                                            <>
-                                                <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"                   
-                                                    onClick={replyUpdate}>
-                                                    수정
-                                                </button>
-                                                <button
-                                                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-700"
-                                                    onClick={() => replyDelete(reply.rcnum)}>
-                                                    삭제
-                                                </button>
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
+                            ))}
                         </div>
-                    ))
-                ) : (
-                    <p>답글이 없습니다.</p>
+                    )}
+                </div>
+                <div>
+                    <h2 className="text-2xl md:text-3xl font-bold">여행지 이름: {reply.tour}</h2>
+
+                    {/* 여행지 이름 및 사진 */}
+                    {reply.images && reply.images.filter(img => img.imageType === '여행지').length > 0 && (
+                        <div style={{ display: 'flex', overflowX: 'auto', marginBottom: '10px' }}>
+                            {reply.images.filter(img => img.imageType === '여행지').map(image => (
+                                <img
+                                    key={image.id}
+                                    src={image.filePath} // 절대 URL
+                                    alt={image.imageName}
+                                    style={{ width: '800px', height: '550px', objectFit: 'cover', marginRight: '10px' }}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* 콘텐츠 */}
+                <div>
+                    <h2 className="text-2xl md:text-3xl font-middle">상세 설명</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold">{reply.content}</h2>
+                </div>
+
+                {/* 기타 사진 */}
+                {reply.images && reply.images.filter(img => img.imageType === '기타').length > 0 && (
+                    <div>
+                        <h3 className="text-xl font-bold">기타 사진:</h3>
+                        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                            {reply.images.filter(img => img.imageType === '기타').map(image => (
+                                <img
+                                    key={image.id}
+                                    src={image.filePath} // 절대 URL
+                                    alt={image.imageName}
+                                    style={{ width: '200px', height: '150px', objectFit: 'cover', marginRight: '10px', marginBottom: '10px' }}
+                                />
+                            ))}
+                        </div>
+                    </div>
                 )}
-                {loading && <p>Loading...</p>}
+            </li>
+        ))}
+    </ul>
+) : (
+    <p>No replies found.</p>
+)}
+            {/* 페이지네이션 버튼 */}
+            <div className="mt-4 flex justify-center">
+                <ul className="flex items-center space-x-1 h-20 text-base">
+                    <li>
+                        <a
+                            href="#"
+                            onClick={(e) => { e.preventDefault(); handlePageChange(page - 10); }}
+                            className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 ${page <= 10 ? 'cursor-not-allowed bg-gray-300' : ''}`}
+                            aria-disabled={page <= 10}
+                        >
+                            <span className="sr-only">10 Pages Back</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-player-track-prev" width="22" height="22" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M21 5v14l-8 -7z" />
+                                <path d="M10 5v14l-8 -7z" />
+                            </svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="#"
+                            onClick={(e) => { e.preventDefault(); handlePageChange(page - 1); }}
+                            className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 ${page === 1 ? 'cursor-not-allowed bg-gray-300' : ''}`}
+                            aria-disabled={page === 1}
+                        >
+                            <span className="sr-only">Previous</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-player-skip-back" width="22" height="22" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M20 5v14l-12 -7z" />
+                                <path d="M4 5l0 14" />
+                            </svg>
+                        </a>
+                    </li>
+                    {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
+                        <li key={startPage + index}>
+                            <a
+                                href="#"
+                                onClick={(e) => { e.preventDefault(); handlePageChange(startPage + index); }}
+                                className={`flex items-center justify-center px-4 h-10 leading-tight ${page === startPage + index ? 'text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700' : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700'} rounded-md`}
+                                aria-current={page === startPage + index ? 'page' : undefined}
+                            >
+                                {startPage + index}
+                            </a>
+                        </li>
+                    ))}
+                    <li>
+                        <a
+                            href="#"
+                            onClick={(e) => { e.preventDefault(); handlePageChange(page + 1); }}
+                            className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 ${page === totalPages ? 'cursor-not-allowed bg-gray-300' : ''}`}
+                            aria-disabled={page === totalPages}
+                        >
+                            <span className="sr-only">Next</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-player-skip-forward" width="22" height="22" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M4 5v14l12 -7z" />
+                                <path d="M20 5l0 14" />
+                            </svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="#"
+                            onClick={(e) => { e.preventDefault(); handlePageChange(page + 10); }}
+                            className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 ${page >= totalPages - 10 ? 'cursor-not-allowed bg-gray-300' : ''}`}
+                            aria-disabled={page >= totalPages - 10}
+                        >
+                            <span className="sr-only">10 Pages Forward</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-player-track-next" width="22" height="22" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M3 5v14l8 -7z" />
+                                <path d="M14 5v14l8 -7z" />
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
+
+         
         </div>
 </div>
 </div>

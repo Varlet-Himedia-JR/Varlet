@@ -8,14 +8,15 @@ import { getCookie } from "../../util/cookieUtil";
 
 
 function ContentsList() {
-    const [contentsList, setContentsList] = useState([]); // 놀거리 목록
+    const [contentsList, setContentsList] = useState([]); // 컨텐츠 목록
     const [page, setPage] = useState(1); // 현재 페이지
     const [hasMore, setHasMore] = useState(true); // 더 로드할 데이터가 있는지 여부
     const [searchTerm, setSearchTerm] = useState(''); // 검색어
     const [filteredContents, setFilteredContents] = useState([]); // 필터된 리뷰 목록
+    const [isAdmin, setIsAdmin] = useState(false);
     const navigate = useNavigate();
 
-    // 놀거리 등록 (관리자만 가능)
+    // 컨텐츠 등록 (관리자만 가능)
     const writeContents = () => {
         if (!getCookie('user')) {
             navigate('/login');
@@ -90,6 +91,17 @@ function ContentsList() {
         };
     }, [handleScroll]);
 
+    useEffect(() => {
+        if (getCookie('user')) {
+            for (let i = 0; i < getCookie('user').roleNames.length; i++) {
+                if (getCookie('user').roleNames[i] === 'ADMIN') {
+                    setIsAdmin(true);
+                    break;
+                }
+            }
+        }
+    }, []);
+
     // 초기 데이터 로드
     useEffect(() => {
         loadContents(page);
@@ -132,7 +144,7 @@ function ContentsList() {
                 <div className="contents-container flex flex-wrap justify-between" >
                     <h1 className="text-4xl font-bold text-gray-800">
                         <br />
-                        국내 다양한 놀거리들을 즐겨보세요
+                        국내 다양한 컨텐츠들을 즐겨보세요
                     </h1>
                     <div className="search-container" style={{ marginBottom: "20px", width: "100%" }}>
                         <input
@@ -143,19 +155,25 @@ function ContentsList() {
                             placeholder="축제명으로 검색"
                         />
                         {searchTerm && (
-                            <button className="clear-button" onClick={handleClearSearch}>X</button>
-                        )}
-                        <div
-                            className="bg-blue-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer w-32"
-                            onClick={writeContents}
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-backspace cursor-pointer" width="40" height="40" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round" onClick={handleClearSearch} >
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-                                <path d="M13.5 6.5l4 4" />
+                                <path d="M20 6a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-11l-5 -5a1.5 1.5 0 0 1 0 -2l5 -5z" />
+                                <path d="M12 10l4 4m0 -4l-4 4" />
                             </svg>
-                            <span className="text-xl font-bold">등록</span>
-                        </div>
+                        )}
+                        {isAdmin &&
+                            <div
+                                className="bg-blue-500 text-white px-4 py-2 rounded flex items-center space-x-2 cursor-pointer w-32"
+                                onClick={writeContents}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                                    <path d="M13.5 6.5l4 4" />
+                                </svg>
+                                <span className="text-xl font-bold">등록</span>
+                            </div>
+                        }
                     </div>
                     {
                         Array.isArray(filteredContents) && filteredContents.length > 0 ? (
@@ -172,7 +190,7 @@ function ContentsList() {
                                     <div className="p-4">
                                         <h3 className="text-lg font-semibold mb-2">{contents.cname}</h3>
                                         <p className="text-muted-foreground mb-4">{contents.location} {contents.location2}</p>
-                                        <p className="text-muted-foreground mb-4">{contents.cstartTime.substring(0, 10)} - {contents.cendTime.substring(0, 10)}</p>
+                                        {contents.ctype==='축제' && <p className="text-muted-foreground mb-4">{contents.cstart_time.substring(0, 10)} - {contents.cend_time.substring(0, 10)}</p>}
                                         <div className="flex items-center justify-between">
                                             <span className="text-primary font-semibold">
                                                 &#8361; : {contents.cost === 0

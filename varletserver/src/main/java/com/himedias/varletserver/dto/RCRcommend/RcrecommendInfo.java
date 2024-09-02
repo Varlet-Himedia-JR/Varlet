@@ -1,5 +1,7 @@
 package com.himedias.varletserver.dto.RCRcommend;
 
+import com.himedias.varletserver.entity.Image;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -15,25 +17,42 @@ public interface RcrecommendInfo {
 
     Timestamp getWritedate();
 
+    String getBerth();
+
+    String getTour();
+
+    RCommunityInfo getRnum();
+
     MemberInfo getUserid();
 
     List<ImageInfo> getImages();
+
+    /**
+     * Projection for {@link com.himedias.varletserver.entity.RCommunity}
+     */
+    interface RCommunityInfo {
+        int getRnum();
+    }
 
     /**
      * Projection for {@link com.himedias.varletserver.entity.Member}
      */
     interface MemberInfo {
         String getUserid();
-
-        String getNickname();
-
-        String getProfileimg();
     }
 
     /**
      * Projection for {@link com.himedias.varletserver.entity.Image}
      */
     interface ImageInfo {
+        Long getId();
+
+        String getImageName();
+
         String getFilePath();
+
+        Timestamp getUploadDate();
+
+        Image.ImageType getImageType();
     }
 }
