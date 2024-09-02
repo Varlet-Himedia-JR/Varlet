@@ -79,7 +79,7 @@ const MyRequest = () => {
                 <div className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg h-200 min-h-full">
                     <div className='mt-14'>
                         <div className='flex justify-between items-baseline'>
-                            <h1 className='text-3xl font-semibold pb-5'>MY REQUEST</h1>
+                            <h1 className='text-3xl font-semibold pb-5'>내가 작성한 의뢰</h1>
                         </div>
                         <ul>
                             <li className='flex font-bold justify-center items-center text-black border-b border-gray-300 pb-2 mb-2'>
