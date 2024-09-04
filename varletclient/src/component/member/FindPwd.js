@@ -22,8 +22,9 @@ function FindPwd() {
         }
     }
 
-    async function onSubmit(){
+    async function onSubmit(event){
         if(!storedCode){return alert("인증번호를 입력하세요");}
+        event.preventDefault();
         try {
             let result = await axios.get(`/api/member/verifyCodeAndFindPwd/${email}/${storedCode}` );
             if (result.data.msg === 'yes') {

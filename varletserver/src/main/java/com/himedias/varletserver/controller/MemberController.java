@@ -411,9 +411,10 @@ public class MemberController {
     @GetMapping("/verifyCodeAndFindPwd/{email}/{code}")
     public HashMap<String, Object> verifyCodeAndFindPwd(@PathVariable("email") String email,@PathVariable("code") String code) {
         HashMap<String, Object> result = new HashMap<>();
-        String ok = ms.verifyCodeAndFindPwd(email, code);
+        String userid = ms.verifyCodeAndFindPwd(email, code);
 
-        if (ok != null) {
+        if (userid != null) {
+            result.put("userid",userid);
             result.put("msg", "yes");
         } else {
             result.put("msg", "no");

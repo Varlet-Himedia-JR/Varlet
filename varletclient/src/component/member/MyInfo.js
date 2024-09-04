@@ -374,7 +374,7 @@ function MyInfo() {
                                 </div>
                             </div>
                             <button className="w-full py-3 mt-4 text-white bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] rounded-lg" onClick={() => { onSubmit() }}>
-                                회원가입
+                                정보수정
                             </button>
                             <button className="w-full py-3 mt-4 text-white bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] rounded-lg" onClick={() => { navigate('/') }}>
                                 돌아가기

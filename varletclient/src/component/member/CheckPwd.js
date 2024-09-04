@@ -39,7 +39,7 @@ function CheckPwd() {
                         className="border text-card-foreground w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md"
                     >
                         <div className="text-center">
-                            <h2 className="text-2xl font-bold text-[#1e90ff]">비밀번호 찾기</h2>
+                            <h2 className="text-2xl font-bold text-[#1e90ff]">비밀번호 확인</h2>
                         </div>
                         <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); pwdCheck(); }}>
                             <div className="space-y-2 text-left">
@@ -56,7 +56,7 @@ function CheckPwd() {
                                 />
                             </div>
                             <button className="w-full py-3 mt-4 text-white bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] rounded-lg" type="submit">
-                                인증하기
+                                비밀번호 인증
                             </button>
                             <button className="w-full py-3 mt-4 text-white bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] rounded-lg" type="button" onClick={() => { navigate('/') }}>
                                 돌아가기

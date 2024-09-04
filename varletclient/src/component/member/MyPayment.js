@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getCookie } from "../../util/cookieUtil";
+import Heading from '../headerfooter/Heading';
+import Footer from '../headerfooter/Footer';
 function MyPayment() {
     const [payments, setPayments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const userId = getCookie('user').userid;
+    const navigate = useNavigate();
 
     useEffect(() => {
         // 사용자의 결제 내역을 서버에서 가져옵니다.
@@ -31,7 +34,9 @@ function MyPayment() {
     }
 
     return (
-        <div>
+        <>
+            <Heading/>
+            <div class='Mypayments'style={{ marginTop: '80px' }}>
             <h2>결제 내역</h2>
             {payments.length === 0 ? (
                 <p>결제 내역이 없습니다.</p>
@@ -40,8 +45,8 @@ function MyPayment() {
                     <thead>
                         <tr>
                             <th>거래 ID</th>
-                            <th>구매자 이름</th>
-                            <th>구매자 이메일</th>
+                            <th>이름</th>
+                            <th>이메일</th>
                             <th>금액</th>
                             <th>상태</th>
                             <th>날짜</th>
@@ -59,9 +64,16 @@ function MyPayment() {
                             </tr>
                         ))}
                     </tbody>
+                    
                 </table>
+                
             )}
-        </div>
+            <button className="w-full py-3 mt-4 text-white bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] rounded-lg" type="button" onClick={() => { navigate('/') }}>
+                                돌아가기
+            </button>
+            </div>
+            <Footer/>
+        </>
     );
 }
 export default MyPayment

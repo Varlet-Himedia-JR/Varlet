@@ -40,15 +40,15 @@ function Payment({ daySchedule }) {
         window.IMP.request_pay({
             pg: "html5_inicis",
             pay_method: "card",
-            merchant_uid: 'merchant_' + new Date().getTime(),
+            merchant_uid: new Date().getTime(),
             name: '결제테스트',
-            amount: totalPrice, 
+            amount: totalPrice - usePoint, 
             buyer_name: getCookie('user').name,
             buyer_email: getCookie('user').email,
             buyer_tel: getCookie('user').phone,
             buyer_addr: getCookie('user').address,
             buyer_postcode: getCookie('user').zip_code,
-            status: "paid",
+            status: "결제완료",
             impUid: "imp_12345"
         }, function (rsp) {
             let user = getCookie('user');
@@ -67,6 +67,7 @@ function Payment({ daySchedule }) {
                     .then(res => {
                         alert('결제 완료');
                         navigate('/myPayment');
+                        console.log(totalPrice - usePoint);
                         console.log('Total Price:', totalPrice);
                         console.log('Use Point:', usePoint);
                     })
@@ -81,7 +82,7 @@ function Payment({ daySchedule }) {
                 console.log('결제 성공:', rsp);
             } else {
                 console.error('결제 실패:', rsp);
-                alert('결제 실패: ' + rsp.error_msg);
+                return;
             }
         });
     }
@@ -119,7 +120,7 @@ function Payment({ daySchedule }) {
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-sm text-muted-foreground">항목별 가격</span>
-                                <span className="text-sm font-medium">{contents.pcount * contents.price}</span>
+                                <span className="text-sm font-medium" >{contents.pcount * contents.price}</span>
                             </div>
                         </div>
                     ))
@@ -148,7 +149,7 @@ function Payment({ daySchedule }) {
                     <hr></hr>
                     <div className="flex items-center justify-between">
                         <span className="text-m text-muted-foreground">합계</span>
-                        <span className="text-m text-muted-foreground">{totalPrice - usePoint >= 0 ? totalPrice - usePoint : 0}</span>
+                        <span className="text-m text-muted-foreground" >{totalPrice - usePoint >= 0 ? totalPrice - usePoint : 0}</span>
                     </div>
                 </div>
 

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
-import '../../style/customer.css';
+import '../../style/writeqna.css';
 import { setCookie, getCookie, removeCookie } from "../../util/cookieUtil";
 import jaxios from '../../util/jwtUtil';
 
@@ -57,7 +57,7 @@ function WriteQna() {
                         }></textarea>
                     </div>
         
-                    <div className='btns'>
+                    <div className='btns1'>
                         <button onClick={  ()=>{ onSubmit() }  }>문의하기</button>
                         <button onClick={ ()=>{ navigate('/qna')} }>목록으로</button>
                     </div>
