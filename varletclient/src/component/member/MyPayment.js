@@ -4,12 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { getCookie } from "../../util/cookieUtil";
 import Heading from '../headerfooter/Heading';
 import Footer from '../headerfooter/Footer';
+import '../../style/mypayments.css';
 function MyPayment() {
     const [payments, setPayments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const userId = getCookie('user').userid;
     const navigate = useNavigate();
+    const statusMessages = {
+        paid: "결제완료",
+        cancelled: "결제취소",
+        failed: "결제실패"
+    };
 
     useEffect(() => {
         // 사용자의 결제 내역을 서버에서 가져옵니다.
@@ -36,44 +42,46 @@ function MyPayment() {
     return (
         <>
             <Heading/>
-            <div class='Mypayments'style={{ marginTop: '80px' }}>
-            <h2>결제 내역</h2>
-            {payments.length === 0 ? (
-                <p>결제 내역이 없습니다.</p>
-            ) : (
-                <table>
-                    <thead>
-                        <tr>
-                            <th>거래 ID</th>
-                            <th>이름</th>
-                            <th>이메일</th>
-                            <th>금액</th>
-                            <th>상태</th>
-                            <th>날짜</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {payments.map(payment => (
-                            <tr key={payment.pseq}>
-                                <td>{payment.merchantUid}</td>
-                                <td>{payment.buyerName}</td>
-                                <td>{payment.buyerEmail}</td>
-                                <td>{payment.amount}</td>
-                                <td>{payment.status}</td>
-                                <td>{new Date(payment.indate).toLocaleString()}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                    
-                </table>
-                
-            )}
-            <button className="w-full py-3 mt-4 text-white bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] rounded-lg" type="button" onClick={() => { navigate('/') }}>
-                                돌아가기
-            </button>
+            <div class='PaymentPage'style={{ marginTop: '80px' }}>
+            <div className='payment'>결제 내역</div>
+              <div style={{display:"flex",justifyContent:"space-between",paddingTop:"30px"}}>
+              </div>
+                  <div className="noticeTable">
+                      <div className="payment_row">
+                          <div className="payment_col" style={{flex:"2.8"}}>주문번호</div>
+                          <div className="payment_col" style={{flex:"3"}}>이름</div>
+                          <div className="payment_col" style={{flex:"3"}}>이메일</div>
+                          <div className="payment_col" style={{flex:"2"}}>금액</div>
+                          <div className="payment_col" style={{flex:"3"}}>상태</div>
+                          <div className="payment_col" style={{flex:"3"}}>날짜</div>
+                      </div>
+                  </div>
+               {
+                  (payments)?(
+                    payments.map((payment,idx)=>{
+                          // 상태 메시지 변환
+                          const statusMessage = statusMessages[payment.status] || payment.status;
+                          const formattedAmount = payment.amount.toLocaleString();
+                          return(
+                              <div className="notice_row2" key={idx}>
+                                  <div className="payment_coll"  style={{flex:"3"}} >{payment.merchantUid}</div>
+                                  <div className="payment_coll"  style={{flex:"2"}} >{payment.buyerName}</div>
+                                  <div className="payment_coll"  style={{flex:"2"}} >{payment.buyerEmail}</div>
+                                  <div className="payment_coll"  style={{flex:"2"}} >{formattedAmount}</div>
+                                  <div className="payment_coll"  style={{flex:"2"}} >{statusMessage}</div>
+                                  <div className="payment_coll"  style={{flex:"5"}} >{new Date(payment.indate).toLocaleString()}</div>
+                              </div>
+                            )
+                      })
+                  ):(null)
+               }
+                <button className="w-40 py-3 mt-4 text-white bg-gradient-to-r from-[#1e90ff] to-[#1e90ff] rounded-lg" type="button" onClick={() => { navigate('/') }}>
+                    홈으로
+                </button>
             </div>
-            <Footer/>
-        </>
-    );
+                <Footer/>
+                
+            </>
+        );
 }
 export default MyPayment

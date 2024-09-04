@@ -28,7 +28,7 @@ public class Payments {
     private String buyerName;
 
     @Column(name = "amount", nullable = false)
-    private Double amount;
+    private Integer amount;
 
     @Column(name = "status", nullable = false)
     private String status;

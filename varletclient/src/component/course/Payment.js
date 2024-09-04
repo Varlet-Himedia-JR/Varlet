@@ -9,6 +9,7 @@ function Payment({ daySchedule }) {
     const [totalPrice, setTotalPrice] = useState(0);
     const [usePoint, setUsePoint] = useState(0);
     const navigate = useNavigate('');
+    let calculatedAmount = totalPrice - usePoint;
 
     // 결제 함수
     useEffect(() => {
@@ -37,19 +38,20 @@ function Payment({ daySchedule }) {
             console.error("IMP 객체가 정의되지 않았습니다.");
             return;
         }
+
+    
+        console.log('Amount to be paid:', calculatedAmount);
         window.IMP.request_pay({
             pg: "html5_inicis",
             pay_method: "card",
             merchant_uid: new Date().getTime(),
             name: '결제테스트',
-            amount: totalPrice - usePoint, 
+            amount: calculatedAmount, 
             buyer_name: getCookie('user').name,
             buyer_email: getCookie('user').email,
             buyer_tel: getCookie('user').phone,
             buyer_addr: getCookie('user').address,
-            buyer_postcode: getCookie('user').zip_code,
-            status: "결제완료",
-            impUid: "imp_12345"
+            buyer_postcode: getCookie('user').zip_code
         }, function (rsp) {
             let user = getCookie('user');
             if (rsp.success) {
@@ -59,17 +61,17 @@ function Payment({ daySchedule }) {
                         merchantUid: rsp.merchant_uid,
                         buyerEmail: rsp.buyer_email,
                         buyerName: rsp.buyer_name,
-                        amount: rsp.amount,
-                        status: rsp.status,
+                        amount: calculatedAmount,
+                        status: rsp.status, // 서버에서 받은 상태를 사용
                         impUid: rsp.imp_uid,
                         userid: user.userid 
                     })
                     .then(res => {
                         alert('결제 완료');
                         navigate('/myPayment');
-                        console.log(totalPrice - usePoint);
                         console.log('Total Price:', totalPrice);
                         console.log('Use Point:', usePoint);
+                        console.log('Calculated Amount:', calculatedAmount);
                     })
                     .catch(err => {
                         console.log(err);
@@ -77,16 +79,14 @@ function Payment({ daySchedule }) {
                     });
                 } catch (err) {
                     console.log(err);
-                    console.log("결제검증 실패");
+                    console.log("결제 검증 실패");
                 }
                 console.log('결제 성공:', rsp);
             } else {
                 console.error('결제 실패:', rsp);
-                return;
             }
         });
     }
-
 
     useEffect(() => {
         if (daySchedule && daySchedule.length > 0) {

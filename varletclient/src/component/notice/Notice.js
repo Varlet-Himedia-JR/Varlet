@@ -80,7 +80,7 @@ return (
                               </div>
                             )
                       })
-                  ):(null)
+                  ):("공지사항이 없습니다.")
                }
                <div id="paging" style={{textAlign:"center", padding:"10px",marginRight:"20px"}}>
               {
