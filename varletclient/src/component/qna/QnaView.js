@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getCookie } from '../../util/cookieUtil';
 import Heading from './../headerfooter/Heading';
 import Footer from './../headerfooter/Footer';
+import '../../style/qnaview.css';
 
 function QnaView() {
     const [qna, setQna] = useState({});
@@ -29,32 +30,32 @@ function QnaView() {
     return (
         <>
         <Heading/>
-            <div className='subPage' style={{ paddingTop: '100px' }}>
+            <div className='qnaviewPage' style={{ paddingTop: '80px' }}>
                 <div className="qna" style={{ flex: "4" }}>
                     {
                         (qna) ? (
                             <div className='qnaview'>
                                 <h2>문의사항</h2>
-                                <div className='field'>
+                                <div className='qnaview_field'>
                                     <label>제목</label>
                                     <div>{qna.subject}</div>
                                 </div>
-                                <div className='field'>
+                                <div className='qnaview_field'>
                                     <label>작성자</label>
                                     <div>{qna.userid}</div>
                                 </div>
-                                <div className='field'>
+                                <div className='qnaview_field'>
                                     <label>내용</label>
                                     <div><pre>{qna.content}</pre></div>
                                 </div>
-                                <div className='field'>
+                                <div className='qnaview_field'>
                                     <label>답변</label>
                                     <div>{qna.reply}</div>
                                 </div>
                             </div>
                         ) : (<div>Loading...</div>)
                     }
-                    <div className='btns'>
+                    <div className='qnaview_btns'>
                         {isAuthor && (
                             <>
                                 <button onClick={qnaDelete}>삭제</button>

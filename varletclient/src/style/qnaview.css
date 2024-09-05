@@ -1,0 +1,50 @@
+.qnaview h2{
+    margin-left: 0px;
+    font-size: 30px; 
+    font-weight: 900;
+    padding-top: 40px;
+}
+.qna{
+    align-items: center;
+    justify-content: center;
+    height: 770px;
+}
+
+.qnaview_field{
+    display: flex;
+    padding: 10px 0 10px 0;
+    width: 1000px;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+}
+
+.qnaview_field div{
+    margin-left: 20px;
+    
+}
+
+.qnaview_field label{
+    font-weight: 800;
+}
+
+
+.qnaview_btns {
+    width: 350px;
+    display: flex;
+    justify-content: space-between;
+    margin-left: 300px;
+    padding-top: 20px;
+}
+
+.qnaview_btns button{
+    background-color: #007bff; /* 버튼 배경색 */
+    color: #fff; /* 버튼 텍스트 색상 */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease; /* 부드러운 배경색 전환 효과 */
+
+    display: flex;
+}
