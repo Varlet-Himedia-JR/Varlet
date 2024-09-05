@@ -1,0 +1,29 @@
+.btns1 button{
+        background-color: #1E90FF; /* 바다색 */
+        color: white;
+        height: 40px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        padding: 10px 20px;
+        margin-left: 30px;
+        margin-bottom: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+}
+
+.btns1{
+    margin-left: 250px;
+}
+
+
+.field textarea{
+    width: 800px;
+    height: 200px;
+}
+
+.qnawriteform h2{
+    margin-left: 0px;
+    font-size: 30px; 
+    font-weight: 900;
+}

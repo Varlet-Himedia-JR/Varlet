@@ -34,8 +34,12 @@
   
   .Copyright{
     position: relative;
+    display: flex;
+    align-items: center;
     margin-top: 15px;
+    text-align: center;
     font-weight: 400;
+    margin-left: 830px;
     font-size: 14px;
   }
 

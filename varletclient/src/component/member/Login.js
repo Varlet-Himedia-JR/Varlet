@@ -92,7 +92,7 @@ function Login() {
                                     style={{ width: '30px' }}
                                     src="https://t1.kakaocdn.net/kakaocorp/kakaocorp/admin/kakaoService/cc08d9e2018e00001.png"
                                     onClick={() => {
-                                        window.location.href = 'http://localhost:8070/member/naverStart';
+                                        window.location.href = 'http://localhost:8070/member/kakaoStart';
                                     }}
                                 />
                             </button>

@@ -84,7 +84,7 @@ function Qna() {
   return (
     <>
         <Heading/>
-        <div className='main' style={{marginTop:'80px'}}>  
+        <div className='QnaMain' style={{marginTop:'80px'}}>  
             <div className='QnaPage'>
                 <div className="qnalist">
                     <div style={{display:"flex",justifyContent:"space-between"}}>
@@ -95,8 +95,8 @@ function Qna() {
                         <div className="row1">
                             <div className="col" style={{flex:"2"}}>번호</div>
                             <div className="col" style={{flex:"4"}}>제목</div>
-                            <div className="col" style={{flex:"2"}}>등록일</div>
-                            <div className="col" style={{flex:"2"}}>답변여부</div>
+                            <div className="col" style={{flex:"3"}}>등록일</div>
+                            <div className="col" style={{flex:"1.5"}}>답변여부</div>
                         </div>
                     </div>
                 {

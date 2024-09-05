@@ -1,0 +1,32 @@
+.PaymentPage{
+    width: 1200px;
+    align-items: center;
+    
+}
+.payment{
+   font-size: 40px; 
+   font-weight: 900;
+}
+.payment_row{
+    width: 1200px;
+    border-bottom: 1px solid black;
+    align-items: center;
+    display:flex;
+    justify-content:space-between;
+    font-weight: 900;
+}
+.payment_col{
+    margin-left: 80px;
+}
+
+.notice_row2{
+    padding: 10px 0 10px 0;
+    width: 1200px;
+    border-bottom: 1px solid rgb(196, 196, 196);
+    align-items: center;
+    display:flex;
+    justify-content:space-between;
+}
+.payment_coll{
+    margin-left: 80px;
+}
